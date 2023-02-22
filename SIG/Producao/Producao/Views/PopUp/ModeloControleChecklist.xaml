@@ -25,7 +25,8 @@
             AllowDraggingColumns="True" 
             AutoGenerateColumns="False" 
             FontSize="10" 
-            ItemsSource="{Binding Path=ItensChkList}" 
+            ItemsSource="{Binding ItensChkList}" 
+            SelectedItem="{Binding ItemChkList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             PreviewKeyDown="dgItens_PreviewKeyDown">
             <Syncfusion:SfDataGrid.Columns>
                 <Syncfusion:GridTextColumn HeaderText="SIGLA" ColumnSizer="SizeToCells" MappingName="sigla"/>
