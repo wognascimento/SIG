@@ -1,0 +1,108 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="App.ico" />
+    <None Remove="favicon.ico" />
+    <None Remove="icon\checklist.png" />
+    <None Remove="icon\configuracao-de-dados-windows-metro-16.png" />
+    <None Remove="icon\icons8-alimentacao-de-papel-32.png" />
+    <None Remove="icon\icons8-caminhao-interestadual-32.png" />
+    <None Remove="icon\icons8-enviar-documento-32.png" />
+    <None Remove="icon\icons8-enviar-documento-por-e-mail-32.png" />
+    <None Remove="icon\icons8-impressao-24.png" />
+    <None Remove="icon\icons8-microsoft-excel-40.png" />
+    <None Remove="icon\icons8-usu_0025c3_0025a1rio-de-g_0025c3_0025aanero-neutro-windows-metro-16.png" />
+    <None Remove="sound\error.wav" />
+    <None Remove="sound\success.wav" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+    <Resource Include="sound\error.wav" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.2" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
+    <PackageReference Include="syncfusion.ui.wpf.net" Version="20.3.0.47" />
+    <PackageReference Include="System.IO.Ports" Version="7.0.0" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Reference Include="Syncfusion.Data.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.Data.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Licensing">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfChart.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.SfChart.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfDiagram.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.SfDiagram.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfGrid.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.SfGrid.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfSkinManager.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.SfSkinManager.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.Shared.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Themes.FluentLight.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.Themes.FluentLight.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Tools.Wpf">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.Tools.WPF.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Resource Include="App.ico" />
+    <Resource Include="favicon.ico" />
+    <Resource Include="icon\checklist.png" />
+    <Resource Include="icon\configuracao-de-dados-windows-metro-16.png" />
+    <Resource Include="icon\icons8-alimentacao-de-papel-32.png" />
+    <Resource Include="icon\icons8-caminhao-interestadual-32.png" />
+    <Resource Include="icon\icons8-enviar-documento-32.png" />
+    <Resource Include="icon\icons8-enviar-documento-por-e-mail-32.png" />
+    <Resource Include="icon\icons8-impressao-24.png" />
+    <Resource Include="icon\icons8-microsoft-excel-40.png" />
+    <Resource Include="icon\icons8-usu_0025c3_0025a1rio-de-g_0025c3_0025aanero-neutro-windows-metro-16.png" />
+    <Resource Include="sound\success.wav" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Syncfusion.Shared.Wpf.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <None Update="Database.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

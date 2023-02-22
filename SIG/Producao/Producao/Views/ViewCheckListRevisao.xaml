@@ -1,0 +1,160 @@
+﻿<UserControl x:Class="Producao.Views.ViewCheckListRevisao"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:local="clr-namespace:Producao.Views" 
+             xmlns:vewModel="clr-namespace:Producao"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" 
+             Loaded="UserControl_Loaded">
+
+    <UserControl.Resources>
+        <vewModel:ConverterNumber x:Key="ConverterNumber"/>
+        <vewModel:ConverterBoolen x:Key="ConverterBoolen"/>
+    </UserControl.Resources>
+    
+    <Grid>
+
+        <Syncfusion:SfDataGrid 
+            Name="itens" 
+            ItemsSource="{Binding Dados}" 
+            ColumnSizer="AutoLastColumnFill" 
+            AllowFiltering="True" 
+            AutoGenerateColumns="False"
+            FrozenColumnCount="9" 
+            AllowResizingColumns="True" 
+            CurrentCellEndEdit="itens_CurrentCellEndEdit">
+
+            <Syncfusion:SfDataGrid.Columns>
+
+                <Syncfusion:GridDateTimeColumn
+                    HeaderText="Data Expedição" 
+                    MappingName="data_de_expedicao" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridTextColumn 
+                    HeaderText="Sigla" 
+                    MappingName="sigla_serv" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridTextColumn 
+                    HeaderText="Tema" 
+                    MappingName="tema" 
+                    ColumnSizer="SizeToHeader"/>
+                <Syncfusion:GridTextColumn 
+                    HeaderText="Item" 
+                    MappingName="item" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridTextColumn 
+                    HeaderText="Local" 
+                    MappingName="local" 
+                    ColumnSizer="SizeToHeader"/>
+                <Syncfusion:GridTextColumn 
+                    HeaderText="Detalhe Local" 
+                    MappingName="detalhe_local" 
+                    ColumnSizer="SizeToHeader"/>
+                <Syncfusion:GridNumericColumn 
+                    HeaderText="Quantidade" 
+                    MappingName="qtd" 
+                    DisplayBinding="{Binding qtd, Converter={StaticResource ConverterNumber}}"/>
+                <Syncfusion:GridTextColumn 
+                    HeaderText="Descrição Comercial" 
+                    MappingName="descricaocomercial" 
+                    ColumnSizer="SizeToHeader"/>
+                <Syncfusion:GridTextColumn 
+                    HeaderText="Dimensão" 
+                    MappingName="dimensao" 
+                    ColumnSizer="SizeToHeader"/>
+                <Syncfusion:GridComboBoxColumn
+                    ItemsSource="{Binding Revisores}"
+                    AllowEditing="True"
+                    IsEditable="True"
+                    HeaderText="Resp Revisão" 
+                    MappingName="resp_revisao"
+                    SelectedValuePath="revisores"
+                    DisplayMemberPath="revisores"/>
+                <Syncfusion:GridDateTimeColumn 
+                    AllowEditing="True"
+                    HeaderText="Prazo Revisão" 
+                    MappingName="prazo_revisao" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridCheckBoxColumn
+                    AllowEditing="True"
+                    HeaderText="OK" 
+                    MappingName="ok" 
+                    DisplayBinding="{Binding ok, Converter={StaticResource ConverterBoolen}}"
+                    ValueBinding="{Binding ok, Converter={StaticResource ConverterBoolen}}"/>
+                <Syncfusion:GridTextColumn 
+                    AllowEditing="True"
+                    HeaderText="Revisado Por" 
+                    MappingName="revisado_por" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridTextColumn 
+                    AllowEditing="True"
+                    HeaderText="Pendência" 
+                    MappingName="pendencia" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridDateTimeColumn 
+                    AllowEditing="True"
+                    HeaderText="Data Revisado Por" 
+                    MappingName="data_revisado_por" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridTextColumn 
+                    AllowEditing="True"
+                    HeaderText="motivo alteração após revisão" 
+                    MappingName="motivo_alt_pos_revisao" />
+                <Syncfusion:GridCheckBoxColumn
+                    AllowEditing="True"
+                    HeaderText="Ok Revisão Alterada" 
+                    MappingName="ok_revisao_alterada" 
+                    DisplayBinding="{Binding ok_revisao_alterada, Converter={StaticResource ConverterBoolen}}"
+                    ValueBinding="{Binding ok_revisao_alterada, Converter={StaticResource ConverterBoolen}}"/>
+                <Syncfusion:GridTextColumn 
+                    AllowEditing="True"
+                    HeaderText="revisão Alterada Por"
+                    MappingName="revisao_alt_por" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridDateTimeColumn 
+                    AllowEditing="True"
+                    HeaderText="Data Alterada Revisão" 
+                    MappingName="data_alt_revisao" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridTextColumn 
+                    AllowEditing="True"
+                    HeaderText="Obs Revisão" 
+                    MappingName="obs_revisao" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridTextColumn 
+                    AllowEditing="True"
+                    HeaderText="Memorial Alterado Por" 
+                    MappingName="memorial_alterado_por" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridDateTimeColumn 
+                    AllowEditing="True"
+                    HeaderText="Memorial Data Alterado" 
+                    MappingName="memorial_data_alterado" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridCheckBoxColumn
+                    AllowEditing="True"
+                    HeaderText="Altera Ok" 
+                    MappingName="altera_ok" 
+                    DisplayBinding="{Binding altera_ok, Converter={StaticResource ConverterBoolen}}"
+                    ValueBinding="{Binding altera_ok, Converter={StaticResource ConverterBoolen}}"/>
+                <Syncfusion:GridTextColumn
+                    AllowEditing="True"
+                    HeaderText="Confirma Alteração Por" 
+                    MappingName="confirma_alteracao_por" 
+                    ColumnSizer="SizeToCells"/>
+                <Syncfusion:GridDateTimeColumn 
+                    AllowEditing="True"
+                    HeaderText="Confirma Alteração Data" 
+                    MappingName="confirma_alteracao_data" 
+                    ColumnSizer="SizeToCells"/>
+                
+
+            </Syncfusion:SfDataGrid.Columns>
+
+        </Syncfusion:SfDataGrid>
+
+    </Grid>
+</UserControl>
