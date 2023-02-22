@@ -36,6 +36,8 @@ namespace Producao
         public DbSet<ModeloReceitaAnoAnterior> ModelosAnoAnterior { get; set; }
         public DbSet<ControleModeloBaixa> ModelosControle { get; set; }
         public DbSet<HistoricoModelo> HistoricosModelo { get; set; }
+        public DbSet<ModeloTabelaPAModel> TabelaPAs { get; set; }
+        
         public DbSet<TemaModel> Temas { get; set; }
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

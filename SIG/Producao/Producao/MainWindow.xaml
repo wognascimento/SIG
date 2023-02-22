@@ -56,16 +56,19 @@
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Impedimento Checklist"/>
             </syncfusion:MenuItemAdv>
+            
             <syncfusion:MenuItemAdv Header="Adereçamento"/>
+            
             <syncfusion:MenuItemAdv Header="Central de Modelos">
                 <syncfusion:MenuItemAdv Header="Modelos">
                     <syncfusion:MenuItemAdv Header="Criar" Click="OnCentralCriarModelo"/>
                     <syncfusion:MenuItemAdv Header="Ordem de Serviço"/>
                     <syncfusion:MenuItemAdv Header="Status Checklist"/>
                 </syncfusion:MenuItemAdv>
-                <syncfusion:MenuItemAdv Header="Tabela PA"/>
+                <syncfusion:MenuItemAdv Header="Tabela P.A" Click="OnCentralTabelaPa"/>
                 <syncfusion:MenuItemAdv Header="Fator"/>
             </syncfusion:MenuItemAdv>
+            
             <syncfusion:MenuItemAdv Header="Cadastro de Produto">
                 <syncfusion:MenuItemAdv Header="Descrição"/>
                 <syncfusion:MenuItemAdv Header="Descrição Adicional"/>

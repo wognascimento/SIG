@@ -48,6 +48,7 @@ namespace Producao.Views.PopUp
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
         }
 

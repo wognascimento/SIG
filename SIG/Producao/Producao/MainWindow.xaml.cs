@@ -173,5 +173,16 @@ namespace Producao
             this._mdi.Items.Add(view);
             
         }
+
+        private void OnCentralTabelaPa(object sender, RoutedEventArgs e)
+        {
+            ViewCentralTabelaPA view = new();
+            DocumentContainer.SetHeader(view, "TABELA FATOR ARVORE P.A");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
     }
 }
