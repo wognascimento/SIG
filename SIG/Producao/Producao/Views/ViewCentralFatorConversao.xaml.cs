@@ -1,8 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Npgsql;
-using Producao.Views.PopUp;
-using Syncfusion.UI.Xaml.Grid;
-using Syncfusion.UI.Xaml.Grid.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,24 +15,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using static iText.IO.Util.IntHashtable;
 
 namespace Producao.Views
 {
     /// <summary>
-    /// Interação lógica para ViewCentralTabelaPA.xam
+    /// Interação lógica para ViewCentralFatorConversao.xam
     /// </summary>
-    public partial class ViewCentralTabelaPA : UserControl
+    public partial class ViewCentralFatorConversao : UserControl
     {
-        public ViewCentralTabelaPA()
+        public ViewCentralFatorConversao()
         {
             InitializeComponent();
-            this.DataContext = new ViewCentralTabelaPAViewModel();
+            this.DataContext = new ViewCentralFatorConversaoViewModel();
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            ViewCentralTabelaPAViewModel vm = (ViewCentralTabelaPAViewModel)DataContext;
+            ViewCentralFatorConversaoViewModel vm = (ViewCentralFatorConversaoViewModel)DataContext;
             try
             {
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
@@ -50,14 +45,14 @@ namespace Producao.Views
             }
         }
 
-        private async void dgTabela_RowValidated(object sender, RowValidatedEventArgs e)
+        private void dgTabela_RowValidated(object sender, Syncfusion.UI.Xaml.Grid.RowValidatedEventArgs e)
         {
-            
+
         }
 
-        private async void dgTabela_RowValidating(object sender, RowValidatingEventArgs e)
+        private async void dgTabela_RowValidating(object sender, Syncfusion.UI.Xaml.Grid.RowValidatingEventArgs e)
         {
-            ModeloTabelaPAModel model = (ModeloTabelaPAModel)e.RowData;
+            ModeloTabelaConversaoModel model = (ModeloTabelaConversaoModel)e.RowData;
             if (!model.codcompladicional.HasValue)
             {
                 e.IsValid = false;
@@ -65,14 +60,14 @@ namespace Producao.Views
                 return;
             }
 
-            ViewCentralTabelaPAViewModel vm = (ViewCentralTabelaPAViewModel)DataContext;
+            ViewCentralFatorConversaoViewModel vm = (ViewCentralFatorConversaoViewModel)DataContext;
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 await Task.Run(() => vm.SaveAsync(model));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
-                MessageBox.Show("Fator P.A cadastrado!!!");
+                MessageBox.Show("Fator cadastrado!!!");
             }
             catch (Exception ex)
             {
@@ -84,9 +79,10 @@ namespace Producao.Views
 
             }
         }
+
     }
 
-    public class ViewCentralTabelaPAViewModel : INotifyPropertyChanged
+    public class ViewCentralFatorConversaoViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propName)
@@ -95,14 +91,14 @@ namespace Producao.Views
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
-        private ModeloTabelaPAModel item;
-        public ModeloTabelaPAModel Item
+        private ModeloTabelaConversaoModel item;
+        public ModeloTabelaConversaoModel Item
         {
             get { return item; }
             set { item = value; RaisePropertyChanged("Item"); }
         }
-        private ObservableCollection<ModeloTabelaPAModel> itens;
-        public ObservableCollection<ModeloTabelaPAModel> Itens
+        private ObservableCollection<ModeloTabelaConversaoModel> itens;
+        public ObservableCollection<ModeloTabelaConversaoModel> Itens
         {
             get { return itens; }
             set { itens = value; RaisePropertyChanged("Itens"); }
@@ -121,13 +117,13 @@ namespace Producao.Views
             set { produtos = value; RaisePropertyChanged("Produtos"); }
         }
 
-        public async Task<ObservableCollection<ModeloTabelaPAModel>> GetItensAsync()
+        public async Task<ObservableCollection<ModeloTabelaConversaoModel>> GetItensAsync()
         {
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.TabelaPAs.ToListAsync();
-                return new ObservableCollection<ModeloTabelaPAModel>(data);
+                var data = await db.TabelaConversoes.ToListAsync();
+                return new ObservableCollection<ModeloTabelaConversaoModel>(data);
             }
             catch (Exception)
             {
@@ -141,12 +137,12 @@ namespace Producao.Views
             {
                 using DatabaseContext db = new();
                 var results = await (from s in db.Descricoes
-                              where s.planilha == "KIT ENF PA" && s.descricao == "PA" && s.inativo != "-1   "
-                              select new ProdutoPAModel 
-                              { 
-                                  codcompladicional = s.codcompladicional,
-                                  descricao = s.descricao_adicional + " " + s.complementoadicional
-                              }).ToListAsync();
+                                     where s.inativo != "-1   "
+                                     select new ProdutoPAModel
+                                     {
+                                         codcompladicional = s.codcompladicional,
+                                         descricao = s.descricao_completa
+                                     }).ToListAsync();
 
                 return new ObservableCollection<ProdutoPAModel>(results);
             }
@@ -156,16 +152,16 @@ namespace Producao.Views
             }
         }
 
-        public async Task SaveAsync(ModeloTabelaPAModel model)
+        public async Task SaveAsync(ModeloTabelaConversaoModel model)
         {
             try
             {
                 using DatabaseContext db = new();
-                var result = await db.TabelaPAs.FindAsync(model.codcompladicional);
-                if(result == null)
-                    await db.TabelaPAs.AddAsync(model);
+                var result = await db.TabelaConversoes.FindAsync(model.codcompladicional);
+                if (result == null)
+                    await db.TabelaConversoes.AddAsync(model);
                 else
-                    await db.TabelaPAs.SingleUpdateAsync(model);
+                    await db.TabelaConversoes.SingleUpdateAsync(model);
 
                 await db.SaveChangesAsync();
 

@@ -16,9 +16,6 @@
 
         <syncfusion:SfDataGrid 
             x:Name="dgTabela"
-            Grid.Row="9" 
-            Grid.Column="0"
-            Grid.ColumnSpan="3" 
             AllowResizingColumns="True" 
             AutoGenerateColumns="False" 
             ColumnSizer="SizeToHeader"

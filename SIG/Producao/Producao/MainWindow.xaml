@@ -66,7 +66,7 @@
                     <syncfusion:MenuItemAdv Header="Status Checklist"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Tabela P.A" Click="OnCentralTabelaPa"/>
-                <syncfusion:MenuItemAdv Header="Fator"/>
+                <syncfusion:MenuItemAdv Header="Fator" Click="OnCentralFatorConversao"/>
             </syncfusion:MenuItemAdv>
             
             <syncfusion:MenuItemAdv Header="Cadastro de Produto">
@@ -76,6 +76,8 @@
                 <syncfusion:MenuItemAdv Header="Fiscal / Espanhol"/>
                 <syncfusion:MenuItemAdv Header="Todas as Descrições"/>
             </syncfusion:MenuItemAdv>
+            
+            
             <syncfusion:MenuItemAdv Header="Estoque">
                 <syncfusion:MenuItemAdv Header="Saldo Estoque"/>
                 <syncfusion:MenuItemAdv Header="Sobra"/>
@@ -87,6 +89,8 @@
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Baixa de Requisição"/>
             </syncfusion:MenuItemAdv>
+            
+            
             <syncfusion:MenuItemAdv Header="Kit">
                 <syncfusion:MenuItemAdv Header="Solução"/>
                 <syncfusion:MenuItemAdv Header="Manutenção"/>
