@@ -243,7 +243,10 @@ namespace Producao.Views
                     cadastrado_por = Environment.UserName,
                     data_cadastro = DateTime.Now
                 };
-                vm.Modelo = await Task.Run(() => vm.AddModeloAsync(dados));
+
+                var tema = txtTema.SelectedItem as TemaModel;
+                
+                vm.Modelo = await Task.Run(() => vm.AddModeloAsync(dados, tema));
                 if (modelo == null)
                 {
                     dgModelos.ClearFilters();
@@ -595,7 +598,7 @@ namespace Producao.Views
             }
         }
 
-        public async Task<ModeloModel> AddModeloAsync(ModeloModel modelo)
+        public async Task<ModeloModel> AddModeloAsync(ModeloModel modelo, TemaModel tema)
         {
             using DatabaseContext db = new();
             var transaction = db.Database.BeginTransaction();
@@ -604,7 +607,7 @@ namespace Producao.Views
                 await db.Modelos.SingleMergeAsync(modelo);
                 await db.SaveChangesAsync();
 
-                var historico =  await db.HistoricosModelo.Where(c =>  c.codcompladicional_modelo == modelo.codcompladicional && c.tema == modelo.tema ).ToListAsync();
+                var historico =  await db.HistoricosModelo.Where(c =>  c.codcompladicional_modelo == modelo.codcompladicional && c.idtema == tema.idtema ).ToListAsync();
                 foreach (HistoricoModelo item in historico)
                 {
                     var receita = new ModeloReceitaModel

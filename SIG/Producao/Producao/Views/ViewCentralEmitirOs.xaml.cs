@@ -1,5 +1,6 @@
 ﻿using iText.Layout.Element;
 using Microsoft.EntityFrameworkCore;
+using Producao.Views.PopUp;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Utility;
 using System;
@@ -100,12 +101,39 @@ namespace Producao.Views
         }
         private static void OnCreateOSClicked(object obj)
         {
+
+            //var Record = { Producao.ModeloControleOsModel}
+            //obj = {Syncfusion.UI.Xaml.Grid.GridRecordContextMenuInfo}
+            var record = ((GridRecordContextMenuInfo)obj).Record as ModeloControleOsModel;
             var grid = ((GridRecordContextMenuInfo)obj).DataGrid;
             var item = grid.SelectedItem as ModeloControleOsModel;
-            if (item?.qtd_chk_list > (int)(item?.qtd_os ?? 0))
+            if (record?.qtd_chk_list > (int)(record?.qtd_os ?? 0))
             {
-                var dif = (item?.qtd_chk_list - (int)(item?.qtd_os ?? 0));
-                MessageBox.Show(dif.ToString());
+            try
+            {
+                    var dif = (record?.qtd_chk_list - (int)(record?.qtd_os ?? 0));
+                    var window = new ModeloSetoresOrdemServico(record?.codcompladicional);
+                    window.Owner = App.Current.MainWindow;
+                    window.ShowDialog();
+                    
+                    /*Window window = new Window();
+                    window.Content = new ModeloSetoresOrdemServico(747); //item?.codcompladicional
+                    window.Owner = App.Current.MainWindow;
+                    window.Title = "SETORES PARA EMISSÃO DA OERDEM DE SERVIÇO";
+                    window.WindowStyle = WindowStyle.ToolWindow; //"ToolWindow"
+                    window.WindowStartupLocation = WindowStartupLocation.CenterOwner; //"CenterOwner" 
+                    window.ResizeMode = ResizeMode.NoResize; //"NoResize"
+                    window.Height = 450;
+                    window.Width = 500;
+                    window.ShowDialog();*/
+
+
+                }
+                catch (Exception ex)
+                {
+
+                }
+               
             }
             else
             {

@@ -13,7 +13,7 @@ namespace Producao
     public class HistoricoModelo
     {
         public long? codcompladicional_modelo {get; set; }
-        public string? tema {get; set; }
+        public long? idtema { get; set; }
         public long? codcompladicional_receita {get; set; }
         public double? media_qtd_modelo {get; set; }
         public double? media_qtd_producao {get; set; }

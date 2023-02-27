@@ -36,6 +36,9 @@ namespace Producao
         public DbSet<ModeloReceitaAnoAnterior> ModelosAnoAnterior { get; set; }
         public DbSet<ControleModeloBaixa> ModelosControle { get; set; }
         public DbSet<HistoricoModelo> HistoricosModelo { get; set; }
+        public DbSet<HistoricoSetorModel> HistoricosSetor { get; set; }
+
+        
         public DbSet<ModeloTabelaPAModel> TabelaPAs { get; set; }
         public DbSet<ModeloTabelaConversaoModel> TabelaConversoes { get; set; }
         public DbSet<ModeloControleOsModel> modeloControleOs { get; set; }

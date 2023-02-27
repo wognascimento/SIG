@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Producao
 {
@@ -21,5 +16,6 @@ namespace Producao
         public double? qtd_chk_list { get; set; }
         public double? qtd_os { get; set; }
         public long? num_os_produto {  get; set; }
+        public long? codcompladicional { get; set; }
     }
 }
