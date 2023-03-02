@@ -13,7 +13,7 @@ namespace Producao
         public string? tipo {set; get;}
         public long? codigo_setor {set; get;}
         public string? setor_caminho {set; get;}
-        public float? quantidade {set; get;}
+        public double? quantidade {set; get;}
         public DateTime? data_inicio {set; get;}
         public DateTime? data_fim {set; get;}
         public string? cliente {set; get;}

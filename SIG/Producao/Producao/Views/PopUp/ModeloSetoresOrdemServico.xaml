@@ -8,9 +8,11 @@
         mc:Ignorable="d"
         Title="SETORES PARA EMISSÃO DA OERDEM DE SERVIÇO" Height="450" Width="450" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded" ResizeMode="NoResize">
 
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -21,12 +23,25 @@
             AllowDraggingColumns="True" 
             AutoGenerateColumns="False" 
             FontSize="10" 
+            SelectedItem="{Binding Iteme, Mode=TwoWay}"
             ItemsSource="{Binding Itens}" 
-            SelectedItem="{Binding Item, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            PreviewKeyDown="dgItens_PreviewKeyDown" AllowEditing="True" AddNewRowInitiating="dgItens_AddNewRowInitiating">
+            PreviewKeyDown="dgItens_PreviewKeyDown" 
+            AllowEditing="True" 
+            AddNewRowInitiating="dgItens_AddNewRowInitiating" 
+            AddNewRowPosition="None" 
+            CurrentCellDropDownSelectionChanged="dgItens_CurrentCellDropDownSelectionChanged">
             <Syncfusion:SfDataGrid.Columns>
-                <Syncfusion:GridTextColumn HeaderText="SETOR" ColumnSizer="AutoWithLastColumnFill" MappingName="setor" AllowEditing="False"/>
-                <Syncfusion:GridCheckBoxColumn HeaderText="SELEÇÃO" ColumnSizer="SizeToHeader" MappingName="selesao"/>
+                <Syncfusion:GridComboBoxColumn
+                    ItemsSource="{Binding Setores}"
+                    DisplayMemberPath="setor"
+                    SelectedValuePath="codigo_setor"
+                    HeaderText="SETOR" 
+                    ColumnSizer="AutoWithLastColumnFill" 
+                    MappingName="codigo_setor"/>
+                <Syncfusion:GridCheckBoxColumn 
+                    HeaderText="SELEÇÃO" 
+                    ColumnSizer="SizeToHeader" 
+                    MappingName="selesao"/>
             </Syncfusion:SfDataGrid.Columns>
         </Syncfusion:SfDataGrid>
 
@@ -36,10 +51,9 @@
                 <TextBlock Text="Precisona a tecla F3 no setor para inserir uma observação" FontWeight="Bold" />
             </StatusBarItem>
             -->
-
-            <Button Content="ADICIONAR SETOR"/>
-            <Separator />
-            <Button Content="GERAR O.S"/>
+            <!--<Button Content="ADICIONAR SETOR" Click="OnAddSetor"/>-->
+            <Separator Width="1"/>
+            <Button Content="GERAR O.S" Click="OnCreateOrdemServico"/>
         </StatusBar>
 
     </Grid>

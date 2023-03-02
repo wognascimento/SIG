@@ -18,8 +18,11 @@ namespace Producao
         public DbSet<QryCheckListGeralComplementoModel> CheckListGeralComplementos { get; set; }
         public DbSet<ChkGeralRelatorioModel> ChkGeralRelatorios { get; set; }
         public DbSet<SetorProducaoModel> SetorProducaos { get; set; }
+        public DbSet<ObsOsModel> ObsOs { get; set; }
         public DbSet<ProdutoOsModel> ProdutoOs { get; set; }
-        public DbSet<ProdutoServicoModel> ProdutoServicos { get; set; }   
+        public DbSet<ProdutoServicoModel> ProdutoServicos { get; set; }
+        public DbSet<OrdemServicoAbertaEmissaoAgrupadoModel> OrdemServicoAbertas { get; set; }
+        public DbSet<OrdemServicoEmissaoAbertaForm> OrdemServicoEmissaoAbertas { get; set; }
         public DbSet<RequisicaoModel> Requisicoes { get; set; }
         public DbSet<DetalheRequisicaoModel> RequisicaoDetalhes { get; set; }
         public DbSet<QryRequisicaoDetalheModel> QryRequisicaoDetalhes { get; set; }

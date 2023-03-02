@@ -1,24 +1,13 @@
-﻿using iText.Layout.Element;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Producao.Views.PopUp;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Utility;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Producao.Views
 {
@@ -109,10 +98,10 @@ namespace Producao.Views
             var item = grid.SelectedItem as ModeloControleOsModel;
             if (record?.qtd_chk_list > (int)(record?.qtd_os ?? 0))
             {
-            try
-            {
+                try
+                {
                     var dif = (record?.qtd_chk_list - (int)(record?.qtd_os ?? 0));
-                    var window = new ModeloSetoresOrdemServico(record?.codcompladicional);
+                    var window = new ModeloSetoresOrdemServico(record);
                     window.Owner = App.Current.MainWindow;
                     window.ShowDialog();
                     
