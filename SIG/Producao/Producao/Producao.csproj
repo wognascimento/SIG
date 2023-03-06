@@ -132,6 +132,9 @@
     <None Update="Modelos\ORDEM_SERVICO_MODELO.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Modelos\RECEITA_CENTRAL_MODELO.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Modelos\REQUISICAO_MODELO.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

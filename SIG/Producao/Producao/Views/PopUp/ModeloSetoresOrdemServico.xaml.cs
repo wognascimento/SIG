@@ -121,10 +121,14 @@ namespace Producao.Views.PopUp
             }
         }
 
-        private void OnPrintOS(object sender, RoutedEventArgs e)
+        private async void OnPrintOS(object sender, RoutedEventArgs e)
         {
+            ModeloSetoresOrdemServicoViewModel vm = (ModeloSetoresOrdemServicoViewModel)DataContext;
+
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 using ExcelEngine excelEngine = new ExcelEngine();
                 IApplication application = excelEngine.Excel;
                 application.DefaultVersion = ExcelVersion.Xlsx;
@@ -132,10 +136,64 @@ namespace Producao.Views.PopUp
                 IWorkbook workbook = excelEngine.Excel.Workbooks.Open("Modelos/ORDEM_SERVICO_MODELO.xlsx");
                 IWorksheet worksheet = workbook.Worksheets[0];
 
+                var servicos = await Task.Run(() => vm.GetOsEmitidas(5002)); //modeloControle.num_os_produto
+
+                IRange range = worksheet[27, 22, 53, 22];
+                if (servicos.Count == 1)
+                    worksheet.ShowRange(range, false);
+
+                var pagina = 1;
+                foreach (var servico in servicos)
+                {
+                    
+                    if (pagina == 1)
+                    {
+                        worksheet.Range["G2"].Text = servico.num_os_produto.ToString(); 
+                        worksheet.Range["I2"].Text = servico.num_os_servico.ToString();
+                        worksheet.Range["B4"].Text = servico.tipo;
+                        worksheet.Range["D4"].Text = $"{servico.data_inicio:dd/MM/yy}";
+                        worksheet.Range["F4"].Text = $"{servico.data_fim:dd/MM/yy}";
+                        worksheet.Range["B5"].Text = servico.setor_caminho;
+                        worksheet.Range["F5"].Text = servico.solicitado_por;
+                        worksheet.Range["G4"].Text = $"META HT: {servico.meta_peca_hora}";
+                        worksheet.Range["B6"].Text = servico.planilha;
+                        worksheet.Range["B7"].Text = servico.descricao_completa;
+                        worksheet.Range["G7"].Text = $"{servico.data_de_expedicao:dd/MM/yy}";
+                        worksheet.Range["B9"].Text = servico.quantidade.ToString(); // FORMATAR CASO NECESSÁRIO
+                        worksheet.Range["D9"].Text = servico.nivel.ToString();
+                        worksheet.Range["B10"].Text = servico.setor_caminho_proximo;
+                        worksheet.Range["B11"].Text = servico.tema;
+                        worksheet.Range["A13"].Text = servico.orientacao_caminho;
+                        worksheet.Range["A17"].Text = servico.acabamento_construcao;
+                        worksheet.Range["A19"].Text = servico.acabamento_fibra;
+                        worksheet.Range["A21"].Text = servico.acabamento_moveis;
+                        worksheet.Range["A23"].Text = servico.laco;
+                        worksheet.Range["A25"].Text = servico.obs_iluminacao;
+
+                        var setores = await Task.Run(() => vm.GetServicos(modeloControle.num_os_produto));
+                        var idexSetor = 9;
+                        foreach (var setor in setores)
+                        {
+                            worksheet.Range[$"G{idexSetor}"].Text = setor.setor_caminho_proximo;
+                            idexSetor ++;
+                            if (idexSetor == 17)
+                                break;
+                        }
+                    }
+                    else if(pagina == 2)
+                    {
+
+                    }
+
+                    pagina = 2;
+                }
+
+                
+
                 //worksheet.Range[$"E4"].Text = vm.Pedido.idpedido.ToString();
                 //worksheet.ShowColumn(2, false);
 
-                IRange range = worksheet[27, 1, 53,1];
+                //IRange range = worksheet[27, 1, 53,1];
                 worksheet.ShowRange(range, false);
 
                 //workbook.PasswordToOpen = "sig@protect";
@@ -155,11 +213,14 @@ namespace Producao.Views.PopUp
                         UseShellExecute = true,
                     });
 
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
 
         }
@@ -200,6 +261,33 @@ namespace Producao.Views.PopUp
             set { _setores = value; RaisePropertyChanged("Setores"); }
         }
 
+        private OsEmissaoProducaoImprimirModel _emitida;
+        public OsEmissaoProducaoImprimirModel Emitida
+        {
+            get { return _emitida; }
+            set { _emitida = value; RaisePropertyChanged("Emitida"); }
+        }
+        private ObservableCollection<OsEmissaoProducaoImprimirModel> _emitidas;
+        public ObservableCollection<OsEmissaoProducaoImprimirModel> Emitidas
+        {
+            get { return _emitidas; }
+            set { _emitidas = value; RaisePropertyChanged("Emitidas"); }
+        }
+
+        private ProdutoServicoModel _serviso;
+        public ProdutoServicoModel Servico
+        {
+            get { return _serviso; }
+            set { _serviso = value; RaisePropertyChanged("Servico"); }
+        }
+        private ObservableCollection<ProdutoServicoModel> _servicos;
+        public ObservableCollection<ProdutoServicoModel> Servicos
+        {
+            get { return _servicos; }
+            set { _servicos = value; RaisePropertyChanged("Servicos"); }
+        }
+
+
         public async Task<ObservableCollection<HistoricoSetorModel>> GetSetoresProdutoAsync(long? codcompladicional)
         {
             try
@@ -213,13 +301,11 @@ namespace Producao.Views.PopUp
                 throw;
             }
         }
-        //ObservableCollection<SetorProducaoModel>
         public async Task<ObservableCollection<SetorModel>> GetSetorsAsync()
         {
             try
             {
                 using DatabaseContext db = new();
-                //var data = await db.SetorProducaos.Where(c => c.inativo == "0    ").OrderBy(c => c.setor).ToListAsync();
                 var data = await (from s in db.SetorProducaos where s.inativo == "0    " select new SetorModel { setor =  s.setor + " - " + s.galpao, codigo_setor = s.codigo_setor}).ToListAsync();
                 return new ObservableCollection<SetorModel>(data);
             }
@@ -317,6 +403,34 @@ namespace Producao.Views.PopUp
             catch (Exception)
             {
                 transaction.Rollback();
+                throw;
+            }
+        }
+
+        public async Task<ObservableCollection<OsEmissaoProducaoImprimirModel>> GetOsEmitidas(long? num_os_produto)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.ImprimirOsS.Where(i => i.num_os_produto == num_os_produto).ToListAsync();
+                return new ObservableCollection<OsEmissaoProducaoImprimirModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ObservableCollection<ProdutoServicoModel>> GetServicos(long? num_os_produto)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.ProdutoServicos.Where(i => i.num_os_produto == num_os_produto).ToListAsync();
+                return new ObservableCollection<ProdutoServicoModel>(data);
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }
