@@ -52,8 +52,9 @@
             </StatusBarItem>
             -->
             <!--<Button Content="ADICIONAR SETOR" Click="OnAddSetor"/>-->
-            <Separator Width="1"/>
             <Button Content="GERAR O.S" Click="OnCreateOrdemServico"/>
+            <Separator Width="1"/>
+            <Button Content="IMPRIMIR O.S" Click="OnPrintOS"/>
         </StatusBar>
 
     </Grid>

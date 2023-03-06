@@ -1,21 +1,12 @@
-﻿using Microsoft.Office.Interop.Excel;
-using Org.BouncyCastle.Ocsp;
-using Producao.Views;
+﻿using Producao.Views;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Utility;
-using Syncfusion.Windows.Shared;
 using Syncfusion.XlsIO;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Producao

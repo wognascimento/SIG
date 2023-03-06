@@ -1,18 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Syncfusion.Data;
-using Syncfusion.Pdf;
-using Syncfusion.Pdf.Graphics;
-using Syncfusion.Pdf.Grid;
+//using Microsoft.Office.Interop.Excel;
 using Syncfusion.UI.Xaml.Grid;
-using Syncfusion.UI.Xaml.Grid.Helpers;
-using Syncfusion.Windows.Shared;
+using Syncfusion.XlsIO;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+//using Excel = Microsoft.Office.Interop.Excel;
+
 
 namespace Producao.Views.PopUp
 {
@@ -121,6 +121,48 @@ namespace Producao.Views.PopUp
             }
         }
 
+        private void OnPrintOS(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using ExcelEngine excelEngine = new ExcelEngine();
+                IApplication application = excelEngine.Excel;
+                application.DefaultVersion = ExcelVersion.Xlsx;
+                //IWorkbook workbook = excelEngine.Excel.Workbooks.Open("Modelos/ORDEM_SERVICO_MODELO.xlsx", ExcelParseOptions.Default, false, "1@3mudar");
+                IWorkbook workbook = excelEngine.Excel.Workbooks.Open("Modelos/ORDEM_SERVICO_MODELO.xlsx");
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                //worksheet.Range[$"E4"].Text = vm.Pedido.idpedido.ToString();
+                //worksheet.ShowColumn(2, false);
+
+                IRange range = worksheet[27, 1, 53,1];
+                worksheet.ShowRange(range, false);
+
+                //workbook.PasswordToOpen = "sig@protect";
+                //workbook.SetWriteProtectionPassword("sig@protect");
+                //workbook.ReadOnlyRecommended = true;
+
+                workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
+                worksheet.Clear();
+                workbook.Close();
+
+
+
+                Process.Start(
+                    new ProcessStartInfo(@"Impressos\ORDEM_SERVICO_MODELO.xlsx")
+                    {
+                        Verb = "Print",
+                        UseShellExecute = true,
+                    });
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
     }
 
     public class ModeloSetoresOrdemServicoViewModel : INotifyPropertyChanged
