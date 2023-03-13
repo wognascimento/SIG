@@ -33,19 +33,29 @@
                 <syncfusion:MenuItemAdv Header="Itens Conferidos"/>
             </syncfusion:MenuItemAdv>
             <syncfusion:MenuItemAdv Header="Consultas">
-                <syncfusion:MenuItemAdv Header="T Exped"/>
-                <syncfusion:MenuItemAdv Header="Caixas endereçadas"/>
+                <syncfusion:MenuItemAdv Header="T Exped" Click="OnExpedClick"/>
+                <syncfusion:MenuItemAdv Header="Caixas endereçadas" Click="OnCaixasEnderecadasClick"/>
                 <syncfusion:MenuItemSeparator/>
-                <syncfusion:MenuItemAdv Header="Saldo Geral Expedido"/>
-                <syncfusion:MenuItemAdv Header="Saldo Geral Expedido por Shopping"/>
+                <!--<syncfusion:MenuItemAdv Header="Saldo Geral Expedido"/>-->
+                <syncfusion:MenuItemAdv Header="Saldo Geral Expedido por Shopping" Click="OnSaldoGeralShoppingClick"/>
+                <syncfusion:MenuItemAdv Header="Produtos Expedido por Data" Click="OnProdutosExpedidoDataClick"/>
                 <syncfusion:MenuItemSeparator/>
                 <syncfusion:MenuItemAdv Header="Cubagem ">
-                    <syncfusion:MenuItemAdv Header="Cliente Fracionada"/>
-                    <syncfusion:MenuItemAdv Header="Por Semana"/>
+                    <syncfusion:MenuItemAdv Header="Expedida por Dia" Click="OnCubagemDiaClick"/>
+                    <syncfusion:MenuItemAdv Header="Semana Ano Anterior x Ano Atual" Click="OnCubagemSemanaAnosClick"/>
+                    <syncfusion:MenuItemAdv Header="Prevista por Cliente" Click="OnCubagemPrevistaClienteClick"/>
+                    <syncfusion:MenuItemAdv Header="Cliente Fracionada por Caminhão"/>
+                    <syncfusion:MenuItemAdv Header="Cliente Efetiva"/>
                 </syncfusion:MenuItemAdv>
             </syncfusion:MenuItemAdv>
         </syncfusion:MenuAdv>
-        <syncfusion:DocumentContainer x:Name="_dc" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        
+        <syncfusion:DocumentContainer 
+            x:Name="_dc" 
+            Grid.Row="1" 
+            HorizontalContentAlignment="Center" 
+            VerticalContentAlignment="Center"/>
+        
         <StatusBar Grid.Row="2">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

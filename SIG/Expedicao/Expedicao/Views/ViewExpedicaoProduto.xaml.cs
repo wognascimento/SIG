@@ -19,7 +19,9 @@ namespace Expedicao.Views
         public ViewExpedicaoProduto()
         {
             InitializeComponent();
-            //this.dataGrid.SearchHelper = new LocalizarHelperExt(this.dataGrid);
+            //this.dataGrid.SearchHelper = new LocalizarHelperExt(dataGrid);
+
+            this.Exped.SelectionController = new GridSelectionControllerExt(Exped);
         }
 
         private async void UserControl_Initialized(object sender, EventArgs e)
@@ -31,7 +33,7 @@ namespace Expedicao.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.InnerException.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -48,7 +50,7 @@ namespace Expedicao.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.InnerException.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -68,7 +70,7 @@ namespace Expedicao.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.InnerException.Message);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -96,7 +98,7 @@ namespace Expedicao.Views
                 catch (Exception ex)
                 {
                     e.Cancel = true;
-                    int num2 = (int)MessageBox.Show(ex.InnerException.Message);
+                    int num2 = (int)MessageBox.Show(ex.Message);
                 }
             }
             else
@@ -135,49 +137,47 @@ namespace Expedicao.Views
             }
             else
             {
-                double? qtdExpedida = rowData.QtdExpedida;
-                if (!qtdExpedida.HasValue)
+                //decimal? qtdExpedida = (decimal?)rowData.QtdExpedida;
+                if (!rowData.QtdExpedida.HasValue)
                 {
                     e.IsValid = false;
                     e.ErrorMessages.Add("QtdExpedida", "qtd_expedida não pode ser nulo.");
                 }
                 else
                 {
-                    qtdExpedida = rowData.QtdExpedida;
-                    double? nullable1 = this.ProdutoExpedido.Qtd;
-                    if (qtdExpedida.GetValueOrDefault() > nullable1.GetValueOrDefault() & qtdExpedida.HasValue & nullable1.HasValue)
+                    //Math.Round( 2.123455909, 2);
+                    //qtdExpedida = (decimal?)rowData.QtdExpedida;
+                    //decimal? nullable1 = (decimal?)this.ProdutoExpedido.Qtd;
+                    if (Math.Round((double)rowData.QtdExpedida,2) > Math.Round((double)ProdutoExpedido.Qtd,2) & rowData.QtdExpedida.HasValue & ProdutoExpedido.Qtd.HasValue)
                     {
                         e.IsValid = false;
                         e.ErrorMessages.Add("QtdExpedida", "qtd_expedida não pode ser maior que qtd do cheklist.");
                     }
                     else
                     {
-                        int? nullable2 = rowData.VolExp;
-                        if (!nullable2.HasValue)
+                        
+                        if (!rowData.VolExp.HasValue)
                         {
                             e.IsValid = false;
                             e.ErrorMessages.Add("VolExp", "vol_exp não pode ser nulo.");
                         }
                         else
                         {
-                            nullable2 = rowData.VolTotExp;
-                            if (!nullable2.HasValue)
+                            if (!rowData.VolTotExp.HasValue)
                             {
                                 e.IsValid = false;
                                 e.ErrorMessages.Add("VolTotExp", "vol_tot_exp não pode ser nulo.");
                             }
                             else
                             {
-                                nullable1 = rowData.Pl;
-                                if (!nullable1.HasValue)
+                                if (!rowData.Pl.HasValue)
                                 {
                                     e.IsValid = false;
                                     e.ErrorMessages.Add("Pl", "pl não pode ser nulo.");
                                 }
                                 else
                                 {
-                                    nullable1 = rowData.Pb;
-                                    if (!nullable1.HasValue)
+                                    if (!rowData.Pb.HasValue)
                                     {
                                         e.IsValid = false;
                                         e.ErrorMessages.Add("Pb", "pb não pode ser nulo.");
@@ -186,48 +186,69 @@ namespace Expedicao.Views
                                     {
                                         if (rowData.ModeloCaixa == null)
                                         {
-                                            nullable1 = rowData.Largura;
-                                            if (!nullable1.HasValue)
+                                            if (!rowData.Largura.HasValue)
                                             {
-                                                nullable1 = rowData.Altura;
-                                                if (!nullable1.HasValue)
-                                                {
-                                                    nullable1 = rowData.Profundidade;
-                                                    if (!nullable1.HasValue)
-                                                    {
-                                                        e.IsValid = false;
-                                                        e.ErrorMessages.Add("Largura", "Precisa informar uma das formas de medida.");
-                                                        e.ErrorMessages.Add("Altura", "Precisa informar uma das formas de medida.");
-                                                        e.ErrorMessages.Add("Profundidade", "Precisa informar uma das formas de medida.");
-                                                        e.ErrorMessages.Add("ModeloCaixa", "Precisa informar uma das formas de medida.");
-                                                        return;
-                                                    }
-                                                }
+                                                e.IsValid = false;
+                                                e.ErrorMessages.Add("Largura", "Precisa informar uma das formas de medida.");
+                                                return;
+                                            }
+                                            if (!rowData.Altura.HasValue)
+                                            {
+                                                e.IsValid = false;
+                                                e.ErrorMessages.Add("Altura", "Precisa informar uma das formas de medida.");
+                                                return;
+                                            }
+                                            if (!rowData.Profundidade.HasValue)
+                                            {
+                                                e.IsValid = false;
+                                                e.ErrorMessages.Add("Profundidade", "Precisa informar uma das formas de medida.");
+                                                return;
                                             }
                                         }
-                                        if (rowData.ModeloCaixa != null)
+                                        if (rowData.ModeloCaixa != null && rowData.ModeloCaixa != "CX")
                                         {
-                                            nullable1 = rowData.Largura;
-                                            if (nullable1.HasValue)
+                                            if (rowData.Largura.HasValue)
                                             {
-                                                nullable1 = rowData.Altura;
-                                                if (nullable1.HasValue)
-                                                {
-                                                    nullable1 = rowData.Profundidade;
-                                                    if (nullable1.HasValue)
-                                                    {
-                                                        e.IsValid = false;
-                                                        e.ErrorMessages.Add("Largura", "Precisa informar apenas tipo da caixa ou as medidas.");
-                                                        e.ErrorMessages.Add("Altura", "Precisa informar apenas tipo da caixa ou as medidas.");
-                                                        e.ErrorMessages.Add("Profundidade", "Precisa informar apenas tipo da caixa ou as medidas.");
-                                                        e.ErrorMessages.Add("ModeloCaixa", "Precisa informar apenas tipo da caixa ou as medidas.");
-                                                        return;
-                                                    }
-                                                }
+                                                e.IsValid = false;
+                                                e.ErrorMessages.Add("Largura", "Precisa informar apenas tipo da caixa ou as medidas.");
+                                                return;
+                                            }
+                                            if (rowData.Altura.HasValue)
+                                            {
+                                                e.IsValid = false;
+                                                e.ErrorMessages.Add("Altura", "Precisa informar apenas tipo da caixa ou as medidas.");
+                                                return;
+                                            }
+                                            if (rowData.Profundidade.HasValue)
+                                            {
+                                                e.IsValid = false;
+                                                e.ErrorMessages.Add("Profundidade", "Precisa informar apenas tipo da caixa ou as medidas.");
+                                                return;
                                             }
                                         }
-                                        nullable2 = rowData.Volume;
-                                        if (nullable2.HasValue)
+                                        if (rowData.ModeloCaixa == "CX")
+                                        {
+                                            if (!rowData.Largura.HasValue)
+                                            {
+                                                e.IsValid = false;
+                                                e.ErrorMessages.Add("Largura", "Com tipo de caixa CX informado, precisa informar as medidas.");
+                                                return;
+                                            }
+                                            if (!rowData.Altura.HasValue)
+                                            {
+                                                e.IsValid = false;
+                                                e.ErrorMessages.Add("Altura", "Com tipo de caixa CX informado, precisa informar as medidas.");
+                                                return;
+                                            }
+                                            if (!rowData.Profundidade.HasValue)
+                                            {
+                                                e.IsValid = false;
+                                                e.ErrorMessages.Add("Profundidade", "Com tipo de caixa CX informado, precisa informar as medidas.");
+                                                return;
+                                            }
+
+                                        }
+                                        if (rowData.Volume.HasValue)
                                             return;
                                         e.IsValid = false;
                                         e.ErrorMessages.Add("Volume", "Informe o número do volume.");
@@ -256,20 +277,20 @@ namespace Expedicao.Views
 
         private void Localizar()
         {
+            this.dataGrid.SelectedItems.Clear();
+            this.dataGrid.SearchHelper.ClearSearch();
             var window = new Window();
             var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
             stackPanel.Margin = new Thickness(5, 5, 5, 5);
             var inputLayout = new SfTextInputLayout();
             inputLayout.Hint = "Localizar";
-            TextBox textBox = new TextBox();
+            TextBox textBox = new();
             textBox.PreviewKeyDown += (s, e) => 
             {
                 if (e.Key == Key.Enter)
                     PerformSearch(textBox.Text);
                 else if (e.Key == Key.Escape)
                     window.Close();
-
-
             };
             inputLayout.InputView = textBox;
             stackPanel.Children.Add(inputLayout);

@@ -1,10 +1,5 @@
 ﻿using Syncfusion.UI.Xaml.Grid;
-using Syncfusion.UI.Xaml.Grid.Helpers;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -22,11 +17,11 @@ namespace Expedicao
     public class SearchControl : Control, IDisposable
     {
         #region Fields
-        internal Button FindNextButton;
-        internal Button FindPreviousButton;
-        internal Button CloseButton;
-        internal TextBox SearchTextBox;
-        internal AdornerDecorator AdornerLayer;
+        internal Button? FindNextButton;
+        internal Button? FindPreviousButton;
+        internal Button? CloseButton;
+        internal TextBox? SearchTextBox;
+        internal AdornerDecorator? AdornerLayer;
         #endregion
 
         #region Properties
@@ -64,27 +59,27 @@ namespace Expedicao
         {
             if (visible)
             {
-                this.Visibility = Visibility.Visible;
-                this.SearchTextBox.Focus();
+                Visibility = Visibility.Visible;
+                //SearchTextBox.Focus();
             }
             else
             {
-                this.Visibility = Visibility.Hidden;
-                this.SearchTextBox.Clear();
-                this.DataGrid.SearchHelper.ClearSearch();
-                this.DataGrid.Focus();
+                Visibility = Visibility.Hidden;
+                //SearchTextBox.Clear();
+                DataGrid.SearchHelper.ClearSearch();
+                DataGrid.Focus();
             }
         }
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            FindNextButton = this.GetTemplateChild("PART_FindNext") as Button;
-            FindPreviousButton = this.GetTemplateChild("PART_FindPrevious") as Button;
-            CloseButton = this.GetTemplateChild("PART_Close") as Button;
-            SearchTextBox = this.GetTemplateChild("PART_TextBox") as TextBox;
-            AdornerLayer = this.GetTemplateChild("PART_AdornerLayer") as AdornerDecorator;
-            this.SearchTextBox.Focus();
-            this.WireEvents();
+            FindNextButton = GetTemplateChild("PART_FindNext") as Button;
+            FindPreviousButton = GetTemplateChild("PART_FindPrevious") as Button;
+            CloseButton = GetTemplateChild("PART_Close") as Button;
+            SearchTextBox = GetTemplateChild("PART_TextBox") as TextBox;
+            AdornerLayer = GetTemplateChild("PART_AdornerLayer") as AdornerDecorator;
+            SearchTextBox.Focus();
+            WireEvents();
         }
         #endregion
 

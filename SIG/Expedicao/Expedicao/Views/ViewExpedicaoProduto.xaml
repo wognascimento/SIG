@@ -96,11 +96,11 @@
             VerticalAlignment="Top" 
             DataGrid="{Binding ElementName=dataGrid}"
             HorizontalAlignment="Right"/>
--->        
+ -->     
     </Grid>
 <!--
     <interactivity:Interaction.Behaviors>
         <local:Behaviour/>
     </interactivity:Interaction.Behaviors>
--->
+ -->   
 </UserControl>

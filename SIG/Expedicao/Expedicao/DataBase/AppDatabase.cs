@@ -23,6 +23,18 @@ namespace Expedicao
         public DbSet<CarregamentoItemCaminhaoModel> CarregamentoItemCaminhaos { get; set; }
         public DbSet<RelatorioNfTotalCompletoModel> RelatorioNfTotalCompletos { get; set; }
         public DbSet<PacklistCarregCaminhaoModel> PacklistCarregCaminhaos { get; set; }
+
+        public DbSet<QryExpedModel> QryExpeds { get; set; }
+        public DbSet<CaixasEnderecadasModel> CaixasEnderecadas { get; set; }
+        public DbSet<SaldoGeralShoppingModel> SaldoGeralShoppings { get; set; }
+        public DbSet<ProdutosBaiadosGeralTotalDataModel> produtosBaiadosData { get; set; }
+        public DbSet<CubagemDiaModel> CubagemDias { get; set; }
+        public DbSet<CubagemSemanaAnoAnteriorAtualModel> CubagemSemanaAnos { get; set; }
+        public DbSet<CubagemPrevistaClienteModel> CubagemPrevistaClientes { get; set; }
+        
+
+
+
         static AppDatabase() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

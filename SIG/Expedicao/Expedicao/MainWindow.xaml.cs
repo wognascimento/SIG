@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
 using Expedicao.Views;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Windows.Tools.Controls;
+using Syncfusion.XlsIO;
 using SizeMode = Syncfusion.SfSkinManager.SizeMode;
 
 namespace Expedicao
@@ -198,6 +204,295 @@ namespace Expedicao
             DocumentContainer.SetMDIBounds((DependencyObject)viewExpedicaoExcel, new Rect((this._dc.ActualWidth - 600.0) / 2.0, (this._dc.ActualHeight - 80.0) / 2.0, 600.0, 80.0));
             this._dc.CanMDIMaximize = false;
             this._dc.Items.Add((object)viewExpedicaoExcel);
+        }
+
+        private async void OnExpedClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ExcelEngine excelEngine = new();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                using AppDatabase db = new();
+                
+                IList<QryExpedModel> dados = await db.QryExpeds.ToListAsync();
+                ExcelImportDataOptions importDataOptions = new()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(dados, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs(@"c:\relatorios\exped.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                Process.Start(new ProcessStartInfo(@"c:\relatorios\exped.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+
+        }
+
+        private async void OnCaixasEnderecadasClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ExcelEngine excelEngine = new();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                using AppDatabase db = new();
+
+                IList<CaixasEnderecadasModel> dados = await db.CaixasEnderecadas.ToListAsync();
+                ExcelImportDataOptions importDataOptions = new()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(dados, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs(@"c:\relatorios\caixas_enderecadas.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                Process.Start(new ProcessStartInfo(@"c:\relatorios\caixas_enderecadas.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
+        private async void OnSaldoGeralShoppingClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ExcelEngine excelEngine = new();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                using AppDatabase db = new();
+
+                IList<SaldoGeralShoppingModel> dados = await db.SaldoGeralShoppings.ToListAsync();
+                ExcelImportDataOptions importDataOptions = new()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(dados, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs(@"c:\relatorios\saldo_geral_shopping.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                Process.Start(new ProcessStartInfo(@"c:\relatorios\saldo_geral_shopping.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
+        private async void OnProdutosExpedidoDataClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ExcelEngine excelEngine = new();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                using AppDatabase db = new();
+
+                IList<ProdutosBaiadosGeralTotalDataModel> dados = await db.produtosBaiadosData.ToListAsync();
+                ExcelImportDataOptions importDataOptions = new()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(dados, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs(@"c:\relatorios\produtos_expedidos_data.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                Process.Start(new ProcessStartInfo(@"c:\relatorios\produtos_expedidos_data.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+
+        }
+
+        private async void OnCubagemDiaClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ExcelEngine excelEngine = new();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                using AppDatabase db = new();
+
+                IList<CubagemDiaModel> dados = await db.CubagemDias.ToListAsync();
+                ExcelImportDataOptions importDataOptions = new()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(dados, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs(@"c:\relatorios\cubagem_dia.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                Process.Start(new ProcessStartInfo(@"c:\relatorios\cubagem_dia.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
+        private async void OnCubagemSemanaAnosClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ExcelEngine excelEngine = new();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                using AppDatabase db = new();
+
+                IList<CubagemSemanaAnoAnteriorAtualModel> dados = await db.CubagemSemanaAnos.ToListAsync();
+                ExcelImportDataOptions importDataOptions = new()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(dados, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs(@"c:\relatorios\cubagem_ano_atual_ano_anterior.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                Process.Start(new ProcessStartInfo(@"c:\relatorios\cubagem_ano_atual_ano_anterior.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
+        private async void OnCubagemPrevistaClienteClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ExcelEngine excelEngine = new();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                using AppDatabase db = new();
+
+                IList<CubagemPrevistaClienteModel> dados = await db.CubagemPrevistaClientes.ToListAsync();
+                ExcelImportDataOptions importDataOptions = new()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(dados, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs(@"c:\relatorios\cubagem_prevista_cliente.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                Process.Start(new ProcessStartInfo(@"c:\relatorios\cubagem_prevista_cliente.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
         }
     }
 }

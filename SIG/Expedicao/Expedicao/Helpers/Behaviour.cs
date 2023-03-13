@@ -8,14 +8,14 @@ namespace Expedicao
 {
     public class Behaviour : Behavior<UserControl>
     {
-        SfDataGrid dataGrid;
-        SearchControl searchControl;
+        SfDataGrid? dataGrid;
+        SearchControl? searchControl;
         protected override void OnAttached()
         {
-            var window = this.AssociatedObject;
-            this.dataGrid = window.FindName("dataGrid") as SfDataGrid;
-            this.dataGrid.KeyDown += OnDataGridKeyDown;
-            this.searchControl = window.FindName("searchControl") as SearchControl;
+            var window = AssociatedObject;
+            dataGrid = window.FindName("dataGrid") as SfDataGrid;
+            dataGrid.KeyDown += OnDataGridKeyDown;
+            searchControl = window.FindName("searchControl") as SearchControl;
         }
         /// <summary>
         /// Invokes thid Event to show the AdonerDecorator in the view.
@@ -25,13 +25,13 @@ namespace Expedicao
         private void OnDataGridKeyDown(object sender, KeyEventArgs e)
         {
             if ((e.KeyboardDevice.Modifiers & ModifierKeys.Control) != ModifierKeys.None && e.Key == Key.F)
-                searchControl.UpdateSearchControlVisiblity(true);
+                searchControl?.UpdateSearchControlVisiblity(true);
             else
-                searchControl.UpdateSearchControlVisiblity(false);
+                searchControl?.UpdateSearchControlVisiblity(false);
         }
         protected override void OnDetaching()
         {
-            this.dataGrid.KeyDown -= OnDataGridKeyDown;
+            dataGrid.KeyDown -= OnDataGridKeyDown;
         }
     }
 }
