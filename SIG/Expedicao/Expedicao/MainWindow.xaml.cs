@@ -7,8 +7,10 @@ using System.Windows.Input;
 using Expedicao.Views;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.SfSkinManager;
+using Syncfusion.UI.Xaml.Spreadsheet;
 using Syncfusion.Windows.Tools.Controls;
 using Syncfusion.XlsIO;
+using Syncfusion.XlsIO.Implementation.PivotTables;
 using SizeMode = Syncfusion.SfSkinManager.SizeMode;
 
 namespace Expedicao
@@ -482,6 +484,170 @@ namespace Expedicao
                 excelEngine.Dispose();
 
                 Process.Start(new ProcessStartInfo(@"c:\relatorios\cubagem_prevista_cliente.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
+        private async void OnCubagemFracionadaCaminao(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                using AppDatabase db = new();
+                IList<CubagemEnderecada> dados = await db.CubagemEnderecadas.ToListAsync();
+
+                ExcelEngine excelEngine = new();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(2);
+
+                IWorksheet worksheet = workbook.Worksheets[0];
+                IWorksheet pivotSheet = workbook.Worksheets[1];
+
+               
+                ExcelImportDataOptions importDataOptions = new()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(dados, importDataOptions);
+                
+                IPivotCache cache = workbook.PivotCaches.Add(worksheet[$"A1:L1048576"]);
+                IPivotTable pivotTable = pivotSheet.PivotTables.Add("PivotTable1", pivotSheet["A1"], cache);
+
+                pivotTable.Fields[1].Axis = PivotAxisTypes.Page;
+                pivotTable.Fields[9].Axis = PivotAxisTypes.Row;
+                pivotTable.Fields[9].Subtotals = PivotSubtotalTypes.None;
+                pivotTable.Fields[4].Axis = PivotAxisTypes.Row;
+                pivotTable.Fields[4].Subtotals = PivotSubtotalTypes.None;
+                pivotTable.Fields[5].Axis = PivotAxisTypes.Row;
+                pivotTable.Fields[5].Subtotals = PivotSubtotalTypes.None;
+                pivotTable.Fields[3].Axis = PivotAxisTypes.Row;
+                pivotTable.Fields[3].Subtotals = PivotSubtotalTypes.None;
+                pivotTable.Fields[10].Axis = PivotAxisTypes.Column;
+
+                IPivotField pageField = pivotTable.Fields[1];
+                pageField.Items[1].Visible = false;
+                IPivotField field = pivotTable.Fields[7];
+                pivotTable.DataFields.Add(field, "Soma das Cubagens", PivotSubtotalTypes.Sum).NumberFormat = @"#,###0.00";
+
+                IPivotTableOptions options = pivotTable.Options;
+                options.ShowFieldList = false;
+
+                options.RowLayout = PivotTableRowLayout.Tabular;
+
+                //Set classic layout
+                ((PivotTableOptions)options).ShowGridDropZone = true;
+
+                options.RowHeaderCaption = "Payment Dates";
+                options.ColumnHeaderCaption = "Payments";
+
+                pivotTable.ColumnGrand = false;
+                pivotTable.RowGrand = true;
+
+                pivotTable.DisplayFieldCaptions = true;
+
+                workbook.Worksheets[1].Activate();
+                workbook.SaveAs(@"c:\relatorios\cubagem_fracionada_caminhao.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                Process.Start(new ProcessStartInfo(@"c:\relatorios\cubagem_fracionada_caminhao.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
+        private async void OnCubagemEfetivaClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                using AppDatabase db = new();
+                IList<CubagemEnderecada> dados = await db.CubagemEnderecadas.ToListAsync();
+
+                ExcelEngine excelEngine = new();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(2);
+
+                IWorksheet worksheet = workbook.Worksheets[0];
+                IWorksheet pivotSheet = workbook.Worksheets[1];
+
+
+                ExcelImportDataOptions importDataOptions = new()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(dados, importDataOptions);
+
+                IPivotCache cache = workbook.PivotCaches.Add(worksheet[$"A1:L1048576"]);
+                IPivotTable pivotTable = pivotSheet.PivotTables.Add("PivotTable1", pivotSheet["A1"], cache);
+
+                pivotTable.Fields[1].Axis = PivotAxisTypes.Page;
+                pivotTable.Fields[9].Axis = PivotAxisTypes.Row;
+                pivotTable.Fields[9].Subtotals = PivotSubtotalTypes.None;
+                pivotTable.Fields[4].Axis = PivotAxisTypes.Row;
+                pivotTable.Fields[4].Subtotals = PivotSubtotalTypes.None;
+                pivotTable.Fields[5].Axis = PivotAxisTypes.Row;
+                pivotTable.Fields[5].Subtotals = PivotSubtotalTypes.None;
+                pivotTable.Fields[3].Axis = PivotAxisTypes.Row;
+                pivotTable.Fields[3].Subtotals = PivotSubtotalTypes.None;
+                pivotTable.Fields[10].Axis = PivotAxisTypes.Column;
+
+                IPivotField pageField = pivotTable.Fields[1];
+                pageField.Items[1].Visible = false;
+                IPivotField field = pivotTable.Fields[7];
+                pivotTable.DataFields.Add(field, "Soma das Cubagens", PivotSubtotalTypes.Sum).NumberFormat = @"#,###0.00";
+
+                IPivotTableOptions options = pivotTable.Options;
+                options.ShowFieldList = false;
+
+                options.RowLayout = PivotTableRowLayout.Tabular;
+
+                //Set classic layout
+                ((PivotTableOptions)options).ShowGridDropZone = true;
+
+                options.RowHeaderCaption = "Payment Dates";
+                options.ColumnHeaderCaption = "Payments";
+
+                pivotTable.ColumnGrand = false;
+                pivotTable.RowGrand = true;
+
+                pivotTable.DisplayFieldCaptions = true;
+
+                workbook.Worksheets[1].Activate();
+                workbook.SaveAs(@"c:\relatorios\cubagem_fracionada_caminhao.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                Process.Start(new ProcessStartInfo(@"c:\relatorios\cubagem_fracionada_caminhao.xlsx")
                 {
                     UseShellExecute = true
                 });
