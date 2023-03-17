@@ -1,16 +1,13 @@
-﻿using System;
+﻿using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.Utility;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Syncfusion.Data;
-using Syncfusion.UI.Xaml.Grid;
-using Syncfusion.UI.Xaml.Utility;
-using System.IO;
-using System.Net.Sockets;
-using System.Runtime.CompilerServices;
-using System.Collections;
 
 namespace Expedicao.Views
 {
@@ -74,20 +71,29 @@ namespace Expedicao.Views
 
         private async static void OnPrintClicked(object obj)
         {
-            //streamWriter1 = new StreamWriter(@"C:\TEMP\ETIQUETA.TXT");
-            TcpClient? client = new TcpClient();
-            await client.ConnectAsync(IPAdress, Port);
-            streamWriter1 = new StreamWriter(client.GetStream());
 
-            SfDataGrid dataGrid = ((GridContextMenuInfo)obj).DataGrid;
-            EtiquetaNormal((EtiquetaVolumeItemModel)dataGrid.CurrentItem, (List<EtiquetaVolumeItemModel>)dataGrid.ItemsSource);
+            try
+            {
+                streamWriter1 = new StreamWriter(@"C:\TEMP\ETIQUETA.TXT");
+                TcpClient? client = new TcpClient();
+                //await client.ConnectAsync(IPAdress, Port);
+                //streamWriter1 = new StreamWriter(client.GetStream());
 
-            streamWriter1.Flush();
-            streamWriter1.Close();
-            streamWriter1.Dispose();
-            //tcpClient.Close();
+                SfDataGrid dataGrid = ((GridContextMenuInfo)obj).DataGrid;
+                EtiquetaNormal((EtiquetaVolumeItemModel)dataGrid.CurrentItem, (List<EtiquetaVolumeItemModel>)dataGrid.ItemsSource);
 
-            MessageBox.Show("Etiquetas impressas", "Impressão de etiquetas", MessageBoxButton.OK, MessageBoxImage.Information);
+                streamWriter1.Flush();
+                streamWriter1.Close();
+                streamWriter1.Dispose();
+                //tcpClient.Close();
+
+                MessageBox.Show("Etiquetas impressas", "Impressão de etiquetas", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
 
         private async static void OnPrintAllClicked(object obj)
