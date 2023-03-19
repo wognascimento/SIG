@@ -43,7 +43,7 @@ namespace Producao.Views.popup
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.InnerException.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

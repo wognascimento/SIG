@@ -23,6 +23,8 @@
     <None Remove="icones\icons8-detalhes-80.png" />
     <None Remove="icones\icons8-editar-propriedade-40.png" />
     <None Remove="icones\icons8-editar-propriedade-80.png" />
+    <None Remove="icones\icons8-excluir-40.png" />
+    <None Remove="icones\icons8-excluir-80.png" />
     <None Remove="icones\icons8-impressão-40.png" />
     <None Remove="icones\icons8-impressão-80.png" />
     <None Remove="icones\icons8-lista-de-verificação-40.png" />
@@ -111,6 +113,8 @@
     <Resource Include="icones\icons8-detalhes-80.png" />
     <Resource Include="icones\icons8-editar-propriedade-40.png" />
     <Resource Include="icones\icons8-editar-propriedade-80.png" />
+    <Resource Include="icones\icons8-excluir-40.png" />
+    <Resource Include="icones\icons8-excluir-80.png" />
     <Resource Include="icones\icons8-impressão-40.png" />
     <Resource Include="icones\icons8-impressão-80.png" />
     <Resource Include="icones\icons8-lista-de-verificação-40.png" />

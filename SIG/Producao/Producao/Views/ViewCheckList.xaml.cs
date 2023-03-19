@@ -181,7 +181,7 @@ namespace Producao.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.InnerException.Message, "Erro ao inserir", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Erro ao inserir", MessageBoxButton.OK, MessageBoxImage.Error);
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Collapsed;
             }
             
@@ -214,7 +214,7 @@ namespace Producao.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.InnerException.Message, "Erro ao inserir", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Erro ao inserir", MessageBoxButton.OK, MessageBoxImage.Error);
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Collapsed;
             }
         }
@@ -429,7 +429,7 @@ namespace Producao.Views
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.InnerException.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

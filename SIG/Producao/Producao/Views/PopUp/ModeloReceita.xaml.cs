@@ -238,6 +238,50 @@ namespace Producao.Views.PopUp
             }
         }
 
+        private async void OnExcluirClick(object sender, RoutedEventArgs e)
+        {
+            if (Receita == null)
+            {
+                MessageBox.Show("Precisa selecionar uma linha para excluir", "Deletar item", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var confirm = MessageBox.Show("Deseja deletar o item selecionado?", "Deletar item", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (confirm == MessageBoxResult.No)
+            { return; }
+
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+
+                ModeloReceitaViewModel? vm = (ModeloReceitaViewModel)DataContext;
+                var dados = new ModeloReceitaModel
+                {
+                    id_linha = Receita?.id_linha,
+                    id_modelo = Modelo.id_modelo,
+                    codcompladicional = long.Parse(txtCodigoProduto.Text),
+                    qtd_modelo = txtQtdModelo.Value,
+                    qtd_producao = txtQtdProducao.Value,
+                    observacao = txtObservacao.Text,
+                    cadastrado_por = Environment.UserName,
+                    data_cadastro = DateTime.Now,
+                };
+                await Task.Run(() => vm.ExcluirAsync(dados));
+                vm.ItensReceita = await Task.Run(() => vm.GetReceitaDetalhes(Modelo.id_modelo));
+                Limpar();
+                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+
+                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
         private void OnPrintClick(object sender, RoutedEventArgs e)
         {
             try
@@ -385,7 +429,6 @@ namespace Producao.Views.PopUp
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
-
     }
 
     public class ModeloReceitaViewModel : INotifyPropertyChanged
@@ -585,6 +628,26 @@ namespace Producao.Views.PopUp
                 await db.ReceitaModelos.SingleMergeAsync(receita);
                 await db.SaveChangesAsync();
                 return receita;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task ExcluirAsync(ModeloReceitaModel receita)
+        {
+            try
+            {
+                
+                using DatabaseContext db = new();
+                db.ReceitaModelos.Attach(receita);
+                db.ReceitaModelos.Remove(receita);
+                await db.SaveChangesAsync();
+                /*
+                db.ReceitaModelos.Remove(receita);
+                await db.SaveChangesAsync();
+                */
             }
             catch (Exception)
             {

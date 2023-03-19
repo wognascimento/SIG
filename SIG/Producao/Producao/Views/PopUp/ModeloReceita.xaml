@@ -234,20 +234,21 @@
                     Click="OnAdicionarClick"/>
 
             <syncfusion:ButtonAdv 
-                    Grid.Column="4"
+                x:Name="btnExcluir" 
+                Grid.Column="4"
+                SmallIcon="/icones/icons8-excluir-40.png" 
+                LargeIcon="/icones/icons8-excluir-80.png" 
+                SizeMode="Large" 
+                Label="EXCLUIR" 
+                Click="OnExcluirClick" />
+
+            <syncfusion:ButtonAdv 
+                    Grid.Column="6"
                     SmallIcon="/icones/icons8-impressão-40.png" 
                     LargeIcon="/icones/icons8-impressão-80.png" 
                     SizeMode="Large" 
                     Label="IMPRIMIR" 
                     Click="OnPrintClick"/>
-
-            <syncfusion:ButtonAdv 
-                    Grid.Column="6"
-                    SmallIcon="/icones/icons8-copiar-40.png" 
-                    LargeIcon="/icones/icons8-copiar-80.png" 
-                    SizeMode="Large" 
-                    Label="COPIAR" 
-                    Click="OnCopyClick" Visibility="Collapsed"/>
 
 
         </Grid>
