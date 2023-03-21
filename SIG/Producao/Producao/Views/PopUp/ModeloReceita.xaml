@@ -34,6 +34,9 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
             <RowDefinition Height="Auto" />
+            
+            <RowDefinition Height="Auto" />
+            
             <RowDefinition Height="5" />
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -200,13 +203,144 @@
                     NullValue="{x:Null}"/>
 
             </syncfusion:SfTextInputLayout>
-
-
+            
         </Grid>
 
+        <GroupBox x:Name="GBQtdFiadas" Grid.Row="7" Grid.ColumnSpan="3" Visibility="Collapsed">
+            <GroupBox.Header>
+                <Label>Quantidade Modelo Fiada</Label>
+            </GroupBox.Header>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition  />
+                    <ColumnDefinition  />
+                    <ColumnDefinition  />
+                    <ColumnDefinition  />
+                    <ColumnDefinition  />
+                    <ColumnDefinition  />
+                    <ColumnDefinition  />
+                    <ColumnDefinition  />
+                    <ColumnDefinition  />
+                    <ColumnDefinition  />
+                </Grid.ColumnDefinitions>
+
+                <syncfusion:SfTextInputLayout
+                    Margin="5,0,5,0"
+                    Grid.Column="0"
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="MOD. 01"
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+                    <syncfusion:IntegerTextBox x:Name="mod01" UseNullOption="True"  NullValue="{x:Null}"/>
+                </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout
+                    Margin="5,0,5,0"
+                    Grid.Column="1"
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="MOD. 02"
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+                    <syncfusion:IntegerTextBox x:Name="mod02"  UseNullOption="True"  NullValue="{x:Null}"/>
+                </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout
+                    Margin="5,0,5,0"
+                    Grid.Column="2"
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="MOD. 03"
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+                    <syncfusion:IntegerTextBox x:Name="mod03"  UseNullOption="True"  NullValue="{x:Null}"/>
+                </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout
+                    Margin="5,0,5,0"
+                    Grid.Column="3"
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="MOD. 04"
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+                    <syncfusion:IntegerTextBox x:Name="mod04"  UseNullOption="True"  NullValue="{x:Null}"/>
+                </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout
+                    Margin="5,0,5,0"
+                    Grid.Column="4"
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="MOD. 05"
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+                    <syncfusion:IntegerTextBox x:Name="mod05"  UseNullOption="True"  NullValue="{x:Null}"/>
+                </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout
+                    Margin="5,0,5,0"
+                    Grid.Column="5"
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="MOD. 06"
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+                    <syncfusion:IntegerTextBox x:Name="mod06"  UseNullOption="True"  NullValue="{x:Null}"/>
+                </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout
+                    Margin="5,0,5,0"
+                    Grid.Column="6"
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="MOD. 07"
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+                    <syncfusion:IntegerTextBox x:Name="mod07"  UseNullOption="True"  NullValue="{x:Null}"/>
+                </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout
+                    Margin="5,0,5,0"
+                    Grid.Column="7"
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="MOD. 08"
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+                    <syncfusion:IntegerTextBox x:Name="mod08"  UseNullOption="True"  NullValue="{x:Null}"/>
+                </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout
+                    Margin="5,0,5,0"
+                    Grid.Column="8"
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="MOD. 09"
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+                    <syncfusion:IntegerTextBox x:Name="mod09"  UseNullOption="True"  NullValue="{x:Null}"/>
+                </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout
+                    Margin="5,0,5,0"
+                    Grid.Column="9"
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="MOD. 10"
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+                    <syncfusion:IntegerTextBox x:Name="mod10"  UseNullOption="True"  NullValue="{x:Null}"/>
+                </syncfusion:SfTextInputLayout>
+
+            </Grid>
+        </GroupBox>
 
 
-        <Grid Grid.Row="7" Grid.Column="0">
+
+        <Grid Grid.Row="8" Grid.Column="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="1"/>
@@ -215,23 +349,27 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="1"/>
                 <ColumnDefinition />
+                <ColumnDefinition Width="1"/>
+                <ColumnDefinition />
+
             </Grid.ColumnDefinitions>
 
             <syncfusion:ButtonAdv 
-                    Grid.Column="0"
-                    SmallIcon="/icones/icons8-vassoura-40.png" 
-                    LargeIcon="/icones/icons8-vassoura-80.png" 
-                    SizeMode="Large" 
-                    Label="LIMPAR" 
-                    Content="_LIMPAR" 
-                    Click="OnLimparClick" />
+                Grid.Column="0"
+                SmallIcon="/icones/icons8-vassoura-40.png" 
+                LargeIcon="/icones/icons8-vassoura-80.png" 
+                SizeMode="Large" 
+                Label="Limpar" 
+                Content="_LIMPAR" 
+                Click="OnLimparClick" />
 
-            <syncfusion:ButtonAdv 
-                    Grid.Column="2"
-                    SmallIcon="/icones/icons8-salvar-40.png" 
-                    LargeIcon="/icones/icons8-salvar-80.png" 
-                    SizeMode="Large" Label="GRAVAR" 
-                    Click="OnAdicionarClick"/>
+            <syncfusion:ButtonAdv
+                Grid.Column="2"
+                SmallIcon="/icones/icons8-salvar-40.png" 
+                LargeIcon="/icones/icons8-salvar-80.png" 
+                SizeMode="Large" 
+                Label="Gravar" 
+                Click="OnAdicionarClick"/>
 
             <syncfusion:ButtonAdv 
                 x:Name="btnExcluir" 
@@ -239,23 +377,30 @@
                 SmallIcon="/icones/icons8-excluir-40.png" 
                 LargeIcon="/icones/icons8-excluir-80.png" 
                 SizeMode="Large" 
-                Label="EXCLUIR" 
+                Label="Excluir" 
                 Click="OnExcluirClick" />
 
+            <syncfusion:ButtonAdv
+                Grid.Column="6"
+                SmallIcon="/icones/icons8-impressão-40.png" 
+                LargeIcon="/icones/icons8-impressão-80.png" 
+                SizeMode="Large" 
+                Label="Imprimir" 
+                Click="OnPrintClick"/>
+
             <syncfusion:ButtonAdv 
-                    Grid.Column="6"
-                    SmallIcon="/icones/icons8-impressão-40.png" 
-                    LargeIcon="/icones/icons8-impressão-80.png" 
-                    SizeMode="Large" 
-                    Label="IMPRIMIR" 
-                    Click="OnPrintClick"/>
-
-
+                x:Name="btnModeloFiada" 
+                Grid.Column="8"
+                SmallIcon="{x:Null}" 
+                LargeIcon="{x:Null}" 
+                Label="Modelos Fiada" 
+                Visibility="Collapsed" 
+                Click="OnModelosFiadaClick"/>
         </Grid>
 
         <syncfusion:SfDataGrid 
             x:Name="dgModelos"
-            Grid.Row="9" 
+            Grid.Row="10" 
             Grid.Column="0"
             Grid.ColumnSpan="3" 
             AllowFiltering="True" 

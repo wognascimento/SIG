@@ -312,6 +312,13 @@ namespace Producao.Views
             window.ShowDialog();
         }
 
+        private void OnModelosFiadaClick(object sender, RoutedEventArgs e)
+        {
+            var window = new ModeloFiada(modelo);
+            window.Owner = App.Current.MainWindow;
+            window.ShowDialog();
+        }
+
         private async void dgModelos_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             modelo = (QryModeloModel)dgModelos.SelectedItem;
@@ -351,6 +358,7 @@ namespace Producao.Views
         {
             //var SelectedItem = ((DetailsViewDataGrid)e.OriginalSender).SelectedItem;
         }
+
     }
 
     public class CentralCriarModeloViewModel : INotifyPropertyChanged

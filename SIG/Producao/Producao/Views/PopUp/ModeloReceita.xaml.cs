@@ -25,6 +25,17 @@ namespace Producao.Views.PopUp
             InitializeComponent();
             this.Modelo = Modelo;
             this.DataContext = new ModeloReceitaViewModel();
+
+            if (Modelo?.planilha == "FIADA")
+            {
+                btnModeloFiada.Visibility = Visibility.Visible;
+                GBQtdFiadas.Visibility = Visibility.Visible;
+            }
+            /*else
+            {
+                btnModeloFiada.Visibility = Visibility.Collapsed;
+                GBQtdFiadas.Visibility = Visibility.Collapsed;
+            }*/
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -199,6 +210,16 @@ namespace Producao.Views.PopUp
             txtObservacao.Text = string.Empty;
             txtQtdModelo.Value = double.NaN;
             txtQtdProducao.Value = double.NaN;
+            mod01.Value = null;
+            mod02.Value = null;
+            mod03.Value = null;
+            mod04.Value = null;
+            mod05.Value = null;
+            mod06.Value = null;
+            mod07.Value = null;
+            mod08.Value = null;
+            mod09.Value = null;
+            mod10.Value = null;
             Receita = new QryReceitaDetalheCriadoModel();
             txtPlanilha.Focus();
         }
@@ -221,6 +242,16 @@ namespace Producao.Views.PopUp
                     observacao = txtObservacao.Text,
                     cadastrado_por = Environment.UserName,
                     data_cadastro = DateTime.Now,
+                    mod1 = (int?)mod01.Value,
+                    mod2 = (int?)mod02.Value,
+                    mod3 = (int?)mod03.Value,
+                    mod4 = (int?)mod04.Value,
+                    mod5 = (int?)mod05.Value,
+                    mod6 = (int?)mod06.Value,
+                    mod7 = (int?)mod07.Value,
+                    mod8 = (int?)mod08.Value,
+                    mod9 = (int?)mod09.Value,
+                    mod10 = (int?)mod10.Value,
                 };
                 vm.ModeloReceita = await Task.Run(() => vm.AddReceita(dados));
                 vm.ItensReceita = await Task.Run(() => vm.GetReceitaDetalhes(Modelo.id_modelo));
@@ -340,7 +371,7 @@ namespace Producao.Views.PopUp
                 workbook.SaveAs($"Impressos/RECEITA_CENTRAL_MODELO_{Modelo.id_modelo}.xlsx");
                 workbook.Close();
 
-                Process.Start(new ProcessStartInfo($"Impressos\\RECEITA_CENTRAL_MODELO_{Modelo.id_modelo}.xlsx")
+                Process.Start(new ProcessStartInfo($"Impressos/RECEITA_CENTRAL_MODELO_{Modelo.id_modelo}.xlsx")
                 {
                     UseShellExecute = true
                 });
@@ -349,6 +380,13 @@ namespace Producao.Views.PopUp
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void OnModelosFiadaClick(object sender, RoutedEventArgs e)
+        {
+            var window = new ModeloFiada(Modelo);
+            window.Owner = App.Current.MainWindow;
+            window.ShowDialog();
         }
 
         private async void OnCopyClick(object sender, RoutedEventArgs e)
@@ -415,6 +453,17 @@ namespace Producao.Views.PopUp
                 vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(vm.Descricao.planilha));
                 vm.DescAdicionais = await Task.Run(() => vm.GetDescAdicionaisAsync(vm.Descricao.codigo));
                 vm.CompleAdicionais = await Task.Run(() => vm.GetCompleAdicionaisAsync(vm.Descricao.coduniadicional));
+
+                mod01.Value = Receita?.mod1;
+                mod02.Value = Receita?.mod2;
+                mod03.Value = Receita?.mod3;
+                mod04.Value = Receita?.mod4;
+                mod05.Value = Receita?.mod5;
+                mod06.Value = Receita?.mod6;
+                mod07.Value = Receita?.mod7;
+                mod08.Value = Receita?.mod8;
+                mod09.Value = Receita?.mod9;
+                mod10.Value = Receita?.mod10;
 
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }

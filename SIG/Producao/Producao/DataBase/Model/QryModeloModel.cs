@@ -21,5 +21,6 @@ namespace Producao
         public DateTime? data_cadastro {get; set; }
         public double? multiplica { get;set; }
         public string? obs_modelo { get; set;}
+        public int? qtd_fiada_cascata { get; set; }
     }
 }

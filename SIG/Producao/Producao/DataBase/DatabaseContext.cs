@@ -34,6 +34,7 @@ namespace Producao
         public DbSet<EtiquetaEmitidaModel> EtiquetaEmitidas { get; set; }
         public DbSet<QryModeloModel> qryModelos { get; set; }
         public DbSet<ModeloModel> Modelos { get; set; }
+        public DbSet<ModeloFiadaModel> ModelosFiada { get; set; }
         public DbSet<QryReceitaDetalheCriadoModel> qryReceitas  { get; set; }
         public DbSet<ModeloReceitaModel> ReceitaModelos  { get; set; }
         public DbSet<ModeloReceitaAnoAnterior> ModelosAnoAnterior { get; set; }
