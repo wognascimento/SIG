@@ -371,7 +371,7 @@ namespace Producao.Views.PopUp
                 workbook.SaveAs($"Impressos/RECEITA_CENTRAL_MODELO_{Modelo.id_modelo}.xlsx");
                 workbook.Close();
 
-                Process.Start(new ProcessStartInfo($"Impressos/RECEITA_CENTRAL_MODELO_{Modelo.id_modelo}.xlsx")
+                Process.Start(new ProcessStartInfo($"Impressos\\RECEITA_CENTRAL_MODELO_{Modelo.id_modelo}.xlsx")
                 {
                     UseShellExecute = true
                 });

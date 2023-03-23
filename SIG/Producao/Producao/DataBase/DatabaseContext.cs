@@ -41,11 +41,10 @@ namespace Producao
         public DbSet<ControleModeloBaixa> ModelosControle { get; set; }
         public DbSet<HistoricoModelo> HistoricosModelo { get; set; }
         public DbSet<HistoricoSetorModel> HistoricosSetor { get; set; }
+        public DbSet<DistribuicaoPAModel> DistribuicaoPAs { get; set; }
         public DbSet<OsEmissaoProducaoImprimirModel> ImprimirOsS { get; set; }
 
-        
-
-
+       
         public DbSet<ModeloTabelaPAModel> TabelaPAs { get; set; }
         public DbSet<ModeloTabelaConversaoModel> TabelaConversoes { get; set; }
         public DbSet<ModeloControleOsModel> modeloControleOs { get; set; }
