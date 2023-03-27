@@ -25,7 +25,7 @@ namespace Expedicao.Views
         {
             try
             {
-                itens.ItemsSource = await Task.Run((async () => await new ExpedicaoViewModel().GetEtiquetaVolumesAsync()));
+                itens.ItemsSource = await Task.Run(new ExpedicaoViewModel().GetEtiquetaVolumesAsync);
                 loadingDetalhes.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
@@ -74,8 +74,8 @@ namespace Expedicao.Views
 
             try
             {
-                streamWriter1 = new StreamWriter(@"C:\TEMP\ETIQUETA.TXT");
-                TcpClient? client = new TcpClient();
+                //streamWriter1 = new StreamWriter(@"C:\TEMP\ETIQUETA.TXT");
+                //TcpClient? client = new();
                 //await client.ConnectAsync(IPAdress, Port);
                 //streamWriter1 = new StreamWriter(client.GetStream());
 
@@ -99,7 +99,7 @@ namespace Expedicao.Views
         private async static void OnPrintAllClicked(object obj)
         {
             //streamWriter1 = new StreamWriter(@"C:\TEMP\ETIQUETA.TXT");
-            TcpClient? client = new TcpClient();
+            TcpClient? client = new();
             await client.ConnectAsync(IPAdress, Port);
             streamWriter1 = new StreamWriter(client.GetStream());
 
@@ -127,13 +127,14 @@ namespace Expedicao.Views
 
         private static async void EtiquetaNormal(EtiquetaVolumeItemModel row, List<EtiquetaVolumeItemModel> dt)
         {
-            if (row.BaiaCaminhao == null)
+            if (row.BaiaCaminhao.Trim().Length == 0)
                 return;
             try
             {
-                //TcpClient? client = new TcpClient();
-                //await client.ConnectAsync("192.168.2.191", 9100);
-                //StreamWriter streamWriter1 = new StreamWriter(client.GetStream());
+                TcpClient? client = new();
+                await client.ConnectAsync(IPAdress, Port);
+                streamWriter1 = new StreamWriter(client.GetStream());
+
                 streamWriter1.WriteLine("^XA^CI28");
                 streamWriter1.WriteLine("^MMT");
                 streamWriter1.WriteLine("^PW799");

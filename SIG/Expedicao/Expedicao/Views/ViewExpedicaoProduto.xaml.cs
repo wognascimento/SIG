@@ -19,7 +19,7 @@ namespace Expedicao.Views
         public ViewExpedicaoProduto()
         {
             InitializeComponent();
-            //this.dataGrid.SearchHelper = new LocalizarHelperExt(dataGrid);
+            this.dataGrid.SearchHelper = new LocalizarHelperExt(dataGrid);
 
             this.Exped.SelectionController = new GridSelectionControllerExt(Exped);
         }
@@ -297,7 +297,7 @@ namespace Expedicao.Views
             FocusManager.SetFocusedElement(stackPanel, textBox);
             window.Content = stackPanel;
             window.Title = "Localizar código expedição";
-            window.Height = 100;
+            window.Height = 120;
             window.Width = 350;
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             window.WindowStyle = WindowStyle.ToolWindow;

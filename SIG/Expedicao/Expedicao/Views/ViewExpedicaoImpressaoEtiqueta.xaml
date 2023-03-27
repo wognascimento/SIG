@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:Expedicao.Views"
              Initialized="UserControl_Initialized">
     <Grid>
-        <syncfusion:SfDataGrid x:Name="itens" ColumnSizer="AutoWithLastColumnFill" AllowFiltering="True" AutoGenerateColumns="False">
+        <syncfusion:SfDataGrid x:Name="itens" ColumnSizer="AutoWithLastColumnFill" AllowFiltering="True" AutoGenerateColumns="False" AllowResizingColumns="True">
             <syncfusion:SfGridBase.HeaderContextMenu>
                 <ContextMenu>
                     <MenuItem Header="IMPRIMIR TODAS" Command="{Binding Source={x:Static local:ContextMenuCommands.PrintAll}}" CommandParameter="{Binding}"/>
@@ -19,16 +19,16 @@
                 </ContextMenu>
             </syncfusion:SfGridBase.RecordContextMenu>
             <syncfusion:SfDataGrid.Columns>
-                <syncfusion:GridTextColumn MappingName="Sigla"/>
-                <syncfusion:GridTextColumn MappingName="CodVol"/>
-                <syncfusion:GridTextColumn MappingName="Setor"/>
+                <syncfusion:GridTextColumn MappingName="Sigla" ColumnSizer="SizeToCells"/>
+                <syncfusion:GridTextColumn MappingName="Volume" ColumnSizer="SizeToCells"/>
+                <!--<syncfusion:GridTextColumn MappingName="Setor"/>-->
                 <syncfusion:GridTextColumn MappingName="Planilha"/>
                 <syncfusion:GridTextColumn MappingName="Descricao"/>
-                <syncfusion:GridNumericColumn MappingName="CodDetalhesCompl" NumberDecimalDigits="0"/>
-                <syncfusion:GridNumericColumn MappingName="QtdExpedida"/>
+                <syncfusion:GridNumericColumn MappingName="CodDetalhesCompl" NumberDecimalDigits="0" ColumnSizer="SizeToCells"/>
+                <syncfusion:GridNumericColumn MappingName="QtdExpedida" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn MappingName="LocalShoppings"/>
-                <syncfusion:GridTextColumn MappingName="BaiaCaminhao"/>
-                <syncfusion:GridCheckBoxColumn MappingName="Anexo"/>
+                <syncfusion:GridTextColumn MappingName="BaiaCaminhao" ColumnSizer="SizeToCells"/>
+                <syncfusion:GridCheckBoxColumn MappingName="Anexo" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridCheckBoxColumn MappingName="Controlado" ColumnSizer="SizeToCells"/>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
