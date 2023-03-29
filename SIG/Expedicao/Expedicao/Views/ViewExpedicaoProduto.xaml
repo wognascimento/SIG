@@ -70,10 +70,10 @@
                 <syncfusion:GridNumericColumn MappingName="QtdExpedida"/>
                 <syncfusion:GridNumericColumn MappingName="VolExp" NumberDecimalDigits="0" ParsingMode="Int"/>
                 <syncfusion:GridNumericColumn MappingName="VolTotExp" NumberDecimalDigits="0" ParsingMode="Int"/>
-                <syncfusion:GridNumericColumn MappingName="Pl"/>
-                <syncfusion:GridNumericColumn MappingName="Pb"/>
-                <syncfusion:GridNumericColumn MappingName="Largura"/>
-                <syncfusion:GridNumericColumn MappingName="Altura"/>
+                <syncfusion:GridNumericColumn MappingName="Pl" NumberDecimalDigits="3"/>
+                <syncfusion:GridNumericColumn MappingName="Pb" NumberDecimalDigits="3"/>
+                <syncfusion:GridNumericColumn MappingName="Largura" NumberDecimalDigits="3"/>
+                <syncfusion:GridNumericColumn MappingName="Altura" NumberDecimalDigits="3"/>
                 <syncfusion:GridNumericColumn MappingName="Profundidade"/>
                 <syncfusion:GridComboBoxColumn x:Name="Caixas" IsEditable="True" MappingName="ModeloCaixa" SelectedValuePath="NomeCaixa"
                                        DisplayMemberPath="NomeCaixa"/>

@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using Expedicao.Views;
 using Microsoft.EntityFrameworkCore;
+using Syncfusion.Data.Extensions;
 using Syncfusion.SfSkinManager;
 using Syncfusion.UI.Xaml.Spreadsheet;
 using Syncfusion.Windows.Tools.Controls;
@@ -660,5 +662,47 @@ namespace Expedicao
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
+
+        private async void OnPendenciaExpedicaoClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ExcelEngine excelEngine = new();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                using AppDatabase db = new();
+
+                IList<PendenciaExpedicaoModel> dados = await db.PendenciaExpedicaos.Where(f => f.qtd_expedida > 0 ).ToListAsync();
+                ExcelImportDataOptions importDataOptions = new()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(dados, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs(@"c:\relatorios\pendencias_expedicao.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                Process.Start(new ProcessStartInfo(@"c:\relatorios\pendencias_expedicao.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
     }
 }

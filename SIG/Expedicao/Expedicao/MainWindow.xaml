@@ -46,10 +46,11 @@
                     <syncfusion:MenuItemAdv Header="Prevista por Cliente" Click="OnCubagemPrevistaClienteClick"/>
                     <syncfusion:MenuItemAdv Header="Cliente Fracionada por Caminhão" Click="OnCubagemFracionadaCaminao"/>
                     <syncfusion:MenuItemAdv Header="Cliente Efetiva" Click="OnCubagemEfetivaClick"/>
+                    <syncfusion:MenuItemAdv Header="Pendências Expedição" Click="OnPendenciaExpedicaoClick"/>
                 </syncfusion:MenuItemAdv>
             </syncfusion:MenuItemAdv>
         </syncfusion:MenuAdv>
-
+        
         <syncfusion:DocumentContainer 
             x:Name="_dc" 
             Grid.Row="1" 

@@ -19,9 +19,17 @@ namespace Expedicao.Views
         public ViewExpedicaoProduto()
         {
             InitializeComponent();
-            this.dataGrid.SearchHelper = new LocalizarHelperExt(dataGrid);
+            
+            try
+            {
+                this.dataGrid.SearchHelper = new LocalizarHelperExt(dataGrid);
+                this.Exped.SelectionController = new GridSelectionControllerExt(Exped);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
-            this.Exped.SelectionController = new GridSelectionControllerExt(Exped);
         }
 
         private async void UserControl_Initialized(object sender, EventArgs e)

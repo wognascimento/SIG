@@ -32,6 +32,7 @@ namespace Expedicao
         public DbSet<CubagemSemanaAnoAnteriorAtualModel> CubagemSemanaAnos { get; set; }
         public DbSet<CubagemPrevistaClienteModel> CubagemPrevistaClientes { get; set; }
         public DbSet<CubagemEnderecada> CubagemEnderecadas { get; set; }
+        public DbSet<PendenciaExpedicaoModel> PendenciaExpedicaos { get; set; }
         
 
 
