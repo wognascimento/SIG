@@ -3,10 +3,11 @@
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.XlsIO;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -108,7 +109,30 @@ namespace Producao.Views.PopUp
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 ModeloSetoresOrdemServicoViewModel vm = (ModeloSetoresOrdemServicoViewModel)DataContext;
+                
+                var setor = false;
+                foreach (var item in vm.Itens)
+                    if (item.selesao == true) setor = true; 
+
+                if (setor == false) 
+                {
+                    MessageBox.Show("Não foi selecionado nenhum setor", "Não é possível emitir Ordem de Serviço");
+                    ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                    return;
+                }
+
+                vm.Planilhas = await Task.Run(() => vm.GetPlanilasReceita(modeloControle.id_modelo));
+                if (vm.Planilhas.Count == 0) 
+                {
+                    MessageBox.Show("Não existe item na receita do modelo", "Não é possível emitir Ordem de Serviço");
+                    ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                    return;
+                }
+
                 await Task.Run(() => vm.CreateOrdenServicoAsync(modeloControle));
+
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
@@ -287,6 +311,14 @@ namespace Producao.Views.PopUp
             set { _servicos = value; RaisePropertyChanged("Servicos"); }
         }
 
+        private ObservableCollection<string> _planilhas;
+        public ObservableCollection<string> Planilhas
+        {
+            get { return _planilhas; }
+            set { _planilhas = value; RaisePropertyChanged("Planilhas"); }
+        }
+
+
 
         public async Task<ObservableCollection<HistoricoSetorModel>> GetSetoresProdutoAsync(long? codcompladicional)
         {
@@ -396,6 +428,25 @@ namespace Producao.Views.PopUp
                     await db.ProdutoServicos.AddAsync(produtoServicoModel);
                     await db.SaveChangesAsync();
 
+
+                    //ADICIONAR REQUISIÇÃO DE MATERIAL
+                    if (i == 0)
+                    {
+                        foreach (var planilha in Planilhas)
+                        {
+                            if (planilha != "ESTOQUE FITAS")
+                            {
+                                await db.Requisicoes.AddAsync(new RequisicaoModel { num_os_servico = produtoServicoModel.num_os_servico, data = DateTime.Now, alterado_por = Environment.UserName });
+                                await db.SaveChangesAsync();
+
+                                adicinar requisicao
+
+                                db.RequisicaoDetalhes.AddAsync(new DetalheRequisicaoModel { });
+
+                            }
+                        }
+                    }
+                    
                 }
                 
                 transaction.Commit();
@@ -428,6 +479,25 @@ namespace Producao.Views.PopUp
                 using DatabaseContext db = new();
                 var data = await db.ProdutoServicos.Where(i => i.num_os_produto == num_os_produto).ToListAsync();
                 return new ObservableCollection<ProdutoServicoModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ObservableCollection<string>> GetPlanilasReceita(long? id_modelo)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.qryReceitas.Where(r => r.id_modelo == id_modelo).OrderBy(g => g.planilha).GroupBy(g => new { g.planilha, g.id_modelo }).Select(p => new { p.Key.planilha }).ToListAsync();
+
+                ObservableCollection<string> nos = new ObservableCollection<string>();
+                foreach (var item in data)
+                    nos.Add(item.planilha);
+
+                return nos;
             }
             catch (Exception)
             {

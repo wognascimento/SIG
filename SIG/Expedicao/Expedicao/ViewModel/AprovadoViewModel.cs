@@ -15,7 +15,7 @@ namespace Expedicao
             try
             {
                 using AppDatabase db = new();
-                listAsync = (IList<AprovadoModel>)await db.Aprovados.OrderBy<AprovadoModel, string>(c => c.SiglaServ).ToListAsync<AprovadoModel>();
+                listAsync = await db.Aprovados.OrderBy(c => c.SiglaServ).ToListAsync();
             }
             catch (Exception)
             {
@@ -23,13 +23,14 @@ namespace Expedicao
             }
             return listAsync;
         }
+
         public async Task<AprovadoModel> GetAprovadoAsync(string SiglaServ)
         {
             AprovadoModel aprovadoAsync;
             try
             {
                 using AppDatabase db = new();
-                aprovadoAsync = await db.Aprovados.FirstOrDefaultAsync<AprovadoModel>(ap => ap.SiglaServ == SiglaServ);
+                aprovadoAsync = await db.Aprovados.FirstOrDefaultAsync(ap => ap.SiglaServ == SiglaServ);
             }
             catch (Exception)
             {

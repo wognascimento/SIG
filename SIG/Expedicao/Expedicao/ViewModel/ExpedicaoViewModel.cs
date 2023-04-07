@@ -1,19 +1,28 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
 
 namespace Expedicao
 {
-    internal class ExpedicaoViewModel
+    public class ExpedicaoViewModel
     {
+
+        private List<object> _searchItem;
+        public List<object> SearchItem
+        {
+            get { return _searchItem; }
+            set { _searchItem = value; }
+        }
+
+        public ExpedicaoViewModel()
+        {
+            _searchItem = new List<object>();
+        }
+
         public async Task<IList<ProdutoExpedidoModel>> GetProdutoExpedidos(
           int IdAprovado)
         {

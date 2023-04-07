@@ -11,6 +11,10 @@
              Initialized="UserControl_Initialized" 
              PreviewKeyDown="UserControl_PreviewKeyDown">
 
+    <UserControl.Resources>
+        <local:ConverterNumber x:Key="ConverterNumber"/>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -34,7 +38,7 @@
         
         <syncfusion:SfDataGrid 
             x:Name="dataGrid"
-            Grid.Row="1"            
+            Grid.Row="1"      
             SelectionChanged="DataGrid_SelectionChanged"  
             AutoGenerateColumns="False" 
             ColumnSizer="AutoWithLastColumnFill" 
@@ -46,7 +50,11 @@
                 <syncfusion:GridTextColumn HeaderText="Local" MappingName="LocalShoppings"/>
                 <syncfusion:GridTextColumn MappingName="Planilha"/>
                 <syncfusion:GridTextColumn HeaderText="Descrição" MappingName="DescricaoProduto"/>
-                <syncfusion:GridNumericColumn HeaderText="Quantidade" MappingName="Qtd" ColumnSizer="SizeToCells"/>
+                <syncfusion:GridNumericColumn  
+                    HeaderText="Quantidade" 
+                    MappingName="Qtd" 
+                    ColumnSizer="SizeToCells"
+                    DisplayBinding="{Binding Path=Qtd, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"/>
                 <syncfusion:GridNumericColumn HeaderText="Complemento adicional" MappingName="CodComplAdicional" NumberDecimalDigits="0"
                                       ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridNumericColumn HeaderText="Detalhes Complemento" MappingName="CodDetalhesCompl" NumberDecimalDigits="0"
@@ -67,16 +75,21 @@
                            AutoGenerateColumns="False" ColumnSizer="SizeToHeader" AddNewRowPosition="Bottom" AllowEditing="True"
                            AllowDeleting="True">
             <syncfusion:SfDataGrid.Columns>
-                <syncfusion:GridNumericColumn MappingName="QtdExpedida"/>
-                <syncfusion:GridNumericColumn MappingName="VolExp" NumberDecimalDigits="0" ParsingMode="Int"/>
-                <syncfusion:GridNumericColumn MappingName="VolTotExp" NumberDecimalDigits="0" ParsingMode="Int"/>
-                <syncfusion:GridNumericColumn MappingName="Pl" NumberDecimalDigits="3"/>
-                <syncfusion:GridNumericColumn MappingName="Pb" NumberDecimalDigits="3"/>
-                <syncfusion:GridNumericColumn MappingName="Largura" NumberDecimalDigits="3"/>
-                <syncfusion:GridNumericColumn MappingName="Altura" NumberDecimalDigits="3"/>
-                <syncfusion:GridNumericColumn MappingName="Profundidade"/>
-                <syncfusion:GridComboBoxColumn x:Name="Caixas" IsEditable="True" MappingName="ModeloCaixa" SelectedValuePath="NomeCaixa"
-                                       DisplayMemberPath="NomeCaixa"/>
+                <syncfusion:GridNumericColumn MappingName="QtdExpedida"     DisplayBinding="{Binding Path=QtdExpedida, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
+                <syncfusion:GridNumericColumn MappingName="VolExp"          DisplayBinding="{Binding Path=VolExp, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
+                <syncfusion:GridNumericColumn MappingName="VolTotExp"       DisplayBinding="{Binding Path=VolTotExp, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
+                <syncfusion:GridNumericColumn MappingName="Pl"              DisplayBinding="{Binding Path=Pl, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
+                <syncfusion:GridNumericColumn MappingName="Pb"              DisplayBinding="{Binding Path=Pb, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
+                <syncfusion:GridNumericColumn MappingName="Largura"         DisplayBinding="{Binding Path=Largura, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
+                <syncfusion:GridNumericColumn MappingName="Altura"          DisplayBinding="{Binding Path=Altura, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
+                <syncfusion:GridNumericColumn MappingName="Profundidade"    DisplayBinding="{Binding Path=Profundidade, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
+                <syncfusion:GridComboBoxColumn 
+                    x:Name="Caixas" 
+                    ItemsSource="{Binding Medidas}"
+                    IsEditable="True" 
+                    MappingName="ModeloCaixa" 
+                    SelectedValuePath="NomeCaixa" 
+                    DisplayMemberPath="NomeCaixa"/>
                 <syncfusion:GridNumericColumn MappingName="Volume" NumberDecimalDigits="0" ParsingMode="Int"/>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
