@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Producao.DataBase.Model;
 //using Microsoft.Office.Interop.Excel;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.XlsIO;
@@ -436,13 +437,31 @@ namespace Producao.Views.PopUp
                         {
                             if (planilha != "ESTOQUE FITAS")
                             {
-                                await db.Requisicoes.AddAsync(new RequisicaoModel { num_os_servico = produtoServicoModel.num_os_servico, data = DateTime.Now, alterado_por = Environment.UserName });
+                                var requisicao = new RequisicaoModel { num_os_servico = produtoServicoModel.num_os_servico, data = DateTime.Now, alterado_por = Environment.UserName };
+
+                                await db.Requisicoes.AddAsync(requisicao);
                                 await db.SaveChangesAsync();
 
-                                adicinar requisicao
+                                //adicinar requisicao
 
-                                db.RequisicaoDetalhes.AddAsync(new DetalheRequisicaoModel { });
-
+                                //var detalhes = db.DetalhesModelo.Where()
+                                //modeloControle.planilha
+                                var detalhes = await db.DetalhesModelo.Where(d => d.planilha == planilha && d.id_modelo == modeloControle.id_modelo).ToListAsync();
+                                foreach (DetalhesModeloModel detalhe in detalhes)
+                                {
+                                    var detReq = new DetalheRequisicaoModel
+                                    {
+                                        num_requisicao = requisicao.num_requisicao,
+                                        codcompladicional = detalhe.codcompladicional,
+                                        quantidade = modeloControle.planilha == "ADEREÇO" || modeloControle.planilha == "FIADA" || modeloControle.planilha == "ENF PISO" ? detalhe.qtd : (detalhe.qtd * produtoServicoModel.quantidade),
+                                        observacao = detalhe.observacao,
+                                        data = DateTime.Now,
+                                        alterado_por = Environment.UserName
+                                    };
+                                    await db.RequisicaoDetalhes.AddAsync(detReq);
+                                }
+                                throw new Exception("FORÇAR ERRO PARA NÃO CONCLUIR A TRANSAÇÃO");
+                                // IMPRIMIR REQUISIÇÃO
                             }
                         }
                     }

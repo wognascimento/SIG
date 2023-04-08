@@ -10,7 +10,7 @@ namespace Producao
         [Key]
         public long? cod_det_req {set; get; }
         public long? num_requisicao {set; get; }
-        public float? quantidade {set; get; }
+        public double? quantidade {set; get; }
         public DateTime? data {set; get; }
         public string? alterado_por {set; get; }
         public string? ok {set; get; }

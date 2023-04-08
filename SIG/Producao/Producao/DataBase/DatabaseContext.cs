@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Producao.DataBase.Model;
 using System;
 
 namespace Producao
@@ -43,7 +44,7 @@ namespace Producao
         public DbSet<HistoricoSetorModel> HistoricosSetor { get; set; }
         public DbSet<DistribuicaoPAModel> DistribuicaoPAs { get; set; }
         public DbSet<OsEmissaoProducaoImprimirModel> ImprimirOsS { get; set; }
-        //public DbSet<ReceitaDetalhesCriadoModel> ReceitaDetalhesCriados { get; set; }
+        public DbSet<DetalhesModeloModel> DetalhesModelo { get; set; }
 
        
         public DbSet<ModeloTabelaPAModel> TabelaPAs { get; set; }
