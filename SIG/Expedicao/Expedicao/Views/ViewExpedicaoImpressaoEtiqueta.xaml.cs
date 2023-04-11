@@ -124,8 +124,12 @@ namespace Expedicao.Views
 
         private static async Task EtiquetaNormal(EtiquetaVolumeItemModel row, List<EtiquetaVolumeItemModel> dt)
         {
-            if (row.BaiaCaminhao.Trim().Length == 0)
+            if (row.BaiaCaminhao == null || row.BaiaCaminhao.Trim().Length == 0)
+            {
+                MessageBox.Show("Etiqueta sem número de caminão não pode ser impressa", "Impressão de etiquetas", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
+            }
+               
 
             try
             {
