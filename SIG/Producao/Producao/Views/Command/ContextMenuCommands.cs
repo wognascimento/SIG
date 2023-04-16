@@ -164,8 +164,6 @@ namespace Producao
                 int _etiqueta = 1;
                 int _pagina = 1;
 
-                
-
                 //foreach (EtiquetaEmitidaModel item in filteredResult)
                 for (int i = 0; i < grid.View.Records.Count; i++)
                 {

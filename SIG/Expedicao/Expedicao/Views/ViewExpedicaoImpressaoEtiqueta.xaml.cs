@@ -147,7 +147,7 @@ namespace Expedicao.Views
                 streamWriter1.WriteLine($@"^FT131,102^A0N,81,60^FB517,1,0,C^FR^FH\^FD{row.Sigla}^FS");
                 streamWriter1.WriteLine($@"^FT688,151^BQN,2,4");
                 if ((bool)row.Controlado)
-                    streamWriter1.WriteLine($@"^FH\^FDLA,{row.Volume}^FS");
+                    streamWriter1.WriteLine($@"^FH\^FDLA,{row.Sigla}|{row.Volume}^FS");
                 streamWriter1.WriteLine($@"^BY3,3,56^FT234,195^BCN,,Y,N");
                 streamWriter1.WriteLine($@"^FD>;{row.Barcode}^FS");
                 streamWriter1.WriteLine($@"^FT685,172^A0N,18,16^FB90,1,0,C^FH\^FDCAMINHÃO^FS");

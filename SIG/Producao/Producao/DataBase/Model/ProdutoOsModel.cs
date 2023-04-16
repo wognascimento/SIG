@@ -14,7 +14,7 @@ namespace Producao
         public long? cod_produto {set; get;}
         public long? cod_desc_adicional {set; get;}
         public long? cod_compl_adicional {set; get;}
-        public float? quantidade {set; get;}
+        public double? quantidade {set; get;}
         public DateTime? data_emissao {set; get;}
         public string? responsavel_emissao {set; get;}
         public long? id_modelo {set; get;}

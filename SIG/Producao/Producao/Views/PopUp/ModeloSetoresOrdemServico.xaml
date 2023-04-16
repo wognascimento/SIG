@@ -54,7 +54,7 @@
             <!--<Button Content="ADICIONAR SETOR" Click="OnAddSetor"/>-->
             <Button Content="GERAR O.S" Click="OnCreateOrdemServico"/>
             <Separator Width="1"/>
-            <Button Content="IMPRIMIR O.S" Click="OnPrintOS"/>
+            <Button Content="IMPRIMIR O.S/REQUISIÇÃO" Click="OnPrintOS"/>
         </StatusBar>
 
     </Grid>

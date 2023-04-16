@@ -45,6 +45,7 @@ namespace Producao
         public DbSet<DistribuicaoPAModel> DistribuicaoPAs { get; set; }
         public DbSet<OsEmissaoProducaoImprimirModel> ImprimirOsS { get; set; }
         public DbSet<DetalhesModeloModel> DetalhesModelo { get; set; }
+        public DbSet<StatusChkGeralCentralModel> statusChkGeralCentrals { get; set; }
 
        
         public DbSet<ModeloTabelaPAModel> TabelaPAs { get; set; }

@@ -80,9 +80,9 @@
                 <syncfusion:GridNumericColumn MappingName="VolTotExp"       DisplayBinding="{Binding Path=VolTotExp, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
                 <syncfusion:GridNumericColumn MappingName="Pl"              DisplayBinding="{Binding Path=Pl, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
                 <syncfusion:GridNumericColumn MappingName="Pb"              DisplayBinding="{Binding Path=Pb, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
-                <syncfusion:GridNumericColumn MappingName="Largura"         DisplayBinding="{Binding Path=Largura, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
-                <syncfusion:GridNumericColumn MappingName="Altura"          DisplayBinding="{Binding Path=Altura, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
-                <syncfusion:GridNumericColumn MappingName="Profundidade"    DisplayBinding="{Binding Path=Profundidade, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
+                <syncfusion:GridNumericColumn MappingName="Largura"         DisplayBinding="{Binding Path=Largura, Converter={StaticResource ConverterNumber}, Mode=TwoWay}" NumberDecimalDigits="3"    />
+                <syncfusion:GridNumericColumn MappingName="Altura"          DisplayBinding="{Binding Path=Altura, Converter={StaticResource ConverterNumber}, Mode=TwoWay}" NumberDecimalDigits="3"    />
+                <syncfusion:GridNumericColumn MappingName="Profundidade"    DisplayBinding="{Binding Path=Profundidade, Converter={StaticResource ConverterNumber}, Mode=TwoWay}" NumberDecimalDigits="3"    />
                 <syncfusion:GridComboBoxColumn 
                     x:Name="Caixas" 
                     ItemsSource="{Binding Medidas}"
