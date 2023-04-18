@@ -63,7 +63,7 @@
                 <syncfusion:MenuItemAdv Header="Modelos">
                     <syncfusion:MenuItemAdv Header="Criar" Click="OnCentralCriarModelo"/>
                     <syncfusion:MenuItemAdv Header="Ordem de Serviço" Click="OnCentralEmitirOs"/>
-                    <syncfusion:MenuItemAdv Header="Status Checklist"/>
+                    <syncfusion:MenuItemAdv Header="Status Checklist" Click="OnCentralStatusCheckList"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Tabela P.A" Click="OnCentralTabelaPa"/>
                 <syncfusion:MenuItemAdv Header="Fator" Click="OnCentralFatorConversao"/>

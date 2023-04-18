@@ -206,5 +206,16 @@ namespace Producao
             this._mdi.CanMDIMaximize = false;
             this._mdi.Items.Add(view);
         }
+
+        private void OnCentralStatusCheckList(object sender, RoutedEventArgs e)
+        {
+            ViewCentralStatusCheckList view = new();
+            DocumentContainer.SetHeader(view, "STATUS CHECK-LIST");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1500.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1500.0, 800.0));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
     }
 }

@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Producao" 
+             xmlns:local="clr-namespace:Producao.Views" 
+             xmlns:app="clr-namespace:Producao" 
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
-        <local:ConverterNumber x:Key="ConverterNumber"/>
+        <app:ConverterNumber x:Key="ConverterNumber"/>
     </UserControl.Resources>
 
     <Grid>
@@ -25,25 +26,16 @@
             AllowResizingColumns="True" 
             AutoGenerateColumns="False" 
             ColumnSizer="Auto"
-            ItemsSource="{Binding ElementName=dataPager,Path=PagedSource}"
+            ItemsSource="{Binding ElementName=dataPager, Path=PagedSource}"
             FontSize="9"
             AllowResizingHiddenColumns="True" AllowFiltering="True">
 
             <syncfusion:SfDataGrid.RecordContextMenu>
                 <ContextMenu Style="{x:Null}">
 
-                    <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.CreateOS}}"
+                    <MenuItem Command="{Binding Source={x:Static Member=local:CentralStatusCheckListMenuCommands.CreateModelo}}"
                               CommandParameter="{Binding}"
-                              Header="Gerar Ordem de Serviço"/>
-
-                    <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.ReimprimirOS}}"
-                              CommandParameter="{Binding}"
-                              Header="Re-imprimir Ordem de Serviço"  />
-
-                    <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.TabelaPAExcel}}"
-                              CommandParameter="{Binding}"
-                              Header="Tabela P.A Excel" />
-
+                              Header="Gerar Modelo"/>
                 </ContextMenu>
             </syncfusion:SfDataGrid.RecordContextMenu>
 
@@ -52,11 +44,11 @@
                 <syncfusion:GridTextColumn MappingName="tema"/>
                 <syncfusion:GridTextColumn MappingName="planilha"/>
                 <syncfusion:GridTextColumn MappingName="descricao_completa"/>
+                <syncfusion:GridTextColumn MappingName="item_memorial"/>
                 <syncfusion:GridTextColumn MappingName="unidade" Width="65"/>
                 <syncfusion:GridNumericColumn MappingName="id_modelo" DisplayBinding="{Binding id_modelo, Converter={StaticResource ConverterNumber}}" Width="65"/>
-                <syncfusion:GridNumericColumn MappingName="qtd_chk_list" Width="60"/>
-                <syncfusion:GridNumericColumn MappingName="qtd_os" Width="60"/>
-                <syncfusion:GridNumericColumn MappingName="num_os_produto" DisplayBinding="{Binding num_os_produto, Converter={StaticResource ConverterNumber}}" Width="60"/>
+                <syncfusion:GridNumericColumn MappingName="qtde_compl" Width="60"/>
+                <syncfusion:GridTextColumn MappingName="status" Width="60"/>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
 
