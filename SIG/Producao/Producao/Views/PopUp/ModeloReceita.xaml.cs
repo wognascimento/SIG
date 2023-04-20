@@ -26,7 +26,7 @@ namespace Producao.Views.PopUp
             this.Modelo = Modelo;
             this.DataContext = new ModeloReceitaViewModel();
 
-            if (Modelo?.planilha == "FIADA")
+            if (Modelo?.planilha == "FIADA" || Modelo?.planilha == "ADEREÇO" || Modelo?.planilha == "ENF PISO")
             {
                 btnModeloFiada.Visibility = Visibility.Visible;
                 GBQtdFiadas.Visibility = Visibility.Visible;
