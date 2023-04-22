@@ -6,9 +6,7 @@ using Syncfusion.UI.Xaml.ScrollAxis;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,6 +43,7 @@ namespace Producao.Views
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
         }
         private async void OnBuscaProduto(object sender, KeyEventArgs e)

@@ -7,13 +7,16 @@
 
     <Grid x:Name="Etiqueta">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <syncfusion:MenuAdv Grid.Row="0" 
-                            ScrollViewer.HorizontalScrollBarVisibility="Visible" 
-                            PopUpAnimationType="Slide" VerticalAlignment="Center" VerticalContentAlignment="Center">
+        <syncfusion:MenuAdv 
+            Grid.Row="0" 
+            ScrollViewer.HorizontalScrollBarVisibility="Visible" 
+            PopUpAnimationType="Slide" 
+            VerticalAlignment="Center" 
+            VerticalContentAlignment="Center">
             <syncfusion:MenuItemAdv Click="MenuItemAdv_Click" Header="Aprovados"/>
             <!--<syncfusion:MenuItemAdv Header="Memorial"/>-->
             <syncfusion:MenuItemAdv Header="Check list">
@@ -36,7 +39,7 @@
                 <syncfusion:MenuItemAdv Header="Pendência de Produção"/>
             </syncfusion:MenuItemAdv>
             <syncfusion:MenuItemAdv Header="Relplan"/>
-            <syncfusion:MenuItemAdv Header="Agenda Visita Técnica"/>
+            <!--<syncfusion:MenuItemAdv Header="Agenda Visita Técnica"/>-->
             <syncfusion:MenuItemAdv Header="Ordem de Serviço">
                 <syncfusion:MenuItemAdv Header="Serviço">
                     <syncfusion:MenuItemAdv Header="Emitir"/>
@@ -48,6 +51,7 @@
                 <syncfusion:MenuItemAdv Header="Desbaiamento"/>
                 <syncfusion:MenuItemAdv Header="Transformação"/>
                 <syncfusion:MenuItemAdv Header="Requisição">
+                    <syncfusion:MenuItemAdv Header="Receita" Click="OnCreateReceitaRequisicao"/>
                     <syncfusion:MenuItemAdv Header="Emitir"/>
                     <syncfusion:MenuItemAdv Header="Alterar"/>
                     <syncfusion:MenuItemAdv Header="Consultas">
