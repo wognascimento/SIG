@@ -379,18 +379,18 @@ namespace Producao
             Siglas = new ObservableCollection<SiglaChkListModel>();
             Planilhas = new ObservableCollection<RelplanModel>();
 
-            Task.Run(async () => { Siglas = await GetSiglasAsync(); });
-            Task.Run(async () => { Planilhas = await GetPlanilhasAsync(); });
+            //Task.Run(async () => { Siglas = await GetSiglasAsync(); });
+            //Task.Run(async () => { Planilhas = await GetPlanilhasAsync(); });
 
             rowDataCommand = new RelayCommand(ChangeCanExecute);
         }
-        public async Task GetSetoresAsync()
+        public async Task<ObservableCollection<SetorProducaoModel>> GetSetoresAsync()
         {
             try
             {
                 using DatabaseContext db = new();
                 var data = await db.SetorProducaos.OrderBy(c => c.setor).Where(c => c.inativo.Equals("0")).ToListAsync();
-                SetoresProducao = new ObservableCollection<SetorProducaoModel>(data);
+                return new ObservableCollection<SetorProducaoModel>(data);
             }
             catch (Exception)
             {
@@ -527,6 +527,7 @@ namespace Producao
             }
             
         }
+
         public async Task CriarOsProdutoAsync()
         {
             try
@@ -543,6 +544,7 @@ namespace Producao
                 throw;
             }
         }
+
         public async Task CriarProdutoServicoAsync()
         {
             try
@@ -559,12 +561,12 @@ namespace Producao
                 throw;
             }
         }
-        public async Task GetProdutoServicoAsync()
+        public async Task<ProdutoServicoModel> GetProdutoServicoAsync()
         {
             try
             {
                 using DatabaseContext db = new();
-                ProdutoServico = await db.ProdutoServicos.Where(p => p.cod_detalhe_compl == CheckListGeralComplemento.coddetalhescompl).FirstOrDefaultAsync();
+                return await db.ProdutoServicos.Where(p => p.cod_detalhe_compl == CheckListGeralComplemento.coddetalhescompl).FirstOrDefaultAsync();
             }
             catch (Exception)
             {
@@ -588,12 +590,12 @@ namespace Producao
                 throw;
             }
         }
-        public async Task GetRequisicaoAsync()
+        public async Task<RequisicaoModel> GetRequisicaoAsync()
         {
             try
             {
                 using DatabaseContext db = new();
-                Requisicao = await db.Requisicoes.Where(r => r.num_os_servico == ProdutoServico.num_os_servico).FirstOrDefaultAsync();
+                return await db.Requisicoes.Where(r => r.num_os_servico == ProdutoServico.num_os_servico).FirstOrDefaultAsync();
             }
             catch (Exception)
             {
@@ -601,13 +603,13 @@ namespace Producao
             }
         }
 
-        public async Task GetRequisicaoDetalhesAsync()
+        public async Task<ObservableCollection<QryRequisicaoDetalheModel>> GetRequisicaoDetalhesAsync()
         {
             try
             {
                 using DatabaseContext db = new();
                 var data = await db.QryRequisicaoDetalhes.Where(r => r.num_requisicao == Requisicao.num_requisicao).ToListAsync();
-                QryRequisicaoDetalhes = new ObservableCollection<QryRequisicaoDetalheModel>(data);
+                return new ObservableCollection<QryRequisicaoDetalheModel>(data);
             }
             catch (Exception)
             {
@@ -623,11 +625,10 @@ namespace Producao
                 var data = await db.Siglas.OrderBy(c => c.sigla_serv).ToListAsync();
                 return new ObservableCollection<SiglaChkListModel>(data);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                throw;
             }
-            return new ObservableCollection<SiglaChkListModel>();
         }
         public async Task<ObservableCollection<RelplanModel>> GetPlanilhasAsync()
         {
@@ -637,11 +638,10 @@ namespace Producao
                 var data = await db.Relplans.OrderBy(c => c.planilha).Where(c => c.ativo.Equals("1")).ToListAsync();
                 return new ObservableCollection<RelplanModel>(data);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                throw;
             }
-            return new ObservableCollection<RelplanModel>();
         }
         public async Task<ObservableCollection<ProdutoModel>> GetProdutosAsync()
         {
@@ -654,14 +654,13 @@ namespace Producao
                     .Where(c => c.planilha.Equals(Planilha.planilha))
                     .Where(c => c.inativo != "-1")
                     .ToListAsync();
-                Produtos = new ObservableCollection<ProdutoModel>(data);
-                return Produtos;
+                return new ObservableCollection<ProdutoModel>(data);
+                //return Produtos;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                throw;
             }
-            return Produtos;
         }
         public async Task<ObservableCollection<TabelaDescAdicionalModel>> GetDescAdicionaisAsync()
         {
@@ -675,14 +674,13 @@ namespace Producao
                     .Where(c => c.inativo != "-1")
                     .ToListAsync();
 
-                DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>(data);
-                return DescAdicionais;
+                return new ObservableCollection<TabelaDescAdicionalModel>(data);
+                //return DescAdicionais;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                throw;
             }
-            return DescAdicionais;
         }
 
         public async Task<ObservableCollection<TblComplementoAdicionalModel>> GetCompleAdicionaisAsync()
@@ -698,15 +696,14 @@ namespace Producao
                     .Where(c => c.inativo != "-1")
                     .ToListAsync();
 
-                CompleAdicionais = new ObservableCollection<TblComplementoAdicionalModel>(data);
+                return new ObservableCollection<TblComplementoAdicionalModel>(data);
                 //return new ObservableCollection<TblComplementoAdicionalModel>(data);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                throw;
             }
             //return new ObservableCollection<TblComplementoAdicionalModel>();
-            return CompleAdicionais;
         }
 
         public async Task<ObservableCollection<object>> GetLocaisShoppAsync()
@@ -720,16 +717,15 @@ namespace Producao
                     .Select(s => new
                     {
                         s.local_shoppings
-                    })
-                    .ToArrayAsync();
-                Locaisshopping = new ObservableCollection<object>(data.GroupBy(x => x.local_shoppings));
-                return Locaisshopping;
+                    }).ToArrayAsync();
+                return new ObservableCollection<object>(data.GroupBy(x => x.local_shoppings));
+                //return Locaisshopping;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                throw;
             }
-            return Locaisshopping;
+            //return Locaisshopping;
         }
 
         public async Task<ObservableCollection<QryCheckListGeralModel>> GetCheckListGeralAsync()
@@ -744,11 +740,11 @@ namespace Producao
                 CheckListGerais = new ObservableCollection<QryCheckListGeralModel>(data);
                 return CheckListGerais;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                throw;
             }
-            return CheckListGerais;
+            //return CheckListGerais;
         }
 
         public async Task<ComplementoCheckListModel> AddComplementoCheckListAsync()
@@ -783,8 +779,8 @@ namespace Producao
                 var data = await db.CheckListGerals
                     .Where(c => c.codcompl == CodCompl)
                     .FirstOrDefaultAsync();
-                CheckListGeral = data;
-                return CheckListGeral;
+                //CheckListGeral = data;
+                return data;
             }
             catch (NpgsqlException)
             {
@@ -792,7 +788,7 @@ namespace Producao
             }
         }
 
-        public async Task<ObservableCollection<QryCheckListGeralComplementoModel>> GetCheckListGeralComplementoAsync()
+        public async Task<ObservableCollection<QryCheckListGeralComplementoModel>> GetCheckListGeralComplementoAsync(long? codcompl)
         {
             try
             {
@@ -800,23 +796,23 @@ namespace Producao
                 using DatabaseContext db = new();
                 var data = await db.CheckListGeralComplementos
                     .OrderBy(c => c.coddetalhescompl)
-                    .Where(c => c.codcompl == CheckListGeral.codcompl)
+                    .Where(c => c.codcompl == codcompl)
                     .ToListAsync();
 
-                CheckListGeralComplementos = new ObservableCollection<QryCheckListGeralComplementoModel>(data);
+                return new ObservableCollection<QryCheckListGeralComplementoModel>(data);
                 //return CheckListGeralComplementos;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                throw;
             }
             //return new ObservableCollection<QryCheckListGeralComplementoModel>();
-            return CheckListGeralComplementos;
+            //return CheckListGeralComplementos;
         }
 
-        public async Task<DetalhesComplemento> AddDetalhesComplementoCheckListAsync()
+        public async Task<DetalhesComplemento> AddDetalhesComplementoCheckListAsync(DetalhesComplemento detCompl)
         {
-            if (DetCompl == null)
+            if (detCompl == null)
             {
                 throw new ArgumentNullException($"{nameof(AddDetalhesComplementoCheckListAsync)} entity must not be null");
             }
@@ -824,13 +820,13 @@ namespace Producao
             try
             {
                 using DatabaseContext db = new();
-                db.Entry(DetCompl).State = DetCompl.coddetalhescompl == null ?
+                db.Entry(detCompl).State = detCompl.coddetalhescompl == null ?
                                    EntityState.Added :
                                    EntityState.Modified;
 
                 await db.SaveChangesAsync();
 
-                return DetCompl;
+                return detCompl;
             }
             catch (NpgsqlException)
             {
@@ -863,9 +859,9 @@ namespace Producao
                 //ChkGeralRelatorios = new ObservableCollection<ChkGeralRelatorioModel>(data);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message);
+                throw;
             }
 
         }

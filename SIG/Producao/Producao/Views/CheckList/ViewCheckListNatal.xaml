@@ -1,10 +1,10 @@
-﻿<UserControl x:Name="chklist" x:Class="Producao.Views.ViewCheckList"
+﻿<UserControl x:Name="chklist" x:Class="Producao.Views.CheckList.ViewCheckListNatal"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-             xmlns:local="clr-namespace:Producao.Views"
+             xmlns:local="clr-namespace:Producao.Views.CheckList"
              xmlns:vewModel="clr-namespace:Producao"
              mc:Ignorable="d" 
              d:DesignHeight="768" d:DesignWidth="1024" 
@@ -29,7 +29,14 @@
 
             <StackPanel Orientation="Horizontal">
 
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="Shopping" Width="260" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4" 
+                    Margin="5" 
+                    HintFloatMode="Float" 
+                    Hint="Shopping" 
+                    Width="260" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
                     <syncfusion:ComboBoxAdv 
                         x:Name="cbSiglaShopping"
                         IsEditable="true"
@@ -42,7 +49,15 @@
                         SelectionChanged="OnSiglaSelectionChanged"/>
                 </syncfusion:SfTextInputLayout>
 
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="Tema" Width="450"  IsEnabled="False" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4" 
+                    Margin="5" 
+                    HintFloatMode="Float" 
+                    Hint="Tema" 
+                    Width="450"  
+                    IsEnabled="False" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
                     <syncfusion:SfTextBoxExt Text="{Binding Sigla.tema}"/>
                 </syncfusion:SfTextInputLayout>
 

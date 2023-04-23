@@ -16,15 +16,15 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
-namespace Producao.Views
+namespace Producao.Views.CheckList
 {
     /// <summary>
     /// Interação lógica para ViewCheckList.xam
     /// </summary>
-    public partial class ViewCheckList : UserControl
+    public partial class ViewCheckListNatal : UserControl
     {
         private bool dbClick;
-        public ViewCheckList()
+        public ViewCheckListNatal()
         {
             DataContext = new CheckListViewModel();
             InitializeComponent();

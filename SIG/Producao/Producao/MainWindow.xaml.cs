@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Producao.Views;
+using Producao.Views.CheckList;
 using Producao.Views.OrdemServico.Requisicao;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Windows.Tools.Controls;
@@ -119,7 +120,7 @@ namespace Producao
 
         private void OnChecklist_Click(object sender, RoutedEventArgs e)
         {
-            ViewCheckList view = new();
+            ViewCheckListNatal view = new();
             DocumentContainer.SetHeader(view, "CHECKLIST NATAL");
             DocumentContainer.SetSizetoContentInMDI(view, true);
             DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));

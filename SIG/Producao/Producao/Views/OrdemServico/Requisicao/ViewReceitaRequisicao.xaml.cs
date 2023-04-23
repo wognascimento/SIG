@@ -1,23 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Producao.Views.PopUp;
-using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace Producao.Views.OrdemServico.Requisicao
 {
@@ -237,14 +228,16 @@ namespace Producao.Views.OrdemServico.Requisicao
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 var dados = new RequisicaoReceitaModel
                 {
+                    id = vm.Item == null ? null : vm.Item.id,
                     codcompladicional_produto = vm.DescricaoProduto.codcompladicional,
                     codcompladicional_receita = long.Parse(txtCodigoProdutoReceita.Text),
                     quantidade = Convert.ToDouble(txtQuantidade.Text),
-                    inserido_por = Environment.UserName,
-                    inserido_em = DateTime.Now,
+                    inserido_por = vm.Item == null ? Environment.UserName : vm.Item.inserido_por,
+                    inserido_em = vm.Item == null ? DateTime.Now : vm.Item.inserido_em,
+                    alterado_por = vm.Item == null ? null : Environment.UserName,
+                    alterado_em = vm.Item == null ? null : DateTime.Now,
                 };
                 vm.RequiReceita = await Task.Run(() => vm.AddReceita(dados));
-                //vm.ItensReceita = await Task.Run(() => vm.GetReceitaDetalhes(Modelo.id_modelo));
                 vm.Itens = await Task.Run(() => vm.GetItensAsync(vm.DescricaoProduto.codcompladicional));
                 Limpar();
 
@@ -258,9 +251,37 @@ namespace Producao.Views.OrdemServico.Requisicao
             }
         }
 
-        private void dgModelos_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private async void dgModelos_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            vm.Item = (Item)dgModelos.SelectedItem;
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                vm.Descricao = await Task.Run(() => vm.GetDescricaoAsync((long)vm.Item?.codcompladicional_receita));
+                txtCodigoProdutoReceita.Text = vm.Descricao.codcompladicional.ToString();
+                txtPlanilha.Text = vm.Descricao.planilha;
+                txtDescricao.Text = vm.Descricao.descricao;
+                txtDescricaoAdicional.Text = vm.Descricao.descricao_adicional;
+                txtComplementoAdicional.Text = vm.Descricao.complementoadicional;
+                txtQuantidade.Text = vm.Item?.quantidade.ToString();
 
+
+                vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(vm.Descricao.planilha));
+                vm.DescAdicionais = await Task.Run(() => vm.GetDescAdicionaisAsync(vm.Descricao.codigo));
+                vm.CompleAdicionais = await Task.Run(() => vm.GetCompleAdicionaisAsync(vm.Descricao.coduniadicional));
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (FormatException ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
         }
 
         private void dgModelos_SelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
@@ -351,6 +372,13 @@ namespace Producao.Views.OrdemServico.Requisicao
         {
             get { return _compledicional; }
             set { _compledicional = value; RaisePropertyChanged("Compledicional"); }
+        }
+
+        private Item _item;
+        public Item Item
+        {
+            get { return _item; }
+            set { _item = value; RaisePropertyChanged("Item"); }
         }
 
         private ObservableCollection<Item> _itens;
