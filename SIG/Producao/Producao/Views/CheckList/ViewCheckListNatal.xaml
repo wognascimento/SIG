@@ -25,19 +25,18 @@
         </Grid.RowDefinitions>
 
 
-        <StackPanel Grid.Row="0" Orientation="Vertical" >
+        <StackPanel Grid.Row="0" Orientation="Vertical">
 
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Height="39" >
 
                 <syncfusion:SfTextInputLayout 
-                    InputViewPadding="4" 
-                    Margin="5" 
+                    InputViewPadding="4"
                     HintFloatMode="Float" 
                     Hint="Shopping" 
                     Width="260" 
                     CharCountVisibility="Collapsed" 
-                    HelperTextVisibility="Collapsed">
-                    <syncfusion:ComboBoxAdv 
+                    HelperTextVisibility="Collapsed" >
+                    <!--<syncfusion:ComboBoxAdv 
                         x:Name="cbSiglaShopping"
                         IsEditable="true"
                         AutoCompleteMode="Suggest"
@@ -46,38 +45,69 @@
                         SelectedValue="{Binding ComplementoCheckList.id_aprovado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         DisplayMemberPath="sigla_serv"
                         SelectedValuePath="id_aprovado"
-                        SelectionChanged="OnSiglaSelectionChanged"/>
+                        SelectionChanged="OnSiglaSelectionChanged"/>-->
+
+                    <syncfusion:SfTextBoxExt 
+                        x:Name="cbSiglaShopping"
+                        SearchItemPath="sigla_serv"
+                        ValueMemberPath="id_aprovado"
+                        ShowDropDownButton="True"
+                        AutoCompleteMode="Suggest"
+                        SuggestionMode="Contains"
+                        AutoCompleteSource="{Binding Siglas}" 
+                        SelectedItem="{Binding Sigla, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValue="{Binding ComplementoCheckList.id_aprovado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItemChanged="OnSiglaSelectionChanged" 
+                        ShowSuggestionsOnFocus="True"/>
+                    
                 </syncfusion:SfTextInputLayout>
 
-                <syncfusion:SfTextInputLayout 
+                <syncfusion:SfTextInputLayout
                     InputViewPadding="4" 
-                    Margin="5" 
                     HintFloatMode="Float" 
                     Hint="Tema" 
                     Width="450"  
                     IsEnabled="False" 
                     CharCountVisibility="Collapsed" 
-                    HelperTextVisibility="Collapsed">
+                    HelperTextVisibility="Collapsed" Margin="5,0,0,0" >
                     <syncfusion:SfTextBoxExt Text="{Binding Sigla.tema}"/>
                 </syncfusion:SfTextInputLayout>
 
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Height="39">
 
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="ID" Width="150" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="ID" 
+                    Width="150" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbId"
                         Text="{Binding ComplementoCheckList.ordem}" />
                 </syncfusion:SfTextInputLayout>
 
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="ITEM" Width="100" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4"
+                    HintFloatMode="Float" 
+                    Hint="ITEM" 
+                    Width="100" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed" Margin="5,0,0,0">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbItem" 
                         Text="{Binding ComplementoCheckList.item_memorial}"/>
                 </syncfusion:SfTextInputLayout>
 
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="LOCAL DO SHOPPING" Width="350" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4"
+                    HintFloatMode="Float" 
+                    Hint="LOCAL DO SHOPPING" 
+                    Width="455" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed" Margin="5,0,0,0">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbLocalShopping"
                         AutoCompleteSource="{Binding Locaisshopping}"
@@ -91,10 +121,16 @@
 
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Height="39">
 
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="PLANILHA" Width="260" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
-                    <syncfusion:ComboBoxAdv 
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4"
+                    HintFloatMode="Float" 
+                    Hint="PLANILHA" 
+                    Width="260" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed" Margin="0,0,5,0">
+                    <!--<syncfusion:ComboBoxAdv 
                         x:Name="cbPlanilha"
                         IsEditable="true"
                         AutoCompleteMode="Suggest"
@@ -102,11 +138,30 @@
                         SelectedItem="{Binding Planilha}"
                         DisplayMemberPath="planilha" 
                         SelectionChanged="OnPlanilhaSelectionChanged" 
-                        DropDownOpened="OnDropDownOpened"/> 
+                        DropDownOpened="OnDropDownOpened"/>-->
+
+                    <syncfusion:SfTextBoxExt 
+                        x:Name="cbPlanilha"
+                        SearchItemPath="planilha"
+                        ValueMemberPath="planilha"
+                        ShowDropDownButton="True"
+                        AutoCompleteMode="Suggest"
+                        SuggestionMode="Contains"
+                        AutoCompleteSource="{Binding Planilhas}" 
+                        SelectedItem="{Binding Planilha, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItemChanged="OnPlanilhaSelectionChanged" 
+                        ShowSuggestionsOnFocus="True"/>
+                    
                 </syncfusion:SfTextInputLayout>
 
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="DESCRIÇÃO" Width="450" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
-                    <syncfusion:ComboBoxAdv 
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4"
+                    HintFloatMode="Float" 
+                    Hint="DESCRIÇÃO" 
+                    Width="450" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+                    <!--<syncfusion:ComboBoxAdv 
                         x:Name="cbDescricao"
                         IsEditable="true"
                         AutoCompleteMode="Suggest"
@@ -116,15 +171,35 @@
                         DisplayMemberPath="descricao" 
                         SelectedValuePath="codigo"
                         SelectionChanged="OnDescricaoSelectionChanged"
-                        DropDownOpened="OnDropDownOpened"/>
+                        DropDownOpened="OnDropDownOpened"/>-->
+
+                    <syncfusion:SfTextBoxExt 
+                        x:Name="cbDescricao"
+                        SearchItemPath="descricao"
+                        ValueMemberPath="codigo"
+                        ShowDropDownButton="True"
+                        AutoCompleteMode="Suggest"
+                        SuggestionMode="Contains"
+                        AutoCompleteSource="{Binding Produtos}" 
+                        SelectedItem="{Binding Produto, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValue="{Binding ComplementoCheckList.codproduto, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedItemChanged="OnDescricaoSelectionChanged" 
+                        ShowSuggestionsOnFocus="True"/>
+                    
                 </syncfusion:SfTextInputLayout>
 
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Height="39">
 
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="DESCRIÇÃO ADICIONAL" Width="610" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
-                    <syncfusion:ComboBoxAdv 
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="DESCRIÇÃO ADICIONAL" 
+                    Width="610" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed" Margin="0,0,5,0">
+                    <!--<syncfusion:ComboBoxAdv 
                         x:Name="cbDescricaoAdicional"
                         IsEditable="true"
                         AutoCompleteMode="Suggest"
@@ -132,10 +207,29 @@
                         SelectedItem="{Binding DescAdicional}"
                         SelectedValue="{Binding ComplementoCheckList.coduniadicional, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         DisplayMemberPath="descricao_adicional"
-                        SelectedValuePath="coduniadicional"/>
+                        SelectedValuePath="coduniadicional"/>-->
+
+                    <syncfusion:SfTextBoxExt 
+                        x:Name="cbDescricaoAdicional"
+                        SearchItemPath="descricao_adicional"
+                        ValueMemberPath="coduniadicional"
+                        ShowDropDownButton="True"
+                        AutoCompleteMode="Suggest"
+                        SuggestionMode="Contains"
+                        AutoCompleteSource="{Binding DescAdicionais}" 
+                        SelectedItem="{Binding DescAdicional, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValue="{Binding ComplementoCheckList.coduniadicional, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ShowSuggestionsOnFocus="True"/>
+                    
                 </syncfusion:SfTextInputLayout>
 
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="QTDE" Width="100" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4"
+                    HintFloatMode="Float" 
+                    Hint="QTDE" 
+                    Width="100" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
                     <syncfusion:DoubleTextBox 
                         x:Name="tbQtde" 
                         UseNullOption="True"
@@ -145,25 +239,43 @@
                 </syncfusion:SfTextInputLayout>
 
             </StackPanel>
-            
-            <StackPanel Orientation="Horizontal">
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="ORIENTAÇÃO DE PRODUÇÃO" Width="720" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
+
+            <StackPanel Orientation="Horizontal" Height="39">
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="ORIENTAÇÃO DE PRODUÇÃO" 
+                    Width="720" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbOrientacaoProducao" 
                         Text="{Binding ComplementoCheckList.obs}"/>
                 </syncfusion:SfTextInputLayout>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="ORIENTAÇÃO DE MONTAGEM" Width="720" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
+            <StackPanel Orientation="Horizontal" Height="39">
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="ORIENTAÇÃO DE MONTAGEM" 
+                    Width="720" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbOrientacaoMontagem" 
                         Text="{Binding ComplementoCheckList.orient_montagem}"/>
                 </syncfusion:SfTextInputLayout>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal">
-                <syncfusion:SfTextInputLayout InputViewPadding="5" Margin="5" HintFloatMode="Float" Hint="ORIENTAÇÃO DE DESMONTAGEM" Width="720" CharCountVisibility="Collapsed" HelperTextVisibility="Collapsed">
+            <StackPanel Orientation="Horizontal" Height="39">
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4" 
+                    HintFloatMode="Float" 
+                    Hint="ORIENTAÇÃO DE DESMONTAGEM" 
+                    Width="720" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbOrientacaoDesmontagem" 
                         Text="{Binding ComplementoCheckList.orient_desmont}"/>
@@ -224,7 +336,7 @@
             ShowRowHeader="True" 
             ItemsSource="{Binding CheckListGerais}"
             SelectedItem="{Binding CheckListGeral, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            SelectionChanged="OnSelectionChanged" MouseDoubleClick="OnMouseDoubleClick">
+            SelectionChanged="OnSelectionChanged" MouseDoubleClick="OnMouseDoubleClick" FontSize="10">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridTextColumn HeaderText="ID" MappingName="id" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn HeaderText="ITEM" MappingName="item_memorial"/>
@@ -252,26 +364,32 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-
+<!--
             <TextBlock x:Name="btnAddicionar" Visibility="Collapsed">
                 <Hyperlink  Click="OnAddComplemento">
                     Adcionar Complemento
                 </Hyperlink>
             </TextBlock>
-
+-->
             <syncfusion:SfDataGrid
                 Grid.Row="1"
                 x:Name="dgComplemento"
+                AddNewRowPosition="Bottom"
                 ShowRowHeader="True"
                 AutoGenerateColumns="False"
                 ColumnSizer="SizeToHeader"
                 ItemsSource="{Binding CheckListGeralComplementos}"
                 SelectedItem="{Binding CheckListGeralComplemento, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                CurrentCellDropDownSelectionChanged="OnCurrentCellDropDownSelectionChanged" CurrentCellValueChanged="dgComplemento_CurrentCellValueChanged" >
+                CurrentCellDropDownSelectionChanged="OnCurrentCellDropDownSelectionChanged" 
+                CurrentCellValueChanged="dgComplemento_CurrentCellValueChanged" 
+                FontSize="10" >
                 <syncfusion:SfDataGrid.Columns>
-                    <syncfusion:GridTextColumn
+                    <syncfusion:GridComboBoxColumn
                         HeaderText="COMPLEMENTO ADICIONAL" 
-                        MappingName="complementoadicional"/>
+                        MappingName="codcompladicional"
+                        ItemsSource="{Binding CompleAdicionais}"
+                        DisplayMemberPath="complementoadicional"
+                        SelectedValuePath="codcompladicional"/>
                     <syncfusion:GridTextColumn
                         HeaderText="UNID" 
                         MappingName="unidade"/>

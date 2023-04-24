@@ -430,7 +430,7 @@ namespace Producao
                     {
                         SetorProducao = (SetorProducaoModel)sfMultiColumn.SelectedItem;
 
-                        ProdutoOs = new ProdutoOsModel
+                        var ProdutoOs = new ProdutoOsModel
                         {
                             tipo = "PEÇA NOVA",
                             planilha = CheckListGeral.planilha,
@@ -442,9 +442,9 @@ namespace Producao
                             responsavel_emissao = Environment.UserName,
                             solicitado_por = Environment.UserName
                         };
+                        ProdutoOs = await Task.Run(async () => await CriarOsProdutoAsync(ProdutoOs));
 
-                        await Task.Run(async () => await CriarOsProdutoAsync());
-                        ProdutoServico = new ProdutoServicoModel
+                        var ProdutoServico = new ProdutoServicoModel
                         {
                             num_os_produto = ProdutoOs.num_os_produto,
                             tipo = ProdutoOs.tipo,
@@ -466,18 +466,16 @@ namespace Producao
                             impresso = "-1",
                             cod_detalhe_compl = CheckListGeralComplemento.coddetalhescompl
                         };
+                        ProdutoServico = await Task.Run(async () => await CriarProdutoServicoAsync(ProdutoServico));
 
-                        await Task.Run(async () => await CriarProdutoServicoAsync());
-
-                        Requisicao = new RequisicaoModel
+                        var Requisicao = new RequisicaoModel
                         {
                             num_os_servico = ProdutoServico.num_os_servico,
                             data = DateTime.Now,
                             alterado_por = Environment.UserName
 
                         };
-
-                        await Task.Run(async () => await CriarRequisicaoAsync());
+                        Requisicao = await Task.Run(async () => await CriarRequisicaoAsync(Requisicao));
               
                         window.Close();
 
@@ -495,9 +493,9 @@ namespace Producao
 
                 };
 
-                await Task.Run(async () => await GetProdutoServicoAsync());
+                var produtoServico = await Task.Run(async () => await GetProdutoServicoAsync(ProdutoServico.cod_detalhe_compl));
 
-                if (ProdutoServico == null)
+                if (produtoServico == null)
                 {
                     stackPanel.Children.Add(btn);
                     window.Content = stackPanel;
@@ -512,8 +510,8 @@ namespace Producao
                 }
                 else
                 {
-                    await Task.Run(async () => await GetRequisicaoAsync());
-                    await Task.Run(async () => await GetRequisicaoDetalhesAsync());
+                    await Task.Run(async () => await GetRequisicaoAsync(produtoServico.num_os_servico));
+                    await Task.Run(async () => await GetRequisicaoDetalhesAsync(Requisicao.num_requisicao));
                     RequisicaoMaterial detailsWindow = new RequisicaoMaterial(ProdutoServico); //ProdutoServico
                     detailsWindow.Owner = Window.GetWindow((DependencyObject)obj);  //(Window)obj;
                     detailsWindow.ShowDialog();
@@ -528,7 +526,7 @@ namespace Producao
             
         }
 
-        public async Task CriarOsProdutoAsync()
+        public async Task<ProdutoOsModel> CriarOsProdutoAsync(ProdutoOsModel ProdutoOs)
         {
             try
             {
@@ -538,6 +536,7 @@ namespace Producao
                                    EntityState.Modified;
 
                 await db.SaveChangesAsync();
+                return ProdutoOs;
             }
             catch (Exception)
             {
@@ -545,7 +544,7 @@ namespace Producao
             }
         }
 
-        public async Task CriarProdutoServicoAsync()
+        public async Task<ProdutoServicoModel> CriarProdutoServicoAsync(ProdutoServicoModel ProdutoServico)
         {
             try
             {
@@ -555,18 +554,22 @@ namespace Producao
                                    EntityState.Modified;
 
                 await db.SaveChangesAsync();
+                return ProdutoServico;
             }
             catch (Exception)
             {
                 throw;
             }
         }
-        public async Task<ProdutoServicoModel> GetProdutoServicoAsync()
+        public async Task<ProdutoServicoModel> GetProdutoServicoAsync(long? coddetalhescompl)
         {
             try
             {
                 using DatabaseContext db = new();
-                return await db.ProdutoServicos.Where(p => p.cod_detalhe_compl == CheckListGeralComplemento.coddetalhescompl).FirstOrDefaultAsync();
+                var data = await db.ProdutoServicos
+                    .Where(p => p.cod_detalhe_compl == coddetalhescompl)
+                    .FirstOrDefaultAsync();
+                return data;
             }
             catch (Exception)
             {
@@ -574,7 +577,7 @@ namespace Producao
             }
         }
 
-        public async Task CriarRequisicaoAsync()
+        public async Task<RequisicaoModel> CriarRequisicaoAsync(RequisicaoModel Requisicao)
         {
             try
             {
@@ -584,18 +587,20 @@ namespace Producao
                                    EntityState.Modified;
 
                 await db.SaveChangesAsync();
+                return Requisicao;
             }
             catch (Exception)
             {
                 throw;
             }
         }
-        public async Task<RequisicaoModel> GetRequisicaoAsync()
+        public async Task<RequisicaoModel> GetRequisicaoAsync(long? num_os_servico)
         {
             try
             {
                 using DatabaseContext db = new();
-                return await db.Requisicoes.Where(r => r.num_os_servico == ProdutoServico.num_os_servico).FirstOrDefaultAsync();
+                var data = await db.Requisicoes.Where(r => r.num_os_servico == num_os_servico).FirstOrDefaultAsync();
+                return data;
             }
             catch (Exception)
             {
@@ -603,12 +608,12 @@ namespace Producao
             }
         }
 
-        public async Task<ObservableCollection<QryRequisicaoDetalheModel>> GetRequisicaoDetalhesAsync()
+        public async Task<ObservableCollection<QryRequisicaoDetalheModel>> GetRequisicaoDetalhesAsync(long? num_requisicao)
         {
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.QryRequisicaoDetalhes.Where(r => r.num_requisicao == Requisicao.num_requisicao).ToListAsync();
+                var data = await db.QryRequisicaoDetalhes.Where(r => r.num_requisicao == num_requisicao).ToListAsync();
                 return new ObservableCollection<QryRequisicaoDetalheModel>(data);
             }
             catch (Exception)
@@ -643,39 +648,35 @@ namespace Producao
                 throw;
             }
         }
-        public async Task<ObservableCollection<ProdutoModel>> GetProdutosAsync()
+        public async Task<ObservableCollection<ProdutoModel>> GetProdutosAsync(string? planilha)
         {
             try
             {
-                Produtos = new ObservableCollection<ProdutoModel>();
                 using DatabaseContext db = new();
                 var data = await db.Produtos
                     .OrderBy(c => c.descricao)
-                    .Where(c => c.planilha.Equals(Planilha.planilha))
+                    .Where(c => c.planilha.Equals(planilha))
                     .Where(c => c.inativo != "-1")
                     .ToListAsync();
                 return new ObservableCollection<ProdutoModel>(data);
-                //return Produtos;
             }
             catch (Exception)
             {
                 throw;
             }
         }
-        public async Task<ObservableCollection<TabelaDescAdicionalModel>> GetDescAdicionaisAsync()
+        public async Task<ObservableCollection<TabelaDescAdicionalModel>> GetDescAdicionaisAsync(long? codigo)
         {
             try
             {
-                DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>();
                 using DatabaseContext db = new();
                 var data = await db.DescAdicionais
                     .OrderBy(c => c.descricao_adicional)
-                    .Where(c => c.codigoproduto.Equals(Produto.codigo))
+                    .Where(c => c.codigoproduto.Equals(codigo))
                     .Where(c => c.inativo != "-1")
                     .ToListAsync();
 
                 return new ObservableCollection<TabelaDescAdicionalModel>(data);
-                //return DescAdicionais;
             }
             catch (Exception)
             {
@@ -683,71 +684,64 @@ namespace Producao
             }
         }
 
-        public async Task<ObservableCollection<TblComplementoAdicionalModel>> GetCompleAdicionaisAsync()
+        public async Task<ObservableCollection<TblComplementoAdicionalModel>> GetCompleAdicionaisAsync(long? coduniadicional)
         {
-            //(long)((CheckListViewModel)DataContext).ComplementoCheckList.coduniadicional
             try
             {
                 CompleAdicionais = new ObservableCollection<TblComplementoAdicionalModel>();
                 using DatabaseContext db = new();
                 var data = await db.ComplementoAdicionais
                     .OrderBy(c => c.complementoadicional)
-                    .Where(c => c.coduniadicional.Equals(ComplementoCheckList.coduniadicional))
+                    .Where(c => c.coduniadicional.Equals(coduniadicional))
                     .Where(c => c.inativo != "-1")
                     .ToListAsync();
 
                 return new ObservableCollection<TblComplementoAdicionalModel>(data);
-                //return new ObservableCollection<TblComplementoAdicionalModel>(data);
             }
             catch (Exception)
             {
                 throw;
             }
-            //return new ObservableCollection<TblComplementoAdicionalModel>();
         }
 
-        public async Task<ObservableCollection<object>> GetLocaisShoppAsync()
+        public async Task<ObservableCollection<object>> GetLocaisShoppAsync(long? id_aprovado)
         {
             try
             {
                 using DatabaseContext db = new();
                 var data = await db.ComplementoCheckLists
                     .OrderBy(c => c.local_shoppings)
-                    .Where(c => c.id_aprovado == Sigla.id_aprovado)
+                    .Where(c => c.id_aprovado == id_aprovado)
                     .Select(s => new
                     {
                         s.local_shoppings
                     }).ToArrayAsync();
                 return new ObservableCollection<object>(data.GroupBy(x => x.local_shoppings));
-                //return Locaisshopping;
             }
             catch (Exception)
             {
                 throw;
             }
-            //return Locaisshopping;
         }
 
-        public async Task<ObservableCollection<QryCheckListGeralModel>> GetCheckListGeralAsync()
+        public async Task<ObservableCollection<QryCheckListGeralModel>> GetCheckListGeralAsync(long? id_aprovado)
         {
             try
             {
                 using DatabaseContext db = new();
                 var data = await db.CheckListGerals
                     .OrderBy(c => c.id)
-                    .Where(c => c.id_aprovado == Sigla.id_aprovado)
+                    .Where(c => c.id_aprovado == id_aprovado)
                     .ToListAsync();
-                CheckListGerais = new ObservableCollection<QryCheckListGeralModel>(data);
-                return CheckListGerais;
+                return new ObservableCollection<QryCheckListGeralModel>(data);
             }
             catch (Exception)
             {
                 throw;
             }
-            //return CheckListGerais;
         }
 
-        public async Task<ComplementoCheckListModel> AddComplementoCheckListAsync()
+        public async Task<ComplementoCheckListModel> AddComplementoCheckListAsync(ComplementoCheckListModel ComplementoCheckList)
         {
             if (ComplementoCheckList == null)
             {
@@ -779,7 +773,6 @@ namespace Producao
                 var data = await db.CheckListGerals
                     .Where(c => c.codcompl == CodCompl)
                     .FirstOrDefaultAsync();
-                //CheckListGeral = data;
                 return data;
             }
             catch (NpgsqlException)
@@ -792,7 +785,7 @@ namespace Producao
         {
             try
             {
-                CheckListGeralComplementos = new ObservableCollection<QryCheckListGeralComplementoModel>();
+                //CheckListGeralComplementos = new ObservableCollection<QryCheckListGeralComplementoModel>();
                 using DatabaseContext db = new();
                 var data = await db.CheckListGeralComplementos
                     .OrderBy(c => c.coddetalhescompl)
@@ -800,14 +793,11 @@ namespace Producao
                     .ToListAsync();
 
                 return new ObservableCollection<QryCheckListGeralComplementoModel>(data);
-                //return CheckListGeralComplementos;
             }
             catch (Exception)
             {
                 throw;
             }
-            //return new ObservableCollection<QryCheckListGeralComplementoModel>();
-            //return CheckListGeralComplementos;
         }
 
         public async Task<DetalhesComplemento> AddDetalhesComplementoCheckListAsync(DetalhesComplemento detCompl)
@@ -834,15 +824,14 @@ namespace Producao
             }
         }
 
-        public async Task GetChkGeralRelatorioAsync()
+        public async Task<IList> GetChkGeralRelatorioAsync(long? id_aprovado)
         {
             try
             {
-                //ChkGeralRelatorios = new ObservableCollection<ChkGeralRelatorioModel>();
                 using DatabaseContext db = new();
                 var data = await db.ChkGeralRelatorios
                     .OrderBy(c => c.ordem)
-                    .Where(c => c.id_aprovado == Sigla.id_aprovado)
+                    .Where(c => c.id_aprovado == id_aprovado)
                     .Select(s => new
                     {
                         s.item_memorial,
@@ -855,39 +844,22 @@ namespace Producao
                         s.coddetalhescompl
                     })
                     .ToListAsync();
-                ChkGeralRelatorios = data;
-                //ChkGeralRelatorios = new ObservableCollection<ChkGeralRelatorioModel>(data);
+                return data;
 
             }
             catch (Exception)
             {
                 throw;
             }
-
         }
-
-        
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propName)
         {
-            //Application.Current.Dispatcher.BeginInvoke((Action)(() =>
-            //{
-                if (this.PropertyChanged != null)
-                    this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
-            //}));
-        }
-        /*
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            Application.Current.Dispatcher.BeginInvoke((Action)(() =>
-            {
-                PropertyChangedEventHandler handler = PropertyChanged;
-                if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-            }));
+            if (this.PropertyChanged != null)
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
 
         }
-        */
 
     }
 }
