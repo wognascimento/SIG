@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Producao.Views;
+using Producao.Views.OrdemServico.Requisicao;
 using Producao.Views.PopUp;
 using Syncfusion.UI.Xaml.Grid;
 using System;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace Producao
 {
@@ -281,6 +283,20 @@ namespace Producao
             }
         }
 
+        private RequisicaoReceitaModel _requiReceita;
+        public RequisicaoReceitaModel RequiReceita
+        {
+            get { return _requiReceita; }
+            set { _requiReceita = value; RaisePropertyChanged("RequiReceita"); }
+        }
+
+        private ObservableCollection<RequisicaoReceitaModel> _requiReceitas;
+        public ObservableCollection<RequisicaoReceitaModel> RequiReceitas
+        {
+            get { return _requiReceitas; }
+            set { _requiReceitas = value; RaisePropertyChanged("RequiReceitas"); }
+        }
+
         /**/
         private RequisicaoModel _requisicao;
         public RequisicaoModel Requisicao
@@ -403,8 +419,15 @@ namespace Producao
         {
             try
             {
-                await Task.Run(async () => await GetSetoresAsync());
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
 
+                if (CheckListGeralComplemento == null)
+                {
+                    MessageBox.Show("Salva o registro para poder criar requisição");
+                    return;
+                }
+
+                this.SetoresProducao = await Task.Run(GetSetoresAsync);
                 var window = new Window();
                 var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
                 SfMultiColumnDropDownControl sfMultiColumn = new SfMultiColumnDropDownControl();
@@ -413,7 +436,7 @@ namespace Producao
                 sfMultiColumn.IsDropDownOpen = true;
                 sfMultiColumn.AutoGenerateColumns = false;
                 sfMultiColumn.GridColumnSizer = GridLengthUnitType.AutoLastColumnFill;
-                sfMultiColumn.SearchCondition = SearchCondition.Contains;//  "Contains";
+                sfMultiColumn.SearchCondition = SearchCondition.Contains; //"Contains";
                 sfMultiColumn.DisplayMember = "setor";
                 sfMultiColumn.ValueMember = "codigo_setor";
                 sfMultiColumn.Columns.Add(new GridTextColumn() { MappingName = "setor" });
@@ -425,78 +448,30 @@ namespace Producao
                 btn.Content = "OK";
                 btn.Click += async (s, e) =>
                 {
-                    
                     try
                     {
+                        Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                         SetorProducao = (SetorProducaoModel)sfMultiColumn.SelectedItem;
-
-                        var ProdutoOs = new ProdutoOsModel
-                        {
-                            tipo = "PEÇA NOVA",
-                            planilha = CheckListGeral.planilha,
-                            cod_produto = CheckListGeral.codigo,
-                            cod_desc_adicional = CheckListGeral.coduniadicional,
-                            cod_compl_adicional = CheckListGeralComplemento.codcompladicional,
-                            quantidade = 0,
-                            data_emissao = DateTime.Now,
-                            responsavel_emissao = Environment.UserName,
-                            solicitado_por = Environment.UserName
-                        };
-                        ProdutoOs = await Task.Run(async () => await CriarOsProdutoAsync(ProdutoOs));
-
-                        var ProdutoServico = new ProdutoServicoModel
-                        {
-                            num_os_produto = ProdutoOs.num_os_produto,
-                            tipo = ProdutoOs.tipo,
-                            codigo_setor = SetorProducao.codigo_setor,
-                            setor_caminho = $"{SetorProducao.setor} - {SetorProducao.galpao}",
-                            quantidade = ProdutoOs.quantidade,
-                            data_inicio = DateTime.Now,
-                            data_fim = DateTime.Now.AddDays(1),
-                            cliente = Sigla.sigla_serv,
-                            tema = Sigla.tema,
-                            orientacao_caminho = "OS DESTINADA A REQUISIÇÃO DE MATERIAL PARA A PLANILHA",
-                            codigo_setor_proximo = 39,    
-                            setor_caminho_proximo = "FINAL - TODOS",
-                            fase = "PRODUÇÃO",
-                            responsavel_emissao_os = Environment.UserName,
-                            emitida_por = Environment.UserName,
-                            emitida_data = DateTime.Now,
-                            retrabalho = "NÃO",
-                            impresso = "-1",
-                            cod_detalhe_compl = CheckListGeralComplemento.coddetalhescompl
-                        };
-                        ProdutoServico = await Task.Run(async () => await CriarProdutoServicoAsync(ProdutoServico));
-
-                        var Requisicao = new RequisicaoModel
-                        {
-                            num_os_servico = ProdutoServico.num_os_servico,
-                            data = DateTime.Now,
-                            alterado_por = Environment.UserName
-
-                        };
-                        Requisicao = await Task.Run(async () => await CriarRequisicaoAsync(Requisicao));
-              
+                        var produtoServico = await Task.Run(() => CriateOsChklistAsync(SetorProducao)); 
                         window.Close();
-
-                        RequisicaoMaterial detailsWindow = new RequisicaoMaterial(ProdutoServico);
+                        RequisicaoMaterial detailsWindow = new RequisicaoMaterial(produtoServico);
                         detailsWindow.Owner = Window.GetWindow((DependencyObject)obj); //Window.GetWindow((DependencyObject)obj)
+                        Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                         detailsWindow.ShowDialog();
-
                     }
                     catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message);
-                    }
-                    
-                    
-
+                        Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                    } 
                 };
 
-                var produtoServico = await Task.Run(async () => await GetProdutoServicoAsync(ProdutoServico.cod_detalhe_compl));
+                var produtoServico = await Task.Run(async () => await GetProdutoServicoAsync(CheckListGeralComplemento.coddetalhescompl));
 
                 if (produtoServico == null)
                 {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
                     stackPanel.Children.Add(btn);
                     window.Content = stackPanel;
                     window.Title = "Criar Requisição";
@@ -507,13 +482,16 @@ namespace Producao
                     window.ResizeMode = ResizeMode.NoResize;
                     //window.Owner = (Window)obj;
                     window.ShowDialog();
+                    
                 }
                 else
                 {
-                    await Task.Run(async () => await GetRequisicaoAsync(produtoServico.num_os_servico));
-                    await Task.Run(async () => await GetRequisicaoDetalhesAsync(Requisicao.num_requisicao));
-                    RequisicaoMaterial detailsWindow = new RequisicaoMaterial(ProdutoServico); //ProdutoServico
+
+                    Requisicao = await Task.Run(() => GetRequisicaoAsync(produtoServico.num_os_servico));
+                    QryRequisicaoDetalhes = await Task.Run(() => GetRequisicaoDetalhesAsync(Requisicao.num_requisicao));
+                    RequisicaoMaterial detailsWindow = new RequisicaoMaterial(produtoServico); //ProdutoServico
                     detailsWindow.Owner = Window.GetWindow((DependencyObject)obj);  //(Window)obj;
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     detailsWindow.ShowDialog();
                 }
                 
@@ -522,9 +500,98 @@ namespace Producao
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             
         }
+
+
+        public async Task<ProdutoServicoModel> CriateOsChklistAsync(SetorProducaoModel setorProducao)
+        {
+            
+            using DatabaseContext db = new();
+            using var transaction = db.Database.BeginTransaction();
+
+            try
+            {
+                var produtoOs = new ProdutoOsModel
+                {
+                    tipo = "PEÇA NOVA",
+                    planilha = CheckListGeral.planilha,
+                    cod_produto = CheckListGeral.codigo,
+                    cod_desc_adicional = CheckListGeral.coduniadicional,
+                    cod_compl_adicional = CheckListGeralComplemento.codcompladicional,
+                    quantidade = 0,
+                    data_emissao = DateTime.Now,
+                    responsavel_emissao = Environment.UserName,
+                    solicitado_por = Environment.UserName
+                };
+                await db.ProdutoOs.AddAsync(produtoOs);
+                await db.SaveChangesAsync();
+                var produtoServico = new ProdutoServicoModel
+                {
+                    num_os_produto = produtoOs.num_os_produto,
+                    tipo = produtoOs.tipo,
+                    codigo_setor = setorProducao.codigo_setor,
+                    setor_caminho = $"{setorProducao.setor} - {setorProducao.galpao}",
+                    quantidade = produtoOs.quantidade,
+                    data_inicio = DateTime.Now,
+                    data_fim = DateTime.Now.AddDays(1),
+                    cliente = Sigla.sigla_serv,
+                    tema = Sigla.tema,
+                    orientacao_caminho = "OS DESTINADA A REQUISIÇÃO DE MATERIAL PARA A PLANILHA",
+                    codigo_setor_proximo = 39,
+                    setor_caminho_proximo = "FINAL - TODOS",
+                    fase = "PRODUÇÃO",
+                    responsavel_emissao_os = Environment.UserName,
+                    emitida_por = Environment.UserName,
+                    emitida_data = DateTime.Now,
+                    retrabalho = "NÃO",
+                    impresso = "-1",
+                    cod_detalhe_compl = CheckListGeralComplemento.coddetalhescompl
+                };
+                await db.ProdutoServicos.AddAsync(produtoServico);
+                await db.SaveChangesAsync();
+                var requisicao = new RequisicaoModel
+                {
+                    num_os_servico = produtoServico.num_os_servico,
+                    data = DateTime.Now,
+                    alterado_por = Environment.UserName
+
+                };
+                await db.Requisicoes.AddAsync(requisicao);
+                await db.SaveChangesAsync();
+                var receita = await db.RequisicaoReceitas.Where(r => r.codcompladicional_produto == produtoOs.cod_compl_adicional).ToListAsync();
+                foreach (var item in receita)
+                {
+                    var ReqDetalhe = new DetalheRequisicaoModel
+                    {
+                        cod_det_req = null,
+                        num_requisicao = requisicao.num_requisicao,
+                        codcompladicional = item.codcompladicional_receita,
+                        quantidade = item.quantidade * CheckListGeralComplemento.qtd,
+                        data = DateTime.Now,
+                        alterado_por = Environment.UserName
+                    };
+                    await db.RequisicaoDetalhes.AddAsync(ReqDetalhe);
+                    await db.SaveChangesAsync();
+                    
+                }
+
+                transaction.Commit();
+
+                return produtoServico;
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw;
+            }
+            
+
+        }
+
+
 
         public async Task<ProdutoOsModel> CriarOsProdutoAsync(ProdutoOsModel ProdutoOs)
         {
@@ -577,6 +644,20 @@ namespace Producao
             }
         }
 
+        public async Task<ObservableCollection<RequisicaoReceitaModel>> GetReceitaRequisicaoAsync(long? codcompladicional)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.RequisicaoReceitas.Where(r => r.codcompladicional_produto == codcompladicional).ToListAsync();
+                return new ObservableCollection<RequisicaoReceitaModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<RequisicaoModel> CriarRequisicaoAsync(RequisicaoModel Requisicao)
         {
             try
@@ -594,6 +675,25 @@ namespace Producao
                 throw;
             }
         }
+
+        public async Task<DetalheRequisicaoModel> AddProdutoRequisicaoAsync(DetalheRequisicaoModel RequisicaoDetalhe)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                db.Entry(RequisicaoDetalhe).State = RequisicaoDetalhe.cod_det_req == null ?
+                                   EntityState.Added :
+                                   EntityState.Modified;
+
+                await db.SaveChangesAsync();
+                return RequisicaoDetalhe;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<RequisicaoModel> GetRequisicaoAsync(long? num_os_servico)
         {
             try

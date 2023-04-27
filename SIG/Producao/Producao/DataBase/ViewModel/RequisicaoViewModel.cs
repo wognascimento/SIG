@@ -132,6 +132,7 @@ namespace Producao
 
         public RequisicaoViewModel()
         {
+            /*
             try
             {
                 Task.Run(async () => await GetPlanilhasAsync());
@@ -140,14 +141,15 @@ namespace Producao
             {
                 MessageBox.Show(ex.Message);
             }
+            */
         }
 
-        public async Task GetDescricaoAsync(long codcompladicional)
+        public async Task<QryDescricao> GetDescricaoAsync(long codcompladicional)
         {//e.FirstName.StartsWith(employeeName) || e.LastName.StartsWith(employeeName)
             try
             {
                 using DatabaseContext db = new();
-                Descricao = await db.Descricoes.Where(d => d.inativo.Equals("0") && d.codcompladicional == codcompladicional).FirstOrDefaultAsync();
+                return await db.Descricoes.Where(d => d.inativo.Equals("0") && d.codcompladicional == codcompladicional).FirstOrDefaultAsync();
             }
             catch (Exception)
             {
@@ -155,12 +157,12 @@ namespace Producao
             }
         }
 
-        public async Task GetPlanilhasAsync()
+        public async Task<ObservableCollection<RelplanModel>> GetPlanilhasAsync()
         {
             try
             {
                 using DatabaseContext db = new();
-                Planilhas = new ObservableCollection<RelplanModel>(await db.Relplans.OrderBy(c => c.planilha).Where(c => c.ativo.Equals("1")).ToListAsync());
+                return new ObservableCollection<RelplanModel>(await db.Relplans.OrderBy(c => c.planilha).Where(c => c.ativo.Equals("1")).ToListAsync());
             }
             catch (Exception)
             {
@@ -168,7 +170,7 @@ namespace Producao
             }
         }
 
-        public async Task GetProdutosAsync()
+        public async Task<ObservableCollection<ProdutoModel>> GetProdutosAsync(string? planilha)
         {
             try
             {
@@ -176,10 +178,12 @@ namespace Producao
                 using DatabaseContext db = new();
                 var data = await db.Produtos
                     .OrderBy(c => c.descricao)
-                    .Where(c => c.planilha.Equals(Planilha.planilha))
+                    .Where(c => c.planilha.Equals(planilha))
                     .Where(c => c.inativo != "-1")
                     .ToListAsync();
-                Produtos = new ObservableCollection<ProdutoModel>(data);
+                //Produtos = new ObservableCollection<ProdutoModel>(data);
+
+                return new ObservableCollection<ProdutoModel>(data);
             }
             catch (Exception)
             {
@@ -187,7 +191,7 @@ namespace Producao
             }
         }
 
-        public async Task GetDescAdicionaisAsync()
+        public async Task<ObservableCollection<TabelaDescAdicionalModel>> GetDescAdicionaisAsync(long? codigo)
         {
             try
             {
@@ -195,10 +199,11 @@ namespace Producao
                 using DatabaseContext db = new();
                 var data = await db.DescAdicionais
                     .OrderBy(c => c.descricao_adicional)
-                    .Where(c => c.codigoproduto.Equals(Produto.codigo))
+                    .Where(c => c.codigoproduto.Equals(codigo))
                     .Where(c => c.inativo != "-1")
                     .ToListAsync();
-                DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>(data);
+                //DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>(data);
+                return new ObservableCollection<TabelaDescAdicionalModel>(data);
             }
             catch (Exception)
             {
@@ -206,7 +211,7 @@ namespace Producao
             }
         }
 
-        public async Task GetCompleAdicionaisAsync()
+        public async Task<ObservableCollection<TblComplementoAdicionalModel>> GetCompleAdicionaisAsync(long? coduniadicional)
         {
             try
             {
@@ -214,10 +219,11 @@ namespace Producao
                 using DatabaseContext db = new();
                 var data = await db.ComplementoAdicionais
                     .OrderBy(c => c.complementoadicional)
-                    .Where(c => c.coduniadicional.Equals(DescAdicional.coduniadicional))
+                    .Where(c => c.coduniadicional.Equals(coduniadicional))
                     .Where(c => c.inativo != "-1")
                     .ToListAsync();
-                CompleAdicionais = new ObservableCollection<TblComplementoAdicionalModel>(data);
+                //CompleAdicionais = new ObservableCollection<TblComplementoAdicionalModel>(data);
+                return new ObservableCollection<TblComplementoAdicionalModel>(data);
             }
             catch (Exception)
             {
@@ -225,12 +231,12 @@ namespace Producao
             }
         }
 
-        public async Task GetRequisicaoAsync()
+        public async Task<RequisicaoModel> GetRequisicaoAsync(long? num_os_servico)
         {
             try
             {
                 using DatabaseContext db = new();
-                Requisicao = await db.Requisicoes.Where(r => r.num_os_servico == ProdutoServico.num_os_servico).FirstOrDefaultAsync();
+                return await db.Requisicoes.Where(r => r.num_os_servico == num_os_servico).FirstOrDefaultAsync();
             }
             catch (Exception)
             {
@@ -238,16 +244,17 @@ namespace Producao
             }
         }
 
-        public async Task AddProdutoRequisicaoAsync()
+        public async Task<DetalheRequisicaoModel> AddProdutoRequisicaoAsync(DetalheRequisicaoModel requisicaoDetalhe)
         {
             try
             {
                 using DatabaseContext db = new();
-                db.Entry(RequisicaoDetalhe).State = RequisicaoDetalhe.cod_det_req == null ?
+                db.Entry(requisicaoDetalhe).State = requisicaoDetalhe.cod_det_req == null ?
                                    EntityState.Added :
                                    EntityState.Modified;
 
                 await db.SaveChangesAsync();
+                return requisicaoDetalhe;
             }
             catch (Exception)
             {
@@ -255,13 +262,13 @@ namespace Producao
             }
         }
 
-        public async Task GetRequisicaoDetalhesAsync()
+        public async Task<ObservableCollection<QryRequisicaoDetalheModel>> GetRequisicaoDetalhesAsync(long? num_requisicao)
         {
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.QryRequisicaoDetalhes.Where(r => r.num_requisicao == Requisicao.num_requisicao).ToListAsync();
-                QryRequisicaoDetalhes = new ObservableCollection<QryRequisicaoDetalheModel>(data);
+                var data = await db.QryRequisicaoDetalhes.Where(r => r.num_requisicao == num_requisicao).ToListAsync();
+                return new ObservableCollection<QryRequisicaoDetalheModel>(data);
             }
             catch (Exception)
             {

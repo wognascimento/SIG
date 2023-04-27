@@ -378,8 +378,8 @@ namespace Producao.Views.CheckList
             else
                 record = (sfdatagrid.View.Records[rowIndex] as RecordEntry).Data as QryCheckListGeralComplementoModel;
 
-            record.unidade = "WWW"; //viewModel.UnitPriceDict[e.SelectedItem.ToString()];
-            record.saldoestoque = 50;//viewModel.QuantityDict[e.SelectedItem.ToString()];
+            record.unidade = ((TblComplementoAdicionalModel)e.SelectedItem).unidade; //viewModel.UnitPriceDict[e.SelectedItem.ToString()];
+            record.saldoestoque = ((TblComplementoAdicionalModel)e.SelectedItem).saldo_estoque; //viewModel.QuantityDict[e.SelectedItem.ToString()];
         }
 
         private void OnAddComplemento(object sender, RoutedEventArgs e)
@@ -538,6 +538,7 @@ namespace Producao.Views.CheckList
 
         private async void dgComplemento_CurrentCellValueChanged(object sender, CurrentCellValueChangedEventArgs e)
         {
+            /*
             DetalhesComplemento? dado = e.Record as DetalhesComplemento;
             CheckListViewModel vm = (CheckListViewModel)DataContext;
             try
@@ -557,6 +558,7 @@ namespace Producao.Views.CheckList
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            */
         }
     }
 

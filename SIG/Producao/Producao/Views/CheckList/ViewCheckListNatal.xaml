@@ -413,7 +413,7 @@
                         MappingName="coddetalhescompl">
                         <syncfusion:GridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button
+                                <Button 
                                     Content="REQUISIÇÃO" 
                                     syncfusion:FocusManagerHelper.FocusedElement="True"
                                     Command="{Binding Path=DataContext.RowDataCommand,ElementName=dgComplemento}" 
