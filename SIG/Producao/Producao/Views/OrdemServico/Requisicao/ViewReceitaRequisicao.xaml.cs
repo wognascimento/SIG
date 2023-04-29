@@ -93,7 +93,7 @@ namespace Producao.Views.OrdemServico.Requisicao
                     txtProdutoReceita.Text = vm.DescricaoProduto.descricao_completa;
                 }
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                vm.Itens = await Task.Run(() => vm.GetItensAsync(vm.DescricaoProduto.codcompladicional));
+                vm.Itens = await Task.Run(() => vm.GetItensAsync(vm?.DescricaoProduto?.codcompladicional));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)

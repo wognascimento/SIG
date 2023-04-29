@@ -1,5 +1,4 @@
-﻿using Org.BouncyCastle.Asn1.X9;
-using Producao.Views.popup;
+﻿using Producao.Views.popup;
 using Syncfusion.Data;
 using Syncfusion.Data.Extensions;
 using Syncfusion.UI.Xaml.Grid;
@@ -263,20 +262,17 @@ namespace Producao.Views.CheckList
         {
             try
             {
-
                 CheckListViewModel vm = (CheckListViewModel)DataContext;
-
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.ComplementoCheckList.codcompl = null;
                 vm.ComplementoCheckList.sigla = vm.Sigla.sigla_serv;
                 ComplementoCheckListModel compl = await vm.AddComplementoCheckListAsync(vm.ComplementoCheckList);
 
                 SiglaChkListModel valor = (SiglaChkListModel)this.cbSiglaShopping.SelectedItem;
-                var locais = await Task.Run(async () => await vm.GetLocaisShoppAsync(vm.Sigla.id_aprovado));
+                var locais = await Task.Run(() => vm.GetLocaisShoppAsync(vm.Sigla.id_aprovado));
                 vm.Locaisshopping = locais;
 
-                vm.CheckListGerais = await Task.Run(async () => await vm.GetCheckListGeralAsync(vm.Sigla.id_aprovado));
+                vm.CheckListGerais = await Task.Run(() => vm.GetCheckListGeralAsync(vm.Sigla.id_aprovado));
 
                 RowColumnIndex rowColumnIndex = new RowColumnIndex();
                 this.dgCheckListGeral.SelectedItems.Clear();
@@ -284,14 +280,11 @@ namespace Producao.Views.CheckList
                 this.dgCheckListGeral.SearchHelper.FindNext(compl.ordem);
                 rowColumnIndex.RowIndex = this.dgCheckListGeral.SearchHelper.CurrentRowColumnIndex.RowIndex;
                 dgCheckListGeral.ScrollInView(rowColumnIndex);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Erro ao inserir", MessageBoxButton.OK, MessageBoxImage.Error);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             
@@ -302,14 +295,14 @@ namespace Producao.Views.CheckList
             try
             {
                 CheckListViewModel vm = (CheckListViewModel)DataContext;
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 ComplementoCheckListModel compl = await vm.AddComplementoCheckListAsync(vm.ComplementoCheckList);
 
                 SiglaChkListModel valor = (SiglaChkListModel)this.cbSiglaShopping.SelectedItem;
-                var locais = await Task.Run(async () => await vm.GetLocaisShoppAsync(vm.Sigla.id_aprovado));
+                var locais = await Task.Run(() => vm.GetLocaisShoppAsync(vm.Sigla.id_aprovado));
                 vm.Locaisshopping = locais;
 
-                var itens = await Task.Run(async () => await vm.GetCheckListGeralAsync(vm.Sigla.id_aprovado));
+                vm.CheckListGerais = await Task.Run(() => vm.GetCheckListGeralAsync(vm.Sigla.id_aprovado));
 
                 RowColumnIndex rowColumnIndex = new RowColumnIndex();
                 this.dgCheckListGeral.SelectedItems.Clear();
@@ -318,14 +311,13 @@ namespace Producao.Views.CheckList
                 rowColumnIndex.RowIndex = this.dgCheckListGeral.SearchHelper.CurrentRowColumnIndex.RowIndex;
                 dgCheckListGeral.ScrollInView(rowColumnIndex);
 
-
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Collapsed;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Erro ao inserir", MessageBoxButton.OK, MessageBoxImage.Error);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Collapsed;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
 
@@ -367,7 +359,7 @@ namespace Producao.Views.CheckList
             */
 
             var sfdatagrid = sender as SfDataGrid;
-            var viewModel = sfdatagrid.DataContext as CheckListViewModel;
+            var viewModel = (CheckListViewModel)sfdatagrid.DataContext;
             int rowIndex = sfdatagrid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
             //var record = (sfdatagrid.View.Records[rowIndex] as RecordEntry).Data as QryCheckListGeralComplementoModel;
             QryCheckListGeralComplementoModel record;
@@ -376,7 +368,7 @@ namespace Producao.Views.CheckList
                 record = (QryCheckListGeralComplementoModel)sfdatagrid.View.CurrentAddItem;
             //record = new();
             else
-                record = (sfdatagrid.View.Records[rowIndex] as RecordEntry).Data as QryCheckListGeralComplementoModel;
+                record = (QryCheckListGeralComplementoModel)(sfdatagrid.View.Records[rowIndex] as RecordEntry).Data;
 
             record.unidade = ((TblComplementoAdicionalModel)e.SelectedItem).unidade; //viewModel.UnitPriceDict[e.SelectedItem.ToString()];
             record.saldoestoque = ((TblComplementoAdicionalModel)e.SelectedItem).saldo_estoque; //viewModel.QuantityDict[e.SelectedItem.ToString()];
@@ -401,6 +393,8 @@ namespace Producao.Views.CheckList
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 CheckListViewModel vm = (CheckListViewModel)DataContext;
                 DataBaseSettings BaseSettings = DataBaseSettings.Instance;
                 using ExcelEngine excelEngine = new ExcelEngine();
@@ -478,30 +472,30 @@ namespace Producao.Views.CheckList
 
                 worksheet.Rows[1].CellStyle = bodyStyle;
 
-                await Task.Run(async () => await vm.GetChkGeralRelatorioAsync(vm.Sigla.id_aprovado));
-                worksheet.ImportData(vm.ChkGeralRelatorios, 3, 1, false);
+                var dados = await Task.Run(() => vm.GetChkGeralRelatorioAsync(vm.Sigla.id_aprovado));
+                worksheet.ImportData(dados, 3, 1, false);
 
-                worksheet.Range[$"A3:H{vm.ChkGeralRelatorios.Count + 2}"].CellStyle = headerStyle;
+                worksheet.Range[$"A3:H{dados.Count + 2}"].CellStyle = headerStyle;
 
-                worksheet.Range[$"A3:A{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                worksheet.Range[$"A3:A{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                worksheet.Range[$"A3:A{dados.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                worksheet.Range[$"A3:A{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
 
-                worksheet.Range[$"B3:B{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                worksheet.Range[$"B3:B{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
 
-                worksheet.Range[$"C3:C{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                worksheet.Range[$"C3:C{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
 
-                worksheet.Range[$"D3:D{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                worksheet.Range[$"D3:D{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
 
-                worksheet.Range[$"E3:E{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                worksheet.Range[$"E3:E{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                worksheet.Range[$"E3:E{dados.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                worksheet.Range[$"E3:E{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
 
-                worksheet.Range[$"F3:G{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                worksheet.Range[$"F3:G{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                worksheet.Range[$"F3:G{dados.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                worksheet.Range[$"F3:G{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
 
-                worksheet.Range[$"G3:G{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                worksheet.Range[$"G3:G{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
 
-                worksheet.Range[$"H3:H{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                worksheet.Range[$"H3:H{vm.ChkGeralRelatorios.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                worksheet.Range[$"H3:H{dados.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                worksheet.Range[$"H3:H{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
 
                 worksheet.PageSetup.PrintTitleColumns = "$A:$H";
                 worksheet.PageSetup.PrintTitleRows = "$1:$2";
@@ -512,20 +506,23 @@ namespace Producao.Views.CheckList
                 worksheet.PageSetup.BottomMargin = 0.5;
                 worksheet.PageSetup.RightFooter = "&P";
                 worksheet.PageSetup.LeftFooter = "&D";
-                worksheet.PageSetup.CenterVertically = true;
+                //worksheet.PageSetup.CenterVertically = true;
                 worksheet.PageSetup.CenterHorizontally = true;
 
-                workbook.SaveAs("CHECKLIST.xlsx");
-
-                Process.Start(new ProcessStartInfo("CHECKLIST.xlsx")
+                workbook.SaveAs("Impressos/CHECKLIST.xlsx");
+                Process.Start(new ProcessStartInfo("Impressos\\CHECKLIST.xlsx")
                 {
                     UseShellExecute = true
                 });
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             
 
@@ -550,8 +547,8 @@ namespace Producao.Views.CheckList
                 vm.DetCompl.desabilitado_confirmado_data = vm.DetCompl.confirmado == "-1" ? DateTime.Now : null;
                 vm.DetCompl.desabilitado_confirmado_por = vm.DetCompl.confirmado == "-1" ? Environment.UserName : null;
 
-                vm.DetCompl = await Task.Run(async () => await vm.AddDetalhesComplementoCheckListAsync(vm.DetCompl));
-                vm.CheckListGeralComplementos = await Task.Run(async () => await vm.GetCheckListGeralComplementoAsync(vm.DetCompl.codcompl));
+                vm.DetCompl = await Task.Run(() => vm.AddDetalhesComplementoCheckListAsync(vm.DetCompl));
+                vm.CheckListGeralComplementos = await Task.Run(() => vm.GetCheckListGeralComplementoAsync(vm.DetCompl.codcompl));
 
             }
             catch (Exception ex)
@@ -559,6 +556,68 @@ namespace Producao.Views.CheckList
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             */
+            
+        }
+
+        private async void dgComplemento_RowValidated(object sender, RowValidatedEventArgs e)
+        {
+            var sfdatagrid = sender as SfDataGrid;
+            CheckListViewModel vm = (CheckListViewModel)DataContext;
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                QryCheckListGeralComplementoModel data = (QryCheckListGeralComplementoModel)e.RowData;
+                vm.DetCompl.codcompl = data.codcompl;
+                vm.DetCompl.codcompladicional = data.codcompladicional;
+                vm.DetCompl.qtd = data.qtd;
+                vm.DetCompl.confirmado = data.confirmado;
+                vm.DetCompl.confirmado_data = data.confirmado == "-1" ? DateTime.Now : null;
+                vm.DetCompl.confirmado_por = data.confirmado == "-1" ? Environment.UserName : null;
+                vm.DetCompl.desabilitado_confirmado_data = data.confirmado == "-1" ? DateTime.Now : null;
+                vm.DetCompl.desabilitado_confirmado_por = data.confirmado == "-1" ? Environment.UserName : null;
+
+                vm.DetCompl = await Task.Run(() => vm.AddDetalhesComplementoCheckListAsync(vm.DetCompl));
+                //QryCheckListGeralComplementoModel record = (QryCheckListGeralComplementoModel)sfdatagrid.View.CurrentAddItem;
+                //record.coddetalhescompl = vm.DetCompl.coddetalhescompl;
+                ((QryCheckListGeralComplementoModel)e.RowData).coddetalhescompl = vm.DetCompl.coddetalhescompl;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                var toRemove = vm.CheckListGeralComplementos.Where(x => x.coddetalhescompl == null).ToList();
+                foreach (var item in toRemove)
+                    vm.CheckListGeralComplementos.Remove(item);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
+        private void dgComplemento_RowValidating(object sender, RowValidatingEventArgs e)
+        {
+            QryCheckListGeralComplementoModel rowData = (QryCheckListGeralComplementoModel)e.RowData;
+            if (!rowData.codcompl.HasValue)
+            {
+                e.IsValid = false;
+                e.ErrorMessages.Add("codcompladicional", "Erro ao selecionar a linha.");
+                e.ErrorMessages.Add("qtd", "Erro ao selecionar a linha.");
+            }
+            else if (!rowData.codcompladicional.HasValue)
+            {
+                e.IsValid = false;
+                e.ErrorMessages.Add("codcompladicional", "Seleciona o COMPLEMENTO ADICIONAL.");
+            }
+            else if (!rowData.qtd.HasValue)
+            {
+                e.IsValid = false;
+                e.ErrorMessages.Add("qtd", "Informa a QTDE.");
+            }
+        }
+
+        private void dgComplemento_AddNewRowInitiating(object sender, AddNewRowInitiatingEventArgs e)
+        {
+            CheckListViewModel vm = (CheckListViewModel)DataContext;
+
+            ((QryCheckListGeralComplementoModel)e.NewObject).codcompl = vm.CheckListGeral.codcompl;
         }
     }
 

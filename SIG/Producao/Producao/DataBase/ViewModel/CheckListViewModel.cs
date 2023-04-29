@@ -843,18 +843,17 @@ namespace Producao
 
         public async Task<ComplementoCheckListModel> AddComplementoCheckListAsync(ComplementoCheckListModel ComplementoCheckList)
         {
+            /*
             if (ComplementoCheckList == null)
             {
                 throw new ArgumentNullException($"{nameof(AddComplementoCheckListAsync)} entity must not be null");
             }
-
+            */
             try
             {
                 using DatabaseContext db = new();
-                db.Entry(ComplementoCheckList).State = ComplementoCheckList.codcompl == null ?
-                                   EntityState.Added :
-                                   EntityState.Modified;
-
+                //db.Entry(ComplementoCheckList).State = ComplementoCheckList.codcompl == null ? EntityState.Added : EntityState.Modified;
+                await db.ComplementoCheckLists.SingleMergeAsync(ComplementoCheckList);
                 await db.SaveChangesAsync();
 
                 return ComplementoCheckList;
@@ -902,18 +901,11 @@ namespace Producao
 
         public async Task<DetalhesComplemento> AddDetalhesComplementoCheckListAsync(DetalhesComplemento detCompl)
         {
-            if (detCompl == null)
-            {
-                throw new ArgumentNullException($"{nameof(AddDetalhesComplementoCheckListAsync)} entity must not be null");
-            }
-
             try
             {
                 using DatabaseContext db = new();
-                db.Entry(detCompl).State = detCompl.coddetalhescompl == null ?
-                                   EntityState.Added :
-                                   EntityState.Modified;
-
+                //db.Entry(detCompl).State = detCompl.coddetalhescompl == null ? EntityState.Added : EntityState.Modified;
+                await db.DetalhesComplementos.SingleMergeAsync(detCompl);
                 await db.SaveChangesAsync();
 
                 return detCompl;

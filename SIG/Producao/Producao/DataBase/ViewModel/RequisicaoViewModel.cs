@@ -249,10 +249,11 @@ namespace Producao
             try
             {
                 using DatabaseContext db = new();
-                db.Entry(requisicaoDetalhe).State = requisicaoDetalhe.cod_det_req == null ?
+                /*db.Entry(requisicaoDetalhe).State = requisicaoDetalhe.cod_det_req == null ?
                                    EntityState.Added :
-                                   EntityState.Modified;
+                                   EntityState.Modified;*/
 
+                await db.RequisicaoDetalhes.SingleMergeAsync(requisicaoDetalhe);
                 await db.SaveChangesAsync();
                 return requisicaoDetalhe;
             }

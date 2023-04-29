@@ -285,7 +285,7 @@
             <StackPanel Orientation="Horizontal">
                 
                 <syncfusion:ButtonAdv 
-                    Margin="5" 
+                    Margin="2" 
                     SmallIcon="/icones/icons8-vassoura-40.png" 
                     LargeIcon="/icones/icons8-vassoura-80.png" 
                     SizeMode="Large" 
@@ -294,21 +294,21 @@
                     Click="OnLimparClick" />
 
                 <syncfusion:ButtonAdv 
-                    Margin="5" 
+                    Margin="2" 
                     SmallIcon="/icones/icons8-adicionar-propriedade-40.png" 
                     LargeIcon="/icones/icons8-adicionar-propriedade-80.png" 
                     SizeMode="Large" Label="ADICIONAR" 
                     Click="OnAdicionar_Click"/>
 
                 <syncfusion:ButtonAdv 
-                    Margin="5" 
+                    Margin="2" 
                     SmallIcon="/icones/icons8-editar-propriedade-40.png" 
                     LargeIcon="/icones/icons8-editar-propriedade-80.png" 
                     SizeMode="Large" Label="EDITAR" 
                     Click="OnEditClick"/>
 
                 <syncfusion:ButtonAdv 
-                    Margin="5" 
+                    Margin="2" 
                     SmallIcon="/icones/icons8-impressão-40.png" 
                     LargeIcon="/icones/icons8-impressão-80.png" 
                     SizeMode="Large" 
@@ -382,7 +382,7 @@
                 SelectedItem="{Binding CheckListGeralComplemento, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 CurrentCellDropDownSelectionChanged="OnCurrentCellDropDownSelectionChanged" 
                 CurrentCellValueChanged="dgComplemento_CurrentCellValueChanged" 
-                FontSize="10" >
+                FontSize="10" RowValidated="dgComplemento_RowValidated" RowValidating="dgComplemento_RowValidating" AddNewRowInitiating="dgComplemento_AddNewRowInitiating" >
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridComboBoxColumn
                         HeaderText="COMPLEMENTO ADICIONAL" 
@@ -394,14 +394,14 @@
                         HeaderText="UNID" 
                         MappingName="unidade"/>
                     <syncfusion:GridNumericColumn
+                        HeaderText="ESTOQUE" 
+                        MappingName="saldoestoque"
+                        DisplayBinding="{Binding saldoestoque, Converter={StaticResource ConverterNumber}}"/>
+                    <syncfusion:GridNumericColumn
                         AllowEditing="True"
                         HeaderText="QTDE" 
                         MappingName="qtd"
                         DisplayBinding="{Binding qtd, Converter={StaticResource ConverterNumber}}"/>
-                    <syncfusion:GridNumericColumn
-                        HeaderText="ESTOQUE" 
-                        MappingName="saldoestoque"
-                        DisplayBinding="{Binding saldoestoque, Converter={StaticResource ConverterNumber}}"/>
                     <syncfusion:GridCheckBoxColumn
                         AllowEditing="True"
                         HeaderText="CONFIRMADO" 
