@@ -48,13 +48,13 @@ namespace Producao
         public DbSet<OsEmissaoProducaoImprimirModel> ImprimirOsS { get; set; }
         public DbSet<DetalhesModeloModel> DetalhesModelo { get; set; }
         public DbSet<StatusChkGeralCentralModel> statusChkGeralCentrals { get; set; }
-
-       
         public DbSet<ModeloTabelaPAModel> TabelaPAs { get; set; }
         public DbSet<ModeloTabelaConversaoModel> TabelaConversoes { get; set; }
         public DbSet<ModeloControleOsModel> modeloControleOs { get; set; }
-        
+        public DbSet<ClasseSolicitCompra> ClasseSolicitCompras { get; set; }
+        public DbSet<UnidadeModel> Unidades { get; set; }
         public DbSet<TemaModel> Temas { get; set; }
+        public DbSet<FamiliaProdModel> FamiliaProds { get; set; }
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 

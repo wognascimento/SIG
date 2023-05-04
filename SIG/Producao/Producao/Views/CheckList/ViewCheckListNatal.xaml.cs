@@ -127,8 +127,8 @@ namespace Producao.Views.CheckList
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 SiglaChkListModel valor = (SiglaChkListModel)this.cbSiglaShopping.SelectedItem;
-                vm.Locaisshopping = await Task.Run(async () => await vm.GetLocaisShoppAsync(vm.Sigla.id_aprovado));
-                vm.CheckListGerais = await Task.Run(async () => await vm.GetCheckListGeralAsync(vm.Sigla.id_aprovado));
+                vm.Locaisshopping = await Task.Run(async () => await vm.GetLocaisShoppAsync(vm?.Sigla?.id_aprovado));
+                vm.CheckListGerais = await Task.Run(async () => await vm.GetCheckListGeralAsync(vm?.Sigla?.id_aprovado));
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
@@ -149,8 +149,8 @@ namespace Producao.Views.CheckList
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 SiglaChkListModel valor = (SiglaChkListModel)this.cbSiglaShopping.SelectedItem;
-                vm.Locaisshopping = await Task.Run(async () => await vm.GetLocaisShoppAsync(vm.Sigla.id_aprovado));
-                vm.CheckListGerais = await Task.Run(async () => await vm.GetCheckListGeralAsync(vm.Sigla.id_aprovado));
+                vm.Locaisshopping = await Task.Run(async () => await vm.GetLocaisShoppAsync(vm?.Sigla?.id_aprovado));
+                vm.CheckListGerais = await Task.Run(async () => await vm.GetCheckListGeralAsync(vm?.Sigla?.id_aprovado));
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
@@ -239,8 +239,8 @@ namespace Producao.Views.CheckList
                 vm.DescAdicionais = await Task.Run(() => vm.GetDescAdicionaisAsync(vm.Produto.codigo));
                 vm.DescAdicional = (from d in vm.DescAdicionais where d.coduniadicional == record.coduniadicional select d).FirstOrDefault();
 
-                vm.CheckListGeralComplementos = await Task.Run(() => vm.GetCheckListGeralComplementoAsync(vm.CheckListGeral.codcompl));
                 vm.CompleAdicionais = await Task.Run(() => vm.GetCompleAdicionaisAsync(vm.CheckListGeral.coduniadicional));
+                vm.CheckListGeralComplementos = await Task.Run(() => vm.GetCheckListGeralComplementoAsync(vm.CheckListGeral.codcompl));
 
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });

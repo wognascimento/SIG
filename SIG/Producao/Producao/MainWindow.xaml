@@ -1,8 +1,8 @@
 ﻿<Window x:Class="Producao.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-        Title="SISTEMA INTEGRADO DE GERENCIAMNETO - PRODUÇÃO"
+        Title="SISTEMA INTEGRADO DE GERENCIAMENTO - PRODUÇÃO"
         Height="350" Width="525" WindowState="Maximized">
 
     <Grid x:Name="Etiqueta">
@@ -73,10 +73,13 @@
                 <syncfusion:MenuItemAdv Header="Fator" Click="OnCentralFatorConversao"/>
             </syncfusion:MenuItemAdv>
             
-            <syncfusion:MenuItemAdv Header="Cadastro de Produto">
+            <syncfusion:MenuItemAdv Header="Produto">
+                <syncfusion:MenuItemAdv Header="Cadastro de Produto" Click="OnCadastroProduto"/>
+                <!--
                 <syncfusion:MenuItemAdv Header="Descrição"/>
                 <syncfusion:MenuItemAdv Header="Descrição Adicional"/>
                 <syncfusion:MenuItemAdv Header="Complemento Adicional"/>
+                -->
                 <syncfusion:MenuItemAdv Header="Fiscal / Espanhol"/>
                 <syncfusion:MenuItemAdv Header="Todas as Descrições"/>
             </syncfusion:MenuItemAdv>

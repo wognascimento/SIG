@@ -410,11 +410,11 @@
                         ValueBinding="{Binding confirmado, Converter={StaticResource ConverterBoolen}}" />
                     <syncfusion:GridTemplateColumn 
                         HeaderText="REQUISIÇÃO"
-                        MappingName="coddetalhescompl">
+                        MappingName="num_os_produto">
                         <syncfusion:GridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button 
-                                    Content="REQUISIÇÃO" 
+                                    Content="{Binding num_os_produto, Converter={StaticResource NameButtonConverter}}" 
                                     syncfusion:FocusManagerHelper.FocusedElement="True"
                                     Command="{Binding Path=DataContext.RowDataCommand,ElementName=dgComplemento}" 
                                     CommandParameter="{Binding ElementName=chklist}"/>

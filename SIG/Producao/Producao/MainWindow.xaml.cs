@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Producao.Views;
+using Producao.Views.CadastroProduto;
 using Producao.Views.CheckList;
 using Producao.Views.OrdemServico.Requisicao;
 using Syncfusion.SfSkinManager;
@@ -203,7 +204,7 @@ namespace Producao
             ViewCentralEmitirOs view = new();
             DocumentContainer.SetHeader(view, "CONTROLE ORDEM DE SERVIÇO");
             DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1500.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1500.0, 800.0));
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1000.0, 800.0));
             //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
             this._mdi.CanMDIMaximize = false;
             this._mdi.Items.Add(view);
@@ -214,7 +215,7 @@ namespace Producao
             ViewCentralStatusCheckList view = new();
             DocumentContainer.SetHeader(view, "STATUS CHECK-LIST");
             DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1500.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1500.0, 800.0));
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1000.0, 800.0));
             //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
             this._mdi.CanMDIMaximize = false;
             this._mdi.Items.Add(view);
@@ -226,10 +227,26 @@ namespace Producao
             ViewReceitaRequisicao view = new();
             DocumentContainer.SetHeader(view, "RECEITA REQUISIÇÃO MATERIAL");
             DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1500.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1500.0, 800.0));
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1000.0, 800.0));
             //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
             this._mdi.CanMDIMaximize = false;
             this._mdi.Items.Add(view);
+        }
+
+        private void OnCadastroProduto(object sender, RoutedEventArgs e)
+        {
+            ViewCadastroProduto view = new();
+            DocumentContainer.SetHeader(view, "CADASTRO DE PRODUTOS");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1000.0, 800.0));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
+
+        private void MenuItemAdv_Click_2(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
