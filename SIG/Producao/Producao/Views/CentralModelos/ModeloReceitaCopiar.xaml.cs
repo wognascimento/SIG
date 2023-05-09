@@ -2,22 +2,14 @@
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
-namespace Producao.Views.PopUp
+namespace Producao.Views.CentralModelos
 {
     /// <summary>
     /// Lógica interna para ModeloReceitaCopiar.xaml
@@ -42,16 +34,16 @@ namespace Producao.Views.PopUp
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 ModeloReceitaCopiarViewModel? vm = (ModeloReceitaCopiarViewModel)DataContext;
                 vm.ItensReceita = await Task.Run(() => vm.GetModelosAsync(Modelo));
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
@@ -118,7 +110,7 @@ namespace Producao.Views.PopUp
                     .ThenBy(c => c.id_modelo)
                     .ThenBy(c => c.planilha)
                     .ThenBy(c => c.descricao_completa_item_ano_anterior)
-                    .Where(c => c.codcompladicional == Modelo.codcompladicional)
+                    .Where(c => c.planilha == Modelo.planilha && c.descricao == Modelo.descricao)
                     .ToListAsync();
                 return new ObservableCollection<ModeloReceitaAnoAnterior>(data);
             }

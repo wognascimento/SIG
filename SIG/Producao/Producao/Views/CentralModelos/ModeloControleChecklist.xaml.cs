@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Producao.Views.PopUp
+namespace Producao.Views.CentralModelos
 {
     /// <summary>
     /// Lógica interna para ModeloControleChecklist.xaml

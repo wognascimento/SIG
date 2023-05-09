@@ -29,17 +29,18 @@
                     CharCountVisibility="Collapsed" 
                     HelperTextVisibility="Collapsed" Margin="5">
 
-            <syncfusion:SfTextBoxExt 
-                        x:Name="cbPlanilha"
-                        SearchItemPath="planilha"
-                        ValueMemberPath="planilha"
-                        ShowDropDownButton="True"
-                        AutoCompleteMode="Suggest"
-                        SuggestionMode="Contains"
-                        AutoCompleteSource="{Binding Planilhas}" 
-                        SelectedItem="{Binding Planilha, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedItemChanged="OnPlanilhaSelectionChanged" 
-                        ShowSuggestionsOnFocus="True"/>
+            <syncfusion:SfTextBoxExt
+                x:Name="cbPlanilha"
+                SearchItemPath="planilha"
+                ValueMemberPath="planilha"
+                ShowDropDownButton="False"
+                ShowClearButton="True"
+                AutoCompleteMode="SuggestAppend"
+
+                AutoCompleteSource="{Binding Planilhas}" 
+                SelectedItem="{Binding Planilha, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItemChanged="OnPlanilhaSelectionChanged" 
+                ShowSuggestionsOnFocus="True"/>
         </syncfusion:SfTextInputLayout>
 
 
@@ -57,7 +58,7 @@
             FontSize="10" 
             RowValidated="OnRowValidated" 
             RowValidating="OnRowValidating" 
-            AddNewRowInitiating="OnAddNewRowInitiating" AllowFiltering="True" >
+            AddNewRowInitiating="OnAddNewRowInitiating" AllowFiltering="True" CurrentCellEndEdit="OnCurrentCellEndEdit" >
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn
                         HeaderText="CÓDIGO" 

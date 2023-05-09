@@ -72,7 +72,22 @@
                 <syncfusion:MenuItemAdv Header="Tabela P.A" Click="OnCentralTabelaPa"/>
                 <syncfusion:MenuItemAdv Header="Fator" Click="OnCentralFatorConversao"/>
             </syncfusion:MenuItemAdv>
-            
+
+            <syncfusion:MenuItemAdv Header="Construção">
+                <syncfusion:MenuItemAdv Header="Etiqueta"/>
+                <syncfusion:MenuItemAdv Header="Cadastro de Peças"/>
+            </syncfusion:MenuItemAdv>
+
+            <syncfusion:MenuItemAdv Header="Controlados Etiqueta">
+                <syncfusion:MenuItemAdv Header="Imprimir"/>
+                <syncfusion:MenuItemAdv Header="Vincular Etiqueta"/>
+                <syncfusion:MenuItemAdv Header="Consultas">
+                    
+                </syncfusion:MenuItemAdv>
+            </syncfusion:MenuItemAdv>
+
+
+
             <syncfusion:MenuItemAdv Header="Produto">
                 <syncfusion:MenuItemAdv Header="Cadastro de Produto" Click="OnCadastroProduto"/>
                 <!--
@@ -80,8 +95,8 @@
                 <syncfusion:MenuItemAdv Header="Descrição Adicional"/>
                 <syncfusion:MenuItemAdv Header="Complemento Adicional"/>
                 -->
-                <syncfusion:MenuItemAdv Header="Fiscal / Espanhol"/>
-                <syncfusion:MenuItemAdv Header="Todas as Descrições"/>
+                <syncfusion:MenuItemAdv Header="Cadastrar Descrição Espanhol" Click="OnCadastroEspanhol"/>
+                <syncfusion:MenuItemAdv Header="Todas as Descrições" Click="OnTodasDescricoes"/>
             </syncfusion:MenuItemAdv>
             
             

@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using Producao.Views;
 using Producao.Views.OrdemServico.Requisicao;
-using Producao.Views.PopUp;
 using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Collections;
@@ -13,7 +11,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace Producao
 {
@@ -740,7 +737,7 @@ namespace Producao
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.Relplans.OrderBy(c => c.planilha).Where(c => c.ativo.Equals("1")).ToListAsync();
+                var data = await db.Relplans.OrderBy(c => c.planilha).Where(c => c.ativo.Equals("1") && !c.planilha.Contains("ESTOQUE") && !c.planilha.Contains("ALMOX")).ToListAsync();
                 return new ObservableCollection<RelplanModel>(data);
             }
             catch (Exception)

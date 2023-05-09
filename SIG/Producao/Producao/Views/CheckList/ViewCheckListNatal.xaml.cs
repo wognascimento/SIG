@@ -55,12 +55,77 @@ namespace Producao.Views.CheckList
 
         }
 
-        private void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
+        private async void OnSelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
-            CheckListViewModel vm = (CheckListViewModel)DataContext;
-            vm.CheckListGeralComplemento = new QryCheckListGeralComplementoModel();
-            vm.CheckListGeralComplementos = new ObservableCollection<QryCheckListGeralComplementoModel>();
+            //CheckListViewModel vm = (CheckListViewModel)DataContext;
+            //vm.CheckListGeralComplemento = new QryCheckListGeralComplementoModel();
+            //vm.CheckListGeralComplementos = new ObservableCollection<QryCheckListGeralComplementoModel>();
             //btnAddicionar.Visibility = Visibility.Collapsed;
+
+            try
+            {
+               
+                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                dbClick = true;
+                /*
+                var visualcontainer = this.dgCheckListGeral.GetVisualContainer();
+                var rowColumnIndex = visualcontainer.PointToCellRowColumnIndex(e.GetPosition(visualcontainer));
+                var recordindex = this.dgCheckListGeral.ResolveToRecordIndex(rowColumnIndex.RowIndex);
+                var recordentry = this.dgCheckListGeral.View.GroupDescriptions.Count == 0 ? this.dgCheckListGeral.View.Records[recordindex] : this.dgCheckListGeral.View.TopLevelGroup.DisplayElements[recordindex];
+                var record = ((RecordEntry)recordentry).Data as QryCheckListGeralModel;
+                */
+                CheckListViewModel vm = (CheckListViewModel)DataContext;
+                var record = vm.CheckListGeral;
+
+                vm.ComplementoCheckList = new ComplementoCheckListModel
+                {
+                    ordem = vm?.CheckListGeral?.id,
+                    sigla = vm?.CheckListGeral?.sigla,
+                    local_shoppings = vm?.CheckListGeral?.local_shoppings,
+                    codproduto = vm?.CheckListGeral?.codigo,
+                    obs = vm?.CheckListGeral?.obs,
+                    dataalteracaodesc = vm?.CheckListGeral?.dataalteracaodesc,
+                    alteradopor = vm?.CheckListGeral?.alteradopor,
+                    orient_montagem = vm?.CheckListGeral?.orient_montagem,
+                    item_memorial = vm?.CheckListGeral?.item_memorial,
+                    incluidopordesc = vm?.CheckListGeral?.incluidopordesc,
+                    kp = vm?.CheckListGeral?.kp,
+                    orient_desmont = vm?.CheckListGeral?.orient_desmont,
+                    qtd = vm?.CheckListGeral?.qtd,
+                    coduniadicional = vm?.CheckListGeral?.coduniadicional,
+                    codcompl = vm?.CheckListGeral?.codcompl,
+                    nivel = vm?.CheckListGeral?.nivel,
+                    carga = vm?.CheckListGeral?.carga,
+                    class_solucao = vm?.CheckListGeral?.class_solucao,
+                    id_aprovado = vm?.CheckListGeral?.id_aprovado,
+                    historico = vm?.CheckListGeral?.historico,
+                    agrupar = vm?.CheckListGeral?.agrupar
+                };
+
+                vm.Planilha = (from p in vm.Planilhas where p.planilha == record?.planilha select p).FirstOrDefault();
+                vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(vm?.Planilha?.planilha));
+                vm.Produto = (from p in vm.Produtos where p.codigo == record?.codigo select p).FirstOrDefault();
+                vm.DescAdicionais = await Task.Run(() => vm.GetDescAdicionaisAsync(vm?.Produto?.codigo));
+                vm.DescAdicional = (from d in vm.DescAdicionais where d.coduniadicional == record?.coduniadicional select d).FirstOrDefault();
+
+                vm.CompleAdicionais = await Task.Run(() => vm.GetCompleAdicionaisAsync(vm?.CheckListGeral?.coduniadicional));
+                vm.CheckListGeralComplementos = await Task.Run(() => vm.GetCheckListGeralComplementoAsync(vm?.CheckListGeral?.codcompl));
+
+                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+                //btnAddicionar.Visibility = Visibility.Visible;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+
         }
 
         private async void OnPlanilhaSelectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -70,6 +135,17 @@ namespace Producao.Views.CheckList
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 CheckListViewModel vm = (CheckListViewModel)DataContext;
+
+                vm.ComplementoCheckList.codproduto = null;
+                vm.Produtos = new ObservableCollection<ProdutoModel>();
+                cbDescricao.SelectedItem = null;
+                cbDescricao.Text = string.Empty;
+
+                vm.ComplementoCheckList.coduniadicional = null;
+                vm.DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>();
+                cbDescricaoAdicional.SelectedItem = null;
+                cbDescricaoAdicional.Text = string.Empty;
+
                 //if (!dbClick)
                 vm.Produtos = await Task.Run(async () => await vm.GetProdutosAsync(vm.Planilha?.planilha));
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
@@ -98,6 +174,11 @@ namespace Producao.Views.CheckList
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 CheckListViewModel vm = (CheckListViewModel)DataContext;
+
+                vm.ComplementoCheckList.coduniadicional = null;
+                vm.DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>();
+                cbDescricaoAdicional.SelectedItem = null;
+
                 //if (!dbClick)
                 vm.DescAdicionais = await Task.Run(async () => await vm.GetDescAdicionaisAsync(vm.Produto?.codigo));
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
@@ -123,6 +204,9 @@ namespace Producao.Views.CheckList
         {
             try
             {
+                dgCheckListGeral.SelectedItem = null;
+                dgComplemento.SelectedItem = null;
+
                 CheckListViewModel vm = (CheckListViewModel)DataContext;
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
@@ -170,6 +254,8 @@ namespace Producao.Views.CheckList
 
         void Limpar()
         {
+            CheckListViewModel vm = (CheckListViewModel)DataContext;
+
             tbId.Text = string.Empty;
             tbItem.Text = string.Empty;
             tbLocalShopping.Text = string.Empty;
@@ -187,6 +273,8 @@ namespace Producao.Views.CheckList
             dgCheckListGeral.SelectedItem = null;
             dgComplemento.SelectedItem = null;
             //btnAddicionar.Visibility = Visibility.Collapsed;
+
+            vm.ComplementoCheckList = new ComplementoCheckListModel();
 
             tbId.Focus();
         }
@@ -567,6 +655,7 @@ namespace Producao.Views.CheckList
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 QryCheckListGeralComplementoModel data = (QryCheckListGeralComplementoModel)e.RowData;
+                vm.DetCompl.coddetalhescompl = data.coddetalhescompl;
                 vm.DetCompl.codcompl = data.codcompl;
                 vm.DetCompl.codcompladicional = data.codcompladicional;
                 vm.DetCompl.qtd = data.qtd;
@@ -580,6 +669,7 @@ namespace Producao.Views.CheckList
                 //QryCheckListGeralComplementoModel record = (QryCheckListGeralComplementoModel)sfdatagrid.View.CurrentAddItem;
                 //record.coddetalhescompl = vm.DetCompl.coddetalhescompl;
                 ((QryCheckListGeralComplementoModel)e.RowData).coddetalhescompl = vm.DetCompl.coddetalhescompl;
+                sfdatagrid.View.Refresh();
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
@@ -619,6 +709,7 @@ namespace Producao.Views.CheckList
 
             ((QryCheckListGeralComplementoModel)e.NewObject).codcompl = vm.CheckListGeral.codcompl;
         }
+
     }
 
     public class NameButtonConverter : IValueConverter

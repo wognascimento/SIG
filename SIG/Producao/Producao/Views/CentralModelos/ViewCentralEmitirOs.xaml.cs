@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Producao.Views.PopUp;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Utility;
 using Syncfusion.XlsIO;
-using Syncfusion.XlsIO.Implementation;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,7 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Producao.Views
+namespace Producao.Views.CentralModelos
 {
     /// <summary>
     /// Interação lógica para ViewCentralEmitirOs.xam
@@ -32,13 +30,14 @@ namespace Producao.Views
             ViewCentralEmitirOsViewModel vm = (ViewCentralEmitirOsViewModel)DataContext;
             try
             {
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.Itens = await Task.Run(vm.GetItensAsync);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
     }

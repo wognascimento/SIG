@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 
-namespace Producao.Views.PopUp
+namespace Producao.Views.CentralModelos
 {
     /// <summary>
     /// Interação lógica para AddSetorOrdemServico.xam

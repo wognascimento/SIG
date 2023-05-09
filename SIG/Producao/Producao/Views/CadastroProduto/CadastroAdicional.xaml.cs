@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -43,7 +44,8 @@ namespace Producao.Views.CadastroProduto
 
         private void OnAddNewRowInitiating(object sender, Syncfusion.UI.Xaml.Grid.AddNewRowInitiatingEventArgs e)
         {
-
+            CadastroAdicionalViewModel vm = (CadastroAdicionalViewModel)DataContext;
+            ((TabelaDescAdicionalModel)e.NewObject).codigoproduto = produto.codigo;
         }
 
         private void OnCurrentCellDropDownSelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellDropDownSelectionChangedEventArgs e)
@@ -56,14 +58,57 @@ namespace Producao.Views.CadastroProduto
 
         }
 
-        private void OnRowValidated(object sender, Syncfusion.UI.Xaml.Grid.RowValidatedEventArgs e)
+        private async void OnRowValidated(object sender, Syncfusion.UI.Xaml.Grid.RowValidatedEventArgs e)
         {
+            var sfdatagrid = sender as SfDataGrid;
+            CadastroAdicionalViewModel vm = (CadastroAdicionalViewModel)DataContext;
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                TabelaDescAdicionalModel data = (TabelaDescAdicionalModel)e.RowData;
+                //data.codigoproduto
+                //data.descricao_adicional
+                data.cadastradopor = data.coduniadicional == null ? Environment.UserName : data.cadastradopor;
+                data.cadastradoem = data.coduniadicional == null ? DateTime.Now : data.cadastradoem;
+                data.alteradopor = data.coduniadicional == null ? null : Environment.UserName;
+                data.alteradoem = data.coduniadicional == null ? null : DateTime.Now;
+                //data.revisao
+                //data.obsproducaoobrigatoria
+                //data.obsmontagem
+                //data.unidade = produto
+                data.inativo = data.inativo == null ? "0" : "-1";
 
+
+                data = await Task.Run(() => vm.SaveAsync(data));
+                var record = sfdatagrid.View.CurrentAddItem as ProdutoModel;
+                sfdatagrid.View.Refresh();
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                var toRemove = vm.ProdutosAdicionais.Where(x => x.coduniadicional == null).ToList();
+                foreach (var item in toRemove)
+                    vm.ProdutosAdicionais.Remove(item);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
         }
 
         private void OnRowValidating(object sender, Syncfusion.UI.Xaml.Grid.RowValidatingEventArgs e)
         {
-
+            TabelaDescAdicionalModel rowData = (TabelaDescAdicionalModel)e.RowData;
+            if (rowData.codigoproduto == null)
+            {
+                e.IsValid = false;
+                e.ErrorMessages.Add("coduniadicional", "Produto não selecionado");
+                e.ErrorMessages.Add("descricao_adicional", "Informe a DESCRIÇÃO ADICIONAL");
+            }
+            else if (rowData.descricao_adicional == null)
+            {
+                e.IsValid = false;
+                e.ErrorMessages.Add("descricao_adicional", "Informe a DESCRIÇÃO ADICIONAL");
+            }
         }
 
     }
@@ -109,6 +154,7 @@ namespace Producao.Views.CadastroProduto
             {
                 //obj = {Syncfusion.UI.Xaml.Grid.SfDataGrid}
                 var window = new CadastroCompmento(ProdutoAdicional);
+                window.Title = $"Complemento Adicional da Descrição Adicional -> {ProdutoAdicional.descricao_adicional}";
                 window.Owner = App.Current.MainWindow;
                 window.Height = 450;
                 window.Width = 900;
@@ -131,6 +177,21 @@ namespace Producao.Views.CadastroProduto
                     .Where(c => c.codigoproduto == codigoproduto)
                     .ToListAsync();
                 return new ObservableCollection<TabelaDescAdicionalModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<TabelaDescAdicionalModel> SaveAsync(TabelaDescAdicionalModel adicional)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                await db.DescAdicionais.SingleMergeAsync(adicional);
+                await db.SaveChangesAsync();
+                return adicional;
             }
             catch (Exception)
             {

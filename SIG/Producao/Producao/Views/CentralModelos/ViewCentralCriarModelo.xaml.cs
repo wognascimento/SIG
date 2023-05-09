@@ -12,7 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Producao.Views
+namespace Producao.Views.CentralModelos
 {
     /// <summary>
     /// Interação lógica para ViewCentralCriarModelo.xam
@@ -33,17 +33,17 @@ namespace Producao.Views
             vm = (CentralCriarModeloViewModel)DataContext;
             try
             {
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.Planilhas = await Task.Run(vm.GetPlanilhasAsync);
                 vm.Temas = await Task.Run(vm.GetTemasAsync);
                 vm.QryModelos = await Task.Run(vm.GetModelos);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtPlanilha.Focus();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
         private async void OnBuscaProduto(object sender, KeyEventArgs e)
@@ -119,9 +119,22 @@ namespace Producao.Views
             try
             {
                 RelplanModel? planilha = e.NewValue as RelplanModel;
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                vm.Produtos = new ObservableCollection<ProdutoModel>();
+                txtDescricao.SelectedItem = null;
+                txtDescricao.Text = string.Empty;
+
+                vm.DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>();
+                txtDescricaoAdicional.SelectedItem = null;
+                txtDescricaoAdicional.Text = string.Empty;
+
+                vm.CompleAdicionais = new ObservableCollection<TblComplementoAdicionalModel>();
+                txtComplementoAdicional.SelectedItem = null;
+                txtComplementoAdicional.Text = string.Empty;
+
                 vm.Produtos = await Task.Run(()=> vm.GetProdutosAsync(planilha?.planilha));
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtDescricao.Focus();
                 dgModelos.Columns["planilha"].FilteredFrom = FilteredFrom.FilterRow;
                 dgModelos.Columns["planilha"].FilterPredicates.Add(new FilterPredicate()
@@ -133,6 +146,7 @@ namespace Producao.Views
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
 
@@ -141,9 +155,18 @@ namespace Producao.Views
             try
             {
                 ProdutoModel? produto = e.NewValue as ProdutoModel;
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                vm.DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>();
+                txtDescricaoAdicional.SelectedItem = null;
+                txtDescricaoAdicional.Text = string.Empty;
+
+                vm.CompleAdicionais = new ObservableCollection<TblComplementoAdicionalModel>();
+                txtComplementoAdicional.SelectedItem = null;
+                txtComplementoAdicional.Text = string.Empty;
+
                 vm.DescAdicionais = await Task.Run(() => vm.GetDescAdicionaisAsync(produto?.codigo));
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtDescricaoAdicional.Focus();
                 dgModelos.Columns["descricao_completa"].FilteredFrom = FilteredFrom.FilterRow;
                 dgModelos.Columns["descricao_completa"].FilterPredicates.Add(new FilterPredicate()
@@ -156,6 +179,7 @@ namespace Producao.Views
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
         private async void OnSelectedDescricaoAdicional(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -163,9 +187,14 @@ namespace Producao.Views
             try
             {
                 TabelaDescAdicionalModel? adicional = e.NewValue as TabelaDescAdicionalModel;
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                vm.CompleAdicionais = new ObservableCollection<TblComplementoAdicionalModel>();
+                txtComplementoAdicional.SelectedItem = null;
+                txtComplementoAdicional.Text = string.Empty;
+
                 vm.CompleAdicionais = await Task.Run(() => vm.GetCompleAdicionaisAsync(adicional?.coduniadicional));
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtComplementoAdicional.Focus();
                 dgModelos.Columns["descricao_completa"].FilteredFrom = FilteredFrom.FilterRow;
                 dgModelos.Columns["descricao_completa"].FilterPredicates.Add(new FilterPredicate()
@@ -178,6 +207,7 @@ namespace Producao.Views
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
 
@@ -613,7 +643,7 @@ namespace Producao.Views
             {
                 await db.Modelos.SingleMergeAsync(modelo);
                 await db.SaveChangesAsync();
-
+                /*
                 var historico =  await db.HistoricosModelo.Where(c =>  c.codcompladicional_modelo == modelo.codcompladicional && c.idtema == tema.idtema ).ToListAsync();
                 foreach (HistoricoModelo item in historico)
                 {
@@ -629,6 +659,7 @@ namespace Producao.Views
                     await db.ReceitaModelos.SingleMergeAsync(receita);
                     await db.SaveChangesAsync();
                 }
+                */
                 //<ObservableCollection<TemaModel>>
                 transaction.Commit();
 

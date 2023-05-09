@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Producao.Views.PopUp;
 using Syncfusion.XlsIO;
 using System;
 using System.Collections.ObjectModel;
@@ -10,7 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Producao.Views.PopUp
+namespace Producao.Views.CentralModelos
 {
     /// <summary>
     /// Lógica interna para ModeloReceita.xaml
@@ -406,7 +407,7 @@ namespace Producao.Views.PopUp
                         if (result == MessageBoxResult.Yes)
                         {
                             Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                            ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                            //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                             await Task.Run(() => vm.AddCopiaReceita(dados));
                         }
                         else
@@ -415,20 +416,20 @@ namespace Producao.Views.PopUp
                     else
                     {
                         Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                        ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                        //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                         await Task.Run(() => vm.AddCopiaReceita(dados));
                     }
                 }
 
                 vm.ItensReceita = await Task.Run(() => vm.GetReceitaDetalhes(Modelo.id_modelo));
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }

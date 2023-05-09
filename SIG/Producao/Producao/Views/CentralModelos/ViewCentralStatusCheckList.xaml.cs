@@ -1,26 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Producao.Views.PopUp;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Utility;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static Producao.Views.CentralStatusCheckListMenuCommands;
+using static Producao.Views.CentralModelos.CentralStatusCheckListMenuCommands;
 
-namespace Producao.Views
+namespace Producao.Views.CentralModelos
 {
     /// <summary>
     /// Interação lógica para ViewCentralStatusCheckList.xam
@@ -38,13 +29,14 @@ namespace Producao.Views
             ViewCentralStatusCheckListViewModel vm = (ViewCentralStatusCheckListViewModel)DataContext;
             try
             {
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.Itens = await Task.Run(vm.GetItensAsync);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
     }

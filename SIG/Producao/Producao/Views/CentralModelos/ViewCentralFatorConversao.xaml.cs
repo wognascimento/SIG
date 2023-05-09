@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Producao.Views
+namespace Producao.Views.CentralModelos
 {
     /// <summary>
     /// Interação lógica para ViewCentralFatorConversao.xam
@@ -26,14 +26,15 @@ namespace Producao.Views
             ViewCentralFatorConversaoViewModel vm = (ViewCentralFatorConversaoViewModel)DataContext;
             try
             {
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.Produtos = await Task.Run(vm.GetProdutosAsync);
                 vm.Itens = await Task.Run(vm.GetItensAsync);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
 

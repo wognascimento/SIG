@@ -1,27 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Npgsql;
-using Producao.Views.PopUp;
 using Syncfusion.UI.Xaml.Grid;
-using Syncfusion.UI.Xaml.Grid.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using static iText.IO.Util.IntHashtable;
 
-namespace Producao.Views
+namespace Producao.Views.CentralModelos
 {
     /// <summary>
     /// Interação lógica para ViewCentralTabelaPA.xam
@@ -39,14 +27,15 @@ namespace Producao.Views
             ViewCentralTabelaPAViewModel vm = (ViewCentralTabelaPAViewModel)DataContext;
             try
             {
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.Produtos = await Task.Run(vm.GetProdutosAsync);
                 vm.Itens = await Task.Run(vm.GetItensAsync);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
 

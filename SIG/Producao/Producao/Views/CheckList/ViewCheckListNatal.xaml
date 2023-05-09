@@ -51,14 +51,14 @@
                         x:Name="cbSiglaShopping"
                         SearchItemPath="sigla_serv"
                         ValueMemberPath="id_aprovado"
-                        ShowDropDownButton="True"
-                        AutoCompleteMode="Suggest"
-                        SuggestionMode="Contains"
+                        ShowDropDownButton="false"
+                        AutoCompleteMode="SuggestAppend"
+ 
                         AutoCompleteSource="{Binding Siglas}" 
                         SelectedItem="{Binding Sigla, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValue="{Binding ComplementoCheckList.id_aprovado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedItemChanged="OnSiglaSelectionChanged" 
-                        ShowSuggestionsOnFocus="True"/>
+                        ShowSuggestionsOnFocus="True" ShowClearButton="True"/>
                     
                 </syncfusion:SfTextInputLayout>
 
@@ -86,6 +86,7 @@
                     HelperTextVisibility="Collapsed">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbId"
+                        ShowClearButton="True"
                         Text="{Binding ComplementoCheckList.ordem}" />
                 </syncfusion:SfTextInputLayout>
 
@@ -98,6 +99,7 @@
                     HelperTextVisibility="Collapsed" Margin="5,0,0,0">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbItem" 
+                        ShowClearButton="True"
                         Text="{Binding ComplementoCheckList.item_memorial}"/>
                 </syncfusion:SfTextInputLayout>
 
@@ -112,8 +114,9 @@
                         x:Name="tbLocalShopping"
                         AutoCompleteSource="{Binding Locaisshopping}"
                         SearchItemPath="Key"
-                        AutoCompleteMode="Suggest"
+                        AutoCompleteMode="SuggestAppend"
                         SuggestionMode="Contains"
+                        ShowClearButton="True"
                         Text="{Binding ComplementoCheckList.local_shoppings}" />
                 </syncfusion:SfTextInputLayout>
 
@@ -144,13 +147,14 @@
                         x:Name="cbPlanilha"
                         SearchItemPath="planilha"
                         ValueMemberPath="planilha"
-                        ShowDropDownButton="True"
-                        AutoCompleteMode="Suggest"
-                        SuggestionMode="Contains"
+                        ShowDropDownButton="False"
+                        AutoCompleteMode="SuggestAppend"
+
                         AutoCompleteSource="{Binding Planilhas}" 
                         SelectedItem="{Binding Planilha, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedItemChanged="OnPlanilhaSelectionChanged" 
-                        ShowSuggestionsOnFocus="True"/>
+                        ShowSuggestionsOnFocus="True"
+                        ShowClearButton="True"/>
                     
                 </syncfusion:SfTextInputLayout>
 
@@ -177,14 +181,15 @@
                         x:Name="cbDescricao"
                         SearchItemPath="descricao"
                         ValueMemberPath="codigo"
-                        ShowDropDownButton="True"
-                        AutoCompleteMode="Suggest"
-                        SuggestionMode="Contains"
+                        ShowDropDownButton="False"
+                        AutoCompleteMode="SuggestAppend"
+
                         AutoCompleteSource="{Binding Produtos}" 
                         SelectedItem="{Binding Produto, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValue="{Binding ComplementoCheckList.codproduto, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedItemChanged="OnDescricaoSelectionChanged" 
-                        ShowSuggestionsOnFocus="True"/>
+                        ShowSuggestionsOnFocus="True"
+                        ShowClearButton="True"/>
                     
                 </syncfusion:SfTextInputLayout>
 
@@ -213,13 +218,14 @@
                         x:Name="cbDescricaoAdicional"
                         SearchItemPath="descricao_adicional"
                         ValueMemberPath="coduniadicional"
-                        ShowDropDownButton="True"
-                        AutoCompleteMode="Suggest"
-                        SuggestionMode="Contains"
+                        ShowDropDownButton="False"
+                        AutoCompleteMode="SuggestAppend"
+
                         AutoCompleteSource="{Binding DescAdicionais}" 
                         SelectedItem="{Binding DescAdicional, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValue="{Binding ComplementoCheckList.coduniadicional, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        ShowSuggestionsOnFocus="True"/>
+                        ShowSuggestionsOnFocus="True"
+                        ShowClearButton="True"/>
                     
                 </syncfusion:SfTextInputLayout>
 
@@ -250,6 +256,7 @@
                     HelperTextVisibility="Collapsed">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbOrientacaoProducao" 
+                        ShowClearButton="True"
                         Text="{Binding ComplementoCheckList.obs}"/>
                 </syncfusion:SfTextInputLayout>
             </StackPanel>
@@ -264,6 +271,7 @@
                     HelperTextVisibility="Collapsed">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbOrientacaoMontagem" 
+                        ShowClearButton="True"
                         Text="{Binding ComplementoCheckList.orient_montagem}"/>
                 </syncfusion:SfTextInputLayout>
             </StackPanel>
@@ -278,6 +286,7 @@
                     HelperTextVisibility="Collapsed">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbOrientacaoDesmontagem" 
+                        ShowClearButton="True"
                         Text="{Binding ComplementoCheckList.orient_desmont}"/>
                 </syncfusion:SfTextInputLayout>
             </StackPanel>
@@ -336,7 +345,7 @@
             ShowRowHeader="True" 
             ItemsSource="{Binding CheckListGerais}"
             SelectedItem="{Binding CheckListGeral, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            SelectionChanged="OnSelectionChanged" MouseDoubleClick="OnMouseDoubleClick" FontSize="10">
+            SelectionChanged="OnSelectionChanged" FontSize="10">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridTextColumn HeaderText="ID" MappingName="id" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn HeaderText="ITEM" MappingName="item_memorial"/>
@@ -348,6 +357,11 @@
                     HeaderText="QTDE" 
                     MappingName="qtd" 
                     DisplayBinding="{Binding qtd, Converter={StaticResource ConverterNumber}}" 
+                    ColumnSizer="SizeToHeader" />
+                <syncfusion:GridNumericColumn 
+                    HeaderText="CODCOMPL" 
+                    MappingName="codcompl" 
+                    DisplayBinding="{Binding codcompl, Converter={StaticResource ConverterNumber}}" 
                     ColumnSizer="SizeToHeader" />
                 <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE PRODUÇÃO" MappingName="obs" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE MONTAGEM" MappingName="orient_montagem" ColumnSizer="SizeToHeader"/>
@@ -408,6 +422,10 @@
                         MappingName="confirmado"
                         DisplayBinding="{Binding confirmado, Converter={StaticResource ConverterBoolen}}"
                         ValueBinding="{Binding confirmado, Converter={StaticResource ConverterBoolen}}" />
+                    <syncfusion:GridNumericColumn
+                        HeaderText="CODDETALHESCOMPL" 
+                        MappingName="coddetalhescompl"
+                        DisplayBinding="{Binding coddetalhescompl, Converter={StaticResource ConverterNumber}}"/>
                     <syncfusion:GridTemplateColumn 
                         HeaderText="REQUISIÇÃO"
                         MappingName="num_os_produto">

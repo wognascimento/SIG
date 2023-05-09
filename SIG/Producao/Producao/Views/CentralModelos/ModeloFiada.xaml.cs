@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Producao.Views.PopUp
+namespace Producao.Views.CentralModelos
 {
     /// <summary>
     /// Lógica interna para ModeloFiada.xaml

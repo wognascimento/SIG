@@ -163,6 +163,19 @@ namespace Producao.Views.OrdemServico.Requisicao
             {
                 RelplanModel? planilha = e.NewValue as RelplanModel;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                vm.Produtos = new ObservableCollection<ProdutoModel>();
+                txtDescricao.SelectedItem = null;
+                txtDescricao.Text = string.Empty;
+
+                vm.DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>();
+                txtDescricaoAdicional.SelectedItem = null;
+                txtDescricaoAdicional.Text = string.Empty;
+
+                vm.CompleAdicionais = new ObservableCollection<TblComplementoAdicionalModel>();
+                txtComplementoAdicional.SelectedItem = null;
+                txtComplementoAdicional.Text = string.Empty;
+
                 vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(planilha?.planilha));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtDescricao.Focus();
@@ -180,6 +193,15 @@ namespace Producao.Views.OrdemServico.Requisicao
             {
                 ProdutoModel? produto = e.NewValue as ProdutoModel;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                vm.DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>();
+                txtDescricaoAdicional.SelectedItem = null;
+                txtDescricaoAdicional.Text = string.Empty;
+
+                vm.CompleAdicionais = new ObservableCollection<TblComplementoAdicionalModel>();
+                txtComplementoAdicional.SelectedItem = null;
+                txtComplementoAdicional.Text = string.Empty;
+
                 vm.DescAdicionais = await Task.Run(() => vm.GetDescAdicionaisAsync(produto?.codigo));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtDescricaoAdicional.Focus();
@@ -197,6 +219,11 @@ namespace Producao.Views.OrdemServico.Requisicao
             {
                 TabelaDescAdicionalModel? adicional = e.NewValue as TabelaDescAdicionalModel;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                vm.CompleAdicionais = new ObservableCollection<TblComplementoAdicionalModel>();
+                txtComplementoAdicional.SelectedItem = null;
+                txtComplementoAdicional.Text = string.Empty;
+
                 vm.CompleAdicionais = await Task.Run(() => vm.GetCompleAdicionaisAsync(adicional?.coduniadicional));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtComplementoAdicional.Focus();

@@ -79,7 +79,7 @@ namespace Producao.Views.CadastroProduto
 
         private void OnCurrentCellValueChanged(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellValueChangedEventArgs e)
         {
-
+            
         }
 
         private async void OnRowValidated(object sender, RowValidatedEventArgs e)
@@ -96,12 +96,9 @@ namespace Producao.Views.CadastroProduto
                 data.alterado_por = data.codigo == null ? null : Environment.UserName;
                 data.data_altera = data.codigo == null ? null : DateTime.Now;
                 data = await Task.Run(() => vm.SaveAsync(data));
+                var record = sfdatagrid.View.CurrentAddItem as ProdutoModel;
+                sfdatagrid.View.Refresh();
 
-                var found = vm.Produtos.FirstOrDefault(x => x.codigo == null);
-                int i = vm.Produtos.IndexOf(found);
-                vm.Produtos[i] = data;
-
-                ((ProdutoModel)e.RowData).codigo = data.codigo;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
@@ -142,6 +139,10 @@ namespace Producao.Views.CadastroProduto
             }
         }
 
+        private void OnCurrentCellEndEdit(object sender, CurrentCellEndEditEventArgs e)
+        {
+            
+        }
     }
 
     public class CadastroProdutoViewModel : INotifyPropertyChanged
@@ -225,6 +226,7 @@ namespace Producao.Views.CadastroProduto
             {
                 //obj = {Syncfusion.UI.Xaml.Grid.SfDataGrid}
                 var window = new CadastroAdicional(Produto);
+                window.Title = $"Descrição Adicional do produto -> {Produto.descricao}";
                 window.Owner = App.Current.MainWindow;
                 window.Height = 450;
                 window.Width = 700;

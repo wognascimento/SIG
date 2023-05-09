@@ -1,12 +1,17 @@
-﻿<Window x:Class="Producao.Views.PopUp.ModeloSetoresOrdemServico"
+﻿<Window x:Class="Producao.Views.CentralModelos.ModeloSetoresOrdemServico"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Producao.Views.PopUp" 
+        xmlns:local="clr-namespace:Producao.Views.CentralModelos" 
         xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
-        Title="SETORES PARA EMISSÃO DA OERDEM DE SERVIÇO" Height="450" Width="450" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner" Loaded="Window_Loaded" ResizeMode="NoResize">
+        Title="SETORES PARA EMISSÃO DA OERDEM DE SERVIÇO" 
+        Height="450" Width="450" 
+        WindowStyle="ToolWindow" 
+        WindowStartupLocation="CenterOwner" 
+        Loaded="Window_Loaded" 
+        ResizeMode="NoResize">
 
 
     <Grid>

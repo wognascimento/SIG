@@ -14,7 +14,7 @@ using System.Windows.Input;
 //using Excel = Microsoft.Office.Interop.Excel;
 
 
-namespace Producao.Views.PopUp
+namespace Producao.Views.CentralModelos
 {
     /// <summary>
     /// Lógica interna para ModeloSetoresOrdemServico.xaml

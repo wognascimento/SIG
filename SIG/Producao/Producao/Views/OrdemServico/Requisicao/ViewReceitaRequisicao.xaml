@@ -152,9 +152,9 @@
                     <syncfusion:SfTextBoxExt 
                         x:Name="txtPlanilha"
                         SearchItemPath="planilha"
-                        ShowDropDownButton="True"
-                        AutoCompleteMode="Suggest"
-                        SuggestionMode="Contains"
+                        ShowDropDownButton="False"
+                        AutoCompleteMode="SuggestAppend"
+                        ShowClearButton="True"
                         AutoCompleteSource="{Binding Path=Planilhas}" 
                         SelectedItemChanged="OnSelectedPlanilha" 
                         ShowSuggestionsOnFocus="True"/>
@@ -172,10 +172,10 @@
 
                     <syncfusion:SfTextBoxExt 
                         x:Name="txtDescricao"
-                        ShowDropDownButton="True"
+                        ShowDropDownButton="False"
                         SearchItemPath="descricao"
-                        AutoCompleteMode="Suggest"
-                        SuggestionMode="Contains"
+                        AutoCompleteMode="SuggestAppend"
+                        ShowClearButton="True"
                         AutoCompleteSource="{Binding Path=Produtos}"
                         SelectedItemChanged="OnSelectedDescricao"
                         ShowSuggestionsOnFocus="True"/>
@@ -194,10 +194,10 @@
 
                     <syncfusion:SfTextBoxExt
                         x:Name="txtDescricaoAdicional"
-                        ShowDropDownButton="True"
+                        ShowDropDownButton="False"
                         SearchItemPath="descricao_adicional"
-                        AutoCompleteMode="Suggest"
-                        SuggestionMode="Contains"
+                        AutoCompleteMode="SuggestAppend"
+                        ShowClearButton="True"
                         AutoCompleteSource="{Binding Path=DescAdicionais}"
                         SelectedItemChanged="OnSelectedDescricaoAdicional"
                         ShowSuggestionsOnFocus="True"/>
@@ -216,10 +216,10 @@
 
                     <syncfusion:SfTextBoxExt 
                         x:Name="txtComplementoAdicional"
-                        ShowDropDownButton="True"
+                        ShowDropDownButton="False"
                         SearchItemPath="complementoadicional"
-                        AutoCompleteMode="Suggest"
-                        SuggestionMode="Contains"
+                        AutoCompleteMode="SuggestAppend"
+                        ShowClearButton="True"
                         AutoCompleteSource="{Binding Path=CompleAdicionais}"
                         SelectedItemChanged="OnSelectedComplementoAdicional"
                         ShowSuggestionsOnFocus="True"/>
