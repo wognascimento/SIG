@@ -50,7 +50,7 @@ namespace Producao.Views.CentralModelos
 
         private void dgModelos_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var modelo = (ModeloReceitaAnoAnterior)dgModelos.SelectedItem;
+            var modelo = (HistoricoModeloCompletaModel)dgModelos.SelectedItem;
 
             dgModelos.Columns["id_modelo"].FilteredFrom = FilteredFrom.FilterRow;
             dgModelos.Columns["id_modelo"].FilterPredicates.Add(new FilterPredicate()
@@ -61,14 +61,14 @@ namespace Producao.Views.CentralModelos
 
             this.itens = new ObservableCollection<ModeloReceitaModel>();
             var filteredResult = this.dgModelos.View.Records.Select(recordentry => recordentry.Data);
-            foreach (ModeloReceitaAnoAnterior item in filteredResult)
+            foreach (HistoricoModeloCompletaModel item in filteredResult)
                 this.itens.Add(
                     new ModeloReceitaModel
                     {
                         id_modelo = Modelo.id_modelo,
                         codcompladicional = item.itens_receita,
-                        qtd_modelo = item.qtde_modelo,
-                        qtd_producao = item.qtde_producao,
+                        qtd_modelo = item.qtd_modelo_receita,
+                        qtd_producao = item.qtd_producao_receita,
                         observacao = "",
                         cadastrado_por = Environment.UserName,
                         data_cadastro = DateTime.Now,
@@ -87,32 +87,28 @@ namespace Producao.Views.CentralModelos
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
 
-        private ModeloReceitaAnoAnterior _itemReceita;
-        public ModeloReceitaAnoAnterior ItemReceita
+        private HistoricoModeloCompletaModel _itemReceita;
+        public HistoricoModeloCompletaModel ItemReceita
         {
             get { return _itemReceita; }
             set { _itemReceita = value; RaisePropertyChanged("ItemReceita"); }
         }
-        private ObservableCollection<ModeloReceitaAnoAnterior> _itensReceita;
-        public ObservableCollection<ModeloReceitaAnoAnterior> ItensReceita
+        private ObservableCollection<HistoricoModeloCompletaModel> _itensReceita;
+        public ObservableCollection<HistoricoModeloCompletaModel> ItensReceita
         {
             get { return _itensReceita; }
             set { _itensReceita = value; RaisePropertyChanged("ItensReceita"); }
         }
 
-        public async Task<ObservableCollection<ModeloReceitaAnoAnterior>> GetModelosAsync(QryModeloModel Modelo)
+        public async Task<ObservableCollection<HistoricoModeloCompletaModel>> GetModelosAsync(QryModeloModel Modelo)
         {
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.ModelosAnoAnterior
-                    .OrderBy(c => c.tema)
-                    .ThenBy(c => c.id_modelo)
-                    .ThenBy(c => c.planilha)
-                    .ThenBy(c => c.descricao_completa_item_ano_anterior)
+                var data = await db.HistoricoModeloCompletas
                     .Where(c => c.planilha == Modelo.planilha && c.descricao == Modelo.descricao)
                     .ToListAsync();
-                return new ObservableCollection<ModeloReceitaAnoAnterior>(data);
+                return new ObservableCollection<HistoricoModeloCompletaModel>(data);
             }
             catch (Exception)
             {

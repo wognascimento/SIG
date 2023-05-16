@@ -406,11 +406,11 @@
                         SelectedValuePath="codcompladicional"/>
                     <syncfusion:GridTextColumn
                         HeaderText="UNID" 
-                        MappingName="unidade"/>
+                        MappingName="unidade" TextAlignment="Center"/>
                     <syncfusion:GridNumericColumn
                         HeaderText="ESTOQUE" 
                         MappingName="saldoestoque"
-                        DisplayBinding="{Binding saldoestoque, Converter={StaticResource ConverterNumber}}"/>
+                        DisplayBinding="{Binding saldoestoque, Converter={StaticResource ConverterNumber}}" TextAlignment="Center"/>
                     <syncfusion:GridNumericColumn
                         AllowEditing="True"
                         HeaderText="QTDE" 
@@ -426,6 +426,10 @@
                         HeaderText="CODDETALHESCOMPL" 
                         MappingName="coddetalhescompl"
                         DisplayBinding="{Binding coddetalhescompl, Converter={StaticResource ConverterNumber}}"/>
+                    <syncfusion:GridNumericColumn
+                        HeaderText="QTD EXPEDIDA" 
+                        MappingName="qtd_expedida"
+                        DisplayBinding="{Binding qtd_expedida, Converter={StaticResource ConverterNumber}}" TextAlignment="Center"/>
                     <syncfusion:GridTemplateColumn 
                         HeaderText="REQUISIÇÃO"
                         MappingName="num_os_produto">

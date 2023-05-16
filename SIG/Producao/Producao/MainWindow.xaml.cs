@@ -146,6 +146,7 @@ namespace Producao
         private void OnEtiquetaChecklistClick(object sender, RoutedEventArgs e)
         {
             ViewEtiquetaCheckList view = new();
+            //ViewEmitirEtiquetaCheckList view = new();
             DocumentContainer.SetHeader(view, "ETIQUETA CHECKLIST");
             DocumentContainer.SetSizetoContentInMDI(view, true);
             DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));

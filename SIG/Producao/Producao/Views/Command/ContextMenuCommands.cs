@@ -1,4 +1,4 @@
-﻿using Producao.Views;
+﻿using Producao.Views.CheckList;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Utility;
 using Syncfusion.XlsIO;
@@ -58,11 +58,11 @@ namespace Producao
                         case Etiqueta.Primeira:
                             {
                                 worksheet.Range["A1"].Text = vm.Sigla.sigla_serv;
-                                worksheet.Range["B2"].Text = vm.Item.qtd_nao_expedida.ToString();
+                                worksheet.Range["B2"].Text = vm.Dado.qtd_nao_expedida.ToString();
                                 worksheet.Range["C2"].Text = vm.BaseSettings.Database;
-                                worksheet.Range["D2"].Text = vm.Item.coddetalhescompl.ToString();
-                                worksheet.Range["B5"].Text = vm.Item.local_shoppings;
-                                worksheet.Range["A8"].Text = vm.Item.descricao_completa.Replace("ÚNICO", null);
+                                worksheet.Range["D2"].Text = vm.Dado.coddetalhescompl.ToString();
+                                worksheet.Range["B5"].Text = vm.Dado.local_shoppings;
+                                worksheet.Range["A8"].Text = vm.Dado.descricao_completa.Replace("ÚNICO", null);
 
                                 etiqueta = Enum.Parse(typeof(Etiqueta), "Segunda");
                                 break;
@@ -70,55 +70,55 @@ namespace Producao
                         case Etiqueta.Segunda:
                             {
                                 worksheet.Range["F1"].Text = vm.Sigla.sigla_serv;
-                                worksheet.Range["G2"].Text = vm.Item.qtd_nao_expedida.ToString();
+                                worksheet.Range["G2"].Text = vm.Dado.qtd_nao_expedida.ToString();
                                 worksheet.Range["H2"].Text = vm.BaseSettings.Database;
-                                worksheet.Range["I2"].Text = vm.Item.coddetalhescompl.ToString();
-                                worksheet.Range["G5"].Text = vm.Item.local_shoppings;
-                                worksheet.Range["F8"].Text = vm.Item.descricao_completa.Replace("ÚNICO", null);
+                                worksheet.Range["I2"].Text = vm.Dado.coddetalhescompl.ToString();
+                                worksheet.Range["G5"].Text = vm.Dado.local_shoppings;
+                                worksheet.Range["F8"].Text = vm.Dado.descricao_completa.Replace("ÚNICO", null);
                                 etiqueta = Enum.Parse(typeof(Etiqueta), "Terceira");
                                 break;
                             }
                         case Etiqueta.Terceira:
                             {
                                 worksheet.Range["A13"].Text = vm.Sigla.sigla_serv;
-                                worksheet.Range["B14"].Text = vm.Item.qtd_nao_expedida.ToString();
+                                worksheet.Range["B14"].Text = vm.Dado.qtd_nao_expedida.ToString();
                                 worksheet.Range["C14"].Text = vm.BaseSettings.Database;
-                                worksheet.Range["D14"].Text = vm.Item.coddetalhescompl.ToString();
-                                worksheet.Range["B17"].Text = vm.Item.local_shoppings;
-                                worksheet.Range["A20"].Text = vm.Item.descricao_completa.Replace("ÚNICO", null);
+                                worksheet.Range["D14"].Text = vm.Dado.coddetalhescompl.ToString();
+                                worksheet.Range["B17"].Text = vm.Dado.local_shoppings;
+                                worksheet.Range["A20"].Text = vm.Dado.descricao_completa.Replace("ÚNICO", null);
                                 etiqueta = Enum.Parse(typeof(Etiqueta), "Quarta");
                                 break;
                             }
                         case Etiqueta.Quarta:
                             {
                                 worksheet.Range["A13"].Text = vm.Sigla.sigla_serv;
-                                worksheet.Range["G14"].Text = vm.Item.qtd_nao_expedida.ToString();
+                                worksheet.Range["G14"].Text = vm.Dado.qtd_nao_expedida.ToString();
                                 worksheet.Range["H14"].Text = vm.BaseSettings.Database;
-                                worksheet.Range["I14"].Text = vm.Item.coddetalhescompl.ToString();
-                                worksheet.Range["G17"].Text = vm.Item.local_shoppings;
-                                worksheet.Range["F20"].Text = vm.Item.descricao_completa.Replace("ÚNICO", null);
+                                worksheet.Range["I14"].Text = vm.Dado.coddetalhescompl.ToString();
+                                worksheet.Range["G17"].Text = vm.Dado.local_shoppings;
+                                worksheet.Range["F20"].Text = vm.Dado.descricao_completa.Replace("ÚNICO", null);
                                 etiqueta = Enum.Parse(typeof(Etiqueta), "Quinta");
                                 break;
                             }
                         case Etiqueta.Quinta:
                             {
                                 worksheet.Range["A25"].Text = vm.Sigla.sigla_serv;
-                                worksheet.Range["B26"].Text = vm.Item.qtd_nao_expedida.ToString();
+                                worksheet.Range["B26"].Text = vm.Dado.qtd_nao_expedida.ToString();
                                 worksheet.Range["C26"].Text = vm.BaseSettings.Database;
-                                worksheet.Range["D26"].Text = vm.Item.coddetalhescompl.ToString();
-                                worksheet.Range["B29"].Text = vm.Item.local_shoppings;
-                                worksheet.Range["A32"].Text = vm.Item.descricao_completa.Replace("ÚNICO", null);
+                                worksheet.Range["D26"].Text = vm.Dado.coddetalhescompl.ToString();
+                                worksheet.Range["B29"].Text = vm.Dado.local_shoppings;
+                                worksheet.Range["A32"].Text = vm.Dado.descricao_completa.Replace("ÚNICO", null);
                                 etiqueta = Enum.Parse(typeof(Etiqueta), "Sexta");
                                 break;
                             }
                         case Etiqueta.Sexta:
                             {
                                 worksheet.Range["F25"].Text = vm.Sigla.sigla_serv;
-                                worksheet.Range["G26"].Text = vm.Item.qtd_nao_expedida.ToString();
+                                worksheet.Range["G26"].Text = vm.Dado.qtd_nao_expedida.ToString();
                                 worksheet.Range["H26"].Text = vm.BaseSettings.Database;
-                                worksheet.Range["I26"].Text = vm.Item.coddetalhescompl.ToString();
-                                worksheet.Range["G29"].Text = vm.Item.local_shoppings;
-                                worksheet.Range["F32"].Text = vm.Item.descricao_completa.Replace("ÚNICO", null);
+                                worksheet.Range["I26"].Text = vm.Dado.coddetalhescompl.ToString();
+                                worksheet.Range["G29"].Text = vm.Dado.local_shoppings;
+                                worksheet.Range["F32"].Text = vm.Dado.descricao_completa.Replace("ÚNICO", null);
                                 etiqueta = Enum.Parse(typeof(Etiqueta), "Primeira");
                                 break;
                             }
@@ -126,7 +126,7 @@ namespace Producao
                     }
                     Console.WriteLine(etiqueta);
                 }
-                workbook.SaveAs($"Impressos/ETIQUETA_{vm.Item.coddetalhescompl}.xlsx"); 
+                workbook.SaveAs($"Impressos/ETIQUETA_{vm.Dado.coddetalhescompl}.xlsx"); 
             }
         }
         #endregion
@@ -236,7 +236,7 @@ namespace Producao
                                 }
                             case Etiqueta.Quarta:
                                 {
-                                    worksheet.Range["A13"].Text = item.sigla;
+                                    worksheet.Range["F13"].Text = item.sigla;
                                     worksheet.Range["G14"].Text = item.volumes_total > 1 ? item.volumes + " / " + item.volumes_total : item.qtd.ToString();
                                     worksheet.Range["H14"].Text = vm.BaseSettings.Database;
                                     worksheet.Range["I14"].Text = item.coddetalhescompl.ToString();

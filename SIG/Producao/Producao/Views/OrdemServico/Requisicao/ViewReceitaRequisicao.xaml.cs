@@ -539,6 +539,7 @@ namespace Producao.Views.OrdemServico.Requisicao
                 */
                 
                 var data = db.RequisicaoReceitas
+                    .Where( t => t.codcompladicional_produto == codcompladicional_produto)
                     .Join(db.Descricoes, o => o.codcompladicional_receita, i => i.codcompladicional, (o, i) =>
                     new Item
                     {

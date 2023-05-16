@@ -7,7 +7,7 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
         Title="COPIAR RECEITA ANO ANTERIOR"
-        Height="600" Width="800"
+        Height="768" Width="1000"
         WindowStartupLocation="CenterScreen" 
         WindowStyle="ToolWindow"
         ResizeMode="NoResize" Loaded="Window_Loaded">
@@ -25,12 +25,15 @@
             ColumnSizer="SizeToHeader"
             ItemsSource="{Binding Path=ItensReceita}" FontSize="8" MouseDoubleClick="dgModelos_MouseDoubleClick" AllowResizingHiddenColumns="True">
             <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridNumericColumn MappingName="ano" Width="70" NumberDecimalDigits="0" HeaderText="ANO"/>
                 <syncfusion:GridNumericColumn MappingName="id_modelo" Width="70" NumberDecimalDigits="0" HeaderText="MODELO"/>
                 <syncfusion:GridTextColumn MappingName="tema" Width="55" HeaderText="TEMA"/>
                 <syncfusion:GridTextColumn MappingName="obs_modelo" HeaderText="OBS."/>
                 <syncfusion:GridTextColumn MappingName="planilha" HeaderText="PLANILHA"/>
-                <syncfusion:GridTextColumn MappingName="descricao_completa_item_ano_anterior" HeaderText="DESCRIÇÃO"/>
-                <syncfusion:GridNumericColumn MappingName="qtde_producao" HeaderText="PRODUÇÃO" Width="100"/>
+                <syncfusion:GridTextColumn MappingName="descricao_completa" HeaderText="DESCRICAO COMPLETA"/>
+                <syncfusion:GridTextColumn MappingName="planilha_receita" HeaderText="PLANILHA RECEITA"/>
+                <syncfusion:GridTextColumn MappingName="descricao_completa_receita" HeaderText="DESCRICAO COMPLETA RECEITA"/>
+                <syncfusion:GridNumericColumn MappingName="qtd_producao_receita" HeaderText="PRODUÇÃO" Width="100"/>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
 

@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Producao.Views
+namespace Producao.Views.CheckList
 {
     /// <summary>
     /// Interação lógica para ViewEtiquetaCheckList.xam
@@ -28,7 +28,7 @@ namespace Producao.Views
             {
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
-                await Task.Run(async () => await vm.GetSiglasAsync());
+                vm.Siglas =  await Task.Run(vm.GetSiglasAsync);
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
@@ -44,7 +44,7 @@ namespace Producao.Views
             {
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
-                await Task.Run(async () => await vm.GetItensAsync());
+                vm.Dados = await Task.Run(() => vm.GetItensAsync(vm.Sigla.sigla_serv));
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
@@ -60,7 +60,7 @@ namespace Producao.Views
             {
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
-                await Task.Run(async () => await vm.GetEtiquetasAsync());
+                vm.Etiquetas = await Task.Run(() => vm.GetEtiquetasAsync(vm.Dado.coddetalhescompl));
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
@@ -77,9 +77,9 @@ namespace Producao.Views
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
                 vm.Etiqueta = (EtiquetaProducaoModel)e.RowData;
-                //EtiquetaProducaoModel data = (EtiquetaProducaoModel)e.RowData;
-                await Task.Run(async () => await vm.AddEtiquetaAsync());
-                await Task.Run(async () => await vm.GetEtiquetasAsync());
+                EtiquetaProducaoModel data = (EtiquetaProducaoModel)e.RowData;
+                await Task.Run(() => vm.AddEtiquetaAsync(data));
+                await Task.Run(() => vm.GetEtiquetasAsync(data.coddetalhescompl));
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
@@ -136,7 +136,7 @@ namespace Producao.Views
                 e.IsValid = false;
                 e.ErrorMessages.Add("qtd", "Informe a quantidade em cada volume.");
             }
-            else if (rowData.qtd > vm.Item.qtd_nao_expedida)
+            else if (rowData.qtd > vm.Dado.qtd_nao_expedida)
             {
                 e.IsValid = false;
                 e.ErrorMessages.Add("qtd", "a quantidade da etiqueta não pode ser menor que a do checklist");
@@ -151,13 +151,21 @@ namespace Producao.Views
         private void dgEtiqueta_AddNewRowInitiating(object sender, Syncfusion.UI.Xaml.Grid.AddNewRowInitiatingEventArgs e)
         {
             EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
-            ((EtiquetaProducaoModel)e.NewObject).coddetalhescompl = vm.Item.coddetalhescompl; // = new long?(ProdutoExpedido.CodDetalhesCompl);
+            ((EtiquetaProducaoModel)e.NewObject).coddetalhescompl = vm.Dado.coddetalhescompl; // = new long?(ProdutoExpedido.CodDetalhesCompl);
         }
 
     }
 
     public class EtiquetaViewModel : INotifyPropertyChanged
     {
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        }
+
         public DataBaseSettings BaseSettings = DataBaseSettings.Instance;
 
         private ObservableCollection<SiglaChkListModel> _siglas;
@@ -172,18 +180,30 @@ namespace Producao.Views
             get { return _sigla; }
             set { _sigla = value; RaisePropertyChanged("Sigla"); }
         }
-
+        /*
         private ObservableCollection<EtiquetaCheckListModel> _itens;
         public ObservableCollection<EtiquetaCheckListModel> Itens
         {
             get { return _itens; }
             set { _itens = value; RaisePropertyChanged("Itens"); }
         }
-        private EtiquetaCheckListModel _item;
-        public EtiquetaCheckListModel Item
+        */
+        private ObservableCollection<EtiquetaCheckListModel> _dados;
+        public ObservableCollection<EtiquetaCheckListModel> Dados
         {
-            get { return _item; }
-            set { _item = value; RaisePropertyChanged("Item"); }
+            get { return _dados; }
+            set
+            {
+                _dados = value;
+                RaisePropertyChanged("Dados");
+            }
+        }
+
+        private EtiquetaCheckListModel _dado;
+        public EtiquetaCheckListModel Dado
+        {
+            get { return _dado; }
+            set { _dado = value; RaisePropertyChanged("Dado"); }
         }
 
         private ObservableCollection<EtiquetaProducaoModel> _etiquetas;
@@ -204,13 +224,13 @@ namespace Producao.Views
            
         }
 
-        public async Task GetSiglasAsync()
+        public async Task<ObservableCollection<SiglaChkListModel>> GetSiglasAsync()
         {
             try
             {
                 using DatabaseContext db = new();
                 var data = await db.Siglas.OrderBy(c => c.sigla_serv).ToListAsync();
-                Siglas = new ObservableCollection<SiglaChkListModel>(data);
+                return new ObservableCollection<SiglaChkListModel>(data);
             }
             catch (Exception)
             {
@@ -218,13 +238,16 @@ namespace Producao.Views
             }
         }
 
-        public async Task GetItensAsync()
+        public async Task<ObservableCollection<EtiquetaCheckListModel>> GetItensAsync(string? sigla_serv)
         {
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.EtiquetaCheckLists.Where(e => e.sigla == Sigla.sigla_serv && e.qtd_detalhe > 0 && e.qtd_nao_expedida > 0).OrderBy(c => c.item_memorial).ToListAsync();
-                Itens = new ObservableCollection<EtiquetaCheckListModel>(data);
+                var data = await db.EtiquetaCheckLists
+                    .Where(e => e.sigla == sigla_serv && e.qtd_detalhe > 0 && e.qtd_nao_expedida > 0)
+                    .OrderBy(c => c.item_memorial)
+                    .ToListAsync();
+                return new ObservableCollection<EtiquetaCheckListModel>(data);
             }
             catch (Exception)
             {
@@ -232,13 +255,13 @@ namespace Producao.Views
             }
         }
 
-        public async Task GetEtiquetasAsync()
+        public async Task<ObservableCollection<EtiquetaProducaoModel>> GetEtiquetasAsync(long? coddetalhescompl)
         {
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.EtiquetaProducaos.Where(e => e.coddetalhescompl == Item.coddetalhescompl ).OrderBy(c => c.codvol).ToListAsync();
-                Etiquetas = new ObservableCollection<EtiquetaProducaoModel>(data);
+                var data = await db.EtiquetaProducaos.Where(e => e.coddetalhescompl == coddetalhescompl ).OrderBy(c => c.codvol).ToListAsync();
+                return new ObservableCollection<EtiquetaProducaoModel>(data);
             }
             catch (Exception)
             {
@@ -246,7 +269,7 @@ namespace Producao.Views
             }
         }
 
-        public async Task AddEtiquetaAsync()
+        public async Task<EtiquetaProducaoModel> AddEtiquetaAsync(EtiquetaProducaoModel etiqueta)
         {
             try
             {
@@ -256,18 +279,13 @@ namespace Producao.Views
                                    EntityState.Modified;
 
                 await db.SaveChangesAsync();
+
+                return etiqueta;
             }
             catch (Exception)
             {
                 throw;
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void RaisePropertyChanged(string propName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propName));
         }
     }
 }

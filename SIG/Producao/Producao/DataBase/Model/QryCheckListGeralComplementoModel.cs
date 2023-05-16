@@ -33,5 +33,6 @@ namespace Producao
         public string? status_producao { get; set; }
         public string? status_transferencia { get; set; }
         public long? num_os_produto { get; set; }
+        public double? qtd_expedida { get; set; }
     }
 }
