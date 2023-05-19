@@ -25,6 +25,7 @@ namespace Expedicao
         public DbSet<PacklistCarregCaminhaoModel> PacklistCarregCaminhaos { get; set; }
 
         public DbSet<QryExpedModel> QryExpeds { get; set; }
+        public DbSet<ControleVirtualModel> ControleVirtuals { get; set; }
         public DbSet<CaixasEnderecadasModel> CaixasEnderecadas { get; set; }
         public DbSet<SaldoGeralShoppingModel> SaldoGeralShoppings { get; set; }
         public DbSet<ProdutosBaiadosGeralTotalDataModel> produtosBaiadosData { get; set; }

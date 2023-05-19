@@ -206,7 +206,7 @@ namespace Producao
             ViewCentralEmitirOs view = new();
             DocumentContainer.SetHeader(view, "CONTROLE ORDEM DE SERVIÇO");
             DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1000.0, 800.0));
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1024.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1024.0, 800.0));
             //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
             this._mdi.CanMDIMaximize = false;
             this._mdi.Items.Add(view);

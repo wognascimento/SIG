@@ -154,7 +154,8 @@ namespace Producao.Views.CentralModelos
             {
                 try
                 {
-                    var dif = (record?.qtd_chk_list - (int)(record?.qtd_os ?? 0));
+                    //var dif = (record?.qtd_chk_list - (int)(record?.qtd_os ?? 0));
+                    var dif = record?.qtd_chk_list;
                     var window = new ModeloSetoresOrdemServico(record);
                     window.Owner = App.Current.MainWindow;
                     window.ShowDialog();
@@ -220,6 +221,8 @@ namespace Producao.Views.CentralModelos
 
                     if (pagina == 1)
                     {
+                        
+                        worksheet.Range["E2"].Text = servico.cliente;
                         worksheet.Range["G2"].Text = servico.num_os_produto.ToString();
                         worksheet.Range["I2"].Text = servico.num_os_servico.ToString();
                         worksheet.Range["B4"].Text = servico.tipo;
@@ -254,6 +257,7 @@ namespace Producao.Views.CentralModelos
                     }
                     else if (pagina == 2)
                     {
+                        worksheet.Range["E30"].Text = servico.cliente;
                         worksheet.Range["G30"].Text = servico.num_os_produto.ToString();
                         worksheet.Range["I30"].Text = servico.num_os_servico.ToString();
                         worksheet.Range["B32"].Text = servico.tipo;
@@ -289,7 +293,7 @@ namespace Producao.Views.CentralModelos
 
                     pagina = 2;
                 }
-                worksheet.ShowRange(range, false);
+                //worksheet.ShowRange(range, false);
                 workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
                 worksheet.Clear();
                 workbook.Close();

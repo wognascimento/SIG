@@ -48,6 +48,7 @@
                     <syncfusion:MenuItemAdv Header="Cliente Efetiva" Click="OnCubagemEfetivaClick"/>
                     <syncfusion:MenuItemAdv Header="Pendências Expedição" Click="OnPendenciaExpedicaoClick"/>
                 </syncfusion:MenuItemAdv>
+                <syncfusion:MenuItemAdv Header="Expedição Virtual" Click="OnExpedicaoVirtualClick"/>
             </syncfusion:MenuItemAdv>
         </syncfusion:MenuAdv>
         

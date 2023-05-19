@@ -225,6 +225,7 @@
                     <ColumnDefinition  />
                     <ColumnDefinition  />
                     <ColumnDefinition  />
+                    <ColumnDefinition  />
                 </Grid.ColumnDefinitions>
 
                 <syncfusion:SfTextInputLayout
@@ -355,6 +356,8 @@
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="1"/>
                 <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="1"/>
+                <ColumnDefinition Width="75"/>
 
             </Grid.ColumnDefinitions>
 
@@ -408,6 +411,15 @@
                 Label="Modelos Fiada" 
                 Visibility="Collapsed" 
                 Click="OnModelosFiadaClick"/>
+
+            <syncfusion:ButtonAdv 
+                x:Name="btnDistribuicaoFiada" 
+                Grid.Column="12"
+                SmallIcon="{x:Null}" 
+                LargeIcon="{x:Null}" 
+                Label="Distribuição Fiada" 
+                Visibility="Collapsed" 
+                Click="OnDistribuicaoFiadaClick"/>
         </Grid>
 
         <syncfusion:SfDataGrid 

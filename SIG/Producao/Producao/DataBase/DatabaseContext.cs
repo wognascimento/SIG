@@ -27,8 +27,8 @@ namespace Producao
         public DbSet<RequisicaoModel> Requisicoes { get; set; }
         public DbSet<DetalheRequisicaoModel> RequisicaoDetalhes { get; set; }
         public DbSet<RequisicaoReceitaModel> RequisicaoReceitas { get; set; }
-
         public DbSet<QryRequisicaoDetalheModel> QryRequisicaoDetalhes { get; set; }
+        public DbSet<ReqDetalhesModel> ReqDetalhes { get; set; }
         public DbSet<QryDescricao> Descricoes { get; set; }
         public DbSet<ControleMemorialModel> ControleMemorials { get; set; }
         public DbSet<RevisorModel> Revisores { get; set; }
@@ -42,6 +42,7 @@ namespace Producao
         public DbSet<ModeloReceitaModel> ReceitaModelos  { get; set; }
         public DbSet<ModeloReceitaAnoAnterior> ModelosAnoAnterior { get; set; }
         public DbSet<ControleModeloBaixa> ModelosControle { get; set; }
+        public DbSet<ExportEnfeitesInfClienteModel> exportEnfeitesInfClientes { get; set; }
         public DbSet<HistoricoModelo> HistoricosModelo { get; set; }
         public DbSet<HistoricoSetorModel> HistoricosSetor { get; set; }
         public DbSet<DistribuicaoPAModel> DistribuicaoPAs { get; set; }

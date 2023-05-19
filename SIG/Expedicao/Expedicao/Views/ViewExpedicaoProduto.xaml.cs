@@ -1,19 +1,16 @@
-﻿using Syncfusion.UI.Xaml.Grid;
-using Syncfusion.UI.Xaml.TextInputLayout;
+﻿using Microsoft.EntityFrameworkCore;
+using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
+using Syncfusion.UI.Xaml.TextInputLayout;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.ObjectModel;
-using System.Linq.Expressions;
-using System.Text;
-using Syncfusion.UI.Xaml.Grid.Helpers;
 
 namespace Expedicao.Views
 {
@@ -82,13 +79,18 @@ namespace Expedicao.Views
             //[0] = {Syncfusion.UI.Xaml.Grid.GridCellInfo}
             try
             {
-                Exped.ItemsSource = null;
+
+                ExpedicaoProdutoViewModel vm = (ExpedicaoProdutoViewModel)DataContext;
+
+                vm.Exped = new ExpedModel();
                 loadingExped.Visibility = Visibility.Visible;
                 if (e.AddedItems.Count <= 0)
                     return;
-                ProdutoExpedido = (e.AddedItems[0] as GridRowInfo).RowData as ProdutoExpedidoModel;
 
-                Exped.ItemsSource = await Task.Run(async () => await new ExpedicaoViewModel().GetExpedsAsync((int)ProdutoExpedido.CodDetalhesCompl));
+                //ProdutoExpedido = (e.AddedItems[0] as GridRowInfo).RowData as ProdutoExpedidoModel;
+                //vm.ChkDetail.CodDetalhesCompl
+
+                Exped.ItemsSource = await Task.Run(() => vm.GetExpedsAsync(vm.ChkDetail.CodDetalhesCompl));
                 loadingExped.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
@@ -99,7 +101,8 @@ namespace Expedicao.Views
 
         private void Exped_AddNewRowInitiating(object sender, AddNewRowInitiatingEventArgs e)
         {
-            (e.NewObject as ExpedModel).CodDetalhesCompl = new long?((long)ProdutoExpedido.CodDetalhesCompl);
+            ExpedicaoProdutoViewModel vm = (ExpedicaoProdutoViewModel)DataContext;
+            ((ExpedModel)e.NewObject).CodDetalhesCompl = new long?((long)vm.ChkDetail.CodDetalhesCompl);
         }
 
         private void Exped_RecordDeleted(object sender, RecordDeletedEventArgs e)
@@ -114,36 +117,80 @@ namespace Expedicao.Views
             {
                 try
                 {
-                    ExpedModel data = e.Items[0] as ExpedModel;
-                    await Task.Run((async () => await new ExpedicaoViewModel().DeleteExpedAsync(data)));
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                    ExpedModel data = (ExpedModel)e.Items[0];
+                    ExpedicaoProdutoViewModel vm = (ExpedicaoProdutoViewModel)DataContext;
+                    await Task.Run((() => vm.DeleteExpedAsync(data)));
                     e.Cancel = false;
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
                 catch (Exception ex)
                 {
                     e.Cancel = true;
                     int num2 = (int)MessageBox.Show(ex.Message);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
             }
             else
                 e.Cancel = true;
         }
 
+        private async void Exped_CurrentCellValueChanged(object sender, CurrentCellValueChangedEventArgs e)
+        {
+
+            SfDataGrid grid = (SfDataGrid)sender;
+            int columnindex = grid.ResolveToGridVisibleColumnIndex(e.RowColumnIndex.ColumnIndex);
+            var column = grid.Columns[columnindex];
+            if (column.GetType() == typeof(GridCheckBoxColumn) && column.MappingName == "BaiaVirtual")
+            {
+  
+                try
+                {
+                    var rowIndex = grid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
+
+                    if (rowIndex == 0) 
+                    {
+                        var record = (ExpedModel)grid.View.Records[rowIndex].Data;
+                        var value = record.BaiaVirtual;
+                        Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                        ExpedicaoProdutoViewModel vm = (ExpedicaoProdutoViewModel)DataContext;
+                        ExpedModel expedModel = await Task.Run(() => vm.AddExpedAsync(record));
+                        Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+
+            }
+
+        }
+
         private async void Exped_RowValidated(object sender, RowValidatedEventArgs e)
         {
             try
             {
-                ExpedModel data = e.RowData as ExpedModel;
-                ExpedModel expedModel = await Task.Run(async () => await new ExpedicaoViewModel().AddExpedAsync(data));
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ExpedicaoProdutoViewModel vm = (ExpedicaoProdutoViewModel)DataContext;
+                ExpedModel data = (ExpedModel)e.RowData;
+                ExpedModel expedModel = await Task.Run(() => vm.AddExpedAsync(data));
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
 
         private void Exped_RowValidating(object sender, RowValidatingEventArgs e)
         {
-            ExpedModel rowData = e.RowData as ExpedModel;
+            ExpedModel rowData = (ExpedModel)e.RowData;
+            ExpedicaoProdutoViewModel vm = (ExpedicaoProdutoViewModel)DataContext;
             if (!rowData.CodDetalhesCompl.HasValue)
             {
                 e.IsValid = false;
@@ -171,7 +218,7 @@ namespace Expedicao.Views
                     //Math.Round( 2.123455909, 2);
                     //qtdExpedida = (decimal?)rowData.QtdExpedida;
                     //decimal? nullable1 = (decimal?)this.ProdutoExpedido.Qtd;
-                    if (Math.Round((double)rowData.QtdExpedida, 2) > Math.Round((double)ProdutoExpedido.Qtd, 2) & rowData.QtdExpedida.HasValue & ProdutoExpedido.Qtd.HasValue)
+                    if (Math.Round((double)rowData.QtdExpedida, 2) > Math.Round((double)vm.ChkDetail.Qtd, 2) & rowData.QtdExpedida.HasValue & vm.ChkDetail.Qtd.HasValue)
                     {
                         e.IsValid = false;
                         e.ErrorMessages.Add("QtdExpedida", "qtd_expedida não pode ser maior que qtd do cheklist.");
@@ -357,8 +404,6 @@ namespace Expedicao.Views
 
         }
 
-
-
     }
 
     public class SearchHelperExtNew : SearchHelper
@@ -397,12 +442,34 @@ namespace Expedicao.Views
             set { medidas = value; RaisePropertyChanged("Medidas"); }
         }
 
+        private ProdutoExpedidoModel chkDetail;
+        public ProdutoExpedidoModel ChkDetail
+        {
+            get { return chkDetail; }
+            set { chkDetail = value; RaisePropertyChanged("ChkDetail"); }
+        }
+
         private ObservableCollection<ProdutoExpedidoModel> chkDetails;
         public ObservableCollection<ProdutoExpedidoModel> ChkDetails
         {
             get { return chkDetails; }
             set { chkDetails = value; RaisePropertyChanged("ChkDetails"); }
         }
+
+        private ExpedModel exped;
+        public ExpedModel Exped
+        {
+            get { return exped; }
+            set { exped = value; RaisePropertyChanged("Exped"); }
+        }
+
+        private ObservableCollection<ExpedModel> expeds;
+        public ObservableCollection<ExpedModel> Expeds
+        {
+            get { return expeds; }
+            set { expeds = value; RaisePropertyChanged("Expeds"); }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propName)
@@ -450,6 +517,58 @@ namespace Expedicao.Views
                     .ToListAsync();
 
                 return new ObservableCollection<ProdutoExpedidoModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ObservableCollection<ExpedModel>> GetExpedsAsync(int? CodDetalhesCompl)
+        {
+            IList<ExpedModel> listAsync;
+            try
+            {
+                using AppDatabase db = new();
+                listAsync = await db.Expeds
+                    .Where(n => n.CodDetalhesCompl == CodDetalhesCompl)
+                    .OrderBy(n => n.Volume)
+                    .ToListAsync();
+
+                return new ObservableCollection<ExpedModel>(listAsync);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ExpedModel> AddExpedAsync(ExpedModel exped)
+        {
+            ExpedModel expedModel;
+            try
+            {
+                using AppDatabase db = new();
+                db.Entry<ExpedModel>(exped).State = !exped.CodExped.HasValue ? EntityState.Added : EntityState.Modified;
+                int num = await db.SaveChangesAsync();
+                long? codExped = exped.CodExped;
+                expedModel = exped;
+                return expedModel;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task DeleteExpedAsync(ExpedModel exped)
+        {
+            try
+            {
+                using AppDatabase db = new();
+                db.Entry<ExpedModel>(exped).State = EntityState.Deleted;
+                int num = await db.SaveChangesAsync();
+                db.Entry<ExpedModel>(exped).State = EntityState.Detached;
             }
             catch (Exception)
             {

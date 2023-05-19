@@ -13,6 +13,7 @@
 
     <UserControl.Resources>
         <local:ConverterNumber x:Key="ConverterNumber"/>
+        <local:ConverterBoolen x:Key="ConverterBoolen"/>
     </UserControl.Resources>
 
     <Grid>
@@ -44,7 +45,8 @@
             ColumnSizer="AutoWithLastColumnFill" 
             AllowFiltering="True"
             ShowRowHeader="True" 
-            ItemsSource="{Binding ChkDetails}">
+            ItemsSource="{Binding ChkDetails}"
+            SelectedItem="{Binding ChkDetail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridTextColumn HeaderText="Item" MappingName="ItemMemorial" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn HeaderText="Local" MappingName="LocalShoppings"/>
@@ -69,11 +71,23 @@
                          AnimationType="Gear" Control.Background="Black"/>
             </StackPanel>
         </Border>
-        <syncfusion:SfDataGrid RowValidated="Exped_RowValidated" AddNewRowInitiating="Exped_AddNewRowInitiating"
-                           RowValidating="Exped_RowValidating" RecordDeleted="Exped_RecordDeleted"
-                           RecordDeleting="Exped_RecordDeleting" x:Name="Exped" Grid.Row="3" ShowRowHeader="True"
-                           AutoGenerateColumns="False" ColumnSizer="SizeToHeader" AddNewRowPosition="Bottom" AllowEditing="True"
-                           AllowDeleting="True">
+        <syncfusion:SfDataGrid 
+            x:Name="Exped" 
+            Grid.Row="3" 
+            ItemsSource="{Binding Expeds}"
+            SelectedItem="{Binding Exped, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ShowRowHeader="True"
+            RowValidated="Exped_RowValidated" 
+            AddNewRowInitiating="Exped_AddNewRowInitiating"
+            RowValidating="Exped_RowValidating" 
+            RecordDeleted="Exped_RecordDeleted"
+            RecordDeleting="Exped_RecordDeleting"
+            AutoGenerateColumns="False" 
+            ColumnSizer="SizeToHeader" 
+            AddNewRowPosition="Bottom"
+            AllowEditing="True"
+            AllowDeleting="True" 
+            CurrentCellValueChanged="Exped_CurrentCellValueChanged">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn MappingName="QtdExpedida"     DisplayBinding="{Binding Path=QtdExpedida, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
                 <syncfusion:GridNumericColumn MappingName="VolExp"          DisplayBinding="{Binding Path=VolExp, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
@@ -91,6 +105,15 @@
                     SelectedValuePath="NomeCaixa" 
                     DisplayMemberPath="NomeCaixa"/>
                 <syncfusion:GridNumericColumn MappingName="Volume" NumberDecimalDigits="0" ParsingMode="Int"/>
+                
+                <syncfusion:GridCheckBoxColumn
+                        AllowEditing="True"
+                        HeaderText="Virtual" 
+                        MappingName="BaiaVirtual"
+                        DisplayBinding="{Binding BaiaVirtual, Converter={StaticResource ConverterBoolen}}"
+                        ValueBinding="{Binding BaiaVirtual, Converter={StaticResource ConverterBoolen}}"/>
+
+                
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
         <Border x:Name="loadingExped" Height="60" Grid.Row="3" VerticalAlignment="Bottom" Background="Black"

@@ -704,5 +704,45 @@ namespace Expedicao
             }
         }
 
+        private async void OnExpedicaoVirtualClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ExcelEngine excelEngine = new();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                using AppDatabase db = new();
+
+                IList<ControleVirtualModel> dados = await db.ControleVirtuals.ToListAsync();
+                ExcelImportDataOptions importDataOptions = new()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(dados, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs(@"c:\relatorios\expedicao_virtual.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                Process.Start(new ProcessStartInfo(@"c:\relatorios\expedicao_virtual.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
     }
 }

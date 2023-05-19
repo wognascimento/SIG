@@ -396,7 +396,9 @@
                 SelectedItem="{Binding CheckListGeralComplemento, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 CurrentCellDropDownSelectionChanged="OnCurrentCellDropDownSelectionChanged" 
                 CurrentCellValueChanged="dgComplemento_CurrentCellValueChanged" 
-                FontSize="10" RowValidated="dgComplemento_RowValidated" RowValidating="dgComplemento_RowValidating" AddNewRowInitiating="dgComplemento_AddNewRowInitiating" >
+                FontSize="10" RowValidated="dgComplemento_RowValidated"
+                RowValidating="dgComplemento_RowValidating" 
+                AddNewRowInitiating="dgComplemento_AddNewRowInitiating" >
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridComboBoxColumn
                         HeaderText="COMPLEMENTO ADICIONAL" 

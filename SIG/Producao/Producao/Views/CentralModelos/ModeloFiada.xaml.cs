@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.Windows.Shared;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -36,6 +39,62 @@ namespace Producao.Views.CentralModelos
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        private void SfDataGrid_AddNewRowInitiating(object sender, Syncfusion.UI.Xaml.Grid.AddNewRowInitiatingEventArgs e)
+        {
+            ModeloFiadaViewModel vm = (ModeloFiadaViewModel)DataContext;
+            ((ModeloFiadaModel)e.NewObject).id_modelo = modelo.id_modelo;
+        }
+
+        private void SfDataGrid_RowValidating(object sender, Syncfusion.UI.Xaml.Grid.RowValidatingEventArgs e)
+        {
+            ModeloFiadaModel rowData = (ModeloFiadaModel)e.RowData;
+            if (rowData.id_modelo == null)
+            {
+                e.IsValid = false;
+                e.ErrorMessages.Add("modelofiada", "Modelo não selecionado, Fecha e abre a Janela");
+                e.ErrorMessages.Add("qtdmodelofiada", "Modelo não selecionado, Fecha e abre a Janela");
+            }
+            else if (rowData.modelofiada == null)
+            {
+                e.IsValid = false;
+                e.ErrorMessages.Add("modelofiada", "Seleciona o MODELO da fiada.");
+            }
+            else if (rowData.qtdmodelofiada == null)
+            {
+                e.IsValid = false;
+                e.ErrorMessages.Add("qtdmodelofiada", "Informa a QUANTIDADE enfeites do MODELO");
+            }
+        }
+
+        private async void SfDataGrid_RowValidated(object sender, Syncfusion.UI.Xaml.Grid.RowValidatedEventArgs e)
+        {
+            try
+            {
+                ModeloFiadaViewModel vm = (ModeloFiadaViewModel)DataContext;
+                ModeloFiadaModel data = (ModeloFiadaModel)e.RowData;
+                data = await Task.Run(() => vm.SaveModelosFiadaAsync(data));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private async void IntegerTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var field = sender as IntegerTextBox;
+                var valor = Convert.ToInt32(field.Value);
+                ModeloFiadaViewModel vm = (ModeloFiadaViewModel)DataContext;
+                var dados = await Task.Run(() => vm.AddModeloAsync(modelo.id_modelo, valor));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }
@@ -87,6 +146,43 @@ namespace Producao.Views.CentralModelos
             }
         }
 
-        
+        public async Task<ModeloFiadaModel> SaveModelosFiadaAsync(ModeloFiadaModel modelo)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                await db.ModelosFiada.SingleMergeAsync(modelo);
+                await db.SaveChangesAsync();
+                return modelo;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ModeloModel> AddModeloAsync(long? id_modelo, int? qtd_fiada_cascata)
+        {
+            using DatabaseContext db = new();
+            var transaction = db.Database.BeginTransaction();
+            try
+            {
+                var modelo = await db.Modelos.FindAsync(id_modelo);
+                modelo.qtd_fiada_cascata = qtd_fiada_cascata;
+                await db.Modelos.SingleMergeAsync(modelo);
+                await db.SaveChangesAsync();
+
+                transaction.Commit();
+
+                return modelo;
+            }
+            catch (Exception)
+            {
+                transaction.Rollback();
+                throw;
+            }
+        }
+
+
     }
 }

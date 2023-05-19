@@ -5,9 +5,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:local="clr-namespace:Producao"
+    xmlns:vewModel="clr-namespace:Producao"
     x:Class="Producao.Views.CheckList.ViewEtiquetaCheckListEmitida"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
+
+
+    <UserControl.Resources>
+        <vewModel:ConverterNumber x:Key="ConverterNumber"/>
+        <vewModel:ConverterBoolen x:Key="ConverterBoolen"/>
+    </UserControl.Resources>
+    
     <Grid>
 
         <Syncfusion:SfDataGrid  
@@ -26,11 +34,21 @@
                 <Syncfusion:GridTextColumn MappingName="local_shoppings"/>
                 <Syncfusion:GridTextColumn MappingName="planilha"/>
                 <Syncfusion:GridTextColumn MappingName="descricao_completa"/>
-                <Syncfusion:GridNumericColumn MappingName="coddetalhescompl"/>
-                <Syncfusion:GridNumericColumn MappingName="codvol"/>
-                <Syncfusion:GridNumericColumn MappingName="volumes"/>
-                <Syncfusion:GridNumericColumn MappingName="volumes_total"/>
-                <Syncfusion:GridNumericColumn MappingName="qtd"/>
+                <Syncfusion:GridNumericColumn 
+                    MappingName="coddetalhescompl"
+                    DisplayBinding="{Binding coddetalhescompl, Converter={StaticResource ConverterNumber}}"/>
+                <Syncfusion:GridNumericColumn 
+                    MappingName="codvol"
+                    DisplayBinding="{Binding codvol, Converter={StaticResource ConverterNumber}}"/>
+                <Syncfusion:GridNumericColumn 
+                    MappingName="volumes"
+                    DisplayBinding="{Binding volumes, Converter={StaticResource ConverterNumber}}"/>
+                <Syncfusion:GridNumericColumn 
+                    MappingName="volumes_total"
+                    DisplayBinding="{Binding volumes_total, Converter={StaticResource ConverterNumber}}"/>
+                <Syncfusion:GridNumericColumn 
+                    MappingName="qtd"
+                    DisplayBinding="{Binding qtd, Converter={StaticResource ConverterNumber}}"/>
                 <Syncfusion:GridTextColumn MappingName="criado_por"/>
                 <Syncfusion:GridDateTimeColumn MappingName="criado_em"/>
             </Syncfusion:SfDataGrid.Columns>

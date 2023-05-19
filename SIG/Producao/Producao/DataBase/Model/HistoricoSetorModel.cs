@@ -10,7 +10,7 @@ namespace Producao
         public long? codcompladicional { get; set; }
         public long? codigo_setor { get; set; }
         public string? setor { get; set; }
-        public bool? selesao { get; set; }
+        public bool? selesao { get; set; } = true;
         public string? observacao {  get; set; }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Producao.DataBase.Model;
 using Producao.Views.PopUp;
 using Syncfusion.XlsIO;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,6 +33,7 @@ namespace Producao.Views.CentralModelos
             {
                 btnModeloFiada.Visibility = Visibility.Visible;
                 GBQtdFiadas.Visibility = Visibility.Visible;
+                btnDistribuicaoFiada.Visibility = Visibility.Visible;
             }
             /*else
             {
@@ -479,6 +482,275 @@ namespace Producao.Views.CentralModelos
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
+
+        private async void OnDistribuicaoFiadaClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                ModeloReceitaViewModel? vm = (ModeloReceitaViewModel)DataContext;
+
+                using ExcelEngine excelEngine = new ExcelEngine();
+                IApplication application = excelEngine.Excel;
+                application.DefaultVersion = ExcelVersion.Xlsx;
+                //Create a workbook
+                IWorkbook workbook = application.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+                worksheet.IsGridLinesVisible = false;
+
+                IStyle headerStyle;
+                IStyle bodyStyle;
+
+                bodyStyle = workbook.Styles.Add("BodyStyle");
+                bodyStyle.BeginUpdate();
+                bodyStyle.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Dashed;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Dashed;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Dashed;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Dashed;
+                bodyStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                bodyStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                bodyStyle.WrapText = true;
+                bodyStyle.EndUpdate();
+
+                headerStyle = workbook.Styles.Add("headerStyle");
+                headerStyle.BeginUpdate();
+                headerStyle.Color = Color.FromArgb(239, 243, 247);
+                headerStyle.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Dashed;
+                headerStyle.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Dashed;
+                headerStyle.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Dashed;
+                headerStyle.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Dashed;
+                headerStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                headerStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                headerStyle.Font.Bold = true;
+                headerStyle.WrapText = true;
+                headerStyle.EndUpdate();
+
+                var info = await Task.Run(() => vm.GetInfClienteAsync(Modelo.id_modelo));
+                
+                worksheet.Range["A1:B1"].Text = "SHOPPING";
+                worksheet.Range["A1:B1"].Merge();
+                worksheet.Range["A1:B1"].CellStyle = headerStyle;
+
+                worksheet.Range["C1:E1"].Text = info.sigla_serv;
+                worksheet.Range["C1:E1"].Merge();
+                worksheet.Range["C1:E1"].CellStyle = bodyStyle;
+
+                worksheet.Range["F1"].Text = "NÍVEL";
+                worksheet.Range["F1"].Merge();
+                worksheet.Range["F1"].CellStyle = headerStyle;
+
+                worksheet.Range["G1"].Text = info.nivel.ToString();
+                worksheet.Range["G1"].Merge();
+                worksheet.Range["G1"].CellStyle = bodyStyle;
+
+                worksheet.Range["H1"].Text = "MODELO";
+                worksheet.Range["H1"].Merge();
+                worksheet.Range["H1"].CellStyle = headerStyle;
+
+                worksheet.Range["I1"].Text = info.id_modelo.ToString();
+                worksheet.Range["I1"].Merge();
+                worksheet.Range["I1"].CellStyle = bodyStyle;
+
+                worksheet.Range["K1:O1"].Text = "MATERIAIS";
+                worksheet.Range["K1:O1"].Merge();
+                worksheet.Range["K1:O1"].CellStyle = headerStyle;
+
+                worksheet.Range["P1"].Text = "QTDE";
+                worksheet.Range["P1"].Merge();
+                worksheet.Range["P1"].CellStyle = headerStyle;
+
+                var produtos = await Task.Run(() => vm.GetDetalhesModeloAsync(Modelo.id_modelo));
+                for (int i = 0; i < produtos.Count; i++)
+                {
+                    var produto = produtos[i];
+                    worksheet.Range[$"K{(i+2)}:O{(i+2)}"].Text = produto.descricao_completa;
+                    worksheet.Range[$"K{(i+2)}:O{(i+2)}"].Merge();
+                    worksheet.Range[$"K{(i+2)}:O{(i+2)}"].CellStyle = bodyStyle;
+
+                    worksheet.Range[$"P{(i+2)}"].Text = produto.qtd.ToString();
+                    worksheet.Range[$"P{(i+2)}"].Merge();
+                    worksheet.Range[$"P{(i+2)}"].CellStyle = bodyStyle;
+                }
+
+                worksheet.Range["A2:B2"].Text = "TEMA";
+                worksheet.Range["A2:B2"].Merge();
+                worksheet.Range["A2:B2"].CellStyle = headerStyle;
+
+                worksheet.Range["C2:I2"].Text = info.tema;
+                worksheet.Range["C2:I2"].Merge();
+                worksheet.Range["C2:I2"].CellStyle = bodyStyle;
+
+
+                worksheet.Range["A3:B4"].Text = "LOCAL";
+                worksheet.Range["A3:B4"].Merge();
+                worksheet.Range["A3:B4"].CellStyle = headerStyle;
+
+                worksheet.Range["C3:F4"].Text = info.local_shoppings;
+                worksheet.Range["C3:F4"].Merge();
+                worksheet.Range["C3:F4"].CellStyle = bodyStyle;
+
+                worksheet.Range["G3"].Text = "QTD";
+                worksheet.Range["G3"].Merge();
+                worksheet.Range["G3"].CellStyle = headerStyle;
+
+                worksheet.Range["G4"].Text = info.qtd.ToString();
+                worksheet.Range["G4"].Merge();
+                worksheet.Range["G4"].CellStyle = bodyStyle;
+
+                worksheet.Range["H3:I3"].Text = "CÓD.DET.COMPL";
+                worksheet.Range["H3:I3"].Merge();
+                worksheet.Range["H3:I3"].CellStyle = headerStyle;
+
+                worksheet.Range["H4:I4"].Text = info.coddetalhescompl.ToString();
+                worksheet.Range["H4:I4"].Merge();
+                worksheet.Range["H4:I4"].CellStyle = bodyStyle;
+
+                var modelos = await Task.Run(() => vm.GetModelosFiadaAsync(Modelo.id_modelo));
+                var index = 5;
+                for (int i = 0; i < modelos.Count; i++)
+                {
+                    var modelo = modelos[i];
+                    worksheet.Range[$"A{index}"].Text = modelo.modelofiada;
+                    worksheet.Range[$"A{index}"].Merge();
+                    worksheet.Range[$"A{index}"].CellStyle = headerStyle;
+
+                    worksheet.Range[$"B{index}"].Text = modelo.qtdmodelofiada.ToString();
+                    worksheet.Range[$"B{index}"].Merge();
+                    worksheet.Range[$"B{index}"].CellStyle = bodyStyle;
+
+                    worksheet.Range[$"C{index}:I{index}"].Text = "INFORME A DISTÂNCIA ENTRE OS ENFEITES.";
+                    worksheet.Range[$"C{index}:I{index}"].Merge();
+                    worksheet.Range[$"C{index}:I{index}"].CellStyle = bodyStyle;
+
+                    index++;
+                }
+
+                worksheet.Range[$"A{index}"].Text = "Nº O.S.";
+                worksheet.Range[$"A{index}"].Merge();
+                worksheet.Range[$"A{index}"].CellStyle = headerStyle;
+
+                worksheet.Range[$"B{index}"].Text = info.num_os_servico.ToString();
+                worksheet.Range[$"B{index}"].Merge();
+                worksheet.Range[$"B{index}"].CellStyle = bodyStyle;
+
+                worksheet.Range[$"C{index}"].Text = "Nº REQ.";
+                worksheet.Range[$"C{index}"].Merge();
+                worksheet.Range[$"C{index}"].CellStyle = headerStyle;
+
+                var mumLetra = 68;
+                var requisicoes = await Task.Run(() => vm.GetRequisicoesAsync(info.num_os_servico));
+                for (int i = 0; i < requisicoes.Count; i++)
+                {
+                    char letra = (char)mumLetra;
+                    var requisicao = requisicoes[i];
+                    worksheet.Range[$"{letra}{index}"].Text = requisicao.num_requisicao.ToString();
+                    worksheet.Range[$"{letra}{index}"].Merge();
+                    worksheet.Range[$"{letra}{index}"].CellStyle = bodyStyle;
+                    mumLetra++;
+                }
+                index++;
+
+                worksheet.Range[$"A{index}:I{index+7}"].Text = "INSIRA AQUI AS OBSERVAÇÕES.";
+                worksheet.Range[$"A{index}:I{index+7}"].Merge();
+                worksheet.Range[$"A{index}:I{index+7}"].CellStyle = bodyStyle;
+
+                worksheet.Range[$"A{index+8}:I{index+8}"].Text = info.descricao_adicional;
+                worksheet.Range[$"A{index+8}:I{index+8}"].Merge();
+                worksheet.Range[$"A{index+8}:I{index+8}"].CellStyle = headerStyle;
+
+
+
+                /*
+                worksheet.Range["A1"].Text = $"{vm.Sigla.sigla_serv} CHECK LIST {BaseSettings.Database}";
+                worksheet.Range["A1"].CellStyle.Font.Bold = true;
+                worksheet.Range["A1"].CellStyle.Font.Size = 25;
+
+                worksheet.Range["A2"].Text = $"ITEM";
+                worksheet.Range["A2"].ColumnWidth = 5;
+
+                worksheet.Range["B2"].Text = $"LOCAL";
+                worksheet.Range["B2"].ColumnWidth = 20;
+
+                worksheet.Range["C2"].Text = $"FAMÍLIA DE PRODUTO PLANILHA";
+                worksheet.Range["C2"].ColumnWidth = 20;
+                worksheet.Range["C2"].WrapText = true;
+
+                worksheet.Range["D2"].Text = $"DESCRIÇÃO";
+                worksheet.Range["D2"].ColumnWidth = 45;
+                worksheet.Range["D2"].WrapText = true;
+
+                worksheet.Range["E2"].Text = $"UNID";
+                worksheet.Range["E2"].ColumnWidth = 5;
+
+                worksheet.Range["F2"].Text = $"QTDE";
+                worksheet.Range["F2"].ColumnWidth = 5;
+
+                worksheet.Range["G2"].Text = $"ORIENTAÇÃO DE MONTAGEM";
+                worksheet.Range["G2"].ColumnWidth = 30;
+
+                worksheet.Range["H2"].Text = $"COD DETALHES COMPL";
+                worksheet.Range["H2"].ColumnWidth = 10;
+                worksheet.Range["H2"].WrapText = true;
+
+                worksheet.Rows[1].CellStyle = bodyStyle;
+
+                var dados = await Task.Run(() => vm.GetChkGeralRelatorioAsync(vm.Sigla.id_aprovado));
+                worksheet.ImportData(dados, 3, 1, false);
+
+                worksheet.Range[$"A3:H{dados.Count + 2}"].CellStyle = headerStyle;
+
+                worksheet.Range[$"A3:A{dados.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                worksheet.Range[$"A3:A{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+
+                worksheet.Range[$"B3:B{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+
+                worksheet.Range[$"C3:C{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+
+                worksheet.Range[$"D3:D{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+
+                worksheet.Range[$"E3:E{dados.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                worksheet.Range[$"E3:E{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+
+                worksheet.Range[$"F3:G{dados.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                worksheet.Range[$"F3:G{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+
+                worksheet.Range[$"G3:G{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+
+                worksheet.Range[$"H3:H{dados.Count + 2}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                worksheet.Range[$"H3:H{dados.Count + 2}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                */
+
+
+
+                worksheet.PageSetup.PrintTitleColumns = "$A:$H";
+                worksheet.PageSetup.PrintTitleRows = "$1:$2";
+                worksheet.PageSetup.Orientation = ExcelPageOrientation.Landscape;
+                worksheet.PageSetup.LeftMargin = 0.0;
+                worksheet.PageSetup.RightMargin = 0.0;
+                worksheet.PageSetup.TopMargin = 0.0;
+                worksheet.PageSetup.BottomMargin = 0.5;
+                worksheet.PageSetup.RightFooter = "&P";
+                worksheet.PageSetup.LeftFooter = "&D";
+                //worksheet.PageSetup.CenterVertically = true;
+                worksheet.PageSetup.CenterHorizontally = true;
+
+                workbook.SaveAs("Impressos/DISTRIBUICAO_FIADA.xlsx");
+                Process.Start(new ProcessStartInfo("Impressos\\DISTRIBUICAO_FIADA.xlsx")
+                {
+                    UseShellExecute = true
+                });
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
     }
 
     public class ModeloReceitaViewModel : INotifyPropertyChanged
@@ -722,6 +994,70 @@ namespace Producao.Views.CentralModelos
             catch (Exception)
             {
                 transaction.Rollback();
+                throw;
+            }
+        }
+
+        public async Task<ExportEnfeitesInfClienteModel> GetInfClienteAsync(long? idmodelo)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.exportEnfeitesInfClientes
+                    .Where(c => c.id_modelo.Equals(idmodelo))
+                    .FirstOrDefaultAsync();
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ObservableCollection<DetalhesModeloModel>> GetDetalhesModeloAsync(long? idmodelo)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.DetalhesModelo
+                    .Where(c => c.id_modelo.Equals(idmodelo))
+                    .ToListAsync();
+                return new ObservableCollection<DetalhesModeloModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        
+        public async Task<ObservableCollection<ModeloFiadaModel>> GetModelosFiadaAsync(long? idmodelo)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.ModelosFiada
+                    .Where(c => c.id_modelo.Equals(idmodelo))
+                    .ToListAsync();
+                return new ObservableCollection<ModeloFiadaModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+         
+        public async Task<ObservableCollection<RequisicaoModel>> GetRequisicoesAsync(long? num_os_servico)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.Requisicoes
+                    .Where(c => c.num_os_servico.Equals(num_os_servico))
+                    .ToListAsync();
+                return new ObservableCollection<RequisicaoModel>(data);
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }

@@ -25,7 +25,7 @@
             CharCountVisibility="Collapsed" 
             HelperTextVisibility="Collapsed" Margin="5" >
 
-            <Syncfusion:IntegerTextBox UseNullOption="True" Value="{Binding Modelo.qtd_fiada_cascata}" TextAlignment="Center"/>
+            <Syncfusion:IntegerTextBox UseNullOption="True" Value="{Binding Modelo.qtd_fiada_cascata}" TextAlignment="Center" LostFocus="IntegerTextBox_LostFocus"/>
 
         </Syncfusion:SfTextInputLayout>
 
@@ -33,7 +33,7 @@
             Grid.Row="1" 
             ItemsSource="{Binding Path=ModeloFiada}" 
             AddNewRowPosition="Top" 
-            AutoGenerateColumns="False">
+            AutoGenerateColumns="False" AddNewRowInitiating="SfDataGrid_AddNewRowInitiating" RowValidating="SfDataGrid_RowValidating" RowValidated="SfDataGrid_RowValidated">
             <Syncfusion:SfDataGrid.Columns>
                 <Syncfusion:GridComboBoxColumn ItemsSource="{Binding Path=Modelos}" MappingName="modelofiada" ColumnSizer="AutoLastColumnFill" HeaderText="Modelo"/>
                 <Syncfusion:GridNumericColumn MappingName="qtdmodelofiada" HeaderText="qtd fiada" ColumnSizer="SizeToHeader" ParsingMode="Int" NumberDecimalDigits="0" AllowNullValue="True"/>

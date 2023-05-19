@@ -42,6 +42,7 @@
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridTextColumn MappingName="sigla"/>
                 <syncfusion:GridTextColumn MappingName="tema"/>
+                <syncfusion:GridTextColumn MappingName="local_shoppings"/>
                 <syncfusion:GridTextColumn MappingName="planilha"/>
                 <syncfusion:GridTextColumn MappingName="descricao_completa"/>
                 <syncfusion:GridTextColumn MappingName="item_memorial"/>

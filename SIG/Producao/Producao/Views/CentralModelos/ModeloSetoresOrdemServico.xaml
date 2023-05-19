@@ -33,20 +33,25 @@
             PreviewKeyDown="dgItens_PreviewKeyDown" 
             AllowEditing="True" 
             AddNewRowInitiating="dgItens_AddNewRowInitiating" 
-            AddNewRowPosition="None" 
-            CurrentCellDropDownSelectionChanged="dgItens_CurrentCellDropDownSelectionChanged">
+            AddNewRowPosition="Top" 
+            AllowDeleting="True"
+            CurrentCellDropDownSelectionChanged="dgItens_CurrentCellDropDownSelectionChanged" >
             <Syncfusion:SfDataGrid.Columns>
                 <Syncfusion:GridComboBoxColumn
                     ItemsSource="{Binding Setores}"
                     DisplayMemberPath="setor"
                     SelectedValuePath="codigo_setor"
                     HeaderText="SETOR" 
-                    ColumnSizer="AutoWithLastColumnFill" 
+                    ColumnSizer="SizeToHeader" 
                     MappingName="codigo_setor"/>
-                <Syncfusion:GridCheckBoxColumn 
+                <Syncfusion:GridTextColumn 
+                    HeaderText="OBSERVAÇÃO" 
+                    ColumnSizer="AutoWithLastColumnFill" 
+                    MappingName="observacao" TextWrapping="Wrap"/>
+                <!--<Syncfusion:GridCheckBoxColumn 
                     HeaderText="SELEÇÃO" 
                     ColumnSizer="SizeToHeader" 
-                    MappingName="selesao"/>
+                    MappingName="selesao"/>-->
             </Syncfusion:SfDataGrid.Columns>
         </Syncfusion:SfDataGrid>
 
@@ -59,7 +64,7 @@
             <!--<Button Content="ADICIONAR SETOR" Click="OnAddSetor"/>-->
             <Button Content="GERAR O.S" Click="OnCreateOrdemServico"/>
             <Separator Width="1"/>
-            <Button Content="IMPRIMIR O.S/REQUISIÇÃO" Click="OnPrintOS"/>
+            <Button Content="IMPRIMIR O.S/REQUISIÇÃO" Click="OnPrintOS" Visibility="Collapsed"/>
         </StatusBar>
 
     </Grid>

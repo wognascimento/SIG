@@ -253,9 +253,9 @@ namespace Expedicao.Views
                     streamWriter1.WriteLine($@"^FT10,1031^A0N,42,33^FB778,1,0,C^FH\^FD{(stringList5.Count >= 4 ? stringList5[3].Trim() : "")}^FS");
                     streamWriter1.WriteLine($@"^FT10,1083^A0N,42,33^FB778,1,0,C^FH\^FD{(stringList5.Count >= 5 ? stringList5[4].Trim() : "")}^FS");
                     streamWriter1.WriteLine($@"^FT14,1145^AAN,18,10^FB86,1,0,C^FH\^FDDET : ^FS");
-                    streamWriter1.WriteLine($@"^FT88,1160^A0N,42,38^FB95,1,0,C^FH\^FD10000^FS");
+                    streamWriter1.WriteLine($@"^FT88,1160^A0N,42,38^FB95,1,0,C^FH\^FD{etiquetaVolumeItemModel.CodDetalhesCompl}^FS");
                     streamWriter1.WriteLine($@"^FT216,1145^AAN,18,10^FH\^FDQUANTIDADE: ^FS");
-                    streamWriter1.WriteLine($@"^FT378,1160^A0N,42,38^FB76,1,0,C^FH\^FD1000^FS");
+                    streamWriter1.WriteLine($@"^FT378,1160^A0N,42,38^FB76,1,0,C^FH\^FD{etiquetaVolumeItemModel.QtdExpedida}^FS");
                 }
                 if (num2 == 2 || count == 1)
                 {

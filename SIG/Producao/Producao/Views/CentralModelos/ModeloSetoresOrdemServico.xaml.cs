@@ -40,36 +40,39 @@ namespace Producao.Views.CentralModelos
             
             try
             {
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.Setores = await Task.Run(vm.GetSetorsAsync);
-                vm.Itens = await Task.Run(() => vm.GetSetoresProdutoAsync(modeloControle.codcompladicional));
-                vm.Itens.Add(new HistoricoSetorModel { selesao = false });
-                vm.Itens.Add(new HistoricoSetorModel { selesao = false });
-                vm.Itens.Add(new HistoricoSetorModel { selesao = false });
-                vm.Itens.Add(new HistoricoSetorModel { selesao = false });
-                vm.Itens.Add(new HistoricoSetorModel { selesao = false });
-                vm.Itens.Add(new HistoricoSetorModel { selesao = false });
-                vm.Itens.Add(new HistoricoSetorModel { selesao = false });
-                vm.Itens.Add(new HistoricoSetorModel { selesao = false });
-                vm.Itens.Add(new HistoricoSetorModel { selesao = false });
-                vm.Itens.Add(new HistoricoSetorModel { selesao = false });
+                vm.Itens = new ObservableCollection<HistoricoSetorModel>();
+                //vm.Itens = await Task.Run(() => vm.GetSetoresProdutoAsync(modeloControle.codcompladicional));
+                //vm.Itens.Add(new HistoricoSetorModel { selesao = false });
+                //vm.Itens.Add(new HistoricoSetorModel { selesao = false });
+                //vm.Itens.Add(new HistoricoSetorModel { selesao = false });
+                //vm.Itens.Add(new HistoricoSetorModel { selesao = false });
+                //vm.Itens.Add(new HistoricoSetorModel { selesao = false });
+                //vm.Itens.Add(new HistoricoSetorModel { selesao = false });
+                //vm.Itens.Add(new HistoricoSetorModel { selesao = false });
+                //vm.Itens.Add(new HistoricoSetorModel { selesao = false });
+                //vm.Itens.Add(new HistoricoSetorModel { selesao = false });
+                //vm.Itens.Add(new HistoricoSetorModel { selesao = false });
 
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
 
         private void dgItens_CurrentCellDropDownSelectionChanged(object sender, CurrentCellDropDownSelectionChangedEventArgs e)
         {
+            /*
             var sfdatagrid = sender as SfDataGrid;
             int rowIndex = sfdatagrid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
             var record = sfdatagrid.View.Records[rowIndex].Data as HistoricoSetorModel;
             record.selesao = true;
             record.setor = ((SetorModel)e.SelectedItem).setor;
+            */
         }
 
         private void dgItens_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -108,7 +111,7 @@ namespace Producao.Views.CentralModelos
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 //ModeloSetoresOrdemServicoViewModel vm = (ModeloSetoresOrdemServicoViewModel)DataContext;
                 
                 var setor = false;
@@ -118,7 +121,7 @@ namespace Producao.Views.CentralModelos
                 if (setor == false) 
                 {
                     MessageBox.Show("Não foi selecionado nenhum setor", "Não é possível emitir Ordem de Serviço");
-                    ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                    //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                     Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     return;
                 }
@@ -127,21 +130,30 @@ namespace Producao.Views.CentralModelos
                 if (vm.Planilhas.Count == 0) 
                 {
                     MessageBox.Show("Não existe item na receita do modelo", "Não é possível emitir Ordem de Serviço");
-                    ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                    //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                     Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     return;
                 }
 
                 await Task.Run(() => vm.CreateOrdenServicoAsync(modeloControle));
 
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+
+                await Task.Run(ImprimpirRequisicao);
+                await Task.Run(ImprimpirOS);
+
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+                MessageBox.Show("OS E REQUISIÇÃO EMITIDAS E IMPRESSAS");
+                this.Close();
+
+                
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
@@ -186,6 +198,7 @@ namespace Producao.Views.CentralModelos
 
                     if (pagina == 1)
                     {
+                        worksheet.Range["E2"].Text = servico.cliente;
                         worksheet.Range["G2"].Text = servico.num_os_produto.ToString();
                         worksheet.Range["I2"].Text = servico.num_os_servico.ToString();
                         worksheet.Range["B4"].Text = servico.tipo;
@@ -217,9 +230,11 @@ namespace Producao.Views.CentralModelos
                             if (idexSetor == 17)
                                 break;
                         }
+                        //pagina++;
                     }
                     else if (pagina == 2)
                     {
+                        worksheet.Range["E30"].Text = servico.cliente;
                         worksheet.Range["G30"].Text = servico.num_os_produto.ToString();
                         worksheet.Range["I30"].Text = servico.num_os_servico.ToString();
                         worksheet.Range["B32"].Text = servico.tipo;
@@ -254,8 +269,11 @@ namespace Producao.Views.CentralModelos
                     }
 
                     pagina = 2;
+
+
                 }
-                worksheet.ShowRange(range, false);
+
+                //worksheet.ShowRange(range, false);
                 workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
                 worksheet.Clear();
                 workbook.Close();
@@ -282,9 +300,9 @@ namespace Producao.Views.CentralModelos
 
                 foreach (var re in requisicoes)
                 {
-                    vm.QryRequisicaoDetalhes = await Task.Run(() => vm.GetRequisicaoDetalhesAsync(re.num_requisicao));
+                    vm.ReqDetalhes = await Task.Run(() => vm.GetRequisicaoDetalhesAsync(re.num_requisicao));
 
-                    QryRequisicaoDetalheModel requi = (from r in vm.QryRequisicaoDetalhes select r).FirstOrDefault();
+                    ReqDetalhesModel requi = (from r in vm.ReqDetalhes select r).FirstOrDefault();
 
                     using ExcelEngine excelEngine = new ExcelEngine();
                     IApplication application = excelEngine.Excel;
@@ -302,7 +320,7 @@ namespace Producao.Views.CentralModelos
                     worksheet.Range["C6"].Text = requi?.num_os_servico.ToString();
                     worksheet.Range["F6"].Text = requi?.produtocompleto;
 
-                    var itens = (from i in vm.QryRequisicaoDetalhes where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade }).ToList();
+                    var itens = (from i in vm.ReqDetalhes where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade }).ToList();
                     var index = 9;
                     foreach (var item in itens)
                     {
@@ -315,16 +333,15 @@ namespace Producao.Views.CentralModelos
                         index++;
                     }
                     //workbook.SaveAs($"Impressos/REQUISICAO_{requi.num_requisicao}.xlsx");
-                    workbook.SaveAs(@"Impressos\REQUISICAO_MODELO.xlsx.xlsx");
+                    workbook.SaveAs(@$"Impressos\REQUISICAO_MODELO_{re.num_requisicao}.xlsx");
                     Process.Start(
-                    new ProcessStartInfo(@"Impressos\REQUISICAO_MODELO.xlsx.xlsx")
+                    new ProcessStartInfo(@$"Impressos\REQUISICAO_MODELO_{re.num_requisicao}.xlsx")
                     {
                         Verb = "Print",
                         UseShellExecute = true,
                     });
                     worksheet.Clear();
                     workbook.Close();
-
                 }
             }
             catch (Exception)
@@ -414,6 +431,14 @@ namespace Producao.Views.CentralModelos
         {
             get { return _qryRequisicaoDetalhes; }
             set { _qryRequisicaoDetalhes = value; RaisePropertyChanged("QryRequisicaoDetalhes"); }
+        }
+
+
+        private ObservableCollection<ReqDetalhesModel> _reqDetalhes;
+        public ObservableCollection<ReqDetalhesModel> ReqDetalhes
+        {
+            get { return _reqDetalhes; }
+            set { _reqDetalhes = value; RaisePropertyChanged("ReqDetalhes"); }
         }
 
         public async Task<ObservableCollection<HistoricoSetorModel>> GetSetoresProdutoAsync(long? codcompladicional)
@@ -520,7 +545,7 @@ namespace Producao.Views.CentralModelos
                         emitida_por = Environment.UserName,
                         emitida_data = DateTime.Now,
                         turno = "DIURNO",
-                        id_modelo = item.id_modelo
+                        id_modelo = item.id_modelo,
                     };
 
                     await db.ProdutoServicos.AddAsync(produtoServicoModel);
@@ -536,7 +561,7 @@ namespace Producao.Views.CentralModelos
                             {
                                 var requisicao = new RequisicaoModel { num_os_servico = produtoServicoModel.num_os_servico, data = DateTime.Now, alterado_por = Environment.UserName };
 
-                                await db.Requisicoes.AddAsync(requisicao);
+                                await db.Requisicoes.SingleMergeAsync(requisicao);
                                 await db.SaveChangesAsync();
 
                                 //adicinar requisicao
@@ -555,9 +580,10 @@ namespace Producao.Views.CentralModelos
                                         data = DateTime.Now,
                                         alterado_por = Environment.UserName
                                     };
-                                    await db.RequisicaoDetalhes.AddAsync(detReq);
+                                    await db.RequisicaoDetalhes.SingleMergeAsync(detReq);
+                                    await db.SaveChangesAsync();
                                 }
-                                throw new Exception("FORÇAR ERRO PARA NÃO CONCLUIR A TRANSAÇÃO");
+                                //throw new Exception("FORÇAR ERRO PARA NÃO CONCLUIR A TRANSAÇÃO");
                                 // IMPRIMIR REQUISIÇÃO
                             }
                         }
@@ -640,7 +666,11 @@ namespace Producao.Views.CentralModelos
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.QryRequisicaoDetalhes.Where(r => r.num_os_servico == num_os_servico).GroupBy(p => p.num_requisicao).Select(x => new Requisicao { num_requisicao = x.Key }).ToListAsync();
+                var data = await db.ReqDetalhes
+                    .Where(r => r.num_os_servico == num_os_servico)
+                    .GroupBy(p => p.num_requisicao)
+                    .Select(x => new Requisicao { num_requisicao = x.Key })
+                    .ToListAsync();
                 return new ObservableCollection<Requisicao>(data);
             }
             catch (Exception)
@@ -649,13 +679,13 @@ namespace Producao.Views.CentralModelos
             }
         }
 
-        public async Task<ObservableCollection<QryRequisicaoDetalheModel>> GetRequisicaoDetalhesAsync(long? num_requisicao)
+        public async Task<ObservableCollection<ReqDetalhesModel>> GetRequisicaoDetalhesAsync(long? num_requisicao)
         {
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.QryRequisicaoDetalhes.Where(r => r.num_requisicao == num_requisicao).ToListAsync();
-                return new ObservableCollection<QryRequisicaoDetalheModel>(data);
+                var data = await db.ReqDetalhes.Where(r => r.num_requisicao == num_requisicao).ToListAsync();
+                return new ObservableCollection<ReqDetalhesModel>(data);
             }
             catch (Exception)
             {
