@@ -40,6 +40,7 @@
             </syncfusion:SfDataGrid.RecordContextMenu>
 
             <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridDateTimeColumn MappingName="data_de_expedicao"/>
                 <syncfusion:GridTextColumn MappingName="sigla"/>
                 <syncfusion:GridTextColumn MappingName="tema"/>
                 <syncfusion:GridTextColumn MappingName="local_shoppings"/>

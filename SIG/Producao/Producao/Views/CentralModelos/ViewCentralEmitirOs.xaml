@@ -44,6 +44,10 @@
                     <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.TabelaPAExcel}}"
                               CommandParameter="{Binding}"
                               Header="Tabela P.A Excel" />
+
+                    <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.ReceitaControle}}"
+                              CommandParameter="{Binding}"
+                              Header="Receita Controle" />
                     
                 </ContextMenu>
             </syncfusion:SfDataGrid.RecordContextMenu>

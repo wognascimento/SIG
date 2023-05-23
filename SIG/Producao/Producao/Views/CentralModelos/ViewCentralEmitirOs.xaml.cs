@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Utility;
 using Syncfusion.XlsIO;
@@ -72,6 +73,13 @@ namespace Producao.Views.CentralModelos
             set { distribuicao = value; RaisePropertyChanged("Distribuicao"); }
         }
 
+        private ObservableCollection<ReqDetalhesModel> _reqDetalhes;
+        public ObservableCollection<ReqDetalhesModel> ReqDetalhes
+        {
+            get { return _reqDetalhes; }
+            set { _reqDetalhes = value; RaisePropertyChanged("ReqDetalhes"); }
+        }
+
         public async Task<ObservableCollection<ModeloControleOsModel>> GetItensAsync()
         {
             try
@@ -121,6 +129,34 @@ namespace Producao.Views.CentralModelos
                 using DatabaseContext db = new();
                 var data = await db.ProdutoServicos.Where(i => i.num_os_produto == num_os_produto).ToListAsync();
                 return new ObservableCollection<ProdutoServicoModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<QryModeloModel> GetModeloAsync(long? idModelo)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.qryModelos.Where(r => r.id_modelo == idModelo).FirstOrDefaultAsync();
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ObservableCollection<ReqDetalhesModel>> GetRequisicaoDetalServicohesAsync(long? num_os_produto)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.ReqDetalhes.Where(r => r.num_os_produto == num_os_produto && r.quantidade > 0).ToListAsync();
+                return new ObservableCollection<ReqDetalhesModel>(data);
             }
             catch (Exception)
             {
@@ -662,6 +698,96 @@ namespace Producao.Views.CentralModelos
 
                 Process.Start(new ProcessStartInfo("TABELA_PA.xlsx")
                 {
+                    UseShellExecute = true
+                });
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
+        static BaseCommand? receitaControle;
+        public static BaseCommand ReceitaControle
+        {
+            get
+            {
+                if (receitaControle == null)
+                    receitaControle = new BaseCommand(OnReceitaControleClicked);
+                return receitaControle;
+            }
+        }
+
+        private async static void OnReceitaControleClicked(object obj)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                var grid = ((GridRecordContextMenuInfo)obj).DataGrid;
+                var dados = grid.SelectedItem as ModeloControleOsModel;
+                ViewCentralEmitirOsViewModel vm = (ViewCentralEmitirOsViewModel)grid.DataContext;
+
+                QryModeloModel Modelo = await Task.Run(() => vm.GetModeloAsync(dados.id_modelo));
+                vm.ReqDetalhes = await Task.Run(() => vm.GetRequisicaoDetalServicohesAsync(dados.num_os_produto));
+
+                using ExcelEngine excelEngine = new ExcelEngine();
+                IApplication application = excelEngine.Excel;
+                application.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = application.Workbooks.Open("Modelos/RECEITA_CENTRAL_MODELO.xlsx");
+                IWorksheet worksheet = workbook.Worksheets[0];
+                worksheet.Range["A1"].Text = "CENTRAL DE MODELOS - CONTROLE";
+                worksheet.Range["C2"].Text = Modelo.id_modelo.ToString();
+                worksheet.Range["C3"].Text = Modelo.planilha;
+                worksheet.Range["C4"].Text = Modelo.descricao_completa;
+                worksheet.Range["C5"].Text = Modelo.tema;
+                worksheet.Range["A7"].Text = Modelo.obs_modelo;
+                worksheet.Range["H4"].Text = Modelo.multiplica.ToString();
+
+                var index = 9;
+
+                foreach (var item in vm.ReqDetalhes)
+                {
+                    worksheet.Range[$"A{index}"].Text = item.codcompladicional.ToString();
+                    worksheet.Range[$"A{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"A{index}"].CellStyle.Font.Size = 8;
+
+                    worksheet.Range[$"B{index}"].Text = item.planilha;
+                    worksheet.Range[$"B{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"B{index}"].CellStyle.Font.Size = 8;
+
+                    worksheet.Range[$"C{index}"].Text = item.descricao_completa;
+                    worksheet.Range[$"C{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"C{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"C{index}:E{index}"].Merge();
+                    worksheet.Range[$"C{index}:E{index}"].WrapText = true;
+
+                    worksheet.Range[$"F{index}"].Text = item.observacao;
+                    worksheet.Range[$"F{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"F{index}"].CellStyle.Font.Size = 8;
+                    //worksheet.Range[$"F{index}:G{index}"].Merge();
+                    worksheet.Range[$"F{index}"].WrapText = true;
+
+                    worksheet.Range[$"G{index}"].Text = "0";
+                    worksheet.Range[$"G{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"G{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"G{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+
+                    worksheet.Range[$"H{index}"].Text = item.quantidade.ToString();
+                    worksheet.Range[$"H{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"H{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"H{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                    index++;
+                }
+
+                workbook.SaveAs($"Impressos/RECEITA_CENTRAL_MODELO_{Modelo.id_modelo}.xlsx");
+                workbook.Close();
+
+                Process.Start(new ProcessStartInfo($"Impressos\\RECEITA_CENTRAL_MODELO_{Modelo.id_modelo}.xlsx")
+                {
+                    Verb = "Print",
                     UseShellExecute = true
                 });
 
