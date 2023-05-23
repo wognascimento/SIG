@@ -150,8 +150,8 @@ namespace Producao.Views.CentralModelos
             var record = ((GridRecordContextMenuInfo)obj).Record as ModeloControleOsModel;
             var grid = ((GridRecordContextMenuInfo)obj).DataGrid;
             var item = grid.SelectedItem as ModeloControleOsModel;
-            if (record?.qtd_chk_list > (int)(record?.qtd_os ?? 0))
-            {
+            //if (record?.qtd_chk_list > (int)(record?.qtd_os ?? 0))
+            //{
                 try
                 {
                     //var dif = (record?.qtd_chk_list - (int)(record?.qtd_os ?? 0));
@@ -178,11 +178,11 @@ namespace Producao.Views.CentralModelos
                     MessageBox.Show(ex.Message);
                 }
                
-            }
-            else
-            {
-                MessageBox.Show("Quantidade indisponivel para Gerar ordem de serviço.");
-            }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Quantidade indisponivel para Gerar ordem de serviço.");
+            //}
         }
 
 
@@ -466,9 +466,9 @@ namespace Producao.Views.CentralModelos
                     worksheet.Range[$"B{linha}"].CellStyle = bodyStyle;
                     worksheet.Range[$"C{linha}"].Number = (double)(dist?.qtd);
                     worksheet.Range[$"C{linha}"].CellStyle = bodyStyle;
-                    worksheet.Range[$"D{linha}"].Number = (double)dist.ponga;
+                    worksheet.Range[$"D{linha}"].Number = (double)dist.p;
                     worksheet.Range[$"D{linha}"].CellStyle = bodyStyle;
-                    worksheet.Range[$"E{linha}"].Number = (double)dist.tripe;
+                    worksheet.Range[$"E{linha}"].Number = (double)dist.t;
                     worksheet.Range[$"E{linha}"].CellStyle = bodyStyle;
                     worksheet.Range[$"F{linha}"].Text = dist.anel1.ToString();
                     worksheet.Range[$"F{linha}"].CellStyle = bodyStyle;

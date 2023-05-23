@@ -37,7 +37,7 @@ namespace Producao.Views.CentralModelos
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             vm = (ModeloSetoresOrdemServicoViewModel)DataContext;
-            
+
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
@@ -66,13 +66,18 @@ namespace Producao.Views.CentralModelos
 
         private void dgItens_CurrentCellDropDownSelectionChanged(object sender, CurrentCellDropDownSelectionChangedEventArgs e)
         {
-            /*
+            //CurrentAddItem = {Producao.HistoricoSetorModel}
             var sfdatagrid = sender as SfDataGrid;
             int rowIndex = sfdatagrid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
-            var record = sfdatagrid.View.Records[rowIndex].Data as HistoricoSetorModel;
+            HistoricoSetorModel? record;
+            if (rowIndex == -1)
+                record = sfdatagrid.View.CurrentAddItem as HistoricoSetorModel;
+            else
+                record = sfdatagrid.View.Records[rowIndex].Data as HistoricoSetorModel;
+
             record.selesao = true;
             record.setor = ((SetorModel)e.SelectedItem).setor;
-            */
+
         }
 
         private void dgItens_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -113,12 +118,12 @@ namespace Producao.Views.CentralModelos
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 //ModeloSetoresOrdemServicoViewModel vm = (ModeloSetoresOrdemServicoViewModel)DataContext;
-                
+
                 var setor = false;
                 foreach (var item in vm.Itens)
-                    if (item.selesao == true) setor = true; 
+                    if (item.selesao == true) setor = true;
 
-                if (setor == false) 
+                if (setor == false)
                 {
                     MessageBox.Show("Não foi selecionado nenhum setor", "Não é possível emitir Ordem de Serviço");
                     //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
@@ -127,7 +132,7 @@ namespace Producao.Views.CentralModelos
                 }
 
                 vm.Planilhas = await Task.Run(() => vm.GetPlanilasReceita(modeloControle.id_modelo));
-                if (vm.Planilhas.Count == 0) 
+                if (vm.Planilhas.Count == 0)
                 {
                     MessageBox.Show("Não existe item na receita do modelo", "Não é possível emitir Ordem de Serviço");
                     //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
@@ -141,13 +146,13 @@ namespace Producao.Views.CentralModelos
 
                 await Task.Run(ImprimpirRequisicao);
                 await Task.Run(ImprimpirOS);
-
+                
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
                 MessageBox.Show("OS E REQUISIÇÃO EMITIDAS E IMPRESSAS");
                 this.Close();
 
-                
+
 
             }
             catch (Exception ex)
@@ -298,6 +303,11 @@ namespace Producao.Views.CentralModelos
                 var servico = await Task.Run(() => vm.GetServicoRequisicao(vm.ProdutoOsModel.num_os_produto));
                 var requisicoes = await Task.Run(() => vm.GetRequisicaoAsync(servico.num_os_servico));
 
+                if (servico.setor_caminho.Contains("FITAS"))
+                {
+                    await Task.Run(() => OnPrintControle(servico.id_modelo, servico.num_os_servico));
+                }
+
                 foreach (var re in requisicoes)
                 {
                     vm.ReqDetalhes = await Task.Run(() => vm.GetRequisicaoDetalhesAsync(re.num_requisicao));
@@ -320,16 +330,26 @@ namespace Producao.Views.CentralModelos
                     worksheet.Range["C6"].Text = requi?.num_os_servico.ToString();
                     worksheet.Range["F6"].Text = requi?.produtocompleto;
 
-                    var itens = (from i in vm.ReqDetalhes where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade }).ToList();
+                    var itens = (from i in vm.ReqDetalhes where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade, i.observacao }).ToList();
                     var index = 9;
                     foreach (var item in itens)
                     {
                         worksheet.Range[$"A{index}"].Text = item.quantidade.ToString();
                         worksheet.Range[$"A{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                        worksheet.Range[$"B{index}"].Text = item.planilha;
+                        worksheet.Range[$"B{index}:D{index}"].Text = item.planilha;
+                        worksheet.Range[$"B{index}:D{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"B{index}:D{index}"].Merge();
+                        worksheet.Range[$"B{index}:D{index}"].WrapText = true;
                         worksheet.Range[$"E{index}"].Text = item.descricao_completa;
+                        worksheet.Range[$"E{index}:L{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"E{index}:L{index}"].Merge();
+                        worksheet.Range[$"E{index}:L{index}"].WrapText = true;
                         worksheet.Range[$"M{index}"].Text = item.unidade;
-                        worksheet.Range[$"M{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                        worksheet.Range[$"M{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"N{index}:O{index}"].Text = item.observacao;
+                        worksheet.Range[$"N{index}:O{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"N{index}:O{index}"].Merge();
+                        worksheet.Range[$"N{index}:O{index}"].WrapText = true;
                         index++;
                     }
                     //workbook.SaveAs($"Impressos/REQUISICAO_{requi.num_requisicao}.xlsx");
@@ -349,6 +369,78 @@ namespace Producao.Views.CentralModelos
                 throw;
             }
         }
+
+        private async Task OnPrintControle(long? idModelo, long? numServico)
+        {
+            try
+            {
+                QryModeloModel Modelo = await Task.Run(() => vm.GetModeloAsync(idModelo));
+                vm.ReqDetalhes = await Task.Run(() => vm.GetRequisicaoDetalServicohesAsync(numServico));
+
+                using ExcelEngine excelEngine = new ExcelEngine();
+                IApplication application = excelEngine.Excel;
+                application.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = application.Workbooks.Open("Modelos/RECEITA_CENTRAL_MODELO.xlsx");
+                IWorksheet worksheet = workbook.Worksheets[0];
+                worksheet.Range["A1"].Text = "CENTRAL DE MODELOS - CONTROLE";
+                worksheet.Range["C2"].Text = Modelo.id_modelo.ToString();
+                worksheet.Range["C3"].Text = Modelo.planilha;
+                worksheet.Range["C4"].Text = Modelo.descricao_completa;
+                worksheet.Range["C5"].Text = Modelo.tema;
+                worksheet.Range["A7"].Text = Modelo.obs_modelo;
+                worksheet.Range["H4"].Text = Modelo.multiplica.ToString();
+
+                var index = 9;
+
+                foreach (var item in vm.ReqDetalhes)
+                {
+                    worksheet.Range[$"A{index}"].Text = item.codcompladicional.ToString();
+                    worksheet.Range[$"A{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"A{index}"].CellStyle.Font.Size = 8;
+
+                    worksheet.Range[$"B{index}"].Text = item.planilha;
+                    worksheet.Range[$"B{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"B{index}"].CellStyle.Font.Size = 8;
+
+                    worksheet.Range[$"C{index}"].Text = item.descricao_completa;
+                    worksheet.Range[$"C{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"C{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"C{index}:E{index}"].Merge();
+                    worksheet.Range[$"C{index}:E{index}"].WrapText = true;
+
+                    worksheet.Range[$"F{index}"].Text = item.observacao;
+                    worksheet.Range[$"F{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"F{index}"].CellStyle.Font.Size = 8;
+                    //worksheet.Range[$"F{index}:G{index}"].Merge();
+                    worksheet.Range[$"F{index}"].WrapText = true;
+
+                    worksheet.Range[$"G{index}"].Text = "0";
+                    worksheet.Range[$"G{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"G{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"G{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+
+                    worksheet.Range[$"H{index}"].Text = item.quantidade.ToString();
+                    worksheet.Range[$"H{index}"].CellStyle.Font.FontName = "Arial";
+                    worksheet.Range[$"H{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"H{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                    index++;
+                }
+
+                workbook.SaveAs($"Impressos/RECEITA_CENTRAL_MODELO_{Modelo.id_modelo}.xlsx");
+                workbook.Close();
+
+                Process.Start(new ProcessStartInfo($"Impressos\\RECEITA_CENTRAL_MODELO_{Modelo.id_modelo}.xlsx")
+                {
+                    Verb = "Print",
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
     }
 
     public class ModeloSetoresOrdemServicoViewModel : INotifyPropertyChanged
@@ -478,7 +570,7 @@ namespace Producao.Views.CentralModelos
             if (Setores.Count == 0)
                 throw new InvalidOperationException("Não existe setor para criar ordem de serviço.");
 
-            var quantidade = (modeloControle?.qtd_chk_list - (int)(modeloControle?.qtd_os ?? 0));
+            var quantidade = modeloControle?.qtd_chk_list; // (modeloControle?.qtd_chk_list - (int)(modeloControle?.qtd_os ?? 0));
 
             try
             {
@@ -557,7 +649,7 @@ namespace Producao.Views.CentralModelos
                     {
                         foreach (var planilha in Planilhas)
                         {
-                            if (planilha != "ESTOQUE FITAS")
+                            if (!planilha.Contains("FITAS"))
                             {
                                 var requisicao = new RequisicaoModel { num_os_servico = produtoServicoModel.num_os_servico, data = DateTime.Now, alterado_por = Environment.UserName };
 
@@ -685,6 +777,34 @@ namespace Producao.Views.CentralModelos
             {
                 using DatabaseContext db = new();
                 var data = await db.ReqDetalhes.Where(r => r.num_requisicao == num_requisicao).ToListAsync();
+                return new ObservableCollection<ReqDetalhesModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<QryModeloModel> GetModeloAsync(long? idModelo)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.qryModelos.Where(r => r.id_modelo == idModelo).FirstOrDefaultAsync();
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ObservableCollection<ReqDetalhesModel>> GetRequisicaoDetalServicohesAsync(long? num_os_servico)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.ReqDetalhes.Where(r => r.num_os_servico == num_os_servico && r.quantidade > 0).ToListAsync();
                 return new ObservableCollection<ReqDetalhesModel>(data);
             }
             catch (Exception)

@@ -157,7 +157,7 @@ namespace Producao.Views.CentralModelos
                     await db.Modelos.SingleMergeAsync(modelo);
                     await db.SaveChangesAsync();
 
-                    var historico = await db.HistoricosModelo.Where(c => c.codcompladicional_modelo == modelo.codcompladicional && c.idtema == idtema).ToListAsync();
+                    /*var historico = await db.HistoricosModelo.Where(c => c.codcompladicional_modelo == modelo.codcompladicional && c.idtema == idtema).ToListAsync();
                     foreach (HistoricoModelo item in historico)
                     {
                         var receita = new ModeloReceitaModel
@@ -171,7 +171,7 @@ namespace Producao.Views.CentralModelos
                         };
                         await db.ReceitaModelos.SingleMergeAsync(receita);
                         await db.SaveChangesAsync();
-                    }
+                    }*/
                     transaction.Commit();
 
                     return modelo;

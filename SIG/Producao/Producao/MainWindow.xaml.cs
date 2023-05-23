@@ -5,6 +5,7 @@ using Producao.Views.CadastroProduto;
 using Producao.Views.CentralModelos;
 using Producao.Views.CheckList;
 using Producao.Views.OrdemServico.Requisicao;
+using Producao.Views.OrdemServico.Servicos;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Windows.Tools.Controls;
 using SizeMode = Syncfusion.SfSkinManager.SizeMode;
@@ -265,6 +266,17 @@ namespace Producao
             DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1000.0, 800.0));
             DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
             this._mdi.CanMDIMaximize = true;
+            this._mdi.Items.Add(view);
+        }
+
+        private void OnEmitirOSServicoClick(object sender, RoutedEventArgs e)
+        {
+            EmissaoServico view = new();
+            DocumentContainer.SetHeader(view, "EMISSÃO DE O.S. DE SERVIÇO");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 800) / 2.0, (this._mdi.ActualHeight - 400) / 2.0, 800.0, 400));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
             this._mdi.Items.Add(view);
         }
     }

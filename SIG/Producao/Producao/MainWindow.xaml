@@ -42,7 +42,7 @@
             <!--<syncfusion:MenuItemAdv Header="Agenda Visita Técnica"/>-->
             <syncfusion:MenuItemAdv Header="Ordem de Serviço">
                 <syncfusion:MenuItemAdv Header="Serviço">
-                    <syncfusion:MenuItemAdv Header="Emitir"/>
+                    <syncfusion:MenuItemAdv Header="Emitir" Click="OnEmitirOSServicoClick"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Produção">
                     <syncfusion:MenuItemAdv Header="Solicitar"/>
