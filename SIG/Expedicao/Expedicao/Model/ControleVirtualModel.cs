@@ -12,6 +12,7 @@ namespace Expedicao
         public string? codvol { get; set; }
         public string? planilha { get; set; }
         public string? descricao_completa { get; set; }
+        public double? qtd_expedida { get; set; }
         public string? baia_virtual { get; set; }
     }
 }

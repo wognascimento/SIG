@@ -224,8 +224,8 @@ namespace Producao.Views.CentralModelos
             mod08.Value = null;
             mod09.Value = null;
             mod10.Value = null;
-            Receita = new QryReceitaDetalheCriadoModel();
-            txtPlanilha.Focus();
+            //Receita = new QryReceitaDetalheCriadoModel();
+            //txtPlanilha.Focus();
         }
 
         private async void OnAdicionarClick(object sender, RoutedEventArgs e)
@@ -258,8 +258,12 @@ namespace Producao.Views.CentralModelos
                     mod10 = (int?)mod10.Value,
                 };
                 vm.ModeloReceita = await Task.Run(() => vm.AddReceita(dados));
-                vm.ItensReceita = await Task.Run(() => vm.GetReceitaDetalhes(Modelo.id_modelo));
+
+                if (dados.id_linha == null)
+                    vm.ItensReceita = await Task.Run(() => vm.GetReceitaDetalhes(Modelo.id_modelo));
+
                 Limpar();
+                
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 

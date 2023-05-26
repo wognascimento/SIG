@@ -43,19 +43,20 @@
             <syncfusion:MenuItemAdv Header="Ordem de Serviço">
                 <syncfusion:MenuItemAdv Header="Serviço">
                     <syncfusion:MenuItemAdv Header="Emitir" Click="OnEmitirOSServicoClick"/>
+                    <syncfusion:MenuItemAdv Header="Emitidas" Click="OnEmitidasOSServicoClick"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Produção">
-                    <syncfusion:MenuItemAdv Header="Solicitar"/>
+                    <syncfusion:MenuItemAdv Header="Solicitar" Click="OnEmitirOSProdutoClick"/>
                     <syncfusion:MenuItemAdv Header="Emitir"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Desbaiamento"/>
                 <syncfusion:MenuItemAdv Header="Transformação"/>
                 <syncfusion:MenuItemAdv Header="Requisição">
                     <syncfusion:MenuItemAdv Header="Receita" Click="OnCreateReceitaRequisicao"/>
-                    <syncfusion:MenuItemAdv Header="Emitir"/>
-                    <syncfusion:MenuItemAdv Header="Alterar"/>
+                    <syncfusion:MenuItemAdv Header="Emitir" Click="OnRequisicaClick"/>
+                    <syncfusion:MenuItemAdv Header="Alterar" Click="OnAlterarRequisicoes"/>
                     <syncfusion:MenuItemAdv Header="Consultas">
-                        <syncfusion:MenuItemAdv Header="Todas"/>
+                        <syncfusion:MenuItemAdv Header="Emitidas" Click="OnRequisicoesEmitidas"/>
                     </syncfusion:MenuItemAdv>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Impedimento Checklist"/>

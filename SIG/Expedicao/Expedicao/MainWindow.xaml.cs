@@ -676,7 +676,7 @@ namespace Expedicao
 
                 using AppDatabase db = new();
 
-                IList<PendenciaExpedicaoModel> dados = await db.PendenciaExpedicaos.Where(f => f.qtd_expedida > 0 ).ToListAsync();
+                IList<PendenciaExpedicaoModel> dados = await db.PendenciaExpedicaos.ToListAsync();
                 ExcelImportDataOptions importDataOptions = new()
                 {
                     FirstRow = 1,

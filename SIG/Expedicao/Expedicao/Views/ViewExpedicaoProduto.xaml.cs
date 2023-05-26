@@ -137,17 +137,14 @@ namespace Expedicao.Views
 
         private async void Exped_CurrentCellValueChanged(object sender, CurrentCellValueChangedEventArgs e)
         {
-
             SfDataGrid grid = (SfDataGrid)sender;
             int columnindex = grid.ResolveToGridVisibleColumnIndex(e.RowColumnIndex.ColumnIndex);
             var column = grid.Columns[columnindex];
             if (column.GetType() == typeof(GridCheckBoxColumn) && column.MappingName == "BaiaVirtual")
             {
-  
                 try
                 {
                     var rowIndex = grid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
-
                     if (rowIndex == 0) 
                     {
                         var record = (ExpedModel)grid.View.Records[rowIndex].Data;
@@ -157,17 +154,13 @@ namespace Expedicao.Views
                         ExpedModel expedModel = await Task.Run(() => vm.AddExpedAsync(record));
                         Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     }
-
-
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                     Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
-
             }
-
         }
 
         private async void Exped_RowValidated(object sender, RowValidatedEventArgs e)

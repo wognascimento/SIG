@@ -330,26 +330,32 @@ namespace Producao.Views.CentralModelos
                     worksheet.Range["C6"].Text = requi?.num_os_servico.ToString();
                     worksheet.Range["F6"].Text = requi?.produtocompleto;
 
-                    var itens = (from i in vm.ReqDetalhes where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade, i.observacao }).ToList();
+                    var itens = (from i in vm.ReqDetalhes where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade, i.observacao, i.codcompladicional }).ToList();
                     var index = 9;
                     foreach (var item in itens)
                     {
                         worksheet.Range[$"A{index}"].Text = item.quantidade.ToString();
                         worksheet.Range[$"A{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                        worksheet.Range[$"B{index}:D{index}"].Text = item.planilha;
-                        worksheet.Range[$"B{index}:D{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                        worksheet.Range[$"B{index}:D{index}"].Merge();
-                        worksheet.Range[$"B{index}:D{index}"].WrapText = true;
-                        worksheet.Range[$"E{index}"].Text = item.descricao_completa;
-                        worksheet.Range[$"E{index}:L{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                        worksheet.Range[$"E{index}:L{index}"].Merge();
-                        worksheet.Range[$"E{index}:L{index}"].WrapText = true;
-                        worksheet.Range[$"M{index}"].Text = item.unidade;
-                        worksheet.Range[$"M{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                        worksheet.Range[$"N{index}:O{index}"].Text = item.observacao;
-                        worksheet.Range[$"N{index}:O{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                        worksheet.Range[$"N{index}:O{index}"].Merge();
-                        worksheet.Range[$"N{index}:O{index}"].WrapText = true;
+
+                        worksheet.Range[$"B{index}"].Text = item.codcompladicional.ToString();
+                        worksheet.Range[$"B{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+
+                        worksheet.Range[$"C{index}:E{index}"].Text = item.planilha;
+                        worksheet.Range[$"C{index}:E{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"C{index}:E{index}"].Merge();
+                        worksheet.Range[$"C{index}:E{index}"].WrapText = true;
+
+                        worksheet.Range[$"F{index}:K{index}"].Text = item.descricao_completa;
+                        worksheet.Range[$"F{index}:K{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"F{index}:K{index}"].Merge();
+                        worksheet.Range[$"F{index}:K{index}"].WrapText = true;
+
+                        worksheet.Range[$"L{index}"].Text = item.unidade;
+                        worksheet.Range[$"L{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"M{index}:N{index}"].Text = item.observacao;
+                        worksheet.Range[$"M{index}:N{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"M{index}:N{index}"].Merge();
+                        worksheet.Range[$"M{index}:N{index}"].WrapText = true;
                         index++;
                     }
                     //workbook.SaveAs($"Impressos/REQUISICAO_{requi.num_requisicao}.xlsx");

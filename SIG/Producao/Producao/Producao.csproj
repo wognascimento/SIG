@@ -29,6 +29,9 @@
     <None Remove="icones\icons8-impressão-80.png" />
     <None Remove="icones\icons8-lista-de-verificação-40.png" />
     <None Remove="icones\icons8-lista-de-verificação-80.png" />
+    <None Remove="icones\icons8-next-page-blue-ui-16.png" />
+    <None Remove="icones\icons8-next-page-blue-ui-32.png" />
+    <None Remove="icones\icons8-next-page-blue-ui-96.png" />
     <None Remove="icones\icons8-pesquisar-40.png" />
     <None Remove="icones\icons8-pesquisar-80.png" />
     <None Remove="icones\icons8-salvar-40.png" />
@@ -124,6 +127,9 @@
     <Resource Include="icones\icons8-impressão-80.png" />
     <Resource Include="icones\icons8-lista-de-verificação-40.png" />
     <Resource Include="icones\icons8-lista-de-verificação-80.png" />
+    <Resource Include="icones\icons8-next-page-blue-ui-16.png" />
+    <Resource Include="icones\icons8-next-page-blue-ui-32.png" />
+    <Resource Include="icones\icons8-next-page-blue-ui-96.png" />
     <Resource Include="icones\icons8-pesquisar-40.png" />
     <Resource Include="icones\icons8-pesquisar-80.png" />
     <Resource Include="icones\icons8-salvar-40.png" />

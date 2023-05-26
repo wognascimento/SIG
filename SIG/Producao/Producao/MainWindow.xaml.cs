@@ -4,6 +4,7 @@ using Producao.Views;
 using Producao.Views.CadastroProduto;
 using Producao.Views.CentralModelos;
 using Producao.Views.CheckList;
+using Producao.Views.OrdemServico.Produto;
 using Producao.Views.OrdemServico.Requisicao;
 using Producao.Views.OrdemServico.Servicos;
 using Syncfusion.SfSkinManager;
@@ -275,6 +276,61 @@ namespace Producao
             DocumentContainer.SetHeader(view, "EMISSÃO DE O.S. DE SERVIÇO");
             DocumentContainer.SetSizetoContentInMDI(view, true);
             DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 800) / 2.0, (this._mdi.ActualHeight - 400) / 2.0, 800.0, 400));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
+
+        private void OnEmitidasOSServicoClick(object sender, RoutedEventArgs e)
+        {
+            EmissaoServicoEmitidas view = new();
+            DocumentContainer.SetHeader(view, "O.S. DE SERVIÇO EMITIDAS");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000) / 2.0, (this._mdi.ActualHeight - 600) / 2.0, 1000, 600));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
+
+        private void OnAlterarRequisicoes(object sender, RoutedEventArgs e)
+        {
+            RequisicaoMaterialAlterar view = new();
+            DocumentContainer.SetHeader(view, "ALTERAR REQUISIÇÕES DE MATERIAL");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000) / 2.0, (this._mdi.ActualHeight - 600) / 2.0, 1000, 600));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
+
+        private void OnRequisicoesEmitidas(object sender, RoutedEventArgs e)
+        {
+            RequisicaoMaterialEmitidas view = new();
+            DocumentContainer.SetHeader(view, "REQUISIÇÕES DE MATERIAIS EMITIDAS");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000) / 2.0, (this._mdi.ActualHeight - 600) / 2.0, 1000, 600));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
+
+        private void OnRequisicaClick(object sender, RoutedEventArgs e)
+        {
+            RequisicaoMaterialEmitir view = new();
+            DocumentContainer.SetHeader(view, "EMITIR REQUISIÇÕES DE MATERIAL");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 250) / 2.0, (this._mdi.ActualHeight - 250.5) / 2.0, 250, 250.5));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
+
+        private void OnEmitirOSProdutoClick(object sender, RoutedEventArgs e)
+        {
+            SolicitacaoOrdemServicoProduto view = new();
+            DocumentContainer.SetHeader(view, "EMITIR ORDEM DE SERVIÇO DE PRODUTO");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000) / 2.0, (this._mdi.ActualHeight - 600) / 2.0, 1000, 600));
             //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
             this._mdi.CanMDIMaximize = false;
             this._mdi.Items.Add(view);

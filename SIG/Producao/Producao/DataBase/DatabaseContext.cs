@@ -29,6 +29,7 @@ namespace Producao
         public DbSet<RequisicaoModel> Requisicoes { get; set; }
         public DbSet<DetalheRequisicaoModel> RequisicaoDetalhes { get; set; }
         public DbSet<RequisicaoReceitaModel> RequisicaoReceitas { get; set; }
+        public DbSet<GeralRequisicaoProducaoModel> RequisicoesProducao { get; set; }
         public DbSet<QryRequisicaoDetalheModel> QryRequisicaoDetalhes { get; set; }
         public DbSet<ReqDetalhesModel> ReqDetalhes { get; set; }
         public DbSet<QryDescricao> Descricoes { get; set; }

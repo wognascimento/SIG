@@ -19,19 +19,18 @@ namespace Producao.Views.OrdemServico.Requisicao
     /// <summary>
     /// Lógica interna para RequisicaoMaterial.xaml
     /// </summary>
-    public partial class RequisicaoMaterial : Window
+    public partial class RequisicaoMaterialAlterar : UserControl
     {
         List<string> lVoltagem = new List<string>{"", "220V", "110V" };
         List<string> lLocalShopping = new List<string>{ "", "INTERNO", "EXTERNO" };
         bool dbClick;
 
-        public RequisicaoMaterial(object obj)
+        public RequisicaoMaterialAlterar()
         {
             InitializeComponent();
             DataContext = new RequisicaoViewModel();
 
             RequisicaoViewModel vm = (RequisicaoViewModel)DataContext;
-            vm.ProdutoServico = (ProdutoServicoModel)obj;
             
             //cbVoltagem.ItemsSource= lVoltagem;
             //cbLocalShopping.ItemsSource= lLocalShopping;
@@ -45,8 +44,6 @@ namespace Producao.Views.OrdemServico.Requisicao
 
                 RequisicaoViewModel vm = (RequisicaoViewModel)DataContext;
                 vm.Planilhas = await Task.Run(vm.GetPlanilhasAsync);
-                vm.Requisicao = await Task.Run(() => vm.GetRequisicaoAsync(vm.ProdutoServico.num_os_servico));
-                vm.QryRequisicaoDetalhes = await Task.Run(() => vm.GetRequisicaoDetalhesAsync(vm.Requisicao.num_requisicao));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
@@ -58,16 +55,6 @@ namespace Producao.Views.OrdemServico.Requisicao
 
         void Limpar()
         {
-            /*
-            tbCodproduto.Text = string.Empty;
-            txtPlanilha.SelectedItem = null;
-            txtDescricao.SelectedItem = null;
-            txtDescricaoAdicional.SelectedItem = null;
-            txtComplementoAdicional.SelectedItem = null;
-            txtQuantidade.Text = null;
-            txtPlanilha.Focus();
-            */
-
             tbCodproduto.Text = string.Empty;
             txtPlanilha.Text = string.Empty;
             txtPlanilha.SelectedItem = null;
@@ -79,7 +66,42 @@ namespace Producao.Views.OrdemServico.Requisicao
             txtComplementoAdicional.SelectedItem = null;
             txtQuantidade.Text = string.Empty;
             txtPlanilha.Focus();
+        }
 
+        private async void tbNumRequisicao_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                try
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                    string text = ((TextBox)sender).Text;
+                    RequisicaoViewModel vm = (RequisicaoViewModel)DataContext;
+                    //vm.Requisicao = await Task.Run(() => vm.GetByRequisicaoAsync(long.Parse(text)));
+                    
+                    vm.QryRequisicaoDetalhes = await Task.Run(() => vm.GetRequisicaoDetalhesAsync(long.Parse(text)));
+                    if (vm.QryRequisicaoDetalhes.Count == 0)
+                    {
+                        MessageBox.Show("Requisição não encontrado", "Busca de requisição");
+                        Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                        return;
+                    }
+
+
+
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+                catch (FormatException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+            }
         }
 
         private void OnLimparClick(object sender, RoutedEventArgs e)
@@ -158,35 +180,36 @@ namespace Producao.Views.OrdemServico.Requisicao
             }
         }
 
-        private void OnPrintClick(object sender, RoutedEventArgs e)
+        private async void OnPrintClick(object sender, RoutedEventArgs e)
         {
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-
                 RequisicaoViewModel vm = (RequisicaoViewModel)DataContext;
+                var numreq = long.Parse(tbNumRequisicao.Text);
+                vm.ReqDetalhes = await Task.Run(() => vm.GetByRequisicaoDetalhesAsync(numreq));
 
-                QryRequisicaoDetalheModel requi = (from r in vm.QryRequisicaoDetalhes select r).FirstOrDefault();
+                ReqDetalhesModel requi = (from r in vm.ReqDetalhes select r).FirstOrDefault();
 
                 using ExcelEngine excelEngine = new ExcelEngine();
                 IApplication application = excelEngine.Excel;
                 application.DefaultVersion = ExcelVersion.Xlsx;
                 IWorkbook workbook = application.Workbooks.Open("Modelos/REQUISICAO_MODELO.xlsx");
                 IWorksheet worksheet = workbook.Worksheets[0];
-                worksheet.Range["C2"].Text = requi.num_requisicao.ToString();
-                worksheet.Range["C3"].Text = requi.alterado_por;
-                worksheet.Range["G3"].Text = requi.setor_caminho;
-                worksheet.Range["C4"].Text = String.Format("{0:dd/MM/yyyy}", requi.data);  // "03/09/2008" //vm.Requisicao.data.ToString("MM/dd/yyyy");
-                worksheet.Range["G4"].Text = requi.cliente;
-                worksheet.Range["M4"].Text = requi.coddetalhescompl.ToString();
-                worksheet.Range["C5"].Text = requi.item_memorial;
-                worksheet.Range["G5"].Text = requi.tema;
-                worksheet.Range["C6"].Text = requi.num_os_servico.ToString();
-                worksheet.Range["F6"].Text = requi.produtocompleto;
+                worksheet.Range["C2"].Text = requi?.num_requisicao.ToString();
+                worksheet.Range["C3"].Text = requi?.alterado_por;
+                worksheet.Range["G3"].Text = requi?.setor_caminho;
+                worksheet.Range["C4"].Text = String.Format("{0:dd/MM/yyyy}", requi?.data);
+                worksheet.Range["G4"].Text = requi?.cliente;
+                worksheet.Range["M4"].Text = requi?.coddetalhescompl.ToString();
+                worksheet.Range["C5"].Text = requi?.item_memorial;
+                worksheet.Range["G5"].Text = requi?.tema;
+                worksheet.Range["C6"].Text = requi?.num_os_servico.ToString();
+                worksheet.Range["F6"].Text = requi?.produtocompleto;
 
-                var itens = (from i in vm.QryRequisicaoDetalhes where i.quantidade > 0  select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade, i.observacao, i.codcompladicional }).ToList(); //new { a.Name, a.Age }
+                var itens = (from i in vm.ReqDetalhes where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade, i.observacao, i.codcompladicional }).ToList();
                 var index = 9;
-                foreach (var item in itens) 
+                foreach (var item in itens)
                 {
                     worksheet.Range[$"A{index}"].Text = item.quantidade.ToString();
                     worksheet.Range[$"A{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
@@ -211,84 +234,28 @@ namespace Producao.Views.OrdemServico.Requisicao
                     worksheet.Range[$"M{index}:N{index}"].Merge();
                     worksheet.Range[$"M{index}:N{index}"].WrapText = true;
                     index++;
-                    //worksheet.Range["D1:E1"].Merge();
                 }
-
-                //ExcelImportDataOptions importDataOptions = new ExcelImportDataOptions();
-                //importDataOptions.FirstRow = 9;
-                //importDataOptions.IncludeHeader = false;
-                //importDataOptions.NestedDataLayoutOptions = ExcelNestedDataLayoutOptions.Merge;
-                //importDataOptions.NestedDataLayoutOptions = ExcelNestedDataLayoutOptions.Repeat;
-
-                //Import data from the nested collection.
-                //worksheet.ImportData(itens, importDataOptions);
-                //worksheet.ImportData(itens, 9, 1, false);
-
-                //Save the Excel document
-                workbook.SaveAs($"Impressos/REQUISICAO_{requi.num_requisicao}.xlsx");
-                Process.Start(new ProcessStartInfo($"Impressos\\REQUISICAO_{requi.num_requisicao}.xlsx")
+                //workbook.SaveAs($"Impressos/REQUISICAO_{requi.num_requisicao}.xlsx");
+                workbook.SaveAs(@$"Impressos\REQUISICAO_MODELO_{tbNumRequisicao.Text}.xlsx");
+                Process.Start(
+                new ProcessStartInfo(@$"Impressos\REQUISICAO_MODELO_{tbNumRequisicao.Text}.xlsx")
                 {
-                    UseShellExecute = true
+                    Verb = "Print",
+                    UseShellExecute = true,
                 });
+                worksheet.Clear();
+                workbook.Close();
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
-            }
-            
-        }
-        /*
-        private async void OnPlanilhaSelectedItemChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-
-            try
-            {
-                RequisicaoViewModel vm = (RequisicaoViewModel)DataContext;
-                if (!dbClick)
-                    await Task.Run(async () => await vm.GetProdutosAsync());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
 
-        private async void OnDescricaoSelectedItemChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            try
-            {
-                RequisicaoViewModel vm = (RequisicaoViewModel)DataContext;
-                if (!dbClick)
-                    await Task.Run(async () => await vm.GetDescAdicionaisAsync());
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private async void OnDescricaoAdicionalSelectedItemChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            try
-            {
-                RequisicaoViewModel vm = (RequisicaoViewModel)DataContext;
-                if (!dbClick)
-                    await Task.Run(async () => await vm.GetCompleAdicionaisAsync());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void OnComplementoAdicionalSelectedItemChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-
-        }
-        */
         private async void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             
@@ -531,5 +498,6 @@ namespace Producao.Views.OrdemServico.Requisicao
             tbCodproduto.Text = complemento?.codcompladicional.ToString();
             txtQuantidade.Focus();
         }
+
     }
 }

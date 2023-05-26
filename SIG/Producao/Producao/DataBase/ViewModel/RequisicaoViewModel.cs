@@ -1,12 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using iText.Commons.Actions.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace Producao
 {
@@ -130,6 +128,13 @@ namespace Producao
             set { _descricoes = value; RaisePropertyChanged("Descricoes"); }
         }
 
+        private ObservableCollection<ReqDetalhesModel> _reqDetalhes;
+        public ObservableCollection<ReqDetalhesModel> ReqDetalhes
+        {
+            get { return _reqDetalhes; }
+            set { _reqDetalhes = value; RaisePropertyChanged("ReqDetalhes"); }
+        }
+
         public RequisicaoViewModel()
         {
             /*
@@ -231,12 +236,26 @@ namespace Producao
             }
         }
 
+        public async Task<RequisicaoModel> GetByRequisicaoAsync(long? num_requisicao)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                return await db.Requisicoes.FindAsync(num_requisicao); //Where(r => r.num_os_servico == num_os_servico).FirstOrDefaultAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<RequisicaoModel> GetRequisicaoAsync(long? num_os_servico)
         {
             try
             {
                 using DatabaseContext db = new();
-                return await db.Requisicoes.Where(r => r.num_os_servico == num_os_servico).FirstOrDefaultAsync();
+                return await db.Requisicoes.OrderBy(u => u.num_requisicao).Where(r => r.num_os_servico == num_os_servico).LastOrDefaultAsync();
+                //await _context.TaskOrder.OrderBy(u => u.TaskOrderId).LastOrDefaultAsync();
             }
             catch (Exception)
             {
@@ -263,6 +282,20 @@ namespace Producao
             }
         }
 
+        public async Task<ObservableCollection<ReqDetalhesModel>> GetByRequisicaoDetalhesAsync(long? num_requisicao)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.ReqDetalhes.Where(r => r.num_requisicao == num_requisicao).ToListAsync();
+                return new ObservableCollection<ReqDetalhesModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<ObservableCollection<QryRequisicaoDetalheModel>> GetRequisicaoDetalhesAsync(long? num_requisicao)
         {
             try
@@ -276,6 +309,8 @@ namespace Producao
                 throw;
             }
         }
+
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propName)
