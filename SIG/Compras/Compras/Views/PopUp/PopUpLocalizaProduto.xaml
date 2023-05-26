@@ -30,7 +30,7 @@
             <TextBox 
                 x:Name="txtBusca"  />
         </syncfusion:SfTextInputLayout>
-        
+
         <syncfusion:SfDataGrid 
             x:Name="dataGrid"
             Grid.Row="1" 
@@ -48,15 +48,5 @@
                 <syncfusion:GridTextColumn MappingName="unidade" HeaderText="unid." ColumnSizer="SizeToHeader"/>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
-
-        <syncfusion:SfBusyIndicator 
-            x:Name="loading" 
-            Grid.Row="1" 
-            AnimationType="DotCircle" 
-            Header="Carregando..."/>
-
-
-
-
     </Grid>
 </UserControl>

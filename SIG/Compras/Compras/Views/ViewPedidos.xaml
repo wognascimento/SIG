@@ -37,15 +37,7 @@
                 </syncfusion:SfDataGrid.Columns>
             </syncfusion:SfDataGrid>
 
-            <syncfusion:SfBusyIndicator
-                x:Name="loading" 
-                Header="Carregando..." 
-                HorizontalAlignment="Center"
-                HorizontalContentAlignment="Center"
-                ViewboxHeight="100" 
-                ViewboxWidth="100" Background="White" Width="100" Height="200"  />
-
-            <Grid Grid.Column="2">
+        <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition />

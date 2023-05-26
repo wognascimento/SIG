@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Compras.Views.PopUp
 {
@@ -24,7 +25,7 @@ namespace Compras.Views.PopUp
             try
             {
                 SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
-
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 var solicitacao = new SolicitacaoMaterialModel
                 {
                     tipo = (string)tipo.SelectionBoxItem,
@@ -35,11 +36,11 @@ namespace Compras.Views.PopUp
 
                 vm.SolicitacaoMaterial =  await Task.Run(async () => await vm.CreateSolicitacaoMaterialAsync(solicitacao));
                 btnGrevar.IsEnabled= false;
-
-
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
 

@@ -1,22 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Syncfusion.Data;
-using Syncfusion.UI.Xaml.Grid;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Compras.Views
 {
@@ -35,22 +24,26 @@ namespace Compras.Views
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 ConsultaGerencialViewModel vm = (ConsultaGerencialViewModel)DataContext;
                 vm.Detalhes = await Task.Run(vm.GeDetalhesAsync);
 
+                /*
                 itens.Columns["inserido_por"].FilteredFrom = FilteredFrom.FilterRow;
                 itens.Columns["inserido_por"].FilterPredicates.Add(new FilterPredicate()
                 {
                     FilterType = FilterType.Equals,
                     FilterValue = vm.BaseSettings.Username
                 });
+                */
 
-                loading.Visibility = Visibility.Collapsed;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
-                loading.Visibility = Visibility.Collapsed;
             }
         }
 

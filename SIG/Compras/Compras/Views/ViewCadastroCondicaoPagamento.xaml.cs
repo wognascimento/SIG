@@ -26,12 +26,14 @@ namespace Compras.Views
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 CondicaoPagamentoViewModel vm = (CondicaoPagamentoViewModel)DataContext;
                 vm.CondicoesPagto = await Task.Run(vm.GetCondicoesAsync);
-                loading.Visibility = Visibility.Collapsed;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -40,22 +42,23 @@ namespace Compras.Views
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 CondicaoPagamentoViewModel vm = (CondicaoPagamentoViewModel)DataContext;
                 if(vm.CondicaoPagto == null)
                 {
                     vm.CondicaoPagto = new CondicaoPagtoModel();
-                    loading.Visibility = Visibility.Collapsed;
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     return;
                 }
 
-                loading.Visibility = Visibility.Visible;
                 vm.CondicoesPagtoPrcela = await Task.Run(() => vm.GetCondicoesParcelasAsync(vm.CondicaoPagto.id_cond_pagamento));
-                loading.Visibility = Visibility.Collapsed;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                loading.Visibility = Visibility.Collapsed;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
         bool usetransition = false;
@@ -63,7 +66,8 @@ namespace Compras.Views
         {
             try
             {
-                loading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 CondicaoPagamentoViewModel vm = (CondicaoPagamentoViewModel)DataContext;
                 CondicaoPagtoModel data = (CondicaoPagtoModel)e.RowData;
 
@@ -87,12 +91,12 @@ namespace Compras.Views
                         usetransition = false;
                     }));
                 }
-                loading.Visibility = Visibility.Collapsed;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                loading.Visibility = Visibility.Collapsed;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
 
@@ -113,17 +117,17 @@ namespace Compras.Views
         {
             try
             {
-                loading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 CondicaoPagamentoViewModel vm = (CondicaoPagamentoViewModel)DataContext;
                 CondicaoPagamentoParcelaModel data = (CondicaoPagamentoParcelaModel)e.RowData;
 
                 var dados = await Task.Run(async () => await vm.SaveParcelaCondicaoAsync(data));
-                loading.Visibility = Visibility.Collapsed;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                loading.Visibility = Visibility.Collapsed;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
 

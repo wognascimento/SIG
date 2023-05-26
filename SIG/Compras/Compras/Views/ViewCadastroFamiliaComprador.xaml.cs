@@ -33,11 +33,14 @@ namespace Compras.Views
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 FamiliaProdutoViewModel vm = (FamiliaProdutoViewModel)DataContext;
                 vm.FamiliasProduto = await Task.Run(vm.GetFamiliaProdutos);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -46,14 +49,17 @@ namespace Compras.Views
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 FamiliaProdutoViewModel vm = (FamiliaProdutoViewModel)DataContext;
                 FamiliaProdutoModel data = (FamiliaProdutoModel)e.RowData;
 
                 var dados = await Task.Run(async () => await vm.UpdateRespCompraAsync(data));
                 MessageBox.Show("Responsavel compras cadastrado!\nAs Solicitações para esta Família serão automaticamente alteradas.", "Resp compras");
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }

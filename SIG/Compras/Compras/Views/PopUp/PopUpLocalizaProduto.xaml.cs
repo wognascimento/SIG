@@ -1,18 +1,9 @@
 ﻿using Syncfusion.UI.Xaml.Grid;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Compras.Views.PopUp
 {
@@ -36,13 +27,15 @@ namespace Compras.Views.PopUp
             txtBusca.Focus();
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
                 vm.Descricoes = await Task.Run(async () => await vm.GetDescricoesAsync(vm.SolicitacaoMaterial.tipo));
-                loading.Visibility = Visibility.Collapsed;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -60,15 +53,22 @@ namespace Compras.Views.PopUp
 
         private void PerformSearch()
         {
-            if (this.dataGrid.SearchHelper.SearchText.Equals(this.txtBusca.Text))
-                return;
+            try
+            {
+                if (this.dataGrid.SearchHelper.SearchText.Equals(this.txtBusca.Text))
+                    return;
 
-            var text = txtBusca.Text;
-            //AllowCaseSensitiveSearch  - true -> improves the performance when search numeric fields.
-            this.dataGrid.SearchHelper.AllowCaseSensitiveSearch = true;
-            this.dataGrid.SearchHelper.SearchType = SearchType.Contains;
-            this.dataGrid.SearchHelper.AllowFiltering = true;
-            this.dataGrid.SearchHelper.Search(text);
+                var text = txtBusca.Text;
+                //AllowCaseSensitiveSearch  - true -> improves the performance when search numeric fields.
+                this.dataGrid.SearchHelper.AllowCaseSensitiveSearch = true;
+                this.dataGrid.SearchHelper.SearchType = SearchType.Contains;
+                this.dataGrid.SearchHelper.AllowFiltering = true;
+                this.dataGrid.SearchHelper.Search(text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void dataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)

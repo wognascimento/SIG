@@ -39,6 +39,8 @@ namespace Compras.Views
 
                 try
                 {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                     vm.Fornecedor = new Fornecedor();
                     using var brasilAPI = new BrasilAPI();
                     var response = await brasilAPI.CNPJ(cnpj);
@@ -52,6 +54,7 @@ namespace Compras.Views
                     estado.Text = response.UF.ToString();
                     telefone.Text = response.DDD_Telefone1;
                     apelido.Focus();
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
                 catch (BrasilAPIException ex)
                 {
@@ -68,6 +71,7 @@ namespace Compras.Views
                     Console.WriteLine(ex.URL);
 
                     MessageBox.Show(ex.Message);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
             }
         }
@@ -76,12 +80,15 @@ namespace Compras.Views
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 CadastroFornecedorViewModel vm = (CadastroFornecedorViewModel)DataContext;
                 vm.Fornecedor = new Fornecedor();
                 vm.Fornecedores = await Task.Run(vm.GetFornecedoresAsync);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -92,6 +99,7 @@ namespace Compras.Views
             {
                 try
                 {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                     var cep = ((TextBox)sender).Text; // "89010025";
                     using var brasilAPI = new BrasilAPI();
                     var cepResponse = await brasilAPI.CEP_V2(cep);
@@ -101,9 +109,11 @@ namespace Compras.Views
                     cidade.Text = cepResponse.City;
                     estado.Text = cepResponse.UF.ToString();
                     numero.Focus();
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
                 catch (BrasilAPIException ex)
                 {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     MessageBox.Show(ex.Message);
                 }
             }
@@ -115,7 +125,7 @@ namespace Compras.Views
             try
             {
                 //vm.SaveFornecedorTaskAsync();
-
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 await Task.Run(vm.SaveFornecedorTaskAsync);
                 vm.Fornecedor = new Fornecedor();
                 tipo.Focus();
@@ -123,15 +133,23 @@ namespace Compras.Views
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
 
         private void OnBtnNovo(object sender, RoutedEventArgs e)
         {
-            CadastroFornecedorViewModel vm = (CadastroFornecedorViewModel)DataContext;
-            vm.Fornecedor = new Fornecedor();
-            tipo.Focus();
+            try
+            {
+                CadastroFornecedorViewModel vm = (CadastroFornecedorViewModel)DataContext;
+                vm.Fornecedor = new Fornecedor();
+                tipo.Focus();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 

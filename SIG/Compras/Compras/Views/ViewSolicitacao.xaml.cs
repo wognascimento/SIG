@@ -29,23 +29,29 @@ namespace Compras.Views
 
         private void OnCriarSolicitacao(object sender, RoutedEventArgs e)
         {
-            var window = new Window();
-            window.Title = "CRIAR NOVA SOLICITAÇÃO";
-            window.Height = 150;
-            window.Width = 400;
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            window.WindowStyle = WindowStyle.ToolWindow;
-            window.ResizeMode = ResizeMode.NoResize;
-            window.Content = new PopUpNovaSolicitacao(this.DataContext);
-            window.ShowDialog();
-
-            SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
-            if(vm.SolicitacaoMaterial != null)
+            try
             {
-                IdSolicitacao.Text = vm.SolicitacaoMaterial.cod_solicitacao.ToString();
-                TipoSolicitacao.Text = vm.SolicitacaoMaterial.tipo;
-            }
+                var window = new Window();
+                window.Title = "CRIAR NOVA SOLICITAÇÃO";
+                window.Height = 150;
+                window.Width = 400;
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                window.WindowStyle = WindowStyle.ToolWindow;
+                window.ResizeMode = ResizeMode.NoResize;
+                window.Content = new PopUpNovaSolicitacao(this.DataContext);
+                window.ShowDialog();
 
+                SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
+                if (vm.SolicitacaoMaterial != null)
+                {
+                    IdSolicitacao.Text = vm.SolicitacaoMaterial.cod_solicitacao.ToString();
+                    TipoSolicitacao.Text = vm.SolicitacaoMaterial.tipo;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private async void OnIdSolicitacaoKeyDown(object sender, KeyEventArgs e)
@@ -57,6 +63,8 @@ namespace Compras.Views
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
                 vm.SolicitacaoMaterial.status_solicitacao = "ENVIADO";
                 vm.SolicitacaoMaterial.data_status = DateTime.Now;
@@ -68,10 +76,13 @@ namespace Compras.Views
                 btnExcluir.IsEnabled = false;
                 btnApagar.IsEnabled = false;
 
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
                 MessageBox.Show("Solicitação enviada para o compras", "Solicitação enviada", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -87,12 +98,15 @@ namespace Compras.Views
             try
             {
                 SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
-                vm.Planilhas = await Task.Run(async () => await vm.RelplansAsync());
-                vm.Status = await Task.Run(async () => await vm.GetStatusAsync());
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                vm.Planilhas = await Task.Run(vm.RelplansAsync);
+                vm.Status = await Task.Run(vm.GetStatusAsync);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -103,6 +117,8 @@ namespace Compras.Views
                 return;
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
                 switch (((ComboBoxAdv)sender).DisplayMemberPath)
                 {
@@ -130,10 +146,12 @@ namespace Compras.Views
                         if (vm.Compledicional != null)
                             unidade.Text = vm.Compledicional.unidade;
                         break;
-                }  
+                }
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
             
@@ -175,6 +193,8 @@ namespace Compras.Views
                     return;
                 }
 
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(vm.Descricao.planilha));
                 await Task.Run(() => vm.GetProdutoAsync(vm.Descricao.codigo));
 
@@ -193,9 +213,12 @@ namespace Compras.Views
                 txtQuantidade.Focus();
                 _BuscaProdutoCodgo = false;
 
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -220,6 +243,7 @@ namespace Compras.Views
 
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
                 var item = new SolicitacaoMaterialItemModel
                 {
@@ -265,10 +289,12 @@ namespace Compras.Views
                 await Task.Run(async () => await vm.InserirIntemTaskAsync(item));
                 vm.ItensSolicitado = await Task.Run(async () => await vm.GetItensSolicitadoAsync(vm.SolicitacaoMaterial.cod_solicitacao));
                 Limpar();
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -305,12 +331,17 @@ namespace Compras.Views
             {
                 try
                 {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                     await vm.ExcluirIntemTaskAsync(vm.ItemSolicitado.cod_item);
                     MessageBox.Show("Produto excluido da solicitação", "Item excluido",MessageBoxButton.OK ,MessageBoxImage.Information);
                     vm.ItensSolicitado = await Task.Run(async () => await vm.GetItensSolicitadoAsync(vm.SolicitacaoMaterial.cod_solicitacao));
+
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
                 catch (Exception ex)
                 {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     MessageBox.Show(ex.Message);
                 }
                 
@@ -324,6 +355,8 @@ namespace Compras.Views
                 if (IdSolicitacao.Text.Length == 0)
                     return;
 
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
                 long idSolicitacao = long.Parse(IdSolicitacao.Text);
                 vm.SolicitacaoMaterial = await Task.Run(async () => await vm.GetSolicitacaoMaterialAsync(idSolicitacao));
@@ -332,6 +365,7 @@ namespace Compras.Views
                     MessageBox.Show("Solicitação não encontrada!", "Solicitação");
                     IdSolicitacao.Text = string.Empty;
                     IdSolicitacao.Focus();
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     return;
                 }
                 IdSolicitacao.Text = vm.SolicitacaoMaterial?.cod_solicitacao.ToString();
@@ -344,12 +378,15 @@ namespace Compras.Views
                     //btnEditar.IsEnabled = false;
                     btnExcluir.IsEnabled = false;
                     btnApagar.IsEnabled = false;
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
                 vm.ItensSolicitado = await Task.Run(async () => await vm.GetItensSolicitadoAsync(idSolicitacao));
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -360,6 +397,8 @@ namespace Compras.Views
             {
                 try
                 {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                     SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
                     long idSolicitacao = long.Parse(IdSolicitacao.Text);
                     vm.SolicitacaoMaterial = await Task.Run(async () => await vm.GetSolicitacaoMaterialAsync(idSolicitacao));
@@ -373,12 +412,15 @@ namespace Compras.Views
                         //btnEditar.IsEnabled = false;
                         btnExcluir.IsEnabled = false;
                         btnApagar.IsEnabled = false;
+                        Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     }
                     vm.ItensSolicitado = await Task.Run(async () => await vm.GetItensSolicitadoAsync(idSolicitacao));
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
                 }
                 catch (Exception ex)
                 {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     MessageBox.Show(ex.Message);
                 }
             }
@@ -390,6 +432,8 @@ namespace Compras.Views
             {
                 if (e.Key == Key.Enter)
                 {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                     _BuscaProdutoCodgo = true;
                     SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
                     vm.Descricao = await Task.Run(() => vm.GetDescricaoAsync(Dispatcher.Invoke(() => TipoSolicitacao.Text), Dispatcher.Invoke(() => long.Parse(idProduto.Text))));
@@ -416,10 +460,12 @@ namespace Compras.Views
                     unidade.Text = vm.Compledicional.unidade;
                     txtQuantidade.Focus();
                     _BuscaProdutoCodgo = false;
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -431,12 +477,15 @@ namespace Compras.Views
                 if(idProduto.Text.Length == 0)
                     return;
 
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 _BuscaProdutoCodgo = true;
                 SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
                 vm.Descricao = await Task.Run(() => vm.GetDescricaoAsync(Dispatcher.Invoke(() => TipoSolicitacao.Text), Dispatcher.Invoke(() => long.Parse(idProduto.Text))));
                 if (vm.Descricao == null)
                 {
                     MessageBox.Show("Produto não encontrado");
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     return;
                 }
 
@@ -457,10 +506,12 @@ namespace Compras.Views
                 unidade.Text = vm.Compledicional.unidade;
                 txtQuantidade.Focus();
                 _BuscaProdutoCodgo = false;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -823,14 +874,14 @@ namespace Compras.Views
             }
         }
 
-        public async Task InserirIntemTaskAsync(SolicitacaoMaterialItemModel item)
+        public async Task<SolicitacaoMaterialItemModel> InserirIntemTaskAsync(SolicitacaoMaterialItemModel item)
         {
             try
             {
                 using DatabaseContext db = new();
                 db.SolicitacaoMateriaisItens.Add(item);
                 await db.SaveChangesAsync();
-                //return solicitacao;
+                return item;
             }
             catch (Exception)
             {
