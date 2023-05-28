@@ -212,6 +212,8 @@ namespace Producao.Views.OrdemServico.Produto
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 SolicitacaoOrdemServicoProdutoViewModel vm = (SolicitacaoOrdemServicoProdutoViewModel)DataContext;
                 string text = tbCodproduto.Text;
                 vm.Descricao = await Task.Run(() => vm.GetDescricaoAsync(long.Parse(text)));
@@ -234,16 +236,33 @@ namespace Producao.Views.OrdemServico.Produto
                 btnNovo.Visibility = Visibility.Visible;
                 btnCriar.Visibility = Visibility.Collapsed;
                 caminhos.Visibility = Visibility.Visible;
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
 
         private void OnCriarNovaOS(object sender, RoutedEventArgs e)
         {
+            btnNovo.Visibility = Visibility.Collapsed;
+            btnCriar.Visibility = Visibility.Visible;
+            caminhos.Visibility = Visibility.Collapsed;
 
+            cmbTipoOs.SelectedValue = null;
+            tbCodproduto.Text = null;
+            txtPlanilha.SelectedItem = null;
+            txtDescricao.SelectedItem = null;
+            txtDescricaoAdicional.SelectedItem = null;
+            txtComplementoAdicional.SelectedItem = null;
+            txtPlanilha.Text = null;
+            txtDescricao.Text = null;
+            txtDescricaoAdicional.Text = null;
+            txtComplementoAdicional.Text = null;
+            txtQuantidade.Text = null;
         }
 
         private void caminhos_AddNewRowInitiating(object sender, Syncfusion.UI.Xaml.Grid.AddNewRowInitiatingEventArgs e)
@@ -264,6 +283,7 @@ namespace Producao.Views.OrdemServico.Produto
                 data.solicitado_por = Environment.UserName;
                 data.solicitado_data = DateTime.Now;
                 vm.ObsOs = await Task.Run(() => vm.SaveProdutoOsAsync(data));
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {

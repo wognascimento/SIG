@@ -26,6 +26,7 @@ namespace Producao
         public DbSet<ProdutoServicoModel> ProdutoServicos { get; set; }
         public DbSet<OrdemServicoAbertaEmissaoAgrupadoModel> OrdemServicoAbertas { get; set; }
         public DbSet<OrdemServicoEmissaoAbertaForm> OrdemServicoEmissaoAbertas { get; set; }
+        public DbSet<AlteraSolicitacaoOsProducao> AlteraSolicitacaoOsProducaos { get; set; }
         public DbSet<RequisicaoModel> Requisicoes { get; set; }
         public DbSet<DetalheRequisicaoModel> RequisicaoDetalhes { get; set; }
         public DbSet<RequisicaoReceitaModel> RequisicaoReceitas { get; set; }

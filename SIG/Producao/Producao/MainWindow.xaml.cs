@@ -325,10 +325,32 @@ namespace Producao
             this._mdi.Items.Add(view);
         }
 
-        private void OnEmitirOSProdutoClick(object sender, RoutedEventArgs e)
+        private void OnSolicitarOSProdutoClick(object sender, RoutedEventArgs e)
         {
             SolicitacaoOrdemServicoProduto view = new();
+            DocumentContainer.SetHeader(view, "SOLICITAR ORDEM DE SERVIÇO DE PRODUTO");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000) / 2.0, (this._mdi.ActualHeight - 600) / 2.0, 1000, 600));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
+
+        private void OnEmitirOSProdutoClick(object sender, RoutedEventArgs e)
+        {
+            EmitirOrdemServicoProduto view = new();
             DocumentContainer.SetHeader(view, "EMITIR ORDEM DE SERVIÇO DE PRODUTO");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000) / 2.0, (this._mdi.ActualHeight - 768) / 2.0, 1000, 768));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
+
+        private void OnAlterarSolicitacaoOSProdutoClick(object sender, RoutedEventArgs e)
+        {
+            AlterarSolicitacaoOrdemServicoProduto view = new();
+            DocumentContainer.SetHeader(view, "ALTERAR SOLICITAR ORDEM DE SERVIÇO DE PRODUTO");
             DocumentContainer.SetSizetoContentInMDI(view, true);
             DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000) / 2.0, (this._mdi.ActualHeight - 600) / 2.0, 1000, 600));
             //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);

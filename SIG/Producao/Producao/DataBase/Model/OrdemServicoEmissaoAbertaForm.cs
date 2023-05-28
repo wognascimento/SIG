@@ -28,5 +28,6 @@ namespace Producao
         public string? complementoadicional { get; set; }
         public long? codigo_setor { get; set; }
         public long? num_os_servico {  get; set; }
+        public string? descricao_completa {  get; set; }
     }
 }

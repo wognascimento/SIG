@@ -38,7 +38,7 @@
                 <syncfusion:MenuItemAdv Header="Análise ShowRoom"/>
                 <syncfusion:MenuItemAdv Header="Pendência de Produção"/>
             </syncfusion:MenuItemAdv>
-            <syncfusion:MenuItemAdv Header="Relplan"/>
+            
             <!--<syncfusion:MenuItemAdv Header="Agenda Visita Técnica"/>-->
             <syncfusion:MenuItemAdv Header="Ordem de Serviço">
                 <syncfusion:MenuItemAdv Header="Serviço">
@@ -46,8 +46,9 @@
                     <syncfusion:MenuItemAdv Header="Emitidas" Click="OnEmitidasOSServicoClick"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Produção">
-                    <syncfusion:MenuItemAdv Header="Solicitar" Click="OnEmitirOSProdutoClick"/>
-                    <syncfusion:MenuItemAdv Header="Emitir"/>
+                    <syncfusion:MenuItemAdv Header="Solicitar" Click="OnSolicitarOSProdutoClick"/>
+                    <syncfusion:MenuItemAdv Header="Alterar Solicitação" Click="OnAlterarSolicitacaoOSProdutoClick"/>
+                    <syncfusion:MenuItemAdv Header="Emitir" Click="OnEmitirOSProdutoClick"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Desbaiamento"/>
                 <syncfusion:MenuItemAdv Header="Transformação"/>
@@ -90,6 +91,7 @@
 
 
             <syncfusion:MenuItemAdv Header="Produto">
+                <syncfusion:MenuItemAdv Header="Relplan"/>
                 <syncfusion:MenuItemAdv Header="Cadastro de Produto" Click="OnCadastroProduto"/>
                 <!--
                 <syncfusion:MenuItemAdv Header="Descrição"/>

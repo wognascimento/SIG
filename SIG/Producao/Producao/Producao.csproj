@@ -163,4 +163,11 @@
   <ItemGroup>
     <Resource Include="icones\icons8-detalhes-40.png" />
   </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Compile Update="Views\OrdemServico\Produto\AlterarSolicitacaoOrdemServicoProduto.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>
