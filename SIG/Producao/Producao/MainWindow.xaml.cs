@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
+using Microsoft.EntityFrameworkCore;
 using Producao.Views;
 using Producao.Views.CadastroProduto;
 using Producao.Views.CentralModelos;
@@ -7,8 +10,10 @@ using Producao.Views.CheckList;
 using Producao.Views.OrdemServico.Produto;
 using Producao.Views.OrdemServico.Requisicao;
 using Producao.Views.OrdemServico.Servicos;
+using Producao.Views.Planilha;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Windows.Tools.Controls;
+using Syncfusion.XlsIO;
 using SizeMode = Syncfusion.SfSkinManager.SizeMode;
 
 namespace Producao
@@ -355,6 +360,52 @@ namespace Producao
             DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000) / 2.0, (this._mdi.ActualHeight - 600) / 2.0, 1000, 600));
             //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
             this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
+
+        private async void OnPendenciaProducaoClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                using DatabaseContext db = new();
+                var data = await db.PendenciaProducaos.ToListAsync();
+
+                using ExcelEngine excelEngine = new ExcelEngine();
+                IApplication application = excelEngine.Excel;
+
+                application.DefaultVersion = ExcelVersion.Xlsx;
+
+                //Create a workbook
+                IWorkbook workbook = application.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+                //worksheet.IsGridLinesVisible = false;
+                worksheet.ImportData(data, 1, 1, true);
+
+                workbook.SaveAs("Impressos/PENDENCIA_PRODUCAO.xlsx");
+                Process.Start(new ProcessStartInfo("Impressos\\PENDENCIA_PRODUCAO.xlsx")
+                {
+                    UseShellExecute = true
+                });
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void ControleGrupoClick(object sender, RoutedEventArgs e)
+        {
+            ControleGrupo view = new();
+            DocumentContainer.SetHeader(view, "CONTROLE POR GRUPO");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1000.0, 800.0));
+            DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = true;
             this._mdi.Items.Add(view);
         }
     }
