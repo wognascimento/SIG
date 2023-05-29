@@ -70,6 +70,8 @@ namespace Producao.Views.OrdemServico.Produto
                     txtDescricaoAdicional.Text = vm.OrdemServico.descricao_adicional;
                     txtComplementoAdicional.Text = vm.OrdemServico.complementoadicional;
                     txtQuantidade.Focus();
+                    vm.ObsOSs = await Task.Run(() => vm.GetCaminhosOSAsync(long.Parse(text)));
+                    
 
                     Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
@@ -336,6 +338,19 @@ namespace Producao.Views.OrdemServico.Produto
             }
         }
 
+        public async Task<ObservableCollection<ObsOsModel>> GetCaminhosOSAsync(long num_os_produto)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.ObsOs.OrderBy(c => c.num_caminho).Where(c => c.num_os_produto == num_os_produto).ToListAsync();
+                return new ObservableCollection<ObsOsModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propName)
