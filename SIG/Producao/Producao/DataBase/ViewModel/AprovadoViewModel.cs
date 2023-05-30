@@ -4,10 +4,7 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Syncfusion.XlsIO.Implementation.Security;
-using System.Text;
 using System.Collections.ObjectModel;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Producao
 {

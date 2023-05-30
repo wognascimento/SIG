@@ -10,8 +10,17 @@
              Loaded="UserControl_Loaded">
 
     <Grid>
-        <Syncfusion:SfDataGrid Name="itens" ItemsSource="{Binding AprovadosList}" ColumnSizer="AutoLastColumnFill" AllowFiltering="True" AutoGenerateColumns="False"
-                           FrozenColumnCount="12" AllowResizingColumns="True" CurrentCellEndEdit="OnCurrentCellEndEdit" CurrentCellValueChanged="OnCurrentCellValueChanged">
+        <Syncfusion:SfDataGrid 
+            Name="itens" 
+            FontSize="10" FontFamily="Arial"
+            ItemsSource="{Binding Aprovados}" 
+            ColumnSizer="AutoLastColumnFill" 
+            AllowFiltering="True" AutoGenerateColumns="False"
+            FrozenColumnCount="12"
+            AllowResizingColumns="True" 
+            CurrentCellEndEdit="OnCurrentCellEndEdit" 
+            CurrentCellValueChanged="OnCurrentCellValueChanged" 
+            RowValidated="itens_RowValidated">
             <Syncfusion:SfDataGrid.Columns>
                 <Syncfusion:GridTextColumn HeaderText="Evento" MappingName="TipoEvento" ColumnSizer="SizeToCells"/>
                 <Syncfusion:GridNumericColumn MappingName="Ordem" NumberDecimalDigits="1" AllowEditing="True"/>

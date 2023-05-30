@@ -24,5 +24,20 @@ namespace Producao.Views.Planilha
         {
             InitializeComponent();
         }
+
+        private void OnCurrentCellValueChanged(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellValueChangedEventArgs e)
+        {
+
+        }
+
+        private void OnRowValidated(object sender, Syncfusion.UI.Xaml.Grid.RowValidatedEventArgs e)
+        {
+
+        }
+
+        private void OnRowValidating(object sender, Syncfusion.UI.Xaml.Grid.RowValidatingEventArgs e)
+        {
+
+        }
     }
 }

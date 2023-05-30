@@ -27,13 +27,11 @@
             AllowFiltering="True"
             ColumnSizer="AutoWithLastColumnFill"
             ItemsSource="{Binding ProdutosAdicionais}"
-            SelectedItem="{Binding ProdutoAdicional, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            CurrentCellDropDownSelectionChanged="OnCurrentCellDropDownSelectionChanged" 
+            SelectedItem="{Binding ProdutoAdicional, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             CurrentCellValueChanged="OnCurrentCellValueChanged" 
             FontSize="10" 
             RowValidated="OnRowValidated" 
-            RowValidating="OnRowValidating" 
-            AddNewRowInitiating="OnAddNewRowInitiating" >
+            RowValidating="OnRowValidating" >
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn
                         HeaderText="CÓDIGO" 

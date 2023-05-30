@@ -1,14 +1,18 @@
-﻿using Syncfusion.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Producao.Views.CadastroProduto;
+using Producao.Views.CentralModelos;
+using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using static Z.EntityFramework.Extensions.BatchUpdate;
+using System.Windows.Input;
 
 namespace Producao.Views
 {
@@ -22,20 +26,22 @@ namespace Producao.Views
         public ViewAprovado()
         {
             InitializeComponent();
-            this.DataContext = this;
+            this.DataContext = new ViewAprovadoViewModel();
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             try
             {
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
-                itens.ItemsSource = await Task.Run(async () => await new AprovadoViewModel().GetAprovados());
+                ViewAprovadoViewModel vm = (ViewAprovadoViewModel)DataContext;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                vm.Aprovados = await Task.Run(vm.GetAprovados);
                 //AprovadosList = await Task.Run(async () => await new AprovadoViewModel().GetAprovados());
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -45,7 +51,7 @@ namespace Producao.Views
             
         }
 
-        private async void OnCurrentCellValueChanged(object sender, CurrentCellValueChangedEventArgs e)
+        private void OnCurrentCellValueChanged(object sender, CurrentCellValueChangedEventArgs e)
         {
             /*
             SfDataGrid grid = sender as SfDataGrid;
@@ -118,5 +124,77 @@ namespace Producao.Views
             //MessageBox.Show("Changed data in a row : ");
 
         }
+
+        private async void itens_RowValidated(object sender, RowValidatedEventArgs e)
+        {
+            try
+            {
+                var sfdatagrid = sender as SfDataGrid;
+                ViewAprovadoViewModel vm = (ViewAprovadoViewModel)DataContext;
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                var record = sfdatagrid.View.CurrentEditItem as AprovadoModel;
+                await Task.Run(() => vm.SaveAsync(record));
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
+        }
+    }
+
+    public class ViewAprovadoViewModel : INotifyPropertyChanged
+    {
+        private AprovadoModel _aprovado;
+        public AprovadoModel Aprovado
+        {
+            get { return _aprovado; }
+            set { _aprovado = value; RaisePropertyChanged("Aprovado"); }
+        }
+        private ObservableCollection<AprovadoModel> _aprovados;
+        public ObservableCollection<AprovadoModel> Aprovados
+        {
+            get { return _aprovados; }
+            set { _aprovados = value; RaisePropertyChanged("Aprovados"); }
+        }
+
+        public async Task<ObservableCollection<AprovadoModel>> GetAprovados()
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.Aprovados.OrderBy(c => c.Ordem).ToListAsync();
+                return new ObservableCollection<AprovadoModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task SaveAsync(AprovadoModel aprovado)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                AprovadoModel found = await db.Aprovados.FindAsync(aprovado.IdAprovado);
+                db.Entry(found).CurrentValues.SetValues(aprovado);
+                await db.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propName)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
+
     }
 }
