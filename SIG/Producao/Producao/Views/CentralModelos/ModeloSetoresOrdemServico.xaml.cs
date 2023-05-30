@@ -198,6 +198,7 @@ namespace Producao.Views.CentralModelos
                     worksheet.ShowRange(range, false);
 
                 var pagina = 1;
+                var tot = 0;
                 foreach (var servico in servicos)
                 {
 
@@ -230,12 +231,25 @@ namespace Producao.Views.CentralModelos
                         var idexSetor = 9;
                         foreach (var setor in setores)
                         {
-                            worksheet.Range[$"G{idexSetor}"].Text = setor.setor_caminho_proximo;
+                            worksheet.Range[$"G{idexSetor}"].Text = setor.setor_caminho;
                             idexSetor++;
                             if (idexSetor == 17)
                                 break;
                         }
-                        //pagina++;
+                        pagina = 2;
+                        worksheet.ShowRange(range, false);
+                        workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
+                        tot++;
+
+                        if (tot == servicos.Count)
+                        {
+                            Process.Start(
+                            new ProcessStartInfo(@"Impressos\ORDEM_SERVICO_MODELO.xlsx")
+                            {
+                                Verb = "Print",
+                                UseShellExecute = true,
+                            });
+                        }
                     }
                     else if (pagina == 2)
                     {
@@ -266,20 +280,27 @@ namespace Producao.Views.CentralModelos
                         var idexSetor = 37;
                         foreach (var setor in setores)
                         {
-                            worksheet.Range[$"G{idexSetor}"].Text = setor.setor_caminho_proximo;
+                            worksheet.Range[$"G{idexSetor}"].Text = setor.setor_caminho;
                             idexSetor++;
                             if (idexSetor == 17)
                                 break;
                         }
                     }
 
-                    pagina = 2;
-
-
+                    pagina = 1;
+                    tot++;
+                    worksheet.ShowRange(range, true);
+                    workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
+                    Process.Start(
+                        new ProcessStartInfo(@"Impressos\ORDEM_SERVICO_MODELO.xlsx")
+                        {
+                            Verb = "Print",
+                            UseShellExecute = true,
+                        });
                 }
 
                 //worksheet.ShowRange(range, false);
-                workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
+                /*workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
                 worksheet.Clear();
                 workbook.Close();
 
@@ -289,6 +310,7 @@ namespace Producao.Views.CentralModelos
                         Verb = "Print",
                         UseShellExecute = true,
                     });
+                */
             }
             catch (Exception)
             {

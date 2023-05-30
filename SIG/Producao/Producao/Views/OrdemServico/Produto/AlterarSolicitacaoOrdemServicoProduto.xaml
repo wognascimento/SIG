@@ -208,6 +208,14 @@
 
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
+        <syncfusion:ButtonAdv 
+            Grid.Row="5"
+            Grid.Column="2"
+            SmallIcon="/icones/icons8-impressão-40.png" 
+            LargeIcon="/icones/icons8-impressão-80.png" 
+            SizeMode="Large" 
+            Label="IMPRIMIR" 
+            Click="OnPrintClick" Width="70" HorizontalContentAlignment="Left" HorizontalAlignment="Left" />
 
     </Grid>
 
