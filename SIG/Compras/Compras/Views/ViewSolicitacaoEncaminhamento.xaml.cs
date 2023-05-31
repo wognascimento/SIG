@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.Utility;
 using Syncfusion.XlsIO;
 using System;
 using System.Collections.Generic;
@@ -94,7 +96,7 @@ namespace Compras.Views
 
         private void OnDbClick(object sender, MouseButtonEventArgs e)
         {
-
+            /*
             try
             {
                 SolicitacaoEncaminhadaViewModel vm = (SolicitacaoEncaminhadaViewModel)DataContext;
@@ -135,11 +137,12 @@ namespace Compras.Views
             {
                 MessageBox.Show(ex.Message);
             }
+            */
         }
 
         private void SfDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            
             try
             {
                 SolicitacaoEncaminhadaViewModel vm = (SolicitacaoEncaminhadaViewModel)DataContext;
@@ -172,6 +175,7 @@ namespace Compras.Views
             {
                 MessageBox.Show(ex.Message);
             }
+            
         }
     }
 
@@ -273,5 +277,68 @@ namespace Compras.Views
 
         }
 
+    }
+
+    public static class ContextMenuCommands
+    {
+        static BaseCommand? addPedido;
+        public static BaseCommand AddPedido
+        {
+            get
+            {
+                if (addPedido == null)
+                    addPedido = new BaseCommand(OnAdicionarPedidoClicked);
+                return addPedido;
+            }
+        }
+        private static void OnAdicionarPedidoClicked(object obj)
+        {
+            var record = ((GridRecordContextMenuInfo)obj).Record as SolicitacaoEncaminhadaModel;
+            var grid = ((GridRecordContextMenuInfo)obj).DataGrid;
+            var item = grid.SelectedItem as SolicitacaoEncaminhadaModel;
+
+            try
+            {
+                SolicitacaoEncaminhadaViewModel vm = (SolicitacaoEncaminhadaViewModel)grid.DataContext;
+
+                var dados = (from t in vm.ItensMontarPedido where t.cod_item == vm.SolicitacaoEncaminhada.cod_item select t).ToList();
+                if (dados.Count > 0)
+                {
+                    MessageBox.Show("Item já presente no pedido", "Adicionar Item", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                vm.ItensMontarPedido.Add(
+                    new ItemPedidoFileModel
+                    {
+                        cod_item = vm.SolicitacaoEncaminhada.cod_item,
+                        codcompleadicional = vm.SolicitacaoEncaminhada.codcompleadicional,
+                        planilha = vm.SolicitacaoEncaminhada.planilha,
+                        descricao_completa = vm.SolicitacaoEncaminhada.descricao_completa,
+                        unidade = vm.SolicitacaoEncaminhada.unidade,
+                        quantidade = vm.SolicitacaoEncaminhada.quantidade
+                    });
+
+                vm.ItensPedido = (from t in vm.ItensMontarPedido
+                                  group t by new { t.codcompleadicional, t.planilha, t.descricao_completa, t.unidade }
+                             into grp
+                                  select new ItemPedidoFileModel
+                                  {
+                                      codcompleadicional = grp.Key.codcompleadicional,
+                                      planilha = grp.Key.planilha,
+                                      descricao_completa = grp.Key.descricao_completa,
+                                      unidade = grp.Key.unidade,
+                                      quantidade = grp.Sum(t => t.quantidade),
+                                      itens = JsonConvert.SerializeObject((from i in vm.ItensMontarPedido where i.codcompleadicional == grp.Key.codcompleadicional select new { i.cod_item }).ToList())
+                                  }).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+
+        }
     }
 }

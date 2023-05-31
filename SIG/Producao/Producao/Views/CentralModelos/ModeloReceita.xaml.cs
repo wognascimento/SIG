@@ -259,7 +259,7 @@ namespace Producao.Views.CentralModelos
                 };
                 vm.ModeloReceita = await Task.Run(() => vm.AddReceita(dados));
 
-                if (dados.id_linha == null)
+                if (Receita == null)
                     vm.ItensReceita = await Task.Run(() => vm.GetReceitaDetalhes(Modelo.id_modelo));
 
                 Limpar();

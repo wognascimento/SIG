@@ -145,7 +145,7 @@ namespace Expedicao.Views
                 try
                 {
                     var rowIndex = grid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
-                    if (rowIndex == 0) 
+                    if (rowIndex > -1) 
                     {
                         var record = (ExpedModel)grid.View.Records[rowIndex].Data;
                         var value = record.BaiaVirtual;
@@ -538,15 +538,13 @@ namespace Expedicao.Views
 
         public async Task<ExpedModel> AddExpedAsync(ExpedModel exped)
         {
-            ExpedModel expedModel;
             try
             {
                 using AppDatabase db = new();
-                db.Entry<ExpedModel>(exped).State = !exped.CodExped.HasValue ? EntityState.Added : EntityState.Modified;
-                int num = await db.SaveChangesAsync();
-                long? codExped = exped.CodExped;
-                expedModel = exped;
-                return expedModel;
+                //db.Entry<ExpedModel>(exped).State = !exped.CodExped.HasValue ? EntityState.Added : EntityState.Modified;
+                await db.Expeds.SingleMergeAsync(exped);
+                await db.SaveChangesAsync();
+                return exped;
             }
             catch (Exception)
             {

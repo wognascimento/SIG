@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Compras.Views" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:local="clr-namespace:Compras.Views" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
 
@@ -29,21 +30,32 @@
                 AutoGenerateColumns="false" 
                 AllowFiltering="True" 
                 AllowResizingColumns="True" FontSize="10" MouseDoubleClick="OnDbClick">
+
+
+                <syncfusion:SfDataGrid.RecordContextMenu>
+                    <ContextMenu Style="{x:Null}">
+
+                        <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.AddPedido}}"
+                              CommandParameter="{Binding}"
+                              Header="Adicionar ao Pedido."/>
+                    </ContextMenu>
+                </syncfusion:SfDataGrid.RecordContextMenu>
+                
                 <syncfusion:SfDataGrid.Columns>
                     <!--<syncfusion:GridNumericColumn MappingName="cod_item" NumberNegativePattern="0" NumberDecimalDigits="0"/>-->
-                    <syncfusion:GridNumericColumn MappingName="cod_solicitacao" NumberNegativePattern="0" NumberDecimalDigits="0"/>
-                    <syncfusion:GridTextColumn MappingName="resp_compra" HeaderText="compradora(o)"/>
-                    <syncfusion:GridTextColumn MappingName="familia"/>
-                    <syncfusion:GridTextColumn MappingName="planilha"/>
-                    <syncfusion:GridTextColumn MappingName="descricao_completa"/>
-                    <syncfusion:GridTextColumn MappingName="unidade" HeaderText="unid."/>
-                    <syncfusion:GridNumericColumn MappingName="quantidade" HeaderText="qtde."/>
-                    <syncfusion:GridNumericColumn MappingName="saldo_estoque" HeaderText="estoque"/>
-                    <syncfusion:GridTextColumn MappingName="obs_solicitacao" ColumnSizer="SizeToHeader"/>
-                    <syncfusion:GridDateTimeColumn MappingName="data_utilizacao" HeaderText="utilização"/>
-                    <syncfusion:GridTextColumn MappingName="tipo"/>
-                    <syncfusion:GridTextColumn MappingName="username" HeaderText="solicitante"/>
                     <syncfusion:GridDateTimeColumn MappingName="data_informado" HeaderText="data solicitado" Pattern="CustomPattern" CustomPattern="dd/M/yyyy HH:mm:ss"/>
+                    <syncfusion:GridTextColumn MappingName="descricao_completa"/>
+                    <syncfusion:GridNumericColumn MappingName="quantidade" HeaderText="qtde."/>
+                    <syncfusion:GridTextColumn MappingName="unidade" HeaderText="unid."/>
+                    <syncfusion:GridTextColumn MappingName="obs_solicitacao" ColumnSizer="SizeToHeader"/>
+                    <syncfusion:GridTextColumn MappingName="username" HeaderText="solicitante"/>
+                    <syncfusion:GridDateTimeColumn MappingName="data_utilizacao" HeaderText="utilização"/>
+                    <syncfusion:GridTextColumn MappingName="planilha"/>
+                    <syncfusion:GridTextColumn MappingName="resp_compra" HeaderText="compradora(o)"/>
+                    <syncfusion:GridNumericColumn MappingName="saldo_estoque" HeaderText="estoque"/>
+                    <syncfusion:GridNumericColumn MappingName="cod_solicitacao" NumberNegativePattern="0" NumberDecimalDigits="0"/>
+                    <syncfusion:GridTextColumn MappingName="familia"/>
+                    <syncfusion:GridTextColumn MappingName="tipo"/>
                     <syncfusion:GridTextColumn MappingName="prioridade"/>
                 </syncfusion:SfDataGrid.Columns>
             </syncfusion:SfDataGrid>

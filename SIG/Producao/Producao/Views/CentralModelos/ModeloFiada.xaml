@@ -33,7 +33,7 @@
             Grid.Row="1" 
             ItemsSource="{Binding Path=ModeloFiada}" 
             AddNewRowPosition="Top" 
-            AutoGenerateColumns="False" AddNewRowInitiating="SfDataGrid_AddNewRowInitiating" RowValidating="SfDataGrid_RowValidating" RowValidated="SfDataGrid_RowValidated">
+            AutoGenerateColumns="False" AddNewRowInitiating="SfDataGrid_AddNewRowInitiating" RowValidating="SfDataGrid_RowValidating" RowValidated="SfDataGrid_RowValidated" AllowEditing="True">
             <Syncfusion:SfDataGrid.Columns>
                 <Syncfusion:GridComboBoxColumn ItemsSource="{Binding Path=Modelos}" MappingName="modelofiada" ColumnSizer="AutoLastColumnFill" HeaderText="Modelo"/>
                 <Syncfusion:GridNumericColumn MappingName="qtdmodelofiada" HeaderText="qtd fiada" ColumnSizer="SizeToHeader" ParsingMode="Int" NumberDecimalDigits="0" AllowNullValue="True"/>

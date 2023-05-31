@@ -598,7 +598,7 @@ namespace Producao.Views.CentralModelos
             if (Setores.Count == 0)
                 throw new InvalidOperationException("Não existe setor para criar ordem de serviço.");
 
-            var quantidade = modeloControle?.qtd_chk_list; // (modeloControle?.qtd_chk_list - (int)(modeloControle?.qtd_os ?? 0));
+            var quantidade = (modeloControle?.qtd_chk_list - (int)(modeloControle?.qtd_os ?? 0));
 
             try
             {
