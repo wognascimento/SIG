@@ -1,18 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Compras
 {
-    [Keyless]
     [Table("qry_solicitacoes_encaminhadas", Schema = "compras")]
     public class SolicitacaoEncaminhadaModel
     {
+        [Key]
+        public long? cod_item {get ; set ; }
         public string? status_solicitacao {get ; set ; }
         public DateTime? data_entrega {get ; set ; }
         public string? almox_recebimento {get ; set ; }
@@ -45,7 +41,6 @@ namespace Compras
         public string? tipo {get ; set ; }
         public string? resp_compra {get ; set ; }
         public string? status_compra {get ; set ; }
-        public long? cod_item {get ; set ; }
         public long? codfornecedor {get ; set ; }
         public long? codempresa {get ; set ; }
         public long? codlocalcompra {get ; set ; }
@@ -77,6 +72,7 @@ namespace Compras
         public string? nomefantasia {get ; set ; }
         public string? orientacao_compra {get ; set ; }
         public string? orientacao_roteiro { get ; set ; }
+        public string? solicitante { get ; set ; }
         
     }
 }

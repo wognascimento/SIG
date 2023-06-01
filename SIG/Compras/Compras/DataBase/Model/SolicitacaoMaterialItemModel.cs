@@ -78,5 +78,6 @@ namespace Compras
         public string? classif {get ; set ;}
         public string? orientacao_compra {get ; set ;}
         public string? orientacao_roteiro { get; set; }
+        public string? solicitante { get; set; }
     }
 }

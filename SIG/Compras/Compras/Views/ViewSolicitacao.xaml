@@ -98,14 +98,25 @@
                     Width="260" 
                     CharCountVisibility="Collapsed" 
                     HelperTextVisibility="Collapsed">
-                    <syncfusion:ComboBoxAdv 
+                    <!--<syncfusion:ComboBoxAdv 
                         x:Name="cbPlanilha"
                         IsEditable="true"
                         AutoCompleteMode="Suggest"
                         ItemsSource="{Binding Planilhas}" 
                         SelectedItem="{Binding Planilha}"
                         DisplayMemberPath="planilha" 
-                        SelectionChanged="OnSelectionCombo"/>
+                        SelectionChanged="OnSelectionCombo"/>-->
+
+                    <syncfusion:SfTextBoxExt
+                        x:Name="txtPlanilha"
+                        SearchItemPath="planilha"
+                        ShowDropDownButton="False"
+                        AutoCompleteMode="SuggestAppend"
+                        ShowClearButton="True"
+                        AutoCompleteSource="{Binding Path=Planilhas}" 
+                        SelectedItemChanged="OnSelectedPlanilha" 
+                        ShowSuggestionsOnFocus="True"/>
+                    
                 </syncfusion:SfTextInputLayout>
 
                 <syncfusion:SfTextInputLayout 
@@ -116,7 +127,7 @@
                     Width="450" 
                     CharCountVisibility="Collapsed" 
                     HelperTextVisibility="Collapsed">
-                    <syncfusion:ComboBoxAdv 
+                    <!--<syncfusion:ComboBoxAdv 
                         x:Name="cbDescricao"
                         IsEditable="true"
                         AutoCompleteMode="Suggest"
@@ -124,7 +135,20 @@
                         SelectedItem="{Binding Produto}"
                         DisplayMemberPath="descricao" 
                         SelectedValuePath="codigo" 
-                        SelectionChanged="OnSelectionCombo"/>
+                        SelectionChanged="OnSelectionCombo"/>-->
+
+
+                    <syncfusion:SfTextBoxExt 
+                        x:Name="txtDescricao"
+                        ShowDropDownButton="False"
+                        SearchItemPath="descricao"
+                        AutoCompleteMode="SuggestAppend"
+                        ShowClearButton="True"
+                        AutoCompleteSource="{Binding Path=Produtos}"
+                        SelectedItemChanged="OnSelectedDescricao"
+                        ShowSuggestionsOnFocus="True"/>
+
+
                 </syncfusion:SfTextInputLayout>
 
             </StackPanel>
@@ -139,14 +163,25 @@
                     Width="260" 
                     CharCountVisibility="Collapsed" 
                     HelperTextVisibility="Collapsed">
-                    <syncfusion:ComboBoxAdv 
+                    <!--<syncfusion:ComboBoxAdv 
                         x:Name="cbDescricaoAdicional"
                         IsEditable="true"
                         AutoCompleteMode="Suggest"
                         ItemsSource="{Binding DescAdicionais}" 
                         SelectedItem="{Binding DescAdicional}"
                         DisplayMemberPath="descricao_adicional" 
-                        SelectionChanged="OnSelectionCombo"/>
+                        SelectionChanged="OnSelectionCombo"/>-->
+
+                    <syncfusion:SfTextBoxExt
+                        x:Name="txtDescricaoAdicional"
+                        ShowDropDownButton="False"
+                        SearchItemPath="descricao_adicional"
+                        AutoCompleteMode="SuggestAppend"
+                        ShowClearButton="True"
+                        AutoCompleteSource="{Binding Path=DescAdicionais}"
+                        SelectedItemChanged="OnSelectedDescricaoAdicional"
+                        ShowSuggestionsOnFocus="True"/>
+                    
                 </syncfusion:SfTextInputLayout>
 
                 <syncfusion:SfTextInputLayout 
@@ -157,14 +192,25 @@
                     Width="450" 
                     CharCountVisibility="Collapsed" 
                     HelperTextVisibility="Collapsed">
-                    <syncfusion:ComboBoxAdv 
+                    <!--<syncfusion:ComboBoxAdv 
                         x:Name="cbComplementoAdicional"
                         IsEditable="true"
                         AutoCompleteMode="Suggest"
                         ItemsSource="{Binding CompleAdicionais}" 
                         SelectedItem="{Binding Compledicional}"
                         DisplayMemberPath="complementoadicional" 
-                        SelectionChanged="OnSelectionCombo"/>
+                        SelectionChanged="OnSelectionCombo"/>-->
+
+                    <syncfusion:SfTextBoxExt 
+                        x:Name="txtComplementoAdicional"
+                        ShowDropDownButton="False"
+                        SearchItemPath="complementoadicional"
+                        AutoCompleteMode="SuggestAppend"
+                        ShowClearButton="True"
+                        AutoCompleteSource="{Binding Path=CompleAdicionais}"
+                        SelectedItemChanged="OnSelectedComplementoAdicional"
+                        ShowSuggestionsOnFocus="True"/>
+                    
                 </syncfusion:SfTextInputLayout>
 
                 <syncfusion:SfTextInputLayout 
@@ -223,6 +269,17 @@
                         DisplayMemberPath="status" />
                 </syncfusion:SfTextInputLayout>
 
+                <syncfusion:SfTextInputLayout 
+                    Margin="5,0,5,0"
+                    HintFloatMode="Float"
+                    Hint="SOLICITANTE"
+                     Width="370"
+                    InputViewPadding="5"
+                    CharCountVisibility="Collapsed"
+                    HelperTextVisibility="Collapsed">
+                    <TextBox x:Name="txtSolicitante" TextAlignment="Center" />
+                </syncfusion:SfTextInputLayout>
+
             </StackPanel>
 
             <syncfusion:SfTextInputLayout 
@@ -277,14 +334,14 @@
             ColumnSizer="AutoLastColumnFill" 
             AutoGenerateColumns="False">
             <syncfusion:SfDataGrid.Columns>
-                <syncfusion:GridTextColumn MappingName="familia"/>
-                <syncfusion:GridTextColumn MappingName="planilha"/>
+                <syncfusion:GridTextColumn MappingName="familia" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn MappingName="planilha" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn MappingName="descricao_completa"/>
-                <syncfusion:GridNumericColumn MappingName="qtde_solicitacao" HeaderText="qtde"/>
-                <syncfusion:GridTextColumn MappingName="unidade" HeaderText="unid."/>
-                <syncfusion:GridTextColumn MappingName="obs."/>
-                <syncfusion:GridDateTimeColumn MappingName="data_utilizacao" HeaderText="utilização"/>
-                <syncfusion:GridTextColumn MappingName="status"/>
+                <syncfusion:GridNumericColumn MappingName="qtde_solicitacao" HeaderText="qtde" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn MappingName="unidade" HeaderText="unid." ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn MappingName="obs." ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridDateTimeColumn MappingName="data_utilizacao" HeaderText="utilização" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn MappingName="status" ColumnSizer="SizeToHeader"/>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
 

@@ -29,7 +29,11 @@
                 ColumnSizer="AutoLastColumnFill" 
                 AutoGenerateColumns="false" 
                 AllowFiltering="True" 
-                AllowResizingColumns="True" FontSize="10" MouseDoubleClick="OnDbClick">
+                AllowDraggingColumns="True"
+                AllowResizingColumns="True" 
+                FontSize="10" 
+                FontFamily="Verdana"
+                MouseDoubleClick="OnDbClick" RowValidated="itensSolicitados_RowValidated">
 
 
                 <syncfusion:SfDataGrid.RecordContextMenu>
@@ -48,7 +52,9 @@
                     <syncfusion:GridNumericColumn MappingName="quantidade" HeaderText="qtde."/>
                     <syncfusion:GridTextColumn MappingName="unidade" HeaderText="unid."/>
                     <syncfusion:GridTextColumn MappingName="obs_solicitacao" ColumnSizer="SizeToHeader"/>
-                    <syncfusion:GridTextColumn MappingName="username" HeaderText="solicitante"/>
+                    <syncfusion:GridTextColumn MappingName="orientacao_compra" ColumnSizer="SizeToHeader" AllowEditing="True"/>
+                    <syncfusion:GridTextColumn MappingName="orientacao_roteiro" ColumnSizer="SizeToHeader" AllowEditing="True"/>
+                    <syncfusion:GridTextColumn MappingName="solicitante"/>
                     <syncfusion:GridDateTimeColumn MappingName="data_utilizacao" HeaderText="utilização"/>
                     <syncfusion:GridTextColumn MappingName="planilha"/>
                     <syncfusion:GridTextColumn MappingName="resp_compra" HeaderText="compradora(o)"/>
@@ -57,6 +63,7 @@
                     <syncfusion:GridTextColumn MappingName="familia"/>
                     <syncfusion:GridTextColumn MappingName="tipo"/>
                     <syncfusion:GridTextColumn MappingName="prioridade"/>
+                    <syncfusion:GridTextColumn MappingName="username" HeaderText="inserido_por"/>
                 </syncfusion:SfDataGrid.Columns>
             </syncfusion:SfDataGrid>
 

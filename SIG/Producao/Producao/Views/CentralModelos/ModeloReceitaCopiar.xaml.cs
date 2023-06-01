@@ -106,7 +106,7 @@ namespace Producao.Views.CentralModelos
             {
                 using DatabaseContext db = new();
                 var data = await db.HistoricoModeloCompletas
-                    .Where(c => c.planilha == Modelo.planilha && c.descricao == Modelo.descricao)
+                    //.Where(c => c.planilha == Modelo.planilha && c.descricao == Modelo.descricao)
                     .ToListAsync();
                 return new ObservableCollection<HistoricoModeloCompletaModel>(data);
             }

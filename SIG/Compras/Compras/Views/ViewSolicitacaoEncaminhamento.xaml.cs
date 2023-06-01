@@ -177,6 +177,25 @@ namespace Compras.Views
             }
             
         }
+
+        private async void itensSolicitados_RowValidated(object sender, RowValidatedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                SolicitacaoEncaminhadaViewModel vm = (SolicitacaoEncaminhadaViewModel)DataContext;
+                var sfdatagrid = sender as SfDataGrid;
+                //vm.SolicitacaoEncaminhada
+                SolicitacaoEncaminhadaModel data = (SolicitacaoEncaminhadaModel)e.RowData;
+                await Task.Run(() => vm.UpdateSolicitacaoEncaminhadaAsync(data));
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 
     public class SolicitacaoEncaminhadaViewModel : INotifyPropertyChanged
@@ -254,6 +273,21 @@ namespace Compras.Views
                 using DatabaseContext db = new();
                 var data = await db.SolicitacaoEncaminhadas.Where(e => e.tipo != "SERVIÇO").ToListAsync();
                 return new ObservableCollection<SolicitacaoEncaminhadaModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<SolicitacaoEncaminhadaModel> UpdateSolicitacaoEncaminhadaAsync(SolicitacaoEncaminhadaModel solicitacao)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                await db.SolicitacaoEncaminhadas.SingleUpdateAsync(solicitacao);
+                await db.SaveChangesAsync();
+                return solicitacao;
             }
             catch (Exception)
             {
