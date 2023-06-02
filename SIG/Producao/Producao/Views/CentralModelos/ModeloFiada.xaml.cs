@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
-using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.Windows.Shared;
 using System;
 using System.Collections.ObjectModel;
@@ -8,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Producao.Views.CentralModelos
 {
@@ -33,12 +32,15 @@ namespace Producao.Views.CentralModelos
 
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.ModeloFiada = await Task.Run(() => vm.GetModelosFiadaAsync(modelo));
-                
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -73,12 +75,15 @@ namespace Producao.Views.CentralModelos
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 ModeloFiadaViewModel vm = (ModeloFiadaViewModel)DataContext;
                 ModeloFiadaModel data = (ModeloFiadaModel)e.RowData;
                 data = await Task.Run(() => vm.SaveModelosFiadaAsync(data));
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -87,13 +92,16 @@ namespace Producao.Views.CentralModelos
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 var field = sender as IntegerTextBox;
                 var valor = Convert.ToInt32(field.Value);
                 ModeloFiadaViewModel vm = (ModeloFiadaViewModel)DataContext;
                 var dados = await Task.Run(() => vm.AddModeloAsync(modelo.id_modelo, valor));
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }

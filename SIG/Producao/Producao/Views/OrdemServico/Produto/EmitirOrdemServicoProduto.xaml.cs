@@ -308,17 +308,17 @@ namespace Producao.Views.OrdemServico.Produto
                             if (idexSetor == 17)
                                 break;
                         }
-                    }
-                    pagina = 1;
-                    tot++;
-                    worksheet.ShowRange(range, true);
-                    workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
-                    Process.Start(
-                        new ProcessStartInfo(@"Impressos\ORDEM_SERVICO_MODELO.xlsx")
-                        {
-                            Verb = "Print",
-                            UseShellExecute = true,
-                        });
+                        pagina = 1;
+                        tot++;
+                        worksheet.ShowRange(range, true);
+                        workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
+                        Process.Start(
+                            new ProcessStartInfo(@"Impressos\ORDEM_SERVICO_MODELO.xlsx")
+                            {
+                                Verb = "Print",
+                                UseShellExecute = true,
+                            });
+                    } 
                 }
 
                 //worksheet.ShowRange(range, false);

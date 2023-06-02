@@ -74,7 +74,7 @@
     <PackageReference Include="Microsoft.Data.Services.Client" Version="5.8.5" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
     <PackageReference Include="syncfusion.ui.wpf.net" Version="20.3.0.56" />
-    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="7.22.1" />
+    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="7.22.2" />
   </ItemGroup>
   
   

@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:Producao.Views.Planilha"
              xmlns:vewModel="clr-namespace:Producao"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
 
 
     <UserControl.Resources>
@@ -26,39 +26,47 @@
             AutoGenerateColumns="False"
             AllowFiltering="True"
             ColumnSizer="AutoWithLastColumnFill"
-            ItemsSource="{Binding ProdutosAdicionais}"
-            SelectedItem="{Binding ProdutoAdicional, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            ItemsSource="{Binding ControlePlanilhaGrupos}"
+            SelectedItem="{Binding ControlePlanilhaGrupo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             CurrentCellValueChanged="OnCurrentCellValueChanged" 
-            FontSize="10" 
+            FontFamily="Arial"
+            FontSize="9" 
             RowValidated="OnRowValidated" 
             RowValidating="OnRowValidating" >
             <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridTextColumn  MappingName="agrupamento"/>
+                <syncfusion:GridDateTimeColumn  MappingName="data_de_expedicao" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="caminhao" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="revisado" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="confirmado" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="planilha" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="Item" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="id" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="Local_shoppings" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="sigla" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="tema" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="descricao_completa"/>
                 <syncfusion:GridNumericColumn
-                        HeaderText="CÓDIGO" 
-                        MappingName="coduniadicional"
-                        DisplayBinding="{Binding coduniadicional, Converter={StaticResource ConverterNumber}}"/>
-                <syncfusion:GridTextColumn
-                        HeaderText="DESCRIÇÃO ADICIONAL" 
-                        MappingName="descricao_adicional"/>
+                        MappingName="qtd_detalhe"
+                        DisplayBinding="{Binding qtd_detalhe, Converter={StaticResource ConverterNumber}}"/>
+                <syncfusion:GridNumericColumn
+                        MappingName="qtd_complemento"
+                        DisplayBinding="{Binding qtd_complemento, Converter={StaticResource ConverterNumber}}"/>
+                <syncfusion:GridNumericColumn
+                        MappingName="qtd_exp"
+                        DisplayBinding="{Binding qtd_exp, Converter={StaticResource ConverterNumber}}"/>
+                <syncfusion:GridNumericColumn
+                        MappingName="codcompl"
+                        DisplayBinding="{Binding codcompl, Converter={StaticResource ConverterNumber}}"/>
+                <syncfusion:GridNumericColumn
+                        MappingName="coddetalhescompl"
+                        DisplayBinding="{Binding coddetalhescompl, Converter={StaticResource ConverterNumber}}"/>
                 <syncfusion:GridCheckBoxColumn
                         AllowEditing="True"
-                        HeaderText="INATIVO" 
-                        MappingName="inativo"
-                        DisplayBinding="{Binding inativo, Converter={StaticResource ConverterBoolen}}"
-                        ValueBinding="{Binding inativo, Converter={StaticResource ConverterBoolen}}" />
-                <syncfusion:GridTemplateColumn 
-                        HeaderText=""
-                        MappingName="coduniadicional" ColumnSizer="SizeToCells">
-                    <syncfusion:GridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Button 
-                                    Content="Complemento" 
-                                    syncfusion:FocusManagerHelper.FocusedElement="True"
-                                    Command="{Binding Path=DataContext.RowDataCommand,ElementName=adicionais}" 
-                                    CommandParameter="{Binding ElementName=adicionais}"/>
-                        </DataTemplate>
-                    </syncfusion:GridTemplateColumn.CellTemplate>
-                </syncfusion:GridTemplateColumn>
+                        MappingName="os"
+                        DisplayBinding="{Binding os, Converter={StaticResource ConverterBoolen}}"
+                        ValueBinding="{Binding os, Converter={StaticResource ConverterBoolen}}" />
+                
             </syncfusion:SfDataGrid.Columns>
 
 

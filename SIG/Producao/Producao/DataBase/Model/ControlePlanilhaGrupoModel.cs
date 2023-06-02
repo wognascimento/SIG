@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Producao
 {
-    [Keyless]
     [Table("view_controle_planilha_grupo", Schema = "producao")]
-    public class ControlePlanilhaGrupo
+    public class ControlePlanilhaGrupoModel
     {
+        [Key]
+        public long? coddetalhescompl { get; set; }
         public DateTime? data_de_expedicao { get; set; }
         public string? id { get; set; }
         public DateTime? fechamento_shopp { get; set; }
@@ -37,7 +38,6 @@ namespace Producao
         public string? orient_montagem { get; set; }
         public string? obs { get; set; }
         public long? codcompl { get; set; }
-        public long? coddetalhescompl { get; set; }
         public string? item { get; set; }
         public string? resp_cenas { get; set; }
         public string? resp_trilha { get; set; }
@@ -47,5 +47,6 @@ namespace Producao
         public string? resp_estruturas { get; set; }
         public string? tamanho_construcao { get; set; }
         public string? resp_prod { get; set; }
+        public string? descricao_completa { get; set; }
     }
 }

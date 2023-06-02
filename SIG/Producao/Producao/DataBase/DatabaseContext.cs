@@ -19,7 +19,7 @@ namespace Producao
         public DbSet<QryCheckListGeralComplementoModel> CheckListGeralComplementos { get; set; }
         public DbSet<ChkGeralRelatorioModel> ChkGeralRelatorios { get; set; }
         public DbSet<PendenciaProducaoModel> PendenciaProducaos { get; set; }
-        public DbSet<ControlePlanilhaGrupo> ControlePlanilhaGrupos { get; set; }
+        public DbSet<ControlePlanilhaGrupoModel> ControlePlanilhaGrupos { get; set; }
         public DbSet<SetorProducaoModel> SetorProducaos { get; set; }
         public DbSet<ObsOsModel> ObsOs { get; set; }
         public DbSet<TblServicoModel> tblServicos { get; set; }

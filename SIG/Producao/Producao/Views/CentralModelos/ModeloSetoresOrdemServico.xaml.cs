@@ -21,7 +21,6 @@ namespace Producao.Views.CentralModelos
     /// </summary>
     public partial class ModeloSetoresOrdemServico : Window
     {
-
         //private long? codcompladicional;
         private ModeloControleOsModel modeloControle;
         private ProdutoOsModel produtoOsModel;
@@ -227,7 +226,7 @@ namespace Producao.Views.CentralModelos
                         worksheet.Range["A23"].Text = servico.laco;
                         worksheet.Range["A25"].Text = servico.obs_iluminacao;
 
-                        var setores = await Task.Run(() => vm.GetServicos(modeloControle.num_os_produto));
+                        var setores = await Task.Run(() => vm.GetServicos(vm.ProdutoOsModel.num_os_produto));
                         var idexSetor = 9;
                         foreach (var setor in setores)
                         {
@@ -276,7 +275,7 @@ namespace Producao.Views.CentralModelos
                         worksheet.Range["A51"].Text = servico.laco;
                         worksheet.Range["A53"].Text = servico.obs_iluminacao;
 
-                        var setores = await Task.Run(() => vm.GetServicos(modeloControle.num_os_produto));
+                        var setores = await Task.Run(() => vm.GetServicos(vm.ProdutoOsModel.num_os_produto));
                         var idexSetor = 37;
                         foreach (var setor in setores)
                         {
@@ -285,18 +284,19 @@ namespace Producao.Views.CentralModelos
                             if (idexSetor == 17)
                                 break;
                         }
+                        pagina = 1;
+                        tot++;
+                        worksheet.ShowRange(range, true);
+                        workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
+                        Process.Start(
+                            new ProcessStartInfo(@"Impressos\ORDEM_SERVICO_MODELO.xlsx")
+                            {
+                                Verb = "Print",
+                                UseShellExecute = true,
+                            });
                     }
 
-                    pagina = 1;
-                    tot++;
-                    worksheet.ShowRange(range, true);
-                    workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
-                    Process.Start(
-                        new ProcessStartInfo(@"Impressos\ORDEM_SERVICO_MODELO.xlsx")
-                        {
-                            Verb = "Print",
-                            UseShellExecute = true,
-                        });
+                    
                 }
 
                 //worksheet.ShowRange(range, false);
@@ -641,7 +641,7 @@ namespace Producao.Views.CentralModelos
                     await db.SaveChangesAsync();
                 }
                 
-                var solictAberta = await db.OrdemServicoEmissaoAbertas.Where(o => o.num_os_produto == produtoOsModel.num_os_produto).ToListAsync();
+                var solictAberta = await db.OrdemServicoEmissaoAbertas.OrderBy(o => o.num_caminho).Where(o => o.num_os_produto == produtoOsModel.num_os_produto).ToListAsync();
                 for (int i = 0; i < solictAberta.Count; i++)
                 {
                     var item = solictAberta[i];

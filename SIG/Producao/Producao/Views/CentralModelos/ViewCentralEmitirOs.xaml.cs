@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Utility;
 using Syncfusion.XlsIO;
@@ -8,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -186,12 +186,12 @@ namespace Producao.Views.CentralModelos
             var record = ((GridRecordContextMenuInfo)obj).Record as ModeloControleOsModel;
             var grid = ((GridRecordContextMenuInfo)obj).DataGrid;
             var item = grid.SelectedItem as ModeloControleOsModel;
-            //if (record?.qtd_chk_list > (int)(record?.qtd_os ?? 0))
-            //{
+            if (record?.qtd_chk_list > (int)(record?.qtd_os ?? 0))
+            {
                 try
                 {
-                    //var dif = (record?.qtd_chk_list - (int)(record?.qtd_os ?? 0));
-                    var dif = record?.qtd_chk_list;
+                    var dif = (record?.qtd_chk_list - (int)(record?.qtd_os ?? 0));
+                    //var dif = record?.qtd_chk_list;
                     var window = new ModeloSetoresOrdemServico(record);
                     window.Owner = App.Current.MainWindow;
                     window.ShowDialog();
@@ -214,11 +214,11 @@ namespace Producao.Views.CentralModelos
                     MessageBox.Show(ex.Message);
                 }
                
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Quantidade indisponivel para Gerar ordem de serviço.");
-            //}
+            }
+            else
+            {
+                MessageBox.Show("Quantidade indisponivel para Gerar ordem de serviço.");
+            }
         }
 
 
@@ -234,6 +234,8 @@ namespace Producao.Views.CentralModelos
         }
         private async static void OnReimprimirOSClicked(object obj)
         {
+            Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
             var grid = ((GridRecordContextMenuInfo)obj).DataGrid;
             var item = grid.SelectedItem as ModeloControleOsModel;
             try
@@ -252,12 +254,12 @@ namespace Producao.Views.CentralModelos
                     worksheet.ShowRange(range, false);
                 
                 var pagina = 1;
+                var tot = 0;
                 foreach (var servico in servicos)
                 {
 
                     if (pagina == 1)
                     {
-                        
                         worksheet.Range["E2"].Text = servico.cliente;
                         worksheet.Range["G2"].Text = servico.num_os_produto.ToString();
                         worksheet.Range["I2"].Text = servico.num_os_servico.ToString();
@@ -285,10 +287,24 @@ namespace Producao.Views.CentralModelos
                         var idexSetor = 9;
                         foreach (var setor in setores)
                         {
-                            worksheet.Range[$"G{idexSetor}"].Text = setor.setor_caminho_proximo;
+                            worksheet.Range[$"G{idexSetor}"].Text = setor.setor_caminho;
                             idexSetor++;
                             if (idexSetor == 17)
                                 break;
+                        }
+                        pagina = 2;
+                        worksheet.ShowRange(range, false);
+                        workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
+                        tot++;
+
+                        if (tot == servicos.Count)
+                        {
+                            Process.Start(
+                            new ProcessStartInfo(@"Impressos\ORDEM_SERVICO_MODELO.xlsx")
+                            {
+                                Verb = "Print",
+                                UseShellExecute = true,
+                            });
                         }
                     }
                     else if (pagina == 2)
@@ -320,17 +336,30 @@ namespace Producao.Views.CentralModelos
                         var idexSetor = 37;
                         foreach (var setor in setores)
                         {
-                            worksheet.Range[$"G{idexSetor}"].Text = setor.setor_caminho_proximo;
+                            worksheet.Range[$"G{idexSetor}"].Text = setor.setor_caminho;
                             idexSetor++;
                             if (idexSetor == 17)
                                 break;
                         }
+                        pagina = 1;
+                        tot++;
+                        worksheet.ShowRange(range, true);
+                        workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
+                        Process.Start(
+                            new ProcessStartInfo(@"Impressos\ORDEM_SERVICO_MODELO.xlsx")
+                            {
+                                Verb = "Print",
+                                UseShellExecute = true,
+                            });
                     }
 
-                    pagina = 2;
+                    //pagina = 2;
                 }
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
                 //worksheet.ShowRange(range, false);
-                workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
+                /*workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
                 worksheet.Clear();
                 workbook.Close();
 
@@ -340,10 +369,12 @@ namespace Producao.Views.CentralModelos
                         Verb = "Print",
                         UseShellExecute = true,
                     });
+                */
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
             }
         }
 

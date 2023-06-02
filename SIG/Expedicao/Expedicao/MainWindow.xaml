@@ -44,6 +44,7 @@
                     <syncfusion:MenuItemAdv Header="Expedida por Dia" Click="OnCubagemDiaClick"/>
                     <syncfusion:MenuItemAdv Header="Semana Ano Anterior x Ano Atual" Click="OnCubagemSemanaAnosClick"/>
                     <syncfusion:MenuItemAdv Header="Prevista por Cliente" Click="OnCubagemPrevistaClienteClick"/>
+                    <syncfusion:MenuItemAdv Header="Prevista Cliente Zerada" Click="OnCubagemZeradaClienteClick"/>
                     <syncfusion:MenuItemAdv Header="Cliente Fracionada por Caminhão" Click="OnCubagemFracionadaCaminao"/>
                     <syncfusion:MenuItemAdv Header="Cliente Efetiva" Click="OnCubagemEfetivaClick"/>
                     <syncfusion:MenuItemAdv Header="Pendências Expedição" Click="OnPendenciaExpedicaoClick"/>

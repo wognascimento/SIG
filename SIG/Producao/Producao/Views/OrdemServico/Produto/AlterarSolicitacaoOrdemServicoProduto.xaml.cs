@@ -176,6 +176,8 @@ namespace Producao.Views.OrdemServico.Produto
         {
             try
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                 AlterarSolicitacaoOrdemServicoProdutoViewModel vm = (AlterarSolicitacaoOrdemServicoProdutoViewModel)DataContext;
                 using ExcelEngine excelEngine = new ExcelEngine();
                 IApplication application = excelEngine.Excel;
@@ -292,6 +294,8 @@ namespace Producao.Views.OrdemServico.Produto
                     }
                 }
 
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
                 //worksheet.ShowRange(range, false);
                 /*
                 workbook.SaveAs(@"Impressos\ORDEM_SERVICO_MODELO.xlsx");
@@ -306,9 +310,10 @@ namespace Producao.Views.OrdemServico.Produto
                     });
                 */
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
             }
         }
     }

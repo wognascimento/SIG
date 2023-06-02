@@ -287,20 +287,24 @@ namespace Producao.Views.CentralModelos
                     rowColumnIndex.RowIndex = this.dgModelos.SearchHelper.CurrentRowColumnIndex.RowIndex;
                     dgModelos.ScrollInView(rowColumnIndex);
                     this.dgModelos.SelectedItem = modelo;
-
-                    /*
-                    var modelo = (QryModeloModel)dgModelos.SelectedItem;
-                    if (modelo == null)
-                    {
-                        MessageBox.Show("Precisa selecionar um modelo para ir na Receita", "Receita");
-                        return;
-                    }
-                    */
-
-                    var window = new ModeloReceita(modelo);
-                    window.Owner = App.Current.MainWindow;
-                    window.ShowDialog();
                 }
+                else
+                {
+                    modelo = await Task.Run(() => vm.GetModelo(vm.Modelo.id_modelo));
+                    var found = vm.QryModelos.FirstOrDefault(x => x.id_modelo == modelo.id_modelo);
+                    int i = vm.QryModelos.IndexOf(found);
+                    vm.QryModelos[i] = modelo;
+
+                    //var item = vm?.QryModelos.FirstOrDefault(i => i.id_modelo == modelo.id_modelo);
+                    //item = modelo;
+
+                    //dgModelos.SelectedItem = modelo;
+                }
+
+                var window = new ModeloReceita(modelo);
+                window.Owner = App.Current.MainWindow;
+                window.ShowDialog();
+
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)

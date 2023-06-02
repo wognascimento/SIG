@@ -43,13 +43,15 @@ namespace Expedicao.Views
             try
             {
                 DataContext = new ExpedicaoProdutoViewModel();
-
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 ExpedicaoProdutoViewModel vm = (ExpedicaoProdutoViewModel)DataContext;
                 vm.Aprovados = await Task.Run(vm.GetAprovadosAsync);
                 vm.Medidas = await Task.Run(vm.GetMedidasAsync);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }

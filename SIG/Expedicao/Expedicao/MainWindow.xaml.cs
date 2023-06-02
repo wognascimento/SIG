@@ -744,5 +744,16 @@ namespace Expedicao
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
+
+        private void OnCubagemZeradaClienteClick(object sender, RoutedEventArgs e)
+        {
+            ViewCubagemClienteZerada expedicaoRomaneio = new();
+            DocumentContainer.SetHeader(expedicaoRomaneio, "CUBAGEM ZERADA CLIENTE");
+            DocumentContainer.SetSizetoContentInMDI(expedicaoRomaneio, true);
+            DocumentContainer.SetMDIBounds(expedicaoRomaneio, new Rect((this._dc.ActualWidth - 1024.0) / 2.0, (this._dc.ActualHeight - 780.0) / 2.0, 1024.0, 780.0));
+            DocumentContainer.SetMDIWindowState(expedicaoRomaneio, MDIWindowState.Maximized);
+            this._dc.CanMDIMaximize = true;
+            this._dc.Items.Add(expedicaoRomaneio);
+        }
     }
 }

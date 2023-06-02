@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Expedicao
 {
-    [Keyless]
     [Table("c_cubagem_prevista_cliente", Schema = "expedicao")]
     public class CubagemPrevistaClienteModel
     {
+        [Key]
+        public long? cod_linha_qdfecha {  get; set; }
         public string? sigla { get; set; }
         public string? sigla_serv { get; set; }
         public string? tema { get; set; }
