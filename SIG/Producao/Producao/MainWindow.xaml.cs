@@ -7,6 +7,7 @@ using Producao.Views;
 using Producao.Views.CadastroProduto;
 using Producao.Views.CentralModelos;
 using Producao.Views.CheckList;
+using Producao.Views.Estoque;
 using Producao.Views.OrdemServico.Produto;
 using Producao.Views.OrdemServico.Requisicao;
 using Producao.Views.OrdemServico.Servicos;
@@ -406,6 +407,28 @@ namespace Producao
             DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 800.0) / 2.0, 1000.0, 800.0));
             DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
             this._mdi.CanMDIMaximize = true;
+            this._mdi.Items.Add(view);
+        }
+
+        private void OnEntradaEstoqueClick(object sender, RoutedEventArgs e)
+        {
+            MovimentacaoEntrada view = new();
+            DocumentContainer.SetHeader(view, "MOVIMENTAÇÃO ENTRADA ESTOQUE");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1024.00) / 2.0, (this._mdi.ActualHeight - 768.00) / 2.0, 1024.00, 768.00));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
+
+        private void OnSaidaEstoqueClick(object sender, RoutedEventArgs e)
+        {
+            MovimentacaoSaida view = new();
+            DocumentContainer.SetHeader(view, "MOVIMENTAÇÃO SAÍDA ESTOQUE");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1024.00) / 2.0, (this._mdi.ActualHeight - 768.00) / 2.0, 1024.00, 768.00));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
             this._mdi.Items.Add(view);
         }
     }

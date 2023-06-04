@@ -110,8 +110,8 @@
                 <syncfusion:MenuItemAdv Header="Relatório Iventário"/>
                 <syncfusion:MenuItemAdv Header="CCE"/>
                 <syncfusion:MenuItemAdv Header="Movimentações">
-                    <syncfusion:MenuItemAdv Header="Entrada"/>
-                    <syncfusion:MenuItemAdv Header="Saida"/>
+                    <syncfusion:MenuItemAdv Header="Entrada" Click="OnEntradaEstoqueClick"/>
+                    <syncfusion:MenuItemAdv Header="Saida" Click="OnSaidaEstoqueClick"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Baixa de Requisição"/>
             </syncfusion:MenuItemAdv>

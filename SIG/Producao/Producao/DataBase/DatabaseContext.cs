@@ -63,6 +63,9 @@ namespace Producao
         public DbSet<TemaModel> Temas { get; set; }
         public DbSet<FamiliaProdModel> FamiliaProds { get; set; }
         public DbSet<HistoricoModeloCompletaModel> HistoricoModeloCompletas { get; set; }
+        public DbSet<EntradaEstoqueModel> Entradas { get; set; }
+        public DbSet<SaidaEstoqueModel> Saidas { get; set; }
+        public DbSet<ControleAcertoEstoque> ControleAcertoEstoques { get; set; }
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
