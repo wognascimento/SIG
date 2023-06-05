@@ -113,7 +113,7 @@
                     <syncfusion:MenuItemAdv Header="Entrada" Click="OnEntradaEstoqueClick"/>
                     <syncfusion:MenuItemAdv Header="Saida" Click="OnSaidaEstoqueClick"/>
                 </syncfusion:MenuItemAdv>
-                <syncfusion:MenuItemAdv Header="Baixa de Requisição"/>
+                <syncfusion:MenuItemAdv Header="Baixa de Requisição" Click="OnBaixaRequisicaoClick"/>
             </syncfusion:MenuItemAdv>
             
             

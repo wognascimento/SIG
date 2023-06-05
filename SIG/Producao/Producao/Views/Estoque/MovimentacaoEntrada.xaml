@@ -216,6 +216,7 @@
             AutoGenerateColumns="False" 
             AllowResizingColumns="True"
             AllowDraggingColumns="True"
+            AllowFiltering="True"
             ColumnSizer="AutoWithLastColumnFill"
             ShowRowHeader="True" 
             ItemsSource="{Binding Itens}">

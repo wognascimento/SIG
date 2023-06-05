@@ -173,11 +173,11 @@
                 CharCountVisibility="Collapsed" 
                 HelperTextVisibility="Collapsed">
 
-                <syncfusion:ComboBoxAdv/>
+                <syncfusion:ComboBoxAdv x:Name="procedencias" ItemsSource="{Binding Procedencias}"/>
 
             </syncfusion:SfTextInputLayout>
 
-            <CheckBox 
+            <CheckBox x:Name="processamento" 
                 Grid.Column="1" 
                 VerticalAlignment="Center" 
                 VerticalContentAlignment="Center" Margin="5">
@@ -216,27 +216,21 @@
             AutoGenerateColumns="False" 
             AllowResizingColumns="True"
             AllowDraggingColumns="True"
+            AllowFiltering="True"
             ColumnSizer="AutoWithLastColumnFill"
             ShowRowHeader="True" 
-            ItemsSource="{Binding QryRequisicaoDetalhes}"
-            MouseDoubleClick="OnMouseDoubleClick">
+            ItemsSource="{Binding Itens}">
             <syncfusion:SfDataGrid.Columns>
-                <syncfusion:GridNumericColumn 
-                    HeaderText="ID" 
-                    MappingName="cod_det_req" 
-                    ParsingMode="Int" 
-                    NumberDecimalDigits="0"/>
-                <syncfusion:GridTextColumn HeaderText="PLANILHA" MappingName="planilha"/>
-                <syncfusion:GridTextColumn HeaderText="DESCRIÇÃO" MappingName="descricao_completa"/>
-                <syncfusion:GridTextColumn HeaderText="UNID" MappingName="unidade"/>
-                <syncfusion:GridNumericColumn 
-                    HeaderText="QTDE" 
-                    MappingName="quantidade"
-                    DisplayBinding="{Binding quantidade, Converter={StaticResource ConverterNumber}}"/>
-                <syncfusion:GridTextColumn HeaderText="VOLTAGEM" MappingName="voltagem"/>
-                <syncfusion:GridTextColumn HeaderText="LOCAL SHOPPING" MappingName="local_shop"/>
-                <syncfusion:GridDateTimeColumn HeaderText="INSERIDO EM" MappingName="data"/>
-                <syncfusion:GridTextColumn HeaderText="INSERIDO POR" MappingName="alterado_por" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn MappingName="descricao_completa"/>
+                <syncfusion:GridTextColumn MappingName="unidade"/>
+                <syncfusion:GridNumericColumn MappingName="quantidade" DisplayBinding="{Binding quantidade, Converter={StaticResource ConverterNumber}}"/>
+                <syncfusion:GridTextColumn MappingName="destino"/>
+                <syncfusion:GridCheckBoxColumn
+                        MappingName="processado"
+                        DisplayBinding="{Binding processado, Converter={StaticResource ConverterBoolen}}"
+                        ValueBinding="{Binding processado, Converter={StaticResource ConverterBoolen}}" />
+                <syncfusion:GridDateTimeColumn MappingName="saida_data"/>
+                <syncfusion:GridTextColumn MappingName="saida_por"/>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
 

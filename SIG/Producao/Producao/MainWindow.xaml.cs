@@ -431,5 +431,16 @@ namespace Producao
             this._mdi.CanMDIMaximize = false;
             this._mdi.Items.Add(view);
         }
+
+        private void OnBaixaRequisicaoClick(object sender, RoutedEventArgs e)
+        {
+            BaixaRequisicao view = new();
+            DocumentContainer.SetHeader(view, "BAIXA DE REQUISIÇÃO");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1024.00) / 2.0, (this._mdi.ActualHeight - 768.00) / 2.0, 1024.00, 768.00));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
     }
 }
