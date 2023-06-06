@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <None Remove="App.ico" />
+    <None Remove="Database.db" />
     <None Remove="favicon.ico" />
     <None Remove="icon\checklist.png" />
     <None Remove="icon\configuracao-de-dados-windows-metro-16.png" />
@@ -27,6 +28,9 @@
 
   <ItemGroup>
     <Content Include="favicon.ico" />
+    <Content Include="Database.db">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Content>
     <Resource Include="sound\error.wav" />
   </ItemGroup>
   
@@ -98,12 +102,5 @@
     <EmbeddedResource Update="Resources\Syncfusion.Shared.Wpf.resx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-  </ItemGroup>
-  
-  
-  <ItemGroup>
-    <None Update="Database.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 </Project>

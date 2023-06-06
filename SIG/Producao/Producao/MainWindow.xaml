@@ -105,10 +105,14 @@
             
             
             <syncfusion:MenuItemAdv Header="Estoque">
-                <syncfusion:MenuItemAdv Header="Saldo Estoque"/>
+                <syncfusion:MenuItemAdv Header="Saldo Estoque" Click="OnSaldoEstoqueClick"/>
                 <syncfusion:MenuItemAdv Header="Sobra"/>
                 <syncfusion:MenuItemAdv Header="Relatório Iventário"/>
-                <syncfusion:MenuItemAdv Header="CCE"/>
+                <syncfusion:MenuItemAdv Header="CCE">
+                    <syncfusion:MenuItemAdv Header="Lançamentos"/>
+                    <syncfusion:MenuItemAdv Header="Relatório"/>
+                    <syncfusion:MenuItemAdv Header="Consulta"/>
+                </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Movimentações">
                     <syncfusion:MenuItemAdv Header="Entrada" Click="OnEntradaEstoqueClick"/>
                     <syncfusion:MenuItemAdv Header="Saida" Click="OnSaidaEstoqueClick"/>

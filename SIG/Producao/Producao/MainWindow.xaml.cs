@@ -442,5 +442,16 @@ namespace Producao
             this._mdi.CanMDIMaximize = false;
             this._mdi.Items.Add(view);
         }
+
+        private void OnSaldoEstoqueClick(object sender, RoutedEventArgs e)
+        {
+            SaldoEstoque view = new();
+            DocumentContainer.SetHeader(view, "SALDO DE ESTOQUE");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 700) / 2.0, (this._mdi.ActualHeight - 250) / 2.0, 700, 250));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
     }
 }
