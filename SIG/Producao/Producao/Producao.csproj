@@ -29,6 +29,10 @@
     <None Remove="icones\icons8-impressão-80.png" />
     <None Remove="icones\icons8-lista-de-verificação-40.png" />
     <None Remove="icones\icons8-lista-de-verificação-80.png" />
+    <None Remove="icones\icons8-ms-excel-blue-ui-120.png" />
+    <None Remove="icones\icons8-ms-excel-blue-ui-16.png" />
+    <None Remove="icones\icons8-ms-excel-blue-ui-32.png" />
+    <None Remove="icones\icons8-ms-excel-blue-ui-96.png" />
     <None Remove="icones\icons8-next-page-blue-ui-16.png" />
     <None Remove="icones\icons8-next-page-blue-ui-32.png" />
     <None Remove="icones\icons8-next-page-blue-ui-96.png" />
@@ -43,6 +47,7 @@
     <None Remove="Modelos\ORDEM_SERVICO_MODELO.xlsx" />
     <None Remove="Modelos\ORDEM_SERVICO_SERVICO_MODELO.xlsx" />
     <None Remove="Modelos\RECEITA_CENTRAL_MODELO.xlsx" />
+    <None Remove="Modelos\RELATORIO_CCE_MODELO.xlsx" />
     <None Remove="Modelos\REQUISICAO_MODELO.xlsx" />
   </ItemGroup>
 
@@ -127,6 +132,10 @@
     <Resource Include="icones\icons8-impressão-80.png" />
     <Resource Include="icones\icons8-lista-de-verificação-40.png" />
     <Resource Include="icones\icons8-lista-de-verificação-80.png" />
+    <Resource Include="icones\icons8-ms-excel-blue-ui-120.png" />
+    <Resource Include="icones\icons8-ms-excel-blue-ui-16.png" />
+    <Resource Include="icones\icons8-ms-excel-blue-ui-32.png" />
+    <Resource Include="icones\icons8-ms-excel-blue-ui-96.png" />
     <Resource Include="icones\icons8-next-page-blue-ui-16.png" />
     <Resource Include="icones\icons8-next-page-blue-ui-32.png" />
     <Resource Include="icones\icons8-next-page-blue-ui-96.png" />
@@ -147,6 +156,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Modelos\RECEITA_CENTRAL_MODELO.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modelos\RELATORIO_CCE_MODELO.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Modelos\REQUISICAO_MODELO.xlsx">

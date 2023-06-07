@@ -1,22 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Producao.Views.CadastroProduto;
 using Syncfusion.UI.Xaml.Grid;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Producao.Views.Estoque
 {
@@ -79,7 +70,7 @@ namespace Producao.Views.Estoque
 
 
                 await Task.Run(() => vm.SaveSaidaAsync(saida));
-                var record = sfdatagrid.View.CurrentAddItem as ProdutoModel;
+                var record = sfdatagrid.View.CurrentAddItem as SaidaEstoqueModel;
                 sfdatagrid.View.Refresh();
 
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });

@@ -453,5 +453,27 @@ namespace Producao
             this._mdi.CanMDIMaximize = false;
             this._mdi.Items.Add(view);
         }
+
+        private void OnRelatorioCCEClick(object sender, RoutedEventArgs e)
+        {
+            RelatorioCCE view = new();
+            DocumentContainer.SetHeader(view, "RELATÓRIO C.C.E");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 400) / 2.0, (this._mdi.ActualHeight - 70) / 2.0, 400, 70));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
+
+        private void OnDigitarCCEClick(object sender, RoutedEventArgs e)
+        {
+            DigitacaoCCE view = new();
+            DocumentContainer.SetHeader(view, "CONTROLE ESTOQUE PROCESSADO");
+            DocumentContainer.SetSizetoContentInMDI(view, true);
+            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1024.00) / 2.0, (this._mdi.ActualHeight - 768.00) / 2.0, 1024.00, 768.00));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            this._mdi.CanMDIMaximize = false;
+            this._mdi.Items.Add(view);
+        }
     }
 }

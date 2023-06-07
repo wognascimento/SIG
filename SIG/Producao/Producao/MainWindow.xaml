@@ -109,8 +109,8 @@
                 <syncfusion:MenuItemAdv Header="Sobra"/>
                 <syncfusion:MenuItemAdv Header="Relatório Iventário"/>
                 <syncfusion:MenuItemAdv Header="CCE">
-                    <syncfusion:MenuItemAdv Header="Lançamentos"/>
-                    <syncfusion:MenuItemAdv Header="Relatório"/>
+                    <syncfusion:MenuItemAdv Header="Lançamentos" Click="OnDigitarCCEClick"/>
+                    <syncfusion:MenuItemAdv Header="Relatório" Click="OnRelatorioCCEClick"/>
                     <syncfusion:MenuItemAdv Header="Consulta"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Movimentações">

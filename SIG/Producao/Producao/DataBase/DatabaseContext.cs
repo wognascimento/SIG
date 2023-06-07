@@ -68,6 +68,8 @@ namespace Producao
         public DbSet<ControleAcertoEstoque> ControleAcertoEstoques { get; set; }
         public DbSet<BaixaEstoqueRequisicaoModel> BaixaEstoqueRequisicoes { get; set; }
         public DbSet<SaldoDetalhadoModel> SaldoDetalhados { get; set; }
+        public DbSet<BarcodeModel> Barcodes { get; set; }
+        public DbSet<ContaProcessSemanaModel> ContaProcessSemanas { get; set; }
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
