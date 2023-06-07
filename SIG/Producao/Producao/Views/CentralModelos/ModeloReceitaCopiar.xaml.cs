@@ -69,7 +69,7 @@ namespace Producao.Views.CentralModelos
                         codcompladicional = item.itens_receita,
                         qtd_modelo = item.qtd_modelo_receita,
                         qtd_producao = item.qtd_producao_receita,
-                        observacao = "",
+                        observacao = item.observacao,
                         cadastrado_por = Environment.UserName,
                         data_cadastro = DateTime.Now,
                     });

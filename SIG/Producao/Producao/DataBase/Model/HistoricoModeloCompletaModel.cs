@@ -27,5 +27,6 @@ namespace Producao
         public double? qtd_producao_receita { get; set; }
         public long? ano { get; set; }
         public double? custo_total_receita {  get; set; }
+        public string? observacao {  get; set; }
     }
 }
