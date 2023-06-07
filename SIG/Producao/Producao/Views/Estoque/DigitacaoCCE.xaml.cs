@@ -72,7 +72,7 @@ namespace Producao.Views.Estoque
                 };
 
 
-                await Task.Run(() => vm.SaveCCEAsync(cce));
+                data = await Task.Run(() => vm.SaveCCEAsync(cce));
                 var record = sfdatagrid.View.CurrentAddItem as ContaProcessSemanaModel;
                 sfdatagrid.View.Refresh();
 
