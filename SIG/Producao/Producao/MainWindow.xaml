@@ -22,7 +22,7 @@
             <syncfusion:MenuItemAdv Header="Check list">
                 <syncfusion:MenuItemAdv Header="Natal">
                     <syncfusion:MenuItemAdv x:Name="Checklist" Header="Checklist" Click="OnChecklist_Click"/>
-                    <!--<syncfusion:MenuItemAdv Header="Completar"/>-->
+                    <syncfusion:MenuItemAdv x:Name="CompletarChecklist" Header="Completar" Click="CompletarChecklistClick"/>
                     <syncfusion:MenuItemAdv x:Name="Revisao" Header="Revisão" Click="OnRevisaoChecklistClick"/>
                     <syncfusion:MenuItemAdv x:Name="EtiquetaChecklist" Header="Etiqueta">
                         <syncfusion:MenuItemAdv Header="Emitir" Click="OnEtiquetaChecklistClick"/>
