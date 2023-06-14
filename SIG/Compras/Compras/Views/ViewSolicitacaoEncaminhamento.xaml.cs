@@ -2,8 +2,10 @@
 using Newtonsoft.Json;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Utility;
+using Syncfusion.Windows.Controls.Gantt;
 using Syncfusion.XlsIO;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -342,6 +344,12 @@ namespace Compras.Views
                     return;
                 }
 
+                if (vm.SolicitacaoEncaminhada?.quantidade_compra == null) 
+                {
+                    MessageBox.Show("Quantidade de compras esta em branco", "Adicionar Item", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
                 vm.ItensMontarPedido.Add(
                     new ItemPedidoFileModel
                     {
@@ -350,7 +358,7 @@ namespace Compras.Views
                         planilha = vm.SolicitacaoEncaminhada.planilha,
                         descricao_completa = vm.SolicitacaoEncaminhada.descricao_completa,
                         unidade = vm.SolicitacaoEncaminhada.unidade,
-                        quantidade = vm.SolicitacaoEncaminhada.quantidade
+                        quantidade = vm.SolicitacaoEncaminhada.quantidade_compra
                     });
 
                 vm.ItensPedido = (from t in vm.ItensMontarPedido
@@ -373,6 +381,71 @@ namespace Compras.Views
             }
 
 
+        }
+
+        static BaseCommand? excel;
+        public static BaseCommand Excel
+        {
+            get
+            {
+                if (excel == null)
+                    excel = new BaseCommand(OnExcelClicked);
+                return excel;
+            }
+        }
+
+        private static void OnExcelClicked(object obj)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                //GridRecordContextMenuInfo
+                //GridHeaderContextMenu
+                //GridContextMenuInfo
+
+                //var record = ((GridContextMenuInfo)obj).Record as SolicitacaoEncaminhadaModel;
+                var grid = ((GridContextMenuInfo)obj).DataGrid;
+                var item = grid.SelectedItem as SolicitacaoEncaminhadaModel;
+
+                var filteredResult = grid.View.Records.Select(recordentry => recordentry.Data);
+                var itens = grid.View.Records.Count;
+
+                ExcelEngine excelEngine = new ExcelEngine();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                ExcelImportDataOptions importDataOptions = new ExcelImportDataOptions()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+
+                var arquivo = "ENCAMINHAMENTO" + Convert.ToDateTime(DateTime.Now).ToString("yyyMMddHHmmss");
+
+                worksheet.ImportData(filteredResult, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs($"{arquivo}.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+                Process.Start(new ProcessStartInfo($"{arquivo}.xlsx")
+                {
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

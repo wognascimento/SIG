@@ -175,6 +175,19 @@
 
         </syncfusion:SfTextInputLayout>
 
+        <syncfusion:SfTextInputLayout
+                Grid.Row="5"
+                Grid.Column="3"
+                InputViewPadding="4" 
+                HintFloatMode="Float" 
+                Hint="UNIDADE"
+                CharCountVisibility="Collapsed" 
+                HelperTextVisibility="Collapsed" Width="100" HorizontalAlignment="Left">
+
+            <syncfusion:SfTextBoxExt x:Name="txtUnidade" IsEnabled="False"/>
+
+        </syncfusion:SfTextInputLayout>
+
 
 
         <Grid Grid.Row="8" Grid.Column="0">

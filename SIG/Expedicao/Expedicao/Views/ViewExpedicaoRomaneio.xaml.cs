@@ -56,25 +56,32 @@ namespace Expedicao.Views
         public ViewExpedicaoRomaneio()
         {
             InitializeComponent();
-            this.DataContext = this;
+            this.DataContext = new RomaneioViewModel();
         }
 
         public ViewExpedicaoRomaneio(RomaneioModel romaneio)
         {
             this.InitializeComponent();
             this.Romaneio = romaneio;
-            this.DataContext = this;
+            //this.DataContext = this;
         }
 
         private async void UserControl_Initialized(object sender, EventArgs e)
         {
             try
             {
-                shopping_destino.ItemsSource = await Task.Run(async () => await new AprovadoViewModel().GetAprovados());
-                codtransportadora.ItemsSource = await Task.Run(async () => await new TranportadoraViewModel().GetTransportadoras());
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                RomaneioViewModel vm = (RomaneioViewModel)DataContext;
+                shopping_destino.ItemsSource = await Task.Run(() => new AprovadoViewModel().GetAprovados());
+                codtransportadora.ItemsSource = await Task.Run(() => new TranportadoraViewModel().GetTransportadoras());
     
                 if (Romaneio == null)
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     return;
+                }
+                    
 
                 IList<AprovadoModel> itemsSource1 = (IList<AprovadoModel>)shopping_destino.ItemsSource;
                 int num1 = itemsSource1.IndexOf(itemsSource1.Where(a => a.SiglaServ.Equals(Romaneio.ShoppingDestino)).FirstOrDefault());
@@ -111,9 +118,13 @@ namespace Expedicao.Views
                 nome_conferente.Text = Romaneio.NomeConferente;
                 num_lacres.Text = Romaneio.NumLacres;
                 numero_container.Text = Romaneio.NumeroContainer;
+                dateSaida.DateTime = new DateTime?((DateTime)Romaneio.DataHoraLiberacao);
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -144,11 +155,12 @@ namespace Expedicao.Views
                 return;
             try
             {
-                if (this.Romaneio == null)
-                {
+                //if (this.Romaneio == null)
+                //{
                     foreach (AprovadoModel selectedItem in shopping_destino.SelectedItems)
                     {
-                        Romaneio = new RomaneioModel();
+                        RomaneioModel Romaneio = new RomaneioModel();
+                        Romaneio.CodRomaneiro = this.Romaneio?.CodRomaneiro;
                         Romaneio.Operacao = operacao.SelectionBoxItem.ToString();
                         Romaneio.DataCarregamento = data_carregamento.DateTime.Value;
                         Romaneio.HoraChegada = TimeSpan.Parse(hora_chegada.Value.ToString());
@@ -175,9 +187,10 @@ namespace Expedicao.Views
                         Romaneio.NomeConferente = nome_conferente.Text;
                         Romaneio.NumLacres = num_lacres.Text;
                         Romaneio.NumeroContainer = numero_container.Text;
+                        Romaneio.DataHoraLiberacao = dateSaida.DateTime.Value;
                         RomaneioModel romaneioModel = await new RomaneioViewModel().SaveAsync(Romaneio);
                     }
-                }
+                //}
                 MessageBox.Show("Romaneio salvo com sucesso...", "Romaneio", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                 Limpar();
             }

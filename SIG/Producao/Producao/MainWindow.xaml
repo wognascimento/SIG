@@ -81,11 +81,14 @@
                 <syncfusion:MenuItemAdv Header="Cadastro de Peças"/>
             </syncfusion:MenuItemAdv>
 
-            <syncfusion:MenuItemAdv Header="Controlados Etiqueta">
+            <syncfusion:MenuItemAdv Header="Controlados">
                 <syncfusion:MenuItemAdv Header="Imprimir"/>
                 <syncfusion:MenuItemAdv Header="Vincular Etiqueta"/>
-                <syncfusion:MenuItemAdv Header="Consultas">
-                    
+                <syncfusion:MenuItemAdv Header="Cobrança"/>
+                <syncfusion:MenuItemAdv Header="Retorno"/>
+                <syncfusion:MenuItemAdv Header="Relatórios">
+                    <syncfusion:MenuItemAdv Header="Sigla"/>
+                    <syncfusion:MenuItemAdv Header="Planilha"/>
                 </syncfusion:MenuItemAdv>
             </syncfusion:MenuItemAdv>
 
@@ -111,7 +114,7 @@
                 <syncfusion:MenuItemAdv Header="CCE">
                     <syncfusion:MenuItemAdv Header="Lançamentos" Click="OnDigitarCCEClick"/>
                     <syncfusion:MenuItemAdv Header="Relatório" Click="OnRelatorioCCEClick"/>
-                    <syncfusion:MenuItemAdv Header="Consulta"/>
+                    <syncfusion:MenuItemAdv Header="Consulta" Click="OnConsultaCCEClick"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Movimentações">
                     <syncfusion:MenuItemAdv Header="Entrada" Click="OnEntradaEstoqueClick"/>

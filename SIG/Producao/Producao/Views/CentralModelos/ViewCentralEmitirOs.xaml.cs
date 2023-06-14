@@ -41,6 +41,25 @@ namespace Producao.Views.CentralModelos
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
+
+        private async void dgTabela_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F5)
+            {
+                ViewCentralEmitirOsViewModel vm = (ViewCentralEmitirOsViewModel)DataContext;
+                try
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                    vm.Itens = await Task.Run(vm.GetItensAsync);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+            }
+        }
     }
 
     public class ViewCentralEmitirOsViewModel : INotifyPropertyChanged

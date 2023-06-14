@@ -82,7 +82,7 @@ namespace Expedicao.Views
                 {
                     Window window = new Window();
                     window.Title = "EXPEDIÇÃO ROMANEIO " + dataContext.CodRomaneiro.ToString();
-                    window.Content = (object)new ViewExpedicaoRomaneio(dataContext);
+                    window.Content = new ViewExpedicaoRomaneio(dataContext);
                     window.SizeToContent = SizeToContent.WidthAndHeight;
                     window.ResizeMode = ResizeMode.NoResize;
                     window.ShowDialog();

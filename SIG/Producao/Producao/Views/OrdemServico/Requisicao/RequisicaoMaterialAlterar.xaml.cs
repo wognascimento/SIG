@@ -405,6 +405,7 @@ namespace Producao.Views.OrdemServico.Requisicao
                 txtDescricao.Text = vm.Descricao.descricao;
                 txtDescricaoAdicional.Text = vm.Descricao.descricao_adicional;
                 txtComplementoAdicional.Text = vm.Descricao.complementoadicional;
+                txtUnidade.Text = vm.Descricao.unidade;
                 txtQuantidade.Focus();
             }
         }
@@ -428,6 +429,8 @@ namespace Producao.Views.OrdemServico.Requisicao
                 vm.CompleAdicionais = new ObservableCollection<TblComplementoAdicionalModel>();
                 txtComplementoAdicional.SelectedItem = null;
                 txtComplementoAdicional.Text = string.Empty;
+
+                txtUnidade.Text = string.Empty;
 
                 vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(planilha?.planilha));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
@@ -456,6 +459,8 @@ namespace Producao.Views.OrdemServico.Requisicao
                 txtComplementoAdicional.SelectedItem = null;
                 txtComplementoAdicional.Text = string.Empty;
 
+                txtUnidade.Text = string.Empty;
+
                 vm.DescAdicionais = await Task.Run(() => vm.GetDescAdicionaisAsync(produto?.codigo));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtDescricaoAdicional.Focus();
@@ -479,6 +484,8 @@ namespace Producao.Views.OrdemServico.Requisicao
                 txtComplementoAdicional.SelectedItem = null;
                 txtComplementoAdicional.Text = string.Empty;
 
+                txtUnidade.Text = string.Empty;
+
                 vm.CompleAdicionais = await Task.Run(() => vm.GetCompleAdicionaisAsync(adicional?.coduniadicional));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtComplementoAdicional.Focus();
@@ -496,6 +503,7 @@ namespace Producao.Views.OrdemServico.Requisicao
             TblComplementoAdicionalModel? complemento = e.NewValue as TblComplementoAdicionalModel;
             vm.Compledicional = complemento;
             tbCodproduto.Text = complemento?.codcompladicional.ToString();
+            txtUnidade.Text = complemento?.unidade;
             txtQuantidade.Focus();
         }
 

@@ -25,7 +25,7 @@
             ShowRowHeader="True"
             AutoGenerateColumns="False"
             AllowFiltering="True"
-            ColumnSizer="AutoWithLastColumnFill"
+            ColumnSizer="SizeToHeader"
             ItemsSource="{Binding ControlePlanilhaGrupos}"
             SelectedItem="{Binding ControlePlanilhaGrupo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             CurrentCellValueChanged="OnCurrentCellValueChanged" 
@@ -46,6 +46,7 @@
                 <syncfusion:GridTextColumn  MappingName="sigla" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn  MappingName="tema" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn  MappingName="descricao_completa"/>
+                <syncfusion:GridTextColumn  MappingName="obs" HeaderText="observacao_producao" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridNumericColumn
                         MappingName="qtd_detalhe"
                         DisplayBinding="{Binding qtd_detalhe, Converter={StaticResource ConverterNumber}}"/>

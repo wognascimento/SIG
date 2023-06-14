@@ -160,7 +160,7 @@ namespace Expedicao
             DocumentContainer.SetHeader((DependencyObject)expedicaoRomaneio, (object)"EXPEDIÇÃO ROMANEIO");
             DocumentContainer.SetSizetoContentInMDI((DependencyObject)expedicaoRomaneio, true);
             DocumentContainer.SetMDIWindowState((DependencyObject)expedicaoRomaneio, MDIWindowState.Normal);
-            DocumentContainer.SetMDIBounds((DependencyObject)expedicaoRomaneio, new Rect((this._dc.ActualWidth - 900.0) / 2.0, (this._dc.ActualHeight - 780.0) / 2.0, 900.0, 780.0));
+            DocumentContainer.SetMDIBounds((DependencyObject)expedicaoRomaneio, new Rect((this._dc.ActualWidth - 900.0) / 2.0, (this._dc.ActualHeight - 530.0) / 2.0, 900.0, 530.0));
             DocumentContainer.SetMDIWindowState((DependencyObject)expedicaoRomaneio, MDIWindowState.Normal);
             this._dc.CanMDIMaximize = false;
             this._dc.Items.Add((object)expedicaoRomaneio);

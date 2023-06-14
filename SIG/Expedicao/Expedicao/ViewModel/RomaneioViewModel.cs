@@ -15,7 +15,8 @@ namespace Expedicao
             try
             {
                 using AppDatabase db = new AppDatabase();
-                db.Entry<RomaneioModel>(romaneio).State = !romaneio.CodRomaneiro.HasValue ? EntityState.Added : EntityState.Modified;
+                //db.Entry<RomaneioModel>(romaneio).State = !romaneio.CodRomaneiro.HasValue ? EntityState.Added : EntityState.Modified;
+                await db.Romaneios.SingleMergeAsync(romaneio);
                 int num = await db.SaveChangesAsync();
                 long? codRomaneiro = romaneio.CodRomaneiro;
             }

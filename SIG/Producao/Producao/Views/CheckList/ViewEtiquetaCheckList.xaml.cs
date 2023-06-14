@@ -154,6 +154,31 @@ namespace Producao.Views.CheckList
             ((EtiquetaProducaoModel)e.NewObject).coddetalhescompl = vm.Dado.coddetalhescompl; // = new long?(ProdutoExpedido.CodDetalhesCompl);
         }
 
+        private async void dgEtiqueta_RecordDeleting(object sender, Syncfusion.UI.Xaml.Grid.RecordDeletingEventArgs e)
+        {
+            
+            if (MessageBox.Show("Confirma a exclusão a etiqueta?", "Excluir", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                    EtiquetaProducaoModel data = (EtiquetaProducaoModel)e.Items[0];
+                    EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
+                    await Task.Run((() => vm.DeleteEtiquetaAsync(data)));
+                    e.Cancel = false;
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+                catch (Exception ex)
+                {
+                    e.Cancel = true;
+                    int num2 = (int)MessageBox.Show(ex.Message);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+            }
+            else
+                e.Cancel = true;
+            
+        }
     }
 
     public class EtiquetaViewModel : INotifyPropertyChanged
@@ -281,6 +306,21 @@ namespace Producao.Views.CheckList
                 await db.SaveChangesAsync();
 
                 return etiqueta;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task DeleteEtiquetaAsync(EtiquetaProducaoModel etiqueta)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                db.Entry(etiqueta).State = EntityState.Deleted;
+                int num = await db.SaveChangesAsync();
+                db.Entry(etiqueta).State = EntityState.Detached;
             }
             catch (Exception)
             {

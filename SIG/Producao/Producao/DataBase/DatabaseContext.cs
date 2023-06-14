@@ -70,6 +70,7 @@ namespace Producao
         public DbSet<SaldoDetalhadoModel> SaldoDetalhados { get; set; }
         public DbSet<BarcodeModel> Barcodes { get; set; }
         public DbSet<ContaProcessSemanaModel> ContaProcessSemanas { get; set; }
+        public DbSet<DetalhesProcessamentoSemanaModel> DetalhesProcessamentoSemanas { get; set; }
         public DbSet<ChklistNaoCompletadoModel> ChklistNaoCompletados { get; set; }
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

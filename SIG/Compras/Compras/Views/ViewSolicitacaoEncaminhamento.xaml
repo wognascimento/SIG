@@ -44,6 +44,15 @@
                               Header="Adicionar ao Pedido."/>
                     </ContextMenu>
                 </syncfusion:SfDataGrid.RecordContextMenu>
+
+                <syncfusion:SfDataGrid.HeaderContextMenu>
+                    <ContextMenu Style="{x:Null}">
+                        <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.Excel}}"
+                              CommandParameter="{Binding}"
+                              Header="Enviar para Excel"/>
+                    </ContextMenu>
+                </syncfusion:SfDataGrid.HeaderContextMenu>
+                    
                 
                 <syncfusion:SfDataGrid.Columns>
                     <!--<syncfusion:GridNumericColumn MappingName="cod_item" NumberNegativePattern="0" NumberDecimalDigits="0"/>-->
@@ -51,6 +60,7 @@
                     <syncfusion:GridTextColumn MappingName="familia"/>
                     <syncfusion:GridTextColumn MappingName="descricao_completa"/>
                     <syncfusion:GridNumericColumn MappingName="quantidade" HeaderText="qtde."/>
+                    <syncfusion:GridNumericColumn MappingName="quantidade_compra" HeaderText="qtde compra" AllowEditing="True"/>
                     <syncfusion:GridNumericColumn MappingName="saldo_estoque" HeaderText="estoque"/>
                     <syncfusion:GridTextColumn MappingName="unidade" HeaderText="unid."/>
                     <syncfusion:GridTextColumn MappingName="obs_solicitacao" ColumnSizer="SizeToHeader"/>
@@ -62,7 +72,7 @@
                     <syncfusion:GridTextColumn MappingName="resp_compra" HeaderText="compradora(o)"/>
                     <syncfusion:GridNumericColumn MappingName="cod_solicitacao" NumberNegativePattern="0" NumberDecimalDigits="0"/>
                     <syncfusion:GridTextColumn MappingName="tipo"/>
-                    <!--<syncfusion:GridTextColumn MappingName="prioridade"/>-->
+                    <syncfusion:GridDateTimeColumn MappingName="data_entrega" AllowEditing="True"/>
                     <syncfusion:GridTextColumn MappingName="username" HeaderText="inserido_por"/>
                 </syncfusion:SfDataGrid.Columns>
             </syncfusion:SfDataGrid>

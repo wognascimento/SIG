@@ -82,6 +82,8 @@
             x:Name="dgEtiqueta" 
             Grid.Row="2"
             AddNewRowPosition="Top"
+            AllowEditing="True" 
+            AllowDeleting="True"
             GridValidationMode="InView"
             AutoGenerateColumns="False" 
             ColumnSizer="AutoWithLastColumnFill" 
@@ -90,7 +92,7 @@
             SelectedItem="{Binding Etiqueta, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             RowValidated="dgEtiqueta_RowValidated"
             RowValidating="dgEtiqueta_RowValidating" 
-            AddNewRowInitiating="dgEtiqueta_AddNewRowInitiating">
+            AddNewRowInitiating="dgEtiqueta_AddNewRowInitiating" RecordDeleting="dgEtiqueta_RecordDeleting">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn 
                     HeaderText="CODVOL" 

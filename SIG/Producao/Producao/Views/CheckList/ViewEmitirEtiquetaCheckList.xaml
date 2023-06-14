@@ -66,12 +66,10 @@
             Grid.Row="1"
             AutoGenerateColumns="False" 
             AllowResizingColumns="True"
-
             ColumnSizer="AutoWithLastColumnFill" 
             AllowFiltering="True"
-
             ItemsSource="{Binding Itens}"
-            MouseDoubleClick="OnMouseDoubleClick">
+            MouseDoubleClick="OnMouseDoubleClick" RecordDeleting="dgCheckList_RecordDeleting">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridTextColumn HeaderText="SIGLA" MappingName="sigla" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn HeaderText="ITEM" MappingName="item_memorial"/>
