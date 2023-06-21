@@ -72,6 +72,9 @@ namespace Producao
         public DbSet<ContaProcessSemanaModel> ContaProcessSemanas { get; set; }
         public DbSet<DetalhesProcessamentoSemanaModel> DetalhesProcessamentoSemanas { get; set; }
         public DbSet<ChklistNaoCompletadoModel> ChklistNaoCompletados { get; set; }
+        public DbSet<BaixaOsProducaoModel> BaixaOsProducoes { get; set; }
+        public DbSet<OrdemServicoEmitidaModel> OrdemServicoEmitidas { get; set; }
+        public DbSet<ProgramacaoProducaoModel> ProgramacaoProducoes { get; set; }
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -81,10 +84,10 @@ namespace Producao
                 $"host={BaseSettings.Host};" +
                 $"user id={BaseSettings.Username};" +
                 $"password={BaseSettings.Password};" +
-                $"database={BaseSettings.Database};" +
-                $"Pooling=false;" +
-                $"Timeout=300;" +
-                $"CommandTimeout=300;"
+                $"database={BaseSettings.Database};" //+
+                //$"Pooling=false;" +
+                //$"Timeout=300;" +
+                //$"CommandTimeout=300;"
                 );
         }
     }

@@ -16,7 +16,12 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         
-        <syncfusion:SfDataGrid x:Name="itens" ColumnSizer="Star" AllowFiltering="True" AutoGenerateColumns="False">
+        <syncfusion:SfDataGrid 
+            x:Name="itens" 
+            ItemsSource = "{Binding Romaneios}"
+            ColumnSizer="Star" 
+            AllowFiltering="True" 
+            AutoGenerateColumns="False">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn MappingName="CodRomaneiro" NumberDecimalDigits="0" HeaderText="Cod"/>
                 <syncfusion:GridTextColumn MappingName="ShoppingDestino" HeaderText="Shopping"/>
@@ -34,6 +39,7 @@
                 </syncfusion:GridTemplateColumn>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
+        
         <Border x:Name="loadingDetalhes" Grid.Row="1" Height="50" VerticalAlignment="Bottom" Background="Black"
             BorderBrush="Black" BorderThickness="1" Opacity="50">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
@@ -42,12 +48,14 @@
                          AnimationType="Gear" Control.Background="Black"/>
             </StackPanel>
         </Border>
+        
         <Border x:Name="BSelecionados" Grid.Row="1" Height="50" VerticalAlignment="Bottom" BorderThickness="1" Opacity="50"
             Visibility="Hidden">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                <Button Click="Button_Click_1" Margin="5" Content="Selecionados" VerticalAlignment="Center" Height="50"/>
+                <Button Click="Button_Click_1" Margin="5" Content="ENVIAR PARA EXCEL" VerticalAlignment="Center" Height="50"/>
             </StackPanel>
         </Border>
+        
     </Grid>
 
 </UserControl>

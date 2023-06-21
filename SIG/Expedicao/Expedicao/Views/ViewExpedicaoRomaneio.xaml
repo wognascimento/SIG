@@ -87,9 +87,15 @@
             InputViewPadding="4"
             CharCountVisibility="Collapsed" 
             HelperTextVisibility="Collapsed">
-            <syncfusion:ComboBoxAdv x:Name="shopping_destino" DisplayMemberPath="SiglaServ" SelectedValuePath="SiglaServ"
-                              IsTextSearchEnabled="True" AutoCompleteMode="Suggest" AllowMultiSelect="True" EnableOKCancel="True"
-                              DefaultText="Seleciona sigla(s)..."/>
+            <syncfusion:ComboBoxAdv 
+                x:Name="shopping_destino" 
+                ItemsSource="{Binding Aprovados}"
+                DisplayMemberPath="SiglaServ" 
+                SelectedValuePath="SiglaServ"
+                IsTextSearchEnabled="True" 
+                AutoCompleteMode="Suggest" 
+                AllowMultiSelect="True" EnableOKCancel="True"
+                DefaultText="Seleciona sigla(s)..."/>
         </syncfusion:SfTextInputLayout>
         
         <syncfusion:SfTextInputLayout 
@@ -124,8 +130,13 @@
             InputViewPadding="4"
             CharCountVisibility="Collapsed" 
             HelperTextVisibility="Collapsed">
-            <syncfusion:ComboBoxAdv x:Name="codtransportadora" DisplayMemberPath="NomeTransportadora"
-                              SelectedValuePath="CodTransportadora" IsTextSearchEnabled="True" AutoCompleteMode="Suggest"/>
+            <syncfusion:ComboBoxAdv 
+                x:Name="codtransportadora" 
+                ItemsSource="{Binding Tranportadoras}"
+                DisplayMemberPath="NomeTransportadora"
+                SelectedValuePath="CodTransportadora" 
+                IsTextSearchEnabled="True" 
+                AutoCompleteMode="Suggest"/>
         </syncfusion:SfTextInputLayout>
         
         <syncfusion:SfTextInputLayout 

@@ -28,7 +28,8 @@ namespace Producao.Views.CheckList
             {
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
-                vm.Siglas =  await Task.Run(vm.GetSiglasAsync);
+                //vm.Siglas =  await Task.Run(vm.GetSiglasAsync);
+                vm.Dados = await Task.Run(vm.GetItensAsync);
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
@@ -44,7 +45,7 @@ namespace Producao.Views.CheckList
             {
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
-                vm.Dados = await Task.Run(() => vm.GetItensAsync(vm.Sigla.sigla_serv));
+                //vm.Dados = await Task.Run(() => vm.GetItensAsync(vm.Sigla.sigla_serv));
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
@@ -263,13 +264,13 @@ namespace Producao.Views.CheckList
             }
         }
 
-        public async Task<ObservableCollection<EtiquetaCheckListModel>> GetItensAsync(string? sigla_serv)
+        public async Task<ObservableCollection<EtiquetaCheckListModel>> GetItensAsync()
         {
             try
             {
                 using DatabaseContext db = new();
                 var data = await db.EtiquetaCheckLists
-                    .Where(e => e.sigla == sigla_serv && e.qtd_detalhe > 0 && e.qtd_nao_expedida > 0)
+                    .Where(e => e.qtd_detalhe > 0 && e.qtd_nao_expedida > 0)
                     .OrderBy(c => c.item_memorial)
                     .ToListAsync();
                 return new ObservableCollection<EtiquetaCheckListModel>(data);

@@ -29,44 +29,49 @@
             ItemsSource="{Binding ControlePlanilhaGrupos}"
             SelectedItem="{Binding ControlePlanilhaGrupo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             CurrentCellValueChanged="OnCurrentCellValueChanged" 
-            FontFamily="Arial"
-            FontSize="9" 
             RowValidated="OnRowValidated" 
-            RowValidating="OnRowValidating" >
+            RowValidating="OnRowValidating" AllowResizingHiddenColumns="True" AllowResizingColumns="True" >
             <syncfusion:SfDataGrid.Columns>
-                <syncfusion:GridTextColumn  MappingName="agrupamento"/>
-                <syncfusion:GridDateTimeColumn  MappingName="data_de_expedicao" ColumnSizer="SizeToHeader"/>
-                <syncfusion:GridTextColumn  MappingName="caminhao" ColumnSizer="SizeToHeader"/>
-                <syncfusion:GridTextColumn  MappingName="revisado" ColumnSizer="SizeToHeader"/>
-                <syncfusion:GridTextColumn  MappingName="confirmado" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="num_os_produto"/>
+                <syncfusion:GridTextColumn  MappingName="num_os_servico"/>
+
+                <syncfusion:GridDateTimeColumn  MappingName="recebido_setor_data" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="caminhao" ColumnSizer="SizeToCells"/>
+                <syncfusion:GridTextColumn  MappingName="revisado" ColumnSizer="SizeToCells"/>
+                <syncfusion:GridTextColumn  MappingName="confirmado" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn  MappingName="planilha" ColumnSizer="SizeToHeader"/>
-                <syncfusion:GridTextColumn  MappingName="Item" ColumnSizer="SizeToHeader"/>
-                <syncfusion:GridTextColumn  MappingName="id" ColumnSizer="SizeToHeader"/>
-                <syncfusion:GridTextColumn  MappingName="Local_shoppings" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="item" ColumnSizer="SizeToCells"/>
+                <syncfusion:GridTextColumn  MappingName="id" ColumnSizer="SizeToCells"/>
+                <syncfusion:GridTextColumn  MappingName="local_shoppings" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn  MappingName="sigla" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn  MappingName="tema" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn  MappingName="descricao_completa"/>
                 <syncfusion:GridTextColumn  MappingName="obs" HeaderText="observacao_producao" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridNumericColumn
-                        MappingName="qtd_detalhe"
-                        DisplayBinding="{Binding qtd_detalhe, Converter={StaticResource ConverterNumber}}"/>
+                    MappingName="qtd_detalhe"
+                    DisplayBinding="{Binding qtd_detalhe, Converter={StaticResource ConverterNumber}}"
+                    ColumnSizer="SizeToCells"/>
                 <syncfusion:GridNumericColumn
-                        MappingName="qtd_complemento"
-                        DisplayBinding="{Binding qtd_complemento, Converter={StaticResource ConverterNumber}}"/>
+                    MappingName="qtd_complemento"
+                    DisplayBinding="{Binding qtd_complemento, Converter={StaticResource ConverterNumber}}"
+                    ColumnSizer="SizeToCells"/>
                 <syncfusion:GridNumericColumn
-                        MappingName="qtd_exp"
-                        DisplayBinding="{Binding qtd_exp, Converter={StaticResource ConverterNumber}}"/>
+                    MappingName="qtd_exp"
+                    DisplayBinding="{Binding qtd_exp, Converter={StaticResource ConverterNumber}}"
+                    ColumnSizer="SizeToCells"/>
                 <syncfusion:GridNumericColumn
-                        MappingName="codcompl"
-                        DisplayBinding="{Binding codcompl, Converter={StaticResource ConverterNumber}}"/>
+                    MappingName="codcompl"
+                    DisplayBinding="{Binding codcompl, Converter={StaticResource ConverterNumber}}"
+                    ColumnSizer="SizeToCells"/>
                 <syncfusion:GridNumericColumn
-                        MappingName="coddetalhescompl"
-                        DisplayBinding="{Binding coddetalhescompl, Converter={StaticResource ConverterNumber}}"/>
+                    MappingName="coddetalhescompl"
+                    DisplayBinding="{Binding coddetalhescompl, Converter={StaticResource ConverterNumber}}"
+                    ColumnSizer="SizeToCells"/>
                 <syncfusion:GridCheckBoxColumn
-                        AllowEditing="True"
-                        MappingName="os"
-                        DisplayBinding="{Binding os, Converter={StaticResource ConverterBoolen}}"
-                        ValueBinding="{Binding os, Converter={StaticResource ConverterBoolen}}" />
+                    AllowEditing="True"
+                    MappingName="os"
+                    DisplayBinding="{Binding os, Converter={StaticResource ConverterBoolen}}"
+                    ValueBinding="{Binding os, Converter={StaticResource ConverterBoolen}}" />
                 
             </syncfusion:SfDataGrid.Columns>
 

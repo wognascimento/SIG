@@ -46,6 +46,11 @@ namespace Producao.Views
             }
         }
 
+        private async void UserControl_Initialized(object sender, EventArgs e)
+        {
+            
+        }
+
         private void OnCurrentCellEndEdit(object sender, CurrentCellEndEditEventArgs e)
         {
             

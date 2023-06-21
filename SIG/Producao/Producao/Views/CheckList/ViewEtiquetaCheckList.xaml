@@ -21,6 +21,8 @@
             <RowDefinition Height="2*"/>
             <RowDefinition />
         </Grid.RowDefinitions>
+        
+        <!--
 
         <StackPanel Grid.Row="0" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
@@ -45,6 +47,8 @@
             </StackPanel>
 
         </StackPanel>
+        
+        -->
 
         <syncfusion:SfDataGrid
             x:Name="dgCheckList" 

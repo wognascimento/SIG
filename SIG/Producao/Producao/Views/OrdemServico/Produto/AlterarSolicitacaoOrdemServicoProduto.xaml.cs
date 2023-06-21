@@ -29,8 +29,6 @@ namespace Producao.Views.OrdemServico.Produto
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            //ObsOSs
-
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });

@@ -28,9 +28,8 @@
                 <syncfusion:MenuItemAdv Click="ItensCarregados_Click" Name="ItensCarregados" Header="Itens Carregados"/>
             </syncfusion:MenuItemAdv>
             <syncfusion:MenuItemAdv Header="Pré-conferencia">
-                <syncfusion:MenuItemAdv Header="Total por Caminão"/>
-                <syncfusion:MenuItemAdv Header="Itens Faltantes"/>
-                <syncfusion:MenuItemAdv Header="Itens Conferidos"/>
+                <syncfusion:MenuItemAdv Header="Itens Faltantes" Click="OnPreItensFaltantesClick"/>
+                <syncfusion:MenuItemAdv Header="Itens Conferidos" Click="OnPreItensCarregadosClick"/>
             </syncfusion:MenuItemAdv>
             <syncfusion:MenuItemAdv Header="Consultas">
                 <syncfusion:MenuItemAdv Header="T Exped" Click="OnExpedClick"/>

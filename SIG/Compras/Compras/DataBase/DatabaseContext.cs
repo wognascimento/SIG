@@ -38,10 +38,10 @@ namespace Compras
                 $"host={BaseSettings.Host};" +
                 $"user id={BaseSettings.Username};" +
                 $"password={BaseSettings.Password};" +
-                $"database={BaseSettings.Database};" +
-                $"Pooling=false;" +
-                $"Timeout=300;" +
-                $"CommandTimeout=300;"
+                $"database={BaseSettings.Database};" //+
+                //$"Pooling=false;" +
+                //$"Timeout=300;" +
+                //$"CommandTimeout=300;"
                 );
         }
     }

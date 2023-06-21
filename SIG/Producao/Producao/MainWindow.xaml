@@ -45,11 +45,21 @@
                 <syncfusion:MenuItemAdv Header="Serviço">
                     <syncfusion:MenuItemAdv Header="Emitir" Click="OnEmitirOSServicoClick"/>
                     <syncfusion:MenuItemAdv Header="Emitidas" Click="OnEmitidasOSServicoClick"/>
+                    <syncfusion:MenuItemAdv Header="Baixa" Click="OnBaixaServisoClick"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Produção">
                     <syncfusion:MenuItemAdv Header="Solicitar" Click="OnSolicitarOSProdutoClick"/>
                     <syncfusion:MenuItemAdv Header="Alterar Solicitação" Click="OnAlterarSolicitacaoOSProdutoClick"/>
                     <syncfusion:MenuItemAdv Header="Emitir" Click="OnEmitirOSProdutoClick"/>
+                    <syncfusion:MenuItemAdv Header="Baixa" Click="OnBaixaProdutoClick"/>
+                    <syncfusion:MenuItemAdv Header="Relatórios">
+                        <syncfusion:MenuItemAdv Header="Emitidas" Click="OnEmitidasClick"/>
+                        <syncfusion:MenuItemAdv Header="Concluídas" Click="OnConcluidasClick"/>
+                        <syncfusion:MenuItemAdv Header="Não Concluídas" Click="OnNaoConcluidasClick"/>
+                        <syncfusion:MenuItemAdv Header="Canceladas" Click="OnCanceladasClick"/>
+                        <syncfusion:MenuItemAdv Header="Transformação"/>
+                        <syncfusion:MenuItemAdv Header="Programação de produção" Click="OnProgramacaoProducaoClick"/>
+                    </syncfusion:MenuItemAdv>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Desbaiamento"/>
                 <syncfusion:MenuItemAdv Header="Transformação"/>
@@ -130,7 +140,11 @@
             </syncfusion:MenuItemAdv>
         </syncfusion:MenuAdv>
 
-        <syncfusion:DocumentContainer Name="_mdi" Grid.Row="1"/>
+        <syncfusion:DocumentContainer 
+            Name="_mdi" 
+            Grid.Row="1" 
+            EnableAutoScroll="True"
+            Mode="TDI"/>
 
         <StatusBar Grid.Row="2">
             <ItemsControl.ItemsPanel>

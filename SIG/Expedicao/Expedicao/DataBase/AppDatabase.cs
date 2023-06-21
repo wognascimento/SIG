@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Expedicao.Model;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace Expedicao
@@ -34,6 +35,8 @@ namespace Expedicao
         public DbSet<CubagemPrevistaClienteModel> CubagemPrevistaClientes { get; set; }
         public DbSet<CubagemEnderecada> CubagemEnderecadas { get; set; }
         public DbSet<PendenciaExpedicaoModel> PendenciaExpedicaos { get; set; }
+        public DbSet<PreConferenciaItemFaltanteModel> PreConferenciaItemFaltantes { get; set; }
+        public DbSet<PreConferenciaItemShoppModel> PreConferenciaItemShopps { get; set; }
         
 
 
@@ -42,7 +45,16 @@ namespace Expedicao
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql($"host={dB.Host};user id={dB.Username};password={dB.Password};database={dB.Database};Pooling=false;Timeout=300;CommandTimeout=300;");
+            //optionsBuilder.UseNpgsql($"host={dB.Host};user id={dB.Username};password={dB.Password};database={dB.Database};Pooling=false;Timeout=300;CommandTimeout=300;");
+            optionsBuilder.UseNpgsql(
+                $"host={dB.Host};" +
+                $"user id={dB.Username};" +
+                $"password={dB.Password};" +
+                $"database={dB.Database};" //+
+                //$"Pooling=false;" +
+                //$"Timeout=300;" +
+                //$"CommandTimeout=300;"
+                );
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

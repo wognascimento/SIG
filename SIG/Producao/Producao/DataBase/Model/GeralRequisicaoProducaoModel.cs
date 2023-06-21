@@ -10,15 +10,17 @@ namespace Producao
     {
         public long? num_os_servico { get; set; }
         public long? num_requisicao { get; set; }
+        public string? cliente { get; set; }
         public DateTime? data { get; set; }
         public string? alterado_por { get; set; }
         public long? id_modelo { get; set; }
         public string? planilha { get; set; }
-        public string? descricao { get; set; }
-        public string? descricao_adicional { get; set; }
-        public string? complementoadicional { get; set; }
+        //public string? descricao { get; set; }
+        //public string? descricao_adicional { get; set; }
+        //public string? complementoadicional { get; set; }
         public string? descricao_completa { get; set; }
         public string? unidade { get; set; }
+        public int? vida_util { get; set; }
         public double? quantidade { get; set; }
         public string? ok { get; set; }
         public DateTime? data_ok { get; set; }

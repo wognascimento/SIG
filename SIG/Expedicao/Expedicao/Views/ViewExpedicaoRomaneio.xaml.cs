@@ -1,21 +1,14 @@
-﻿using Expedicao.DataBaseLocal;
-using Syncfusion.Windows.Shared;
-using Syncfusion.Windows.Tools.Controls;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Expedicao.Views
 {
@@ -25,44 +18,19 @@ namespace Expedicao.Views
     public partial class ViewExpedicaoRomaneio : UserControl
     {
 
-        private List<string> operacoes = new List<string>()
-        {
-          "CARREGAMENTO SHOPPING",
-          "CARREGAMENTO TRANSFERÊNCIA",
-          "DESCARREGAMENTO SHOPPING",
-          "DESCARREGAMENTO TRANSFERÊNCIA",
-          "KIT SOLUÇÃO"
-        };
-        private List<string> condicaoCaminhao = new List<string>()
-        {
-          "BOA",
-          "REGULAR",
-          "PÉSSIMA"
-        };
-        private RomaneioModel Romaneio;
-
-        public List<string> OperacoesList
-        {
-            get => this.operacoes;
-            set => this.operacoes = value;
-        }
-
-        public List<string> CondicaoCaminhaoList
-        {
-            get => this.condicaoCaminhao;
-            set => this.condicaoCaminhao = value;
-        }
-
         public ViewExpedicaoRomaneio()
         {
-            InitializeComponent();
             this.DataContext = new RomaneioViewModel();
+            InitializeComponent();
         }
 
         public ViewExpedicaoRomaneio(RomaneioModel romaneio)
         {
+            this.DataContext = new RomaneioViewModel();
             this.InitializeComponent();
-            this.Romaneio = romaneio;
+
+            RomaneioViewModel vm = (RomaneioViewModel)DataContext;
+            vm.Romaneio = romaneio;
             //this.DataContext = this;
         }
 
@@ -73,10 +41,10 @@ namespace Expedicao.Views
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
 
                 RomaneioViewModel vm = (RomaneioViewModel)DataContext;
-                shopping_destino.ItemsSource = await Task.Run(() => new AprovadoViewModel().GetAprovados());
-                codtransportadora.ItemsSource = await Task.Run(() => new TranportadoraViewModel().GetTransportadoras());
+                vm.Aprovados = await Task.Run(vm.GetAprovados);
+                vm.Tranportadoras = await Task.Run(vm.GetTransportadoras);
     
-                if (Romaneio == null)
+                if (vm.Romaneio == null)
                 {
                     Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     return;
@@ -84,41 +52,41 @@ namespace Expedicao.Views
                     
 
                 IList<AprovadoModel> itemsSource1 = (IList<AprovadoModel>)shopping_destino.ItemsSource;
-                int num1 = itemsSource1.IndexOf(itemsSource1.Where(a => a.SiglaServ.Equals(Romaneio.ShoppingDestino)).FirstOrDefault());
+                int num1 = itemsSource1.IndexOf(itemsSource1.Where(a => a.SiglaServ.Equals(vm.Romaneio.ShoppingDestino)).FirstOrDefault());
 
                 IList<TranportadoraModel> itemsSource2 = (IList<TranportadoraModel>)codtransportadora.ItemsSource;
-                int num2 = itemsSource2.IndexOf(itemsSource2.Where(t => t.CodTransportadora.Equals(Romaneio.CodTransportadora)).FirstOrDefault());
+                int num2 = itemsSource2.IndexOf(itemsSource2.Where(t => t.CodTransportadora.Equals(vm.Romaneio.CodTransportadora)).FirstOrDefault());
 
-                operacao.ItemsSource = OperacoesList;
-                condicao_caminhao.ItemsSource = CondicaoCaminhaoList;
-                operacao.SelectedIndex = OperacoesList.FindIndex(o => o.Equals(Romaneio.Operacao));
-                cod_romaneiro.Value = Romaneio.CodRomaneiro;
-                data_carregamento.DateTime = new DateTime?((DateTime)Romaneio.DataCarregamento);
-                hora_chegada.Value = Romaneio.HoraChegada.ToString();
+                operacao.ItemsSource = vm.OperacoesList;
+                condicao_caminhao.ItemsSource = vm.CondicaoCaminhaoList;
+                operacao.SelectedIndex = vm.OperacoesList.FindIndex(o => o.Equals(vm.Romaneio.Operacao));
+                cod_romaneiro.Value = vm.Romaneio.CodRomaneiro;
+                data_carregamento.DateTime = new DateTime?((DateTime)vm.Romaneio.DataCarregamento);
+                hora_chegada.Value = vm.Romaneio.HoraChegada.ToString();
                 shopping_destino.SelectedIndex = num1;
-                numero_caminhao.Value = new long?((long)Romaneio.NumeroCaminhao);
-                local_carregamento.Text = Romaneio.LocalCarregamento;
+                numero_caminhao.Value = new long?((long)vm.Romaneio.NumeroCaminhao);
+                local_carregamento.Text = vm.Romaneio.LocalCarregamento;
                 codtransportadora.SelectedIndex = num2;
-                nome_motorista.Text = Romaneio.NomeMotorista;
-                numero_cnh.Text = Romaneio.NumeroCnh;
-                telefone_motorista.Text = Romaneio.TelefoneMotorista;
-                condicao_caminhao.SelectedIndex = CondicaoCaminhaoList.FindIndex(c => c.Equals(Romaneio.CondicaoCaminhao));
-                placa_caminhao.Text = Romaneio.PlacaCaminhao;
-                placa_cidade.Text = Romaneio.PlacaCidade;
-                placa_estado.Text = Romaneio.PlacaEstado;
-                placa_carroceria.Text = Romaneio.PlacaCarroceria;
-                placa_carroceria_cidade.Text = Romaneio.PlacaCarroceriaCidade;
-                placa_carroceria_estado.Text = Romaneio.PlacaCarroceriaEstado;
-                bau_altura.Value = new double?((double)Romaneio.BauAltura);
-                bau_largura.Value = new double?((double)Romaneio.BauLargura);
-                bau_profundidade.Value = new double?((double)Romaneio.BauProfundidade);
-                m3_carregado.Value = new double?((double)Romaneio.M3Carregado);
-                bau_soba.Value = new double?((double)Romaneio.BauSoba);
-                m3_portaria.Value = new double?((double)Romaneio.M3Portaria);
-                nome_conferente.Text = Romaneio.NomeConferente;
-                num_lacres.Text = Romaneio.NumLacres;
-                numero_container.Text = Romaneio.NumeroContainer;
-                dateSaida.DateTime = new DateTime?((DateTime)Romaneio.DataHoraLiberacao);
+                nome_motorista.Text = vm.Romaneio.NomeMotorista;
+                numero_cnh.Text = vm.Romaneio.NumeroCnh;
+                telefone_motorista.Text = vm.Romaneio.TelefoneMotorista;
+                condicao_caminhao.SelectedIndex = vm.CondicaoCaminhaoList.FindIndex(c => c.Equals(vm.Romaneio.CondicaoCaminhao));
+                placa_caminhao.Text = vm.Romaneio.PlacaCaminhao;
+                placa_cidade.Text = vm.Romaneio.PlacaCidade;
+                placa_estado.Text = vm.Romaneio.PlacaEstado;
+                placa_carroceria.Text = vm.Romaneio.PlacaCarroceria;
+                placa_carroceria_cidade.Text = vm.Romaneio.PlacaCarroceriaCidade;
+                placa_carroceria_estado.Text = vm.Romaneio.PlacaCarroceriaEstado;
+                bau_altura.Value = new double?((double)vm.Romaneio.BauAltura);
+                bau_largura.Value = new double?((double)vm.Romaneio.BauLargura);
+                bau_profundidade.Value = new double?((double)vm.Romaneio.BauProfundidade);
+                m3_carregado.Value = new double?((double)vm.Romaneio.M3Carregado);
+                bau_soba.Value = new double?((double)vm.Romaneio.BauSoba);
+                m3_portaria.Value = new double?((double)vm.Romaneio.M3Portaria);
+                nome_conferente.Text = vm.Romaneio.NomeConferente;
+                num_lacres.Text = vm.Romaneio.NumLacres;
+                numero_container.Text = vm.Romaneio.NumeroContainer;
+                dateSaida.DateTime = new DateTime?((DateTime)vm.Romaneio.DataHoraLiberacao);
 
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
@@ -155,12 +123,13 @@ namespace Expedicao.Views
                 return;
             try
             {
+                RomaneioViewModel vm = (RomaneioViewModel)DataContext;
                 //if (this.Romaneio == null)
                 //{
-                    foreach (AprovadoModel selectedItem in shopping_destino.SelectedItems)
-                    {
+                foreach (AprovadoModel selectedItem in shopping_destino.SelectedItems)
+                {
                         RomaneioModel Romaneio = new RomaneioModel();
-                        Romaneio.CodRomaneiro = this.Romaneio?.CodRomaneiro;
+                        Romaneio.CodRomaneiro = vm.Romaneio?.CodRomaneiro;
                         Romaneio.Operacao = operacao.SelectionBoxItem.ToString();
                         Romaneio.DataCarregamento = data_carregamento.DateTime.Value;
                         Romaneio.HoraChegada = TimeSpan.Parse(hora_chegada.Value.ToString());
@@ -178,18 +147,18 @@ namespace Expedicao.Views
                         Romaneio.PlacaCarroceria = placa_carroceria.Text;
                         Romaneio.PlacaCarroceriaCidade = placa_carroceria_cidade.Text;
                         Romaneio.PlacaCarroceriaEstado = placa_carroceria_estado.Text;
-                        Romaneio.BauAltura = (double)bau_altura.Value;
-                        Romaneio.BauLargura = (double)bau_largura.Value;
-                        Romaneio.BauProfundidade = (double)bau_profundidade.Value;
-                        Romaneio.M3Carregado = (double)m3_carregado.Value;
-                        Romaneio.BauSoba = (double)bau_soba.Value;
-                        Romaneio.M3Portaria = (double)m3_portaria.Value;
+                        Romaneio.BauAltura = bau_altura?.Value;
+                        Romaneio.BauLargura = bau_largura?.Value;
+                        Romaneio.BauProfundidade = bau_profundidade?.Value;
+                        Romaneio.M3Carregado = m3_carregado?.Value;
+                        Romaneio.BauSoba = bau_soba?.Value;
+                        Romaneio.M3Portaria = m3_portaria?.Value;
                         Romaneio.NomeConferente = nome_conferente.Text;
                         Romaneio.NumLacres = num_lacres.Text;
                         Romaneio.NumeroContainer = numero_container.Text;
                         Romaneio.DataHoraLiberacao = dateSaida.DateTime.Value;
-                        RomaneioModel romaneioModel = await new RomaneioViewModel().SaveAsync(Romaneio);
-                    }
+                        RomaneioModel romaneioModel = await vm.SaveAsync(Romaneio);
+                }
                 //}
                 MessageBox.Show("Romaneio salvo com sucesso...", "Romaneio", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                 Limpar();
@@ -350,6 +319,149 @@ namespace Expedicao.Views
                 return false;
             }
             return true;
+        }
+    }
+
+    public class RomaneioViewModel : INotifyPropertyChanged
+    {
+        /*
+        private List<string> operacoes = new List<string>()
+        {
+          "CARREGAMENTO SHOPPING",
+          "CARREGAMENTO TRANSFERÊNCIA",
+          "DESCARREGAMENTO SHOPPING",
+          "DESCARREGAMENTO TRANSFERÊNCIA",
+          "KIT SOLUÇÃO"
+        };
+        */
+        /*
+        private List<string> condicaoCaminhao = new List<string>()
+        {
+          "BOA",
+          "REGULAR",
+          "PÉSSIMA"
+        };
+        */
+
+        private RomaneioModel? romaneio;
+        public RomaneioModel Romaneio
+        {
+            get { return romaneio; }
+            set { romaneio = value; RaisePropertyChanged("Romaneio"); }
+        }
+
+        private ObservableCollection<RomaneioModel>? romaneios;
+        public ObservableCollection<RomaneioModel> Romaneios
+        {
+            get { return romaneios; }
+            set { romaneios = value; RaisePropertyChanged("Romaneios"); }
+        }
+
+        private List<string>? operacoesList = new List<string> { "CARREGAMENTO SHOPPING", "CARREGAMENTO TRANSFERÊNCIA", "DESCARREGAMENTO SHOPPING", "DESCARREGAMENTO TRANSFERÊNCIA", "KIT SOLUÇÃO" };
+        public List<string> OperacoesList
+        {
+            get { return operacoesList; }
+            set { operacoesList = value; RaisePropertyChanged("OperacoesList"); }
+        }
+
+        private List<string>? condicaoCaminhaoList = new List<string> { "BOA", "REGULAR", "PÉSSIMA"  };
+        public List<string> CondicaoCaminhaoList
+        {
+            get { return condicaoCaminhaoList; }
+            set { condicaoCaminhaoList = value; RaisePropertyChanged("CondicaoCaminhaoList"); }
+        }
+
+        private ObservableCollection<AprovadoModel>? aprovados;
+        public ObservableCollection<AprovadoModel> Aprovados
+        {
+            get { return aprovados; }
+            set { aprovados = value; RaisePropertyChanged("Aprovados"); }
+        }
+
+        private ObservableCollection<TranportadoraModel>? tranportadoras;
+        public ObservableCollection<TranportadoraModel> Tranportadoras
+        {
+            get { return tranportadoras; }
+            set { tranportadoras = value; RaisePropertyChanged("Tranportadoras"); }
+        }
+
+        /*public List<string> OperacoesList
+        {
+            get => this.operacoes;
+            set => this.operacoes = value;
+        }*/
+        /*
+        public List<string> CondicaoCaminhaoList
+        {
+            get => this.condicaoCaminhao;
+            set => this.condicaoCaminhao = value;
+        }
+        */
+
+        public async Task<ObservableCollection<AprovadoModel>> GetAprovados()
+        {
+            try
+            {
+                using AppDatabase db = new();
+                var data = await db.Aprovados.OrderBy(c => c.SiglaServ).ToListAsync();
+                return new ObservableCollection<AprovadoModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ObservableCollection<TranportadoraModel>> GetTransportadoras()
+        {
+            try
+            {
+                using AppDatabase db = new();
+                var data = await db.Tranportadoras.OrderBy(c => c.NomeTransportadora).ToListAsync();
+                return new ObservableCollection<TranportadoraModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
+        public async Task<RomaneioModel> SaveAsync(RomaneioModel romaneio)
+        {
+            try
+            {
+                using AppDatabase db = new AppDatabase();
+                await db.Romaneios.SingleMergeAsync(romaneio);
+                int num = await db.SaveChangesAsync();
+                long? codRomaneiro = romaneio.CodRomaneiro;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return romaneio;
+        }
+
+        public async Task<ObservableCollection<RomaneioModel>> GetRomaneiosAsync()
+        {
+
+            try
+            {
+                using AppDatabase db = new();
+                var data = await db.Romaneios.OrderBy(n => n.ShoppingDestino).ThenBy(n => n.NumeroCaminhao).ToListAsync();
+                return new ObservableCollection<RomaneioModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void RaisePropertyChanged(string propName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
     }
 }

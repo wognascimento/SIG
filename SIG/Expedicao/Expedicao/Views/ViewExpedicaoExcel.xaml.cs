@@ -48,48 +48,64 @@ namespace Expedicao.Views
 
         private async void btnExcel_Click(object sender, RoutedEventArgs e)
         {
-            ExcelEngine excelEngine = new ExcelEngine();
-            IApplication excel = excelEngine.Excel;
-            excel.DefaultVersion = ExcelVersion.Xlsx;
-            IWorkbook workbook = excel.Workbooks.Create(1);
-            IWorksheet worksheet = workbook.Worksheets[0];
-
-            await Task.Run(() => Dispatcher.Invoke(() => btnExcel.Visibility = Visibility.Hidden));
-            await Task.Run(() => Dispatcher.Invoke(() => sfBusyIndicatorExcel.IsBusy = true));
-
-
-            AprovadoModel aprovado = sfmcAprovados.SelectedItem as AprovadoModel;
-            object dados = new object();
-
-            if (Consulta == "ITENS_FALTANTES")
+            try
             {
-                dados = await new ExpedicaoViewModel().GetItensFaltanteAsync(aprovado.SiglaServ);
+                ExcelEngine excelEngine = new ExcelEngine();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                await Task.Run(() => Dispatcher.Invoke(() => btnExcel.Visibility = Visibility.Hidden));
+                await Task.Run(() => Dispatcher.Invoke(() => sfBusyIndicatorExcel.IsBusy = true));
+
+
+                AprovadoModel aprovado = sfmcAprovados.SelectedItem as AprovadoModel;
+                object dados = new object();
+
+                if (Consulta == "ITENS_FALTANTES")
+                {
+                    dados = await new ExpedicaoViewModel().GetItensFaltanteAsync(aprovado.SiglaServ);
+                }
+                else if (Consulta == "ITENS_CARREGADOS")
+                {
+                    dados = await new ExpedicaoViewModel().GetCarregamentoItensAsync(aprovado.SiglaServ);
+                }
+                else if (Consulta == "PRE_ITENS_FALTANTES")
+                {
+                    dados = await new ExpedicaoViewModel().GetPreItensFaltanteAsync(aprovado.SiglaServ);
+                }
+                else if (Consulta == "PRE_ITENS_CONFERIDOS")
+                {
+                    dados = await new ExpedicaoViewModel().GetPreItensShoppAsync(aprovado.SiglaServ);
+                }
+
+                ExcelImportDataOptions importDataOptions = new ExcelImportDataOptions()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData((IEnumerable)dados, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs($"{Consulta}.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+                await Task.Run(() => Dispatcher.Invoke(() => btnExcel.Visibility = Visibility.Visible));
+                await Task.Run(() => Dispatcher.Invoke(() => sfBusyIndicatorExcel.IsBusy = false));
+
+                Process.Start(new ProcessStartInfo($"{Consulta}.xlsx")
+                {
+                    UseShellExecute = true
+                });
             }
-            else if (Consulta == "ITENS_CARREGADOS")
+            catch (Exception ex)
             {
-                dados = await new ExpedicaoViewModel().GetCarregamentoItensAsync(aprovado.SiglaServ);
+                 MessageBox.Show(ex.Message );
             }
-
-            ExcelImportDataOptions importDataOptions = new ExcelImportDataOptions()
-            {
-                FirstRow = 1,
-                FirstColumn = 1,
-                IncludeHeader = true,
-                PreserveTypes = true
-            };
-            worksheet.ImportData((IEnumerable)dados, importDataOptions);
-            worksheet.UsedRange.AutofitColumns();
-            workbook.SaveAs($"{Consulta}.xlsx");
-            workbook.Close();
-            excelEngine.Dispose();
-
-            await Task.Run(() => Dispatcher.Invoke(() => btnExcel.Visibility = Visibility.Visible));
-            await Task.Run(() => Dispatcher.Invoke(() => sfBusyIndicatorExcel.IsBusy = false));
-
-            Process.Start(new ProcessStartInfo($"{Consulta}.xlsx")
-            {
-                UseShellExecute = true
-            });
+            
         }
 
     }

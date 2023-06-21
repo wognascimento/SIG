@@ -46,8 +46,9 @@
                 <syncfusion:GridTextColumn MappingName="local_shoppings"/>
                 <syncfusion:GridTextColumn MappingName="planilha"/>
                 <syncfusion:GridTextColumn MappingName="descricao_completa"/>
-                <syncfusion:GridTextColumn MappingName="item_memorial"/>
-                <syncfusion:GridTextColumn MappingName="unidade" Width="65"/>
+                <syncfusion:GridTextColumn MappingName="obs" HeaderText="orientacao_producao" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn MappingName="item_memorial" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn MappingName="unidade" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridNumericColumn MappingName="id_modelo" DisplayBinding="{Binding id_modelo, Converter={StaticResource ConverterNumber}}" Width="65"/>
                 <syncfusion:GridNumericColumn MappingName="qtde_compl" Width="60"/>
                 <syncfusion:GridTextColumn MappingName="status" Width="60"/>

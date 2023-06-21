@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Expedicao.Model;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections;
@@ -229,6 +230,40 @@ namespace Expedicao
                 using AppDatabase db = new();
                 listAsync = await db.CarregamentoItenFaltantes
                     .Where(s => s.Sigla == sigla)
+                    .ToListAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return listAsync;
+        }
+
+        public async Task<IList<PreConferenciaItemFaltanteModel>> GetPreItensFaltanteAsync(string sigla)
+        {
+            IList<PreConferenciaItemFaltanteModel> listAsync;
+            try
+            {
+                using AppDatabase db = new();
+                listAsync = await db.PreConferenciaItemFaltantes
+                    .Where(s => s.sigla == sigla)
+                    .ToListAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return listAsync;
+        }
+
+        public async Task<IList<PreConferenciaItemShoppModel>> GetPreItensShoppAsync(string sigla)
+        {
+            IList<PreConferenciaItemShoppModel> listAsync;
+            try
+            {
+                using AppDatabase db = new();
+                listAsync = await db.PreConferenciaItemShopps
+                    .Where(s => s.sigla == sigla)
                     .ToListAsync();
             }
             catch (Exception)

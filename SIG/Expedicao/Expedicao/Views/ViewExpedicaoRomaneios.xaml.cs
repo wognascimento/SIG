@@ -1,19 +1,14 @@
 ﻿using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.XlsIO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Expedicao.Views
 {
@@ -30,6 +25,7 @@ namespace Expedicao.Views
         public ViewExpedicaoRomaneios(string localAberto)
         {
             InitializeComponent();
+            this.DataContext = new RomaneioViewModel();
             LocalAberto = localAberto;
         }
 
@@ -37,10 +33,11 @@ namespace Expedicao.Views
         {
             try
             {
-                itens.ItemsSource = await Task.Run(async () => await new RomaneioViewModel().GetRomaneiosAsync());
+                RomaneioViewModel vm = (RomaneioViewModel)DataContext;
+                vm.Romaneios = await Task.Run(vm.GetRomaneiosAsync);
                 if (LocalAberto == "PRINCIPAL")
                 {
-                    BSelecionados.Visibility = Visibility.Hidden;
+                    BSelecionados.Visibility = Visibility.Visible;
                     loadingDetalhes.Visibility = Visibility.Hidden;
                     itens.SelectionMode = GridSelectionMode.Single;
                 }
@@ -65,13 +62,60 @@ namespace Expedicao.Views
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            /*
             foreach (RomaneioModel selectedItem in itens.SelectedItems.Cast<RomaneioModel>())
             {
                 Romaneios.Add(selectedItem);
             }
 
             Window.GetWindow(sender as DependencyObject).DialogResult = new bool?(true);
+            */
+
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                ExcelEngine excelEngine = new ExcelEngine();
+                IApplication excel = excelEngine.Excel;
+                excel.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = excel.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+
+                RomaneioViewModel vm = (RomaneioViewModel)DataContext;
+
+                ExcelImportDataOptions importDataOptions = new ExcelImportDataOptions()
+                {
+                    FirstRow = 1,
+                    FirstColumn = 1,
+                    IncludeHeader = true,
+                    PreserveTypes = true
+                };
+                worksheet.ImportData(vm.Romaneios, importDataOptions);
+                worksheet.UsedRange.AutofitColumns();
+                workbook.SaveAs($"ROMANEIOS.xlsx");
+                workbook.Close();
+                excelEngine.Dispose();
+
+
+                Process.Start(new ProcessStartInfo($"ROMANEIOS.xlsx")
+                {
+                    UseShellExecute = true
+                });
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
+
+            
         }
+
+    
 
         private void btnAcao_Click(object sender, RoutedEventArgs e)
         {

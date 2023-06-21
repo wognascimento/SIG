@@ -755,5 +755,27 @@ namespace Expedicao
             this._dc.CanMDIMaximize = true;
             this._dc.Items.Add(expedicaoRomaneio);
         }
+
+        private void OnPreItensFaltantesClick(object sender, RoutedEventArgs e)
+        {
+            ViewExpedicaoExcel viewExpedicaoExcel = new ViewExpedicaoExcel("PRE_ITENS_FALTANTES");
+            DocumentContainer.SetHeader((DependencyObject)viewExpedicaoExcel, (object)"EXPEDIÇÃO PRÉ-CONFERENCIA ITENS FALTANTES");
+            DocumentContainer.SetSizetoContentInMDI((DependencyObject)viewExpedicaoExcel, true);
+            DocumentContainer.SetMDIWindowState((DependencyObject)viewExpedicaoExcel, MDIWindowState.Normal);
+            DocumentContainer.SetMDIBounds((DependencyObject)viewExpedicaoExcel, new Rect((this._dc.ActualWidth - 600.0) / 2.0, (this._dc.ActualHeight - 80.0) / 2.0, 600.0, 80.0));
+            this._dc.CanMDIMaximize = false;
+            this._dc.Items.Add((object)viewExpedicaoExcel);
+        }
+
+        private void OnPreItensCarregadosClick(object sender, RoutedEventArgs e)
+        {
+            ViewExpedicaoExcel viewExpedicaoExcel = new ViewExpedicaoExcel("PRE_ITENS_CONFERIDOS");
+            DocumentContainer.SetHeader((DependencyObject)viewExpedicaoExcel, (object)"EXPEDIÇÃO PRÉ-CONFERENCIA ITENS CONFERIDOS");
+            DocumentContainer.SetSizetoContentInMDI((DependencyObject)viewExpedicaoExcel, true);
+            DocumentContainer.SetMDIWindowState((DependencyObject)viewExpedicaoExcel, MDIWindowState.Normal);
+            DocumentContainer.SetMDIBounds((DependencyObject)viewExpedicaoExcel, new Rect((this._dc.ActualWidth - 600.0) / 2.0, (this._dc.ActualHeight - 80.0) / 2.0, 600.0, 80.0));
+            this._dc.CanMDIMaximize = false;
+            this._dc.Items.Add((object)viewExpedicaoExcel);
+        }
     }
 }
