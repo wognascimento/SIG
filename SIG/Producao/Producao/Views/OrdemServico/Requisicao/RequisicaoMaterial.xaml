@@ -252,9 +252,12 @@
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn 
                     HeaderText="ID" 
-                    MappingName="cod_det_req" 
-                    ParsingMode="Int" 
-                    NumberDecimalDigits="0"/>
+                    MappingName="cod_det_req"
+                    DisplayBinding="{Binding cod_det_req, Converter={StaticResource ConverterNumber}}"/>   
+                <syncfusion:GridNumericColumn 
+                    HeaderText="COD." 
+                    MappingName="codcompladicional"
+                    DisplayBinding="{Binding codcompladicional, Converter={StaticResource ConverterNumber}}"/>
                 <syncfusion:GridTextColumn HeaderText="PLANILHA" MappingName="planilha"/>
                 <syncfusion:GridTextColumn HeaderText="DESCRIÇÃO" MappingName="descricao_completa"/>
                 <syncfusion:GridTextColumn HeaderText="UNID" MappingName="unidade"/>

@@ -867,5 +867,16 @@ namespace Producao
             */
             adicionarFilho(new ProgramacaoProducao(), "PROGRAMAÇÃO DE PRODUÇÃO", "PROGRAMACAO_PRODUCAO");
         }
+
+        private void _mdi_CloseButtonClick(object sender, CloseButtonEventArgs e)
+        {
+            var tab = (DocumentContainer)sender;
+            _mdi.Items.Remove(tab.ActiveDocument);
+        }
+
+        private void _mdi_CloseAllTabs(object sender, CloseTabEventArgs e)
+        {
+            _mdi.Items.Clear();
+        }
     }
 }

@@ -144,7 +144,9 @@
             Name="_mdi" 
             Grid.Row="1" 
             EnableAutoScroll="True"
-            Mode="TDI"/>
+            Mode="TDI"
+            CloseButtonClick="_mdi_CloseButtonClick"
+            CloseAllTabs="_mdi_CloseAllTabs"/>
 
         <StatusBar Grid.Row="2">
             <ItemsControl.ItemsPanel>
