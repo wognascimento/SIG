@@ -669,7 +669,7 @@ namespace Producao
             this._mdi.CanMDIMaximize = true;
             this._mdi.Items.Add(view);
             */
-            adicionarFilho(new ViewComplementoCheckListNatal(), "COMPLETAR CHECKLIST NATAL", "COMPLETAR_CHECKLIST_NATAL");
+            //adicionarFilho(new ViewComplementoCheckListNatal(), "COMPLETAR CHECKLIST NATAL", "COMPLETAR_CHECKLIST_NATAL");
         }
 
         private void OnBaixaProdutoClick(object sender, RoutedEventArgs e)

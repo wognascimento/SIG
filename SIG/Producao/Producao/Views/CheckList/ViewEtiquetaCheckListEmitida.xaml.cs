@@ -34,6 +34,11 @@ namespace Producao.Views.CheckList
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
         }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+        }
     }
 
     public class EtiquetaEmitidaViewModel : INotifyPropertyChanged

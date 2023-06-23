@@ -246,6 +246,11 @@ namespace Producao.Views.Estoque
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+        }
     }
 
     class MovimentacaoEntradaViewModel : INotifyPropertyChanged

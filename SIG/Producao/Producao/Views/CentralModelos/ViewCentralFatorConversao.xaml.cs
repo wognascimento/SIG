@@ -73,6 +73,10 @@ namespace Producao.Views.CentralModelos
             }
         }
 
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+        }
     }
 
     public class ViewCentralFatorConversaoViewModel : INotifyPropertyChanged

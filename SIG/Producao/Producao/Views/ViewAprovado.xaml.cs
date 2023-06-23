@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Producao.Views.CadastroProduto;
-using Producao.Views.CentralModelos;
-using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -148,6 +144,11 @@ namespace Producao.Views
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
         }
     }
 

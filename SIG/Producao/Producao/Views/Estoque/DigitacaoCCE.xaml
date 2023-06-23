@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:Producao.Views.Estoque"
              xmlns:app="clr-namespace:Producao" 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Unloaded="UserControl_Unloaded">
 
 
     <UserControl.Resources>

@@ -12,7 +12,7 @@
     Height="auto" Width="auto"
     WindowStartupLocation="CenterScreen" 
     WindowStyle="ToolWindow"
-    ResizeMode="NoResize" Loaded="Window_Loaded">
+    ResizeMode="NoResize" Loaded="Window_Loaded" Unloaded="Window_Unloaded">
 
     <Window.Resources>
         <vewModel:ConverterNumber x:Key="ConverterNumber"/>

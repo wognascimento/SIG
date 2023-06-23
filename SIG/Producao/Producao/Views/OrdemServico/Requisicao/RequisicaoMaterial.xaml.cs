@@ -539,5 +539,10 @@ namespace Producao.Views.OrdemServico.Requisicao
             txtUnidade.Text = complemento?.unidade;
             txtQuantidade.Focus();
         }
+
+        private void Window_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+        }
     }
 }

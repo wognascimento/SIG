@@ -105,6 +105,10 @@ namespace Producao.Views.OrdemServico.Produto
 
         }
 
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+        }
     }
 
     class ProgramacaoProducaoViewModel : INotifyPropertyChanged

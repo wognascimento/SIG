@@ -75,6 +75,11 @@ namespace Producao.Views.OrdemServico.Requisicao
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+        }
     }
 
     class RequisicaoMaterialEmitirViewModel : INotifyPropertyChanged

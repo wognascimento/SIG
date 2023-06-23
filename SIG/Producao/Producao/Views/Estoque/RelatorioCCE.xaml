@@ -8,6 +8,9 @@
              d:DesignHeight="40" d:DesignWidth="500" Loaded="UserControl_Loaded">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" Unloaded="RowDefinition_Unloaded"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="auto" />

@@ -134,6 +134,11 @@ namespace Producao.Views.Estoque
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
+
+        private void RowDefinition_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+        }
     }
 
     class RelatorioCCEViewModel : INotifyPropertyChanged

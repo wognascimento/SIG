@@ -710,6 +710,10 @@ namespace Producao.Views.CheckList
             ((QryCheckListGeralComplementoModel)e.NewObject).codcompl = vm.CheckListGeral.codcompl;
         }
 
+        private void chklist_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+        }
     }
 
     public class NameButtonConverter : IValueConverter

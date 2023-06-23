@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -337,14 +338,16 @@ namespace Producao.Views.CentralModelos
                 worksheet.Range["C4"].Text = Modelo.descricao_completa;
                 worksheet.Range["C5"].Text = Modelo.tema;
                 worksheet.Range["A7"].Text = Modelo.obs_modelo;
-                worksheet.Range["H4"].Text = Modelo.multiplica.ToString();
+                worksheet.Range["H4"].Number = (double)Modelo.multiplica;//String.Format(new CultureInfo("pt-BR"), "{0:G}", Modelo.multiplica); //Modelo.multiplica.ToString();
+                worksheet.Range["H4"].NumberFormat = "0.0";
+                //Console.WriteLine(String.Format(new CultureInfo("pt-BR"), "{0:C}", 189.99));
 
                 //var itens = (from i in vm.ItensReceita where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade }).ToList(); //new { a.Name, a.Age }
                 var index = 9;
 
                 foreach (var item in vm.ItensReceita)
                 {
-                    worksheet.Range[$"A{index}"].Text = item.codcompladicional.ToString();
+                    worksheet.Range[$"A{index}"].Number = (double)item.codcompladicional;
                     worksheet.Range[$"A{index}"].CellStyle.Font.FontName = "Arial";
                     worksheet.Range[$"A{index}"].CellStyle.Font.Size = 8;
 
@@ -364,12 +367,12 @@ namespace Producao.Views.CentralModelos
                     //worksheet.Range[$"F{index}:G{index}"].Merge();
                     worksheet.Range[$"F{index}"].WrapText = true;
 
-                    worksheet.Range[$"G{index}"].Text = item.qtd_modelo.ToString();
+                    worksheet.Range[$"G{index}"].Number = (double)item.qtd_modelo;
                     worksheet.Range[$"G{index}"].CellStyle.Font.FontName = "Arial";
                     worksheet.Range[$"G{index}"].CellStyle.Font.Size = 8;
                     worksheet.Range[$"G{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
 
-                    worksheet.Range[$"H{index}"].Text = item.qtd_producao.ToString();
+                    worksheet.Range[$"H{index}"].Number = (double)item.qtd_producao;
                     worksheet.Range[$"H{index}"].CellStyle.Font.FontName = "Arial";
                     worksheet.Range[$"H{index}"].CellStyle.Font.Size = 8;
                     worksheet.Range[$"H{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;

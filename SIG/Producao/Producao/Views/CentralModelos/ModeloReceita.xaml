@@ -7,10 +7,10 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         xmlns:syncfusionSfDataGrid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF" 
         mc:Ignorable="d"
-        Title="RECEITA DO MODELO" Height="800" Width="1000"
+        Title="RECEITA DO MODELO" Height="800" Width="800"
         WindowStartupLocation="CenterOwner" 
         WindowStyle="ToolWindow" 
-        ResizeMode="NoResize" Loaded="Window_Loaded">
+        ResizeMode="NoResize" Loaded="Window_Loaded" WindowState="Maximized">
 
     <Window.Resources>
         <local:ProdutoInativoColorConverter x:Key="converter"/>

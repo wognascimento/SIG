@@ -9,7 +9,7 @@
     x:Class="Producao.Views.OrdemServico.Requisicao.RequisicaoMaterialAlterar"
     mc:Ignorable="d"
     Height="auto" Width="auto"
-    Loaded="Window_Loaded">
+    Loaded="Window_Loaded" Unloaded="UserControl_Unloaded">
 
     <UserControl.Resources>
         <vewModel:ConverterNumber x:Key="ConverterNumber"/>

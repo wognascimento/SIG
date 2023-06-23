@@ -8,7 +8,7 @@
              xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" 
-             Loaded="OnLoaded">
+             Loaded="OnLoaded" Unloaded="UserControl_Unloaded">
 
     <UserControl.Resources>
         <app:ConverterNumber x:Key="ConverterNumber"/>

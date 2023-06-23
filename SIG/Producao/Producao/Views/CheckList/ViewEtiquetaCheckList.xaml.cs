@@ -26,16 +26,19 @@ namespace Producao.Views.CheckList
         {
             try
             {
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
                 //vm.Siglas =  await Task.Run(vm.GetSiglasAsync);
                 vm.Dados = await Task.Run(vm.GetItensAsync);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
         }
 
@@ -43,15 +46,18 @@ namespace Producao.Views.CheckList
         {
             try
             {
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
                 //vm.Dados = await Task.Run(() => vm.GetItensAsync(vm.Sigla.sigla_serv));
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
         }
 
@@ -59,15 +65,18 @@ namespace Producao.Views.CheckList
         {
             try
             {
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
                 vm.Etiquetas = await Task.Run(() => vm.GetEtiquetasAsync(vm.Dado.coddetalhescompl));
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
         }
 
@@ -75,16 +84,27 @@ namespace Producao.Views.CheckList
         {
             try
             {
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
                 vm.Etiqueta = (EtiquetaProducaoModel)e.RowData;
                 EtiquetaProducaoModel data = (EtiquetaProducaoModel)e.RowData;
-                await Task.Run(() => vm.AddEtiquetaAsync(data));
-                await Task.Run(() => vm.GetEtiquetasAsync(data.coddetalhescompl));
-                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+
+                for (int i = 0; i < data.volumes_total; i++)
+                {
+                    vm.Etiqueta.codvol = null;
+                    vm.Etiqueta.volumes = i+1;
+                    if (i > 0)
+                        vm.Etiqueta.qtd = 0;
+                    vm.Etiqueta = await Task.Run(() => vm.AddEtiquetaAsync(vm.Etiqueta));
+                }
+                vm.Etiquetas = await Task.Run(() => vm.GetEtiquetasAsync(data.coddetalhescompl));
+                //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
@@ -179,6 +199,11 @@ namespace Producao.Views.CheckList
             else
                 e.Cancel = true;
             
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
         }
     }
 
@@ -300,10 +325,10 @@ namespace Producao.Views.CheckList
             try
             {
                 using DatabaseContext db = new();
-                db.Entry(Etiqueta).State = Etiqueta.codvol == null ?
+                /*db.Entry(Etiqueta).State = Etiqueta.codvol == null ?
                                    EntityState.Added :
-                                   EntityState.Modified;
-
+                                   EntityState.Modified;*/
+                await db.EtiquetaProducaos.SingleMergeAsync(etiqueta);
                 await db.SaveChangesAsync();
 
                 return etiqueta;

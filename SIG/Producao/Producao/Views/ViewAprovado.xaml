@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:Producao.Views" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" 
-             Loaded="UserControl_Loaded" Initialized="UserControl_Initialized">
+             Loaded="UserControl_Loaded" Initialized="UserControl_Initialized" Unloaded="UserControl_Unloaded">
 
     <Grid>
         <Syncfusion:SfDataGrid 

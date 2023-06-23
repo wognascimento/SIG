@@ -92,6 +92,11 @@ namespace Producao.Views.Estoque
             data.digitado_por = Environment.UserName;
             data.digitado_data = DateTime.Now;
         }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            ((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+        }
     }
 
     class DigitacaoCCEViewModel : INotifyPropertyChanged

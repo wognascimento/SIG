@@ -1,0 +1,157 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+    <IsPublishable>True</IsPublishable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="App.ico" />
+    <None Remove="icones\configuracao-de-dados-windows-metro-16.png" />
+    <None Remove="icones\icons8-adicionar-a-coleção-40.png" />
+    <None Remove="icones\icons8-adicionar-a-coleção-80.png" />
+    <None Remove="icones\icons8-adicionar-propriedade-40.png" />
+    <None Remove="icones\icons8-adicionar-propriedade-80.png" />
+    <None Remove="icones\icons8-copiar-40.png" />
+    <None Remove="icones\icons8-copiar-80.png" />
+    <None Remove="icones\icons8-detalhes-40.png" />
+    <None Remove="icones\icons8-detalhes-80.png" />
+    <None Remove="icones\icons8-editar-propriedade-40.png" />
+    <None Remove="icones\icons8-editar-propriedade-80.png" />
+    <None Remove="icones\icons8-excluir-40.png" />
+    <None Remove="icones\icons8-excluir-80.png" />
+    <None Remove="icones\icons8-impressão-40.png" />
+    <None Remove="icones\icons8-impressão-80.png" />
+    <None Remove="icones\icons8-lista-de-verificação-40.png" />
+    <None Remove="icones\icons8-lista-de-verificação-80.png" />
+    <None Remove="icones\icons8-ms-excel-blue-ui-120.png" />
+    <None Remove="icones\icons8-ms-excel-blue-ui-16.png" />
+    <None Remove="icones\icons8-ms-excel-blue-ui-32.png" />
+    <None Remove="icones\icons8-ms-excel-blue-ui-96.png" />
+    <None Remove="icones\icons8-next-page-blue-ui-16.png" />
+    <None Remove="icones\icons8-next-page-blue-ui-32.png" />
+    <None Remove="icones\icons8-next-page-blue-ui-96.png" />
+    <None Remove="icones\icons8-pesquisar-40.png" />
+    <None Remove="icones\icons8-pesquisar-80.png" />
+    <None Remove="icones\icons8-salvar-40.png" />
+    <None Remove="icones\icons8-salvar-80.png" />
+    <None Remove="icones\icons8-usu_0025c3_0025a1rio-de-g_0025c3_0025aanero-neutro-windows-metro-16.png" />
+    <None Remove="icones\icons8-vassoura-40.png" />
+    <None Remove="icones\icons8-vassoura-80.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>9</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>00020813-0000-0000-c000-000000000046</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="favicon.ico" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="6.2.4" />
+    <PackageReference Include="itext7" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Data.Services.Client" Version="5.8.5" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
+    <PackageReference Include="syncfusion.ui.wpf.net" Version="20.3.0.56" />
+    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="7.22.2" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Reference Include="Syncfusion.Data.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.Data.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Licensing">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.Licensing.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfChart.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.SfChart.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfDiagram.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.SfDiagram.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfGrid.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.SfGrid.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.SfSkinManager.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.SfSkinManager.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Shared.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.Shared.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Themes.FluentLight.WPF">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.Themes.FluentLight.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Syncfusion.Tools.Wpf">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Syncfusion\Essential Studio\WPF\20.3.0.47\precompiledassemblies\net5.0\Syncfusion.Tools.WPF.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Resource Include="App.ico" />
+    <Resource Include="icones\configuracao-de-dados-windows-metro-16.png" />
+    <Resource Include="icones\icons8-adicionar-a-coleção-40.png" />
+    <Resource Include="icones\icons8-adicionar-a-coleção-80.png" />
+    <Resource Include="icones\icons8-adicionar-propriedade-40.png" />
+    <Resource Include="icones\icons8-adicionar-propriedade-80.png" />
+    <Resource Include="icones\icons8-copiar-40.png" />
+    <Resource Include="icones\icons8-copiar-80.png" />
+    <Resource Include="icones\icons8-detalhes-80.png" />
+    <Resource Include="icones\icons8-editar-propriedade-40.png" />
+    <Resource Include="icones\icons8-editar-propriedade-80.png" />
+    <Resource Include="icones\icons8-excluir-40.png" />
+    <Resource Include="icones\icons8-excluir-80.png" />
+    <Resource Include="icones\icons8-impressão-40.png" />
+    <Resource Include="icones\icons8-impressão-80.png" />
+    <Resource Include="icones\icons8-lista-de-verificação-40.png" />
+    <Resource Include="icones\icons8-lista-de-verificação-80.png" />
+    <Resource Include="icones\icons8-ms-excel-blue-ui-120.png" />
+    <Resource Include="icones\icons8-ms-excel-blue-ui-16.png" />
+    <Resource Include="icones\icons8-ms-excel-blue-ui-32.png" />
+    <Resource Include="icones\icons8-ms-excel-blue-ui-96.png" />
+    <Resource Include="icones\icons8-next-page-blue-ui-16.png" />
+    <Resource Include="icones\icons8-next-page-blue-ui-32.png" />
+    <Resource Include="icones\icons8-next-page-blue-ui-96.png" />
+    <Resource Include="icones\icons8-pesquisar-40.png" />
+    <Resource Include="icones\icons8-pesquisar-80.png" />
+    <Resource Include="icones\icons8-salvar-40.png" />
+    <Resource Include="icones\icons8-salvar-80.png" />
+    <Resource Include="icones\icons8-usu_0025c3_0025a1rio-de-g_0025c3_0025aanero-neutro-windows-metro-16.png" />
+    <Resource Include="icones\icons8-vassoura-40.png" />
+    <Resource Include="icones\icons8-vassoura-80.png" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Folder Include="DataBase\Model\" />
+    <Folder Include="Impressos\" />
+    <Folder Include="Modelos\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <Resource Include="icones\icons8-detalhes-40.png" />
+  </ItemGroup>
+</Project>
