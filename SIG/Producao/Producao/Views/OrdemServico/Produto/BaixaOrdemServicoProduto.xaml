@@ -22,7 +22,6 @@
             AllowFiltering="True"
             ColumnSizer="SizeToHeader"
             ItemsSource="{Binding Itens}"
-            SelectedItem="{Binding Item, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             AllowResizingHiddenColumns="True" 
             AllowResizingColumns="True" 
             RowValidated="SfDataGrid_RowValidated" >

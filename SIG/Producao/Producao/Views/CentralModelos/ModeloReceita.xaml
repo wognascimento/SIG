@@ -10,7 +10,7 @@
         Title="RECEITA DO MODELO" Height="800" Width="800"
         WindowStartupLocation="CenterOwner" 
         WindowStyle="ToolWindow" 
-        ResizeMode="NoResize" Loaded="Window_Loaded" WindowState="Maximized">
+        ResizeMode="NoResize" Loaded="Window_Loaded">
 
     <Window.Resources>
         <local:ProdutoInativoColorConverter x:Key="converter"/>

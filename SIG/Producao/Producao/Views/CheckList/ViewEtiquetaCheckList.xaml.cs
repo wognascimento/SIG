@@ -92,10 +92,13 @@ namespace Producao.Views.CheckList
 
                 for (int i = 0; i < data.volumes_total; i++)
                 {
-                    vm.Etiqueta.codvol = null;
                     vm.Etiqueta.volumes = i+1;
                     if (i > 0)
+                    {
+                        vm.Etiqueta.codvol = null;
                         vm.Etiqueta.qtd = 0;
+                    }
+                        
                     vm.Etiqueta = await Task.Run(() => vm.AddEtiquetaAsync(vm.Etiqueta));
                 }
                 vm.Etiquetas = await Task.Run(() => vm.GetEtiquetasAsync(data.coddetalhescompl));
@@ -127,11 +130,11 @@ namespace Producao.Views.CheckList
                 e.ErrorMessages.Add("peso_liquido", "Erro ao selecionar a linha.");
                 e.ErrorMessages.Add("impresso", "Erro ao selecionar a linha.");
             }
-            else if(rowData.codvol.HasValue)
+            /*else if(rowData.codvol.HasValue)
             {
                 e.IsValid = false;
                 e.ErrorMessages.Add("codvol", "Este campo precisar está em branco.");
-            }
+            }*/
             else if (!rowData.volumes.HasValue)
             {
                 e.IsValid = false;

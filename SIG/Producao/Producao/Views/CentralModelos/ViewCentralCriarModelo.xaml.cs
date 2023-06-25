@@ -326,7 +326,9 @@ namespace Producao.Views.CentralModelos
             }
 
             var window = new ModeloReceita(modelo);
-            window.Owner = App.Current.MainWindow;
+            window.Owner = Application.Current.MainWindow;
+            window.Width = Application.Current.MainWindow.Width;
+            window.Height = Application.Current.MainWindow.Height;
             window.ShowDialog();
         }
 

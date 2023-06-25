@@ -98,14 +98,14 @@
             RowValidating="dgEtiqueta_RowValidating" 
             AddNewRowInitiating="dgEtiqueta_AddNewRowInitiating" RecordDeleting="dgEtiqueta_RecordDeleting">
             <syncfusion:SfDataGrid.Columns>
-                <syncfusion:GridNumericColumn 
+                <!--<syncfusion:GridNumericColumn 
                     HeaderText="CODVOL" 
                     MappingName="codvol" 
                     NumberDecimalDigits="0" 
                     ParsingMode="Int" 
                     AllowNullValue="True"
                     NullText="" 
-                    NullValue="{x:Null}" />
+                    NullValue="{x:Null}" />-->
                 <syncfusion:GridNumericColumn 
                     HeaderText="VOLUME" 
                     MappingName="volumes"
