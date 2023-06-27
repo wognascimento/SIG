@@ -357,6 +357,15 @@
             SelectedItem="{Binding CheckListGeral, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectionChanged="OnSelectionChanged" FontSize="10">
             <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridTextColumn 
+                    MappingName="resp_revisao"
+                    ColumnSizer="SizeToCells"/>
+                <syncfusion:GridCheckBoxColumn
+                        AllowEditing="True"
+                        HeaderText="OK REV." 
+                        MappingName="ok_revisao_alterada"
+                        DisplayBinding="{Binding ok_revisao_alterada, Converter={StaticResource ConverterBoolen}}"
+                        ValueBinding="{Binding ok_revisao_alterada, Converter={StaticResource ConverterBoolen}}" />
                 <syncfusion:GridTextColumn HeaderText="ID" MappingName="id" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn HeaderText="ITEM" MappingName="item_memorial"/>
                 <syncfusion:GridTextColumn HeaderText="LOCAL DO SHOPPING" MappingName="local_shoppings"/>

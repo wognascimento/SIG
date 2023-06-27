@@ -325,10 +325,13 @@ namespace Producao.Views.CentralModelos
                 return;
             }
 
+            var width = Application.Current.MainWindow.Width;
+            var height = Application.Current.MainWindow.Height;
+
             var window = new ModeloReceita(modelo);
             window.Owner = Application.Current.MainWindow;
-            window.Width = Application.Current.MainWindow.Width;
-            window.Height = Application.Current.MainWindow.Height;
+            window.Width = width;
+            window.Height = height;
             window.ShowDialog();
         }
 

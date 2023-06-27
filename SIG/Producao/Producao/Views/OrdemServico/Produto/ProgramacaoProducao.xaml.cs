@@ -1,23 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Producao.DataBase.Model;
-using Syncfusion.UI.Xaml.Diagram;
 using Syncfusion.Windows.Tools.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Producao.Views.OrdemServico.Produto
 {
@@ -204,6 +199,29 @@ namespace Producao.Views.OrdemServico.Produto
         public void RaisePropertyChanged(string propName)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+        }
+    }
+
+    public class ProgramacaoProducaoColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            //value == null || ((value != null) && double.Parse(value.ToString()) == 0)
+            var data = value as ProgramacaoProducaoModel;
+            if (data?.dias_expedicao < 0)
+                return new SolidColorBrush(Colors.Red);
+            //else if (data?.condicao == 2)
+                //return new SolidColorBrush(Colors.LightGreen);
+            //else if (data?.condicao == 3)
+                //return new SolidColorBrush(Colors.LightSkyBlue);
+            else
+                return DependencyProperty.UnsetValue;
+            //return new SolidColorBrush(Colors.White);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

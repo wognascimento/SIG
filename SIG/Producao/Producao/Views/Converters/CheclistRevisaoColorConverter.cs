@@ -19,8 +19,8 @@ namespace Producao
             else if (data?.condicao == 3)
                 return new SolidColorBrush(Colors.LightSkyBlue);
             else
-                return new SolidColorBrush(Colors.White);
-            //return DependencyProperty.UnsetValue;
+                return DependencyProperty.UnsetValue;
+            //return new SolidColorBrush(Colors.White);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

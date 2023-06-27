@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:syncfusionSfDataGrid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF" 
+             xmlns:grid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
              xmlns:local="clr-namespace:Producao.Views.OrdemServico.Produto" 
              xmlns:app="clr-namespace:Producao"
              mc:Ignorable="d" 
@@ -12,6 +14,8 @@
     <UserControl.Resources>
         <app:ConverterNumber x:Key="ConverterNumber"/>
         <app:ConverterBoolen x:Key="ConverterBoolen"/>
+
+        <local:ProgramacaoProducaoColorConverter x:Key="converterCollor"/>
     </UserControl.Resources>
 
     <Grid>
@@ -265,7 +269,13 @@
                 <syncfusion:GridDateTimeColumn 
                     HeaderText="DATA DE EXPEDIÇÃO" 
                     MappingName="data_de_expedicao"
-                    ColumnSizer="SizeToHeader"/>
+                    ColumnSizer="SizeToHeader">
+                    <syncfusion:GridDateTimeColumn.CellStyle>
+                        <Style TargetType="syncfusionSfDataGrid:GridCell">
+                            <Setter Property="Background" Value="{Binding Converter={StaticResource converterCollor}}" />
+                        </Style>
+                    </syncfusion:GridDateTimeColumn.CellStyle>
+                </syncfusion:GridDateTimeColumn>
 
                 <syncfusion:GridTextColumn 
                     HeaderText="PLANILHA" 
