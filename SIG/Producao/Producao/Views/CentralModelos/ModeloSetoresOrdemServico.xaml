@@ -7,7 +7,7 @@
         xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
         Title="SETORES PARA EMISSÃO DA OERDEM DE SERVIÇO" 
-        Height="450" Width="450" 
+        Height="450" Width="650" 
         WindowStyle="ToolWindow" 
         WindowStartupLocation="CenterOwner" 
         Loaded="Window_Loaded" 
