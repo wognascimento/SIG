@@ -32,6 +32,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
             <RowDefinition />
         </Grid.RowDefinitions>
@@ -188,6 +189,22 @@
 
         </syncfusion:SfTextInputLayout>
 
+        <syncfusion:SfTextInputLayout
+                Grid.Row="6"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                InputViewPadding="4" 
+                HintFloatMode="Float" 
+                Hint="OBSERVAÇÃO"
+                CharCountVisibility="Collapsed" 
+                HelperTextVisibility="Collapsed">
+
+            <syncfusion:SfTextBoxExt 
+                x:Name="txtObservacao"
+                ShowClearButton="True"/>
+
+        </syncfusion:SfTextInputLayout>
+
 
 
         <Grid Grid.Row="8" Grid.Column="0">
@@ -236,7 +253,7 @@
 
         <syncfusion:SfDataGrid
             x:Name="itens" 
-            Grid.Row="10"
+            Grid.Row="11"
             Grid.Column="0"
             Grid.ColumnSpan="3"
             AutoGenerateColumns="False" 
@@ -262,8 +279,9 @@
                     HeaderText="QTDE" 
                     MappingName="quantidade"
                     DisplayBinding="{Binding quantidade, Converter={StaticResource ConverterNumber}}"/>
-                <syncfusion:GridTextColumn HeaderText="VOLTAGEM" MappingName="voltagem"/>
-                <syncfusion:GridTextColumn HeaderText="LOCAL SHOPPING" MappingName="local_shop"/>
+                <syncfusion:GridTextColumn HeaderText="OBSERVAÇÃO" MappingName="observacao"/>
+                <!--<syncfusion:GridTextColumn HeaderText="VOLTAGEM" MappingName="voltagem"/>-->
+                <!--<syncfusion:GridTextColumn HeaderText="LOCAL SHOPPING" MappingName="local_shop"/>-->
                 <syncfusion:GridDateTimeColumn HeaderText="INSERIDO EM" MappingName="data"/>
                 <syncfusion:GridTextColumn HeaderText="INSERIDO POR" MappingName="alterado_por" ColumnSizer="SizeToHeader"/>
             </syncfusion:SfDataGrid.Columns>

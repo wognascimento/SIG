@@ -48,21 +48,23 @@ namespace Producao
         public DbSet<ModeloReceitaModel> ReceitaModelos  { get; set; }
         public DbSet<ModeloReceitaAnoAnterior> ModelosAnoAnterior { get; set; }
         public DbSet<ControleModeloBaixa> ModelosControle { get; set; }
-        public DbSet<ExportEnfeitesInfClienteModel> exportEnfeitesInfClientes { get; set; }
         public DbSet<HistoricoModelo> HistoricosModelo { get; set; }
-        public DbSet<HistoricoSetorModel> HistoricosSetor { get; set; }
-        public DbSet<DistribuicaoPAModel> DistribuicaoPAs { get; set; }
-        public DbSet<OsEmissaoProducaoImprimirModel> ImprimirOsS { get; set; }
         public DbSet<DetalhesModeloModel> DetalhesModelo { get; set; }
-        public DbSet<StatusChkGeralCentralModel> statusChkGeralCentrals { get; set; }
         public DbSet<ModeloTabelaPAModel> TabelaPAs { get; set; }
         public DbSet<ModeloTabelaConversaoModel> TabelaConversoes { get; set; }
         public DbSet<ModeloControleOsModel> modeloControleOs { get; set; }
+        public DbSet<ModeloGerarOsModel> ModeloGerarOs { get; set; }
+        public DbSet<HistoricoModeloCompletaModel> HistoricoModeloCompletas { get; set; }
+        public DbSet<DetalhesModeloFitasModel> DetalhesModeloFitas { get; set; }
+        public DbSet<ExportEnfeitesInfClienteModel> exportEnfeitesInfClientes { get; set; }
+        public DbSet<HistoricoSetorModel> HistoricosSetor { get; set; }
+        public DbSet<DistribuicaoPAModel> DistribuicaoPAs { get; set; }
+        public DbSet<OsEmissaoProducaoImprimirModel> ImprimirOsS { get; set; }
+        public DbSet<StatusChkGeralCentralModel> statusChkGeralCentrals { get; set; }
         public DbSet<ClasseSolicitCompra> ClasseSolicitCompras { get; set; }
         public DbSet<UnidadeModel> Unidades { get; set; }
         public DbSet<TemaModel> Temas { get; set; }
         public DbSet<FamiliaProdModel> FamiliaProds { get; set; }
-        public DbSet<HistoricoModeloCompletaModel> HistoricoModeloCompletas { get; set; }
         public DbSet<EntradaEstoqueModel> Entradas { get; set; }
         public DbSet<SaidaEstoqueModel> Saidas { get; set; }
         public DbSet<ControleAcertoEstoque> ControleAcertoEstoques { get; set; }

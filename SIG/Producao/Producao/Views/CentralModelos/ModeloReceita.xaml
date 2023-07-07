@@ -357,6 +357,8 @@
                 <ColumnDefinition Width="1"/>
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="1"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="1"/>
                 <ColumnDefinition Width="75"/>
 
             </Grid.ColumnDefinitions>
@@ -375,12 +377,20 @@
                 SmallIcon="/icones/icons8-salvar-40.png" 
                 LargeIcon="/icones/icons8-salvar-80.png" 
                 SizeMode="Large" 
-                Label="Gravar" 
+                Label="Inserir" 
                 Click="OnAdicionarClick"/>
+
+            <syncfusion:ButtonAdv
+                Grid.Column="4"
+                SmallIcon="/icones/icons8-salvar-como-blue-ui-32.png" 
+                LargeIcon="/icones/icons8-salvar-como-blue-ui-96.png" 
+                SizeMode="Large" 
+                Label="Alterar" 
+                Click="OnAlterarClick"/>
 
             <syncfusion:ButtonAdv 
                 x:Name="btnExcluir" 
-                Grid.Column="4"
+                Grid.Column="6"
                 SmallIcon="/icones/icons8-excluir-40.png" 
                 LargeIcon="/icones/icons8-excluir-80.png" 
                 SizeMode="Large" 
@@ -388,7 +398,7 @@
                 Click="OnExcluirClick" />
 
             <syncfusion:ButtonAdv
-                Grid.Column="6"
+                Grid.Column="8"
                 SmallIcon="/icones/icons8-impressão-40.png" 
                 LargeIcon="/icones/icons8-impressão-80.png" 
                 SizeMode="Large" 
@@ -397,7 +407,7 @@
 
             <syncfusion:ButtonAdv 
                 x:Name="btnCopiarModelo" 
-                Grid.Column="8"
+                Grid.Column="10"
                 SmallIcon="{x:Null}" 
                 LargeIcon="{x:Null}" 
                 Label="Copiar Receita" 
@@ -405,7 +415,7 @@
 
             <syncfusion:ButtonAdv 
                 x:Name="btnModeloFiada" 
-                Grid.Column="10"
+                Grid.Column="12"
                 SmallIcon="{x:Null}" 
                 LargeIcon="{x:Null}" 
                 Label="Modelos Fiada" 
@@ -414,7 +424,7 @@
 
             <syncfusion:ButtonAdv 
                 x:Name="btnDistribuicaoFiada" 
-                Grid.Column="12"
+                Grid.Column="14"
                 SmallIcon="{x:Null}" 
                 LargeIcon="{x:Null}" 
                 Label="Distribuição Fiada" 

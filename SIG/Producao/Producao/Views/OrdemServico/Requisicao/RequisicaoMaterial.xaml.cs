@@ -188,26 +188,33 @@ namespace Producao.Views.OrdemServico.Requisicao
                 var index = 9;
                 foreach (var item in itens) 
                 {
-                    worksheet.Range[$"A{index}"].Text = item.quantidade.ToString();
+                    worksheet.Range[$"A{index}"].Number = (double)item.quantidade;
                     worksheet.Range[$"A{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                    worksheet.Range[$"A{index}"].CellStyle.Font.Size = 7;
 
-                    worksheet.Range[$"B{index}"].Text = item.codcompladicional.ToString();
+                    worksheet.Range[$"B{index}"].Number = (double)item.codcompladicional;
                     worksheet.Range[$"B{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                    worksheet.Range[$"B{index}"].CellStyle.Font.Size = 7;
 
-                    worksheet.Range[$"C{index}:E{index}"].Text = item.planilha;
-                    worksheet.Range[$"C{index}:E{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                    worksheet.Range[$"C{index}:E{index}"].Merge();
-                    worksheet.Range[$"C{index}:E{index}"].WrapText = true;
+                    worksheet.Range[$"C{index}:D{index}"].Text = item.planilha;
+                    worksheet.Range[$"C{index}:D{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                    worksheet.Range[$"C{index}:D{index}"].CellStyle.Font.Size = 7;
+                    worksheet.Range[$"C{index}:D{index}"].Merge();
+                    worksheet.Range[$"C{index}:D{index}"].WrapText = true;
 
-                    worksheet.Range[$"F{index}:K{index}"].Text = item.descricao_completa;
-                    worksheet.Range[$"F{index}:K{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                    worksheet.Range[$"F{index}:K{index}"].Merge();
-                    worksheet.Range[$"F{index}:K{index}"].WrapText = true;
+                    worksheet.Range[$"E{index}:K{index}"].Text = item.descricao_completa;
+                    worksheet.Range[$"E{index}:K{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                    worksheet.Range[$"E{index}:K{index}"].CellStyle.Font.Size = 7;
+                    worksheet.Range[$"E{index}:K{index}"].Merge();
+                    worksheet.Range[$"E{index}:K{index}"].WrapText = true;
 
                     worksheet.Range[$"L{index}"].Text = item.unidade;
-                    worksheet.Range[$"L{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                    worksheet.Range[$"L{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                    worksheet.Range[$"L{index}"].CellStyle.Font.Size = 7;
+
                     worksheet.Range[$"M{index}:N{index}"].Text = item.observacao;
                     worksheet.Range[$"M{index}:N{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                    worksheet.Range[$"M{index}:N{index}"].CellStyle.Font.Size = 7;
                     worksheet.Range[$"M{index}:N{index}"].Merge();
                     worksheet.Range[$"M{index}:N{index}"].WrapText = true;
                     index++;

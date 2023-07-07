@@ -36,11 +36,11 @@
                     <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.CreateOS}}"
                               CommandParameter="{Binding}"
                               Header="Gerar Ordem de Serviço"/>
-
+                    <!--
                     <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.ReimprimirOS}}"
                               CommandParameter="{Binding}"
                               Header="Re-imprimir Ordem de Serviço"  />
-
+                    -->
                     <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.TabelaPAExcel}}"
                               CommandParameter="{Binding}"
                               Header="Tabela P.A Excel" />
@@ -59,9 +59,14 @@
                 <syncfusion:GridTextColumn MappingName="descricao_completa"/>
                 <syncfusion:GridTextColumn MappingName="unidade" Width="65"/>
                 <syncfusion:GridNumericColumn MappingName="id_modelo" DisplayBinding="{Binding id_modelo, Converter={StaticResource ConverterNumber}}" Width="65"/>
-                <syncfusion:GridNumericColumn MappingName="qtd_chk_list" Width="60"/>
-                <syncfusion:GridNumericColumn MappingName="qtd_os" Width="60"/>
-                <syncfusion:GridNumericColumn MappingName="num_os_produto" DisplayBinding="{Binding num_os_produto, Converter={StaticResource ConverterNumber}}" Width="60"/>
+                <syncfusion:GridNumericColumn MappingName="qtde" Width="60"/>
+                <syncfusion:GridNumericColumn MappingName="qtde_os" Width="60"/>
+                <syncfusion:GridUnBoundColumn  Width="150" AllowEditing="False"
+                                                               Expression="qtde - qtde_os"
+                                                               HeaderText="Qtde Faltante"
+                                                               MappingName="QtdeFaltante"
+                                                               TextAlignment="Right" />
+                <!--<syncfusion:GridNumericColumn MappingName="num_os_produto" DisplayBinding="{Binding num_os_produto, Converter={StaticResource ConverterNumber}}" Width="60"/>-->
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
 

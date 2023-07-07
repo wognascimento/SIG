@@ -28,6 +28,7 @@
             AllowDraggingColumns="True" 
             AutoGenerateColumns="False" 
             FontSize="10" 
+            RowHeight="50"
             SelectedItem="{Binding Iteme, Mode=TwoWay}"
             ItemsSource="{Binding Itens}" 
             PreviewKeyDown="dgItens_PreviewKeyDown" 
@@ -35,6 +36,7 @@
             AddNewRowInitiating="dgItens_AddNewRowInitiating" 
             AddNewRowPosition="Top" 
             AllowDeleting="True"
+            ShowRowHeader="True"
             CurrentCellDropDownSelectionChanged="dgItens_CurrentCellDropDownSelectionChanged" >
             <Syncfusion:SfDataGrid.Columns>
                 <Syncfusion:GridComboBoxColumn

@@ -22,11 +22,11 @@ namespace Producao.Views.CentralModelos
     public partial class ModeloSetoresOrdemServico : Window
     {
         //private long? codcompladicional;
-        private ModeloControleOsModel modeloControle;
+        private ModeloGerarOsModel modeloControle;
         private ProdutoOsModel produtoOsModel;
         ModeloSetoresOrdemServicoViewModel vm;
 
-        public ModeloSetoresOrdemServico(ModeloControleOsModel modeloControle)
+        public ModeloSetoresOrdemServico(ModeloGerarOsModel modeloControle)
         {
             InitializeComponent();
             this.DataContext = new ModeloSetoresOrdemServicoViewModel();
@@ -86,7 +86,8 @@ namespace Producao.Views.CentralModelos
 
         private void dgItens_AddNewRowInitiating(object sender, AddNewRowInitiatingEventArgs e)
         {
-
+            var data = e.NewObject as HistoricoSetorModel;
+            data.observacao = this.modeloControle.obs;
         }
 
         private void OnAddSetor(object sender, RoutedEventArgs e)
@@ -131,7 +132,7 @@ namespace Producao.Views.CentralModelos
                 }
 
                 vm.Planilhas = await Task.Run(() => vm.GetPlanilasReceita(modeloControle.id_modelo));
-                if (vm.Planilhas.Count == 0)
+                if (vm.Planilhas.Count == 0 && (modeloControle.planilha != "VASO" && modeloControle.planilha != "TOPIÁRIA"))
                 {
                     MessageBox.Show("Não existe item na receita do modelo", "Não é possível emitir Ordem de Serviço");
                     //((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
@@ -356,26 +357,33 @@ namespace Producao.Views.CentralModelos
                     var index = 9;
                     foreach (var item in itens)
                     {
-                        worksheet.Range[$"A{index}"].Text = item.quantidade.ToString();
+                        worksheet.Range[$"A{index}"].Number = (double)item.quantidade;
                         worksheet.Range[$"A{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                        worksheet.Range[$"A{index}"].CellStyle.Font.Size = 7;
 
-                        worksheet.Range[$"B{index}"].Text = item.codcompladicional.ToString();
+                        worksheet.Range[$"B{index}"].Number = (double)item.codcompladicional;
                         worksheet.Range[$"B{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                        worksheet.Range[$"B{index}"].CellStyle.Font.Size = 7;
 
-                        worksheet.Range[$"C{index}:E{index}"].Text = item.planilha;
-                        worksheet.Range[$"C{index}:E{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                        worksheet.Range[$"C{index}:E{index}"].Merge();
-                        worksheet.Range[$"C{index}:E{index}"].WrapText = true;
+                        worksheet.Range[$"C{index}:D{index}"].Text = item.planilha;
+                        worksheet.Range[$"C{index}:D{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"C{index}:D{index}"].CellStyle.Font.Size = 7;
+                        worksheet.Range[$"C{index}:D{index}"].Merge();
+                        worksheet.Range[$"C{index}:D{index}"].WrapText = true;
 
-                        worksheet.Range[$"F{index}:K{index}"].Text = item.descricao_completa;
-                        worksheet.Range[$"F{index}:K{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                        worksheet.Range[$"F{index}:K{index}"].Merge();
-                        worksheet.Range[$"F{index}:K{index}"].WrapText = true;
+                        worksheet.Range[$"E{index}:K{index}"].Text = item.descricao_completa;
+                        worksheet.Range[$"E{index}:K{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"E{index}:K{index}"].CellStyle.Font.Size = 7;
+                        worksheet.Range[$"E{index}:K{index}"].Merge();
+                        worksheet.Range[$"E{index}:K{index}"].WrapText = true;
 
                         worksheet.Range[$"L{index}"].Text = item.unidade;
-                        worksheet.Range[$"L{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"L{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                        worksheet.Range[$"L{index}"].CellStyle.Font.Size = 7;
+
                         worksheet.Range[$"M{index}:N{index}"].Text = item.observacao;
                         worksheet.Range[$"M{index}:N{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                        worksheet.Range[$"M{index}:N{index}"].CellStyle.Font.Size = 7;
                         worksheet.Range[$"M{index}:N{index}"].Merge();
                         worksheet.Range[$"M{index}:N{index}"].WrapText = true;
                         index++;
@@ -588,7 +596,7 @@ namespace Producao.Views.CentralModelos
             }
         }
 
-        public async Task CreateOrdenServicoAsync(ModeloControleOsModel modeloControle)
+        public async Task CreateOrdenServicoAsync(ModeloGerarOsModel modeloControle)
         {
             using DatabaseContext db = new();
             using var transaction = db.Database.BeginTransaction();
@@ -598,7 +606,7 @@ namespace Producao.Views.CentralModelos
             if (Setores.Count == 0)
                 throw new InvalidOperationException("Não existe setor para criar ordem de serviço.");
 
-            var quantidade = (modeloControle?.qtd_chk_list - (int)(modeloControle?.qtd_os ?? 0));
+            var quantidade = (modeloControle?.qtde - (int)(modeloControle?.qtde_os ?? 0));
 
             try
             {

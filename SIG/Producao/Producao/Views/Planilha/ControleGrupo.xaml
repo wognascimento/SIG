@@ -44,6 +44,7 @@
                 <syncfusion:GridTextColumn  MappingName="id" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn  MappingName="local_shoppings" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn  MappingName="sigla" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridDateTimeColumn  MappingName="data_de_expedicao" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn  MappingName="tema" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn  MappingName="descricao_completa"/>
                 <syncfusion:GridTextColumn  MappingName="obs" HeaderText="observacao_producao" ColumnSizer="SizeToHeader"/>

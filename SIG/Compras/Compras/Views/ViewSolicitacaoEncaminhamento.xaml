@@ -42,6 +42,8 @@
                         <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.AddPedido}}"
                               CommandParameter="{Binding}"
                               Header="Adicionar ao Pedido."/>
+
+
                     </ContextMenu>
                 </syncfusion:SfDataGrid.RecordContextMenu>
 
@@ -50,6 +52,10 @@
                         <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.Excel}}"
                               CommandParameter="{Binding}"
                               Header="Enviar para Excel"/>
+
+                        <MenuItem Command="{Binding Source={x:Static Member=local:ContextMenuCommands.Update}}"
+                              CommandParameter="{Binding}"
+                              Header="Atualizar para entrar novas solicitações"/>
                     </ContextMenu>
                 </syncfusion:SfDataGrid.HeaderContextMenu>
                     

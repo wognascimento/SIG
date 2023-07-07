@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using Enum = System.Enum;
 using SizeMode = Syncfusion.SfSkinManager.SizeMode;
 
@@ -115,26 +116,59 @@ namespace Compras
             }
         }
 
+        private void adicionarFilho(object filho, string title, string name)
+        {
+            var doc = ExistDocumentInDocumentContainer(name);
+            if (doc == null)
+            {
+                doc = (FrameworkElement?)filho;
+                DocumentContainer.SetHeader(doc, title);
+                doc.Name = name.ToLower();
+                _mdi.Items.Add(doc);
+            }
+            else
+            {
+                //_mdi.RestoreDocument(doc as UIElement);
+                _mdi.ActiveDocument = doc;
+            }
+        }
+
+        private FrameworkElement ExistDocumentInDocumentContainer(string name_)
+        {
+            foreach (FrameworkElement element in _mdi.Items)
+            {
+                if (name_.ToLower() == element.Name)
+                {
+                    return element;
+                }
+            }
+            return null;
+        }
+
         private void OnOpenSolicitacao(object sender, RoutedEventArgs e)
         {
-            ViewSolicitacao view = new();
-            DocumentContainer.SetHeader(view, "SOLICITAÇÃO MATERIAL/SERVIÇO");
-            DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
+            //ViewSolicitacao view = new();
+            //DocumentContainer.SetHeader(view, "SOLICITAÇÃO MATERIAL/SERVIÇO");
+            //DocumentContainer.SetSizetoContentInMDI(view, true);
+            //DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
             //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
-            this._mdi.CanMDIMaximize = false;
-            this._mdi.Items.Add(view);
+            //this._mdi.CanMDIMaximize = false;
+            //this._mdi.Items.Add(view);
+
+            adicionarFilho(new ViewSolicitacao(), "SOLICITAÇÃO MATERIAL/SERVIÇO", "SOLICITACAO_MATERIAL_SERVICO");
         }
 
         private void OnOpenEncaminhamento(object sender, RoutedEventArgs e)
         {
-            ViewSolicitacaoEncaminhamento view = new();
-            DocumentContainer.SetHeader(view, "ENCAMINHAMENTO SOLICITAÇÃO MATERIAL");
-            DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
-            DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
-            this._mdi.CanMDIMaximize = true;
-            this._mdi.Items.Add(view);
+            //ViewSolicitacaoEncaminhamento view = new();
+            //DocumentContainer.SetHeader(view, "ENCAMINHAMENTO SOLICITAÇÃO MATERIAL");
+            //DocumentContainer.SetSizetoContentInMDI(view, true);
+            //DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            //this._mdi.CanMDIMaximize = true;
+            //this._mdi.Items.Add(view);
+
+            adicionarFilho(new ViewSolicitacaoEncaminhamento(), "ENCAMINHAMENTO SOLICITAÇÃO MATERIAL", "ENCAMINHAMENTO_SOLICITACAO_MATERIAL");
         }
 
         private void OnOpenEncaminhamentoServico(object sender, RoutedEventArgs e)
@@ -158,6 +192,8 @@ namespace Compras
             {
                 try
                 {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
                     string filename = dialog.FileName;
                     using ExcelEngine excelEngine = new ExcelEngine();
                     IApplication application = excelEngine.Excel;
@@ -260,11 +296,12 @@ namespace Compras
                         };
 
                         var itens =  await InsertProdutoPedido(produtos, _pedido);
-
+                        Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                         MessageBox.Show("Arquivo importado com sucesso!", "Pedido", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     }
                     catch (Exception ex)
                     {
+                        Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                         MessageBox.Show(ex.Message);
                     }
 
@@ -273,6 +310,7 @@ namespace Compras
                 }
                 catch (Exception ex)
                 {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                     MessageBox.Show(ex.Message);
                 }
                 
@@ -308,68 +346,85 @@ namespace Compras
 
         private void OnAbrirPedidos(object sender, RoutedEventArgs e)
         {
-            ViewPedidos view = new();
-            DocumentContainer.SetHeader(view, "TODOS PEDIDOS");
-            DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
-            DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
-            this._mdi.CanMDIMaximize = true;
-            this._mdi.Items.Add(view);
+            //ViewPedidos view = new();
+            //DocumentContainer.SetHeader(view, "TODOS PEDIDOS");
+            //DocumentContainer.SetSizetoContentInMDI(view, true);
+            //DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            //this._mdi.CanMDIMaximize = true;
+            //this._mdi.Items.Add(view);
+            adicionarFilho(new ViewPedidos(), "TODOS PEDIDOS", "TODOS_PEDIDOS");
         }
 
         private void OnOpenCadastroFornecedor(object sender, RoutedEventArgs e)
         {
-            ViewCadastroFornecedor view = new();
-            DocumentContainer.SetHeader(view, "CADASTRO FORNECEDOR");
-            DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
+            //ViewCadastroFornecedor view = new();
+            //DocumentContainer.SetHeader(view, "CADASTRO FORNECEDOR");
+            //DocumentContainer.SetSizetoContentInMDI(view, true);
+            //DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
             //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
-            this._mdi.CanMDIMaximize = false;
-            this._mdi.Items.Add(view);
+            //this._mdi.CanMDIMaximize = false;
+            //this._mdi.Items.Add(view);
+            adicionarFilho(new ViewCadastroFornecedor(), "CADASTRO FORNECEDOR", "CADASTRO_FORNECEDOR");
         }
 
         private void OnOpenCastroCondicaoPagamento(object sender, RoutedEventArgs e)
         {
-            ViewCadastroCondicaoPagamento view = new();
-            DocumentContainer.SetHeader(view, "CADASTRO CONDIÇÃO DE PAGAMENTO");
-            DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
+            //ViewCadastroCondicaoPagamento view = new();
+            //DocumentContainer.SetHeader(view, "CADASTRO CONDIÇÃO DE PAGAMENTO");
+            //DocumentContainer.SetSizetoContentInMDI(view, true);
+            //DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
             //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
-            this._mdi.CanMDIMaximize = false;
-            this._mdi.Items.Add(view);
+            //this._mdi.CanMDIMaximize = false;
+            //this._mdi.Items.Add(view);
+            adicionarFilho(new ViewCadastroCondicaoPagamento(), "CADASTRO CONDIÇÃO DE PAGAMENTO", "CADASTRO_CONDICAO_DE_PAGAMENTO");
         }
 
         private void OnOpenCadastroFamiliaComprador(object sender, RoutedEventArgs e)
         {
-            ViewCadastroFamiliaComprador view = new();
-            DocumentContainer.SetHeader(view, "CADASTRO COMPRADOR(A) FAMÍLIA");
-            DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 500.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 500.0, 700.0));
+            //ViewCadastroFamiliaComprador view = new();
+            //DocumentContainer.SetHeader(view, "CADASTRO COMPRADOR(A) FAMÍLIA");
+            //DocumentContainer.SetSizetoContentInMDI(view, true);
+            //DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 500.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 500.0, 700.0));
             //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
-            this._mdi.CanMDIMaximize = false;
-            this._mdi.Items.Add(view);
+            //this._mdi.CanMDIMaximize = false;
+            //this._mdi.Items.Add(view);
+            adicionarFilho(new ViewCadastroFamiliaComprador(), "CADASTRO COMPRADOR(A) FAMÍLIA", "CADASTRO_COMPRADOR_FAMILIA");
         }
 
         private void OnOpenTodasDescricoes(object sender, RoutedEventArgs e)
         {
-            ViewConsultaProdutos view = new();
-            DocumentContainer.SetHeader(view, "TODOS PRONTOS CIPOLATTI");
-            DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
-            DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
-            this._mdi.CanMDIMaximize = true;
-            this._mdi.Items.Add(view);
+            //ViewConsultaProdutos view = new();
+            //DocumentContainer.SetHeader(view, "TODOS PRONTOS CIPOLATTI");
+            //DocumentContainer.SetSizetoContentInMDI(view, true);
+            //DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            //this._mdi.CanMDIMaximize = true;
+            //this._mdi.Items.Add(view);
+            adicionarFilho(new ViewConsultaProdutos(), "TODOS PRONTOS CIPOLATTI", "TODOS_PRONTOS_CIPOLATTI");
         }
 
         private void OnOpenConsultaGerencial(object sender, RoutedEventArgs e)
         {
-            ViewConsultaGerencial view = new();
-            DocumentContainer.SetHeader(view, "CONSULTA GERENCIAL");
-            DocumentContainer.SetSizetoContentInMDI(view, true);
-            DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
-            DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
-            this._mdi.CanMDIMaximize = true;
-            this._mdi.Items.Add(view);
+            //ViewConsultaGerencial view = new();
+            //DocumentContainer.SetHeader(view, "CONSULTA GERENCIAL");
+            //DocumentContainer.SetSizetoContentInMDI(view, true);
+            //DocumentContainer.SetMDIBounds(view, new Rect((this._mdi.ActualWidth - 1000.0) / 2.0, (this._mdi.ActualHeight - 700.0) / 2.0, 1000.0, 700.0));
+            //DocumentContainer.SetMDIWindowState(view, MDIWindowState.Maximized);
+            //this._mdi.CanMDIMaximize = true;
+            //this._mdi.Items.Add(view);
+            adicionarFilho(new ViewConsultaProdutos(), "CONSULTA GERENCIAL", "CONSULTA_GERENCIAL");
+        }
+
+        private void _mdi_CloseButtonClick(object sender, CloseButtonEventArgs e)
+        {
+            var tab = (DocumentContainer)sender;
+            _mdi.Items.Remove(tab.ActiveDocument);
+        }
+
+        private void _mdi_CloseAllTabs(object sender, CloseTabEventArgs e)
+        {
+            _mdi.Items.Clear();
         }
     }
 }

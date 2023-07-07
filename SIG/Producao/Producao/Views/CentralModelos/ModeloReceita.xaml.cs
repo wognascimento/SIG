@@ -239,7 +239,6 @@ namespace Producao.Views.CentralModelos
                 ModeloReceitaViewModel? vm = (ModeloReceitaViewModel)DataContext;
                 var dados = new ModeloReceitaModel
                 {
-                    id_linha = Receita?.id_linha,
                     id_modelo = Modelo.id_modelo,
                     codcompladicional = long.Parse(txtCodigoProduto.Text),
                     qtd_modelo = txtQtdModelo.Value,
@@ -265,6 +264,55 @@ namespace Producao.Views.CentralModelos
 
                 Limpar();
                 
+                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+
+                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
+        private async void OnAlterarClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
+
+                ModeloReceitaViewModel? vm = (ModeloReceitaViewModel)DataContext;
+                var dados = new ModeloReceitaModel
+                {
+                    id_linha = Receita?.id_linha,
+                    id_modelo = Modelo.id_modelo,
+                    codcompladicional = long.Parse(txtCodigoProduto.Text),
+                    qtd_modelo = txtQtdModelo.Value,
+                    qtd_producao = txtQtdProducao.Value,
+                    observacao = txtObservacao.Text,
+                    cadastrado_por = Environment.UserName,
+                    data_cadastro = DateTime.Now,
+                    mod1 = (int?)mod01.Value,
+                    mod2 = (int?)mod02.Value,
+                    mod3 = (int?)mod03.Value,
+                    mod4 = (int?)mod04.Value,
+                    mod5 = (int?)mod05.Value,
+                    mod6 = (int?)mod06.Value,
+                    mod7 = (int?)mod07.Value,
+                    mod8 = (int?)mod08.Value,
+                    mod9 = (int?)mod09.Value,
+                    mod10 = (int?)mod10.Value,
+                };
+                vm.ModeloReceita = await Task.Run(() => vm.AddReceita(dados));
+
+                //if (Receita == null)
+                vm.ItensReceita = await Task.Run(() => vm.GetReceitaDetalhes(Modelo.id_modelo));
+
+                Limpar();
+
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
@@ -338,7 +386,7 @@ namespace Producao.Views.CentralModelos
                 worksheet.Range["C4"].Text = Modelo.descricao_completa;
                 worksheet.Range["C5"].Text = Modelo.tema;
                 worksheet.Range["A7"].Text = Modelo.obs_modelo;
-                worksheet.Range["H4"].Number = (double)Modelo.multiplica;//String.Format(new CultureInfo("pt-BR"), "{0:G}", Modelo.multiplica); //Modelo.multiplica.ToString();
+                worksheet.Range["H4"].Number = Convert.ToDouble( Modelo.multiplica );//String.Format(new CultureInfo("pt-BR"), "{0:G}", Modelo.multiplica); //Modelo.multiplica.ToString();
                 worksheet.Range["H4"].NumberFormat = "0.0";
                 //Console.WriteLine(String.Format(new CultureInfo("pt-BR"), "{0:C}", 189.99));
 
@@ -758,6 +806,7 @@ namespace Producao.Views.CentralModelos
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
+
     }
 
     public class ModeloReceitaViewModel : INotifyPropertyChanged

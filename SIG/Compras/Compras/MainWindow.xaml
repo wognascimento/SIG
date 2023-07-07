@@ -43,7 +43,12 @@
            
         </syncfusion:MenuAdv>
 
-        <syncfusion:DocumentContainer Name="_mdi" Grid.Row="1"/>
+        <syncfusion:DocumentContainer
+            Name="_mdi"
+            Grid.Row="1"
+            Mode="TDI"
+            CloseButtonClick="_mdi_CloseButtonClick"
+            CloseAllTabs="_mdi_CloseAllTabs"/>
 
         <StatusBar Grid.Row="2">
             <ItemsControl.ItemsPanel>

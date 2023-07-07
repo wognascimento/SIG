@@ -447,5 +447,42 @@ namespace Compras.Views
                 MessageBox.Show(ex.Message);
             }
         }
+
+        static BaseCommand? update;
+        public static BaseCommand Update
+        {
+            get
+            {
+                if (update == null)
+                    update = new BaseCommand(OnUpdateClicked);
+                return update;
+            }
+        }
+
+        private async static void OnUpdateClicked(object obj)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+
+                var grid = ((GridContextMenuInfo)obj).DataGrid;
+                var item = grid.SelectedItem as SolicitacaoEncaminhadaModel;
+                SolicitacaoEncaminhadaViewModel vm = (SolicitacaoEncaminhadaViewModel)grid.DataContext;
+
+                vm.SolicitacoesEncaminhadas = await Task.Run(vm.GetSolicitacaoEncaminhadasAsync);
+                var filteredResult = grid.View.Records.Select(recordentry => recordentry.Data);
+                var itens = grid.View.Records.Count;
+
+
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
