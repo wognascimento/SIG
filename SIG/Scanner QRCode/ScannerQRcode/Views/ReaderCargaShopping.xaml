@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+             x:Class="ScannerQRcode.Views.ReaderCargaShopping"
+             Title="ReaderCargaShopping">
+
+
+
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <!--<RowDefinition Height="50" />-->
+        </Grid.RowDefinitions>
+
+        <cv:CameraView 
+            x:Name="cameraView" 
+            CamerasLoaded="cameraView_CamerasLoaded" 
+            BarCodeDetectionEnabled="True"
+            BarcodeDetected="cameraView_BarcodeDetected"/>
+
+        <Button
+            Grid.Row="0"
+            Text="Enviar X volumes" 
+            HeightRequest="40" 
+            VerticalOptions="End"
+            BackgroundColor="Green"
+            Clicked="Button_Clicked" CornerRadius="0" />
+    </Grid>
+
+</ContentPage>
