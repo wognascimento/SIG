@@ -4,10 +4,11 @@ namespace ScannerQRcode.Views;
 
 public partial class QRCodeReader : ContentPage
 {
-	public QRCodeReader()
+	public QRCodeReader(QRCodeReaderViewModel vm)
 	{
 		InitializeComponent();
-        BindingContext = new QRCodeReaderViewModel();
+        //BindingContext = new QRCodeReaderViewModel();
+        BindingContext = vm;
     }
 
 	/*

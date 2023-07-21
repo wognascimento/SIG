@@ -11,5 +11,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(ReaderCargaShopping), typeof(ReaderCargaShopping));
         Routing.RegisterRoute(nameof(ReaderEnderecamento), typeof(ReaderEnderecamento));
         Routing.RegisterRoute(nameof(ReaderPreConferencia), typeof(ReaderPreConferencia));
+        Routing.RegisterRoute(nameof(LookupCargaShopping), typeof(LookupCargaShopping));
     }
 }

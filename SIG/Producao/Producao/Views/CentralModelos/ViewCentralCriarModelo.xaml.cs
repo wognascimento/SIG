@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Producao.Views.CentralModelos
 {
@@ -325,8 +326,13 @@ namespace Producao.Views.CentralModelos
                 return;
             }
 
-            var width = Application.Current.MainWindow.Width;
-            var height = Application.Current.MainWindow.Height;
+            //var width = Application.Current.MainWindow.Width;
+            //var height = Application.Current.MainWindow.Height;
+
+            int width = (int)this.ActualWidth;
+            int height = (int)this.ActualHeight;
+
+            //this.LayoutTransform = new ScaleTransform(nWidth / 1920, nHieght / 1080);
 
             var window = new ModeloReceita(modelo);
             window.Owner = Application.Current.MainWindow;

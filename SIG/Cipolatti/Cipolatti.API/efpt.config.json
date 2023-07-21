@@ -1,0 +1,195 @@
+﻿{
+   "CodeGenerationMode": 3,
+   "ContextClassName": "CipolattiContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Models",
+   "PreserveCasingWithRegex": true,
+   "ProjectRootNamespace": "Cipolatti.API",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "T4TemplatePath": null,
+   "Tables": [
+      {
+         "Name": "expedicao.t_caixas",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_caixas_jactab",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_caixas_tabjac",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_conf_carga_geral",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_conf_carga_geral_coletor",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_conf_carga_jac",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_conf_carga_tab",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_conf_envio_galpoes_jac",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_conf_envio_galpoes_tab",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_conferentes",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_confirma_baia_local",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_controlados_recebidos",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_controle_baia",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_controle_baia_local",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_envio_baia_galpoes_jac",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_envio_baia_galpoes_tab",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_exped",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_pre_conferencia",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_romaneio",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_saidas_jac_tab",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_saidas_tab_jac",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_transf_lookup_confere_jac",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_transf_lookup_confere_tab",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_transf_lookup_jac",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.t_transf_lookup_tab",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_controle_baia_enderecamento",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_controle_caixa_setor",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_enderecamento_galpao",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_historico_cubagem_ponderada",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_materiais_controlados_retorno",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_media_cubagem_produto",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_movimentacao_volume_shopping",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_os_exp",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_planilha_controlados",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_resp_controlado",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_resumo_ano_anterior_atual",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.tbl_retorno_cliente",
+         "ObjectType": 0
+      },
+      {
+         "Name": "expedicao.qry_lookup",
+         "ObjectType": 3
+      },
+      {
+         "Name": "producao.qry_aprovados",
+         "ObjectType": 3
+      }
+   ],
+   "UiHint": ".2023",
+   "UncountableWords": null,
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": false,
+   "UseDateOnlyTimeOnly": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": false,
+   "UseHandleBars": false,
+   "UseHierarchyId": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseManyToManyEntity": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSchemaNamespaces": false,
+   "UseSpatial": false,
+   "UseT4": false
+}

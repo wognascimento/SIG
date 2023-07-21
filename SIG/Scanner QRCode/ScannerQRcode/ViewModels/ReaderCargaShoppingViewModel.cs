@@ -1,12 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using ScannerQRcode.Data;
 
 namespace ScannerQRcode.ViewModels
 {
-    internal class ReaderCargaShoppingViewModel
+    public partial class ReaderCargaShoppingViewModel : ObservableObject
     {
+        private readonly VolumeScannerRepository _volumeScannerRepository;
+
+        public ReaderCargaShoppingViewModel(VolumeScannerRepository volumeScannerRepository)
+        {
+            _volumeScannerRepository = volumeScannerRepository;
+            Status = "Enviando Volumes";
+        }
+
+        [ObservableProperty]
+        string status;
+
+        [ObservableProperty]
+        bool isLoading;
+
     }
 }

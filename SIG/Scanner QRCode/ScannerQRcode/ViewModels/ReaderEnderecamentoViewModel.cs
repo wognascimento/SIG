@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace ScannerQRcode.ViewModels
 {
-    internal partial class ReaderEnderecamentoViewModel : ObservableObject
+    public partial class ReaderEnderecamentoViewModel : ObservableObject
     {
 
     }

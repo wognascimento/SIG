@@ -1,5 +1,4 @@
-﻿
-using SQLite;
+﻿using SQLite;
 
 namespace ScannerQRcode.Models
 {
@@ -8,5 +7,6 @@ namespace ScannerQRcode.Models
         [PrimaryKey, AutoIncrement, Column("Id")]
         public int Id { get; set; }
         public string Volume { get; set; }
+        public string Qrcode { get; set; }
     }
 }

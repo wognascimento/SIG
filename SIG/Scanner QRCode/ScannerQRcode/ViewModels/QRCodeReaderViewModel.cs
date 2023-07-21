@@ -1,11 +1,20 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ScannerQRcode.Data;
 using ScannerQRcode.Views;
 
 namespace ScannerQRcode.ViewModels
 {
     public partial class QRCodeReaderViewModel : ObservableObject
     {
+
+        private readonly VolumeScannerRepository _volumeScannerRepository;
+
+        public QRCodeReaderViewModel(VolumeScannerRepository volumeScannerRepository)
+        {
+            _volumeScannerRepository = volumeScannerRepository;
+        }
+        
 
         [RelayCommand]
         async Task GoBack()
@@ -28,7 +37,17 @@ namespace ScannerQRcode.ViewModels
         [RelayCommand]
         async Task GoCargaShopping()
         {
-            await Shell.Current.GoToAsync(nameof(ReaderCargaShopping));
+
+            var dados = await _volumeScannerRepository.QueryAllVolumeLookup();
+            //send.Text = $"Enviar {dados.Count} volume(s)";
+            if (dados.Count == 0)
+            {
+                await Shell.Current.GoToAsync(nameof(LookupCargaShopping));
+            }
+            else
+            {
+                await Shell.Current.GoToAsync(nameof(ReaderCargaShopping));
+            }
         }
 
     }

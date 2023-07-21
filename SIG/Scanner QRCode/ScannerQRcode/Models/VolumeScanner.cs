@@ -1,5 +1,4 @@
 ﻿using SQLite;
-using System.Diagnostics;
 
 namespace ScannerQRcode.Models
 {
@@ -10,5 +9,6 @@ namespace ScannerQRcode.Models
         public int Id { get; set; }
         public string Volume { get; set; }
         public string Tipo { get; set; }
+        public DateTime? Created { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 using BarcodeScanner.Mobile;
-using Plugin.LocalNotification;
 using ScannerQRcode.Data;
 using ScannerQRcode.Models;
 
@@ -18,8 +17,15 @@ public partial class ReaderEnderecamento : ContentPage
 
         //LocalNotificationCenter.Current.NotificationActionTapped += Current_NotificationActionTapped;
 
-        var dados = _volumeScannerRepository.GetVolumeScanners();
-        send.Text = $"Enviar {dados.Count} volume(s)";
+        //var dados = await _volumeScannerRepository.GetVolumeScanners();
+        //send.Text = $"Enviar {dados.Count} volume(s)";
+
+        new Action(async () =>
+        {
+            var dados = await _volumeScannerRepository.GetVolumeScanners();
+            send.Text = $"Enviar {dados.Count} volume(s)";
+        }).Invoke();
+
     }
 
     private void Current_NotificationActionTapped(Plugin.LocalNotification.EventArgs.NotificationActionEventArgs e)
@@ -39,10 +45,13 @@ public partial class ReaderEnderecamento : ContentPage
         List<BarcodeResult> obj = e.BarcodeResults;
 
         string result = string.Empty;
+        string type = string.Empty;
+        VolumeLookup lookup = null;
         for (int i = 0; i < obj.Count; i++)
         {
             //result += $"Type : {obj[i].BarcodeType}, Value : {obj[i].DisplayValue}{Environment.NewLine}";
-            result += $"{obj[i].DisplayValue}{Environment.NewLine}";
+            result += $"{obj[i].DisplayValue}";
+            type += $"{obj[i].BarcodeFormat}";
         }
 
         Dispatcher.Dispatch(async () =>
@@ -51,12 +60,16 @@ public partial class ReaderEnderecamento : ContentPage
             // If you want to start scanning again
 
             //App.VolumeScannerRepository.Add(new VolumeScanner { Volume = result });
-            
-            var lookup = _volumeScannerRepository.GetVolumeLookup(result);
+
+            if (type == BarcodeFormats.Code39.ToString())
+                lookup = await _volumeScannerRepository.GetVolumeLookupByCode39(result);
+            else if (type == BarcodeFormats.QRCode.ToString())
+                lookup = await _volumeScannerRepository.GetVolumeLookupByQrCode(result);
+
             if (lookup != null)
             {
-                _volumeScannerRepository.CreateVolumeScanner(new VolumeScanner { Volume = result, Tipo = "ENDEREÇAMENTO" });
-                var dados = _volumeScannerRepository.GetVolumeScanners();
+                await _volumeScannerRepository.CreateVolumeScanner(new VolumeScanner { Volume = result, Tipo = "ENDEREÇAMENTO" });
+                var dados = await _volumeScannerRepository.GetVolumeScanners();
                 send.Text = $"Enviar {dados.Count} volume(s)";
             }
             else

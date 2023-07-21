@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:telerik="http://schemas.telerik.com/2022/xaml/maui"
+             xmlns:editors="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.DataGrid;assembly=Syncfusion.Maui.DataGrid"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ScannerQRcode.Views.LookupCargaShopping"
+             xmlns:viewmodel="clr-namespace:ScannerQRcode.ViewModels"
+             x:DataType="viewmodel:LookupCargaShoppingViewModel"
+             Title="Lookup Carga Shopping">
+
+
+
+    <Grid Padding="10" RowSpacing="20">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <telerik:RadAutoComplete 
+            x:Name="AcSigla"
+            Grid.Row="0"
+            Placeholder="Seleciona Sigla"
+            ItemsSource="{Binding Aprovados}"
+            TextSearchPath="SiglaServ"
+            DisplayTextFormatter="SiglaServ"
+            BackgroundColor="White"
+            DisplayMode="Tokens"
+            SuggestionItemSelected="radAutoCompleteViewSigla_SuggestionItemSelected">
+        </telerik:RadAutoComplete>
+
+
+        <telerik:RadEntry 
+            x:Name="EtCaminhao"
+            Grid.Row="1"
+            Text="{Binding Caminhao}"
+            IsEnabled="{Binding BloqCaminao}"
+            Placeholder="Informe o número do camição separado por ';'"
+            PlaceholderColor="#99000000"
+            AutomationId="radCaminhao">
+        </telerik:RadEntry>
+
+        <telerik:RadEntry 
+            x:Name="EtPlacaCaminao"
+            Grid.Row="2"
+            Text="{Binding PlacaCaminhao}"
+            Placeholder="Informe a Placa do caminão"
+            PlaceholderColor="#99000000"
+            AutomationId="radPlacaCaminao">
+        </telerik:RadEntry>
+
+        <telerik:RadBusyIndicator 
+            x:Name="BusyIndicator"
+            Grid.Row="3"
+            VerticalOptions="Center"
+            AnimationContentHeightRequest="100"
+            AnimationContentWidthRequest="100"
+             AnimationContentColor="#2374FF"
+            AnimationType="Animation2"
+            IsBusy="{Binding IsLoading}">
+
+            <telerik:RadBusyIndicator.BusyContent>
+                <Label Text="{Binding Status}" />
+            </telerik:RadBusyIndicator.BusyContent>
+            <telerik:RadBusyIndicator.BusyContentTemplate>
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <ContentPresenter Content="{TemplateBinding Path=AnimationContent}" />
+                        <ContentPresenter 
+                            Grid.Row="1"
+                            Content="{TemplateBinding Path=BusyContent}"
+                            HorizontalOptions="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </telerik:RadBusyIndicator.BusyContentTemplate>
+
+        </telerik:RadBusyIndicator>
+
+        <telerik:RadButton 
+            Grid.Row="3"
+            Text="Baixar Volumes"
+            Clicked="Button_Clicked"
+            FontSize="20"
+            BackgroundColor="Brown"
+            VerticalOptions="EndAndExpand"/>
+
+
+    </Grid>
+
+</ContentPage>
