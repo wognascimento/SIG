@@ -258,6 +258,7 @@ namespace Producao.Views.CentralModelos
             }
         }
 
+        /*
         public async Task<ObservableCollection<DetalhesModeloFitasModel>> GetItensControleAsync(long? idModelo)
         {
             try
@@ -265,6 +266,20 @@ namespace Producao.Views.CentralModelos
                 using DatabaseContext db = new();
                 var data = await db.DetalhesModeloFitas.Where(r => r.id_modelo == idModelo).ToListAsync();
                 return new ObservableCollection<DetalhesModeloFitasModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        */
+        public async Task<ObservableCollection<ReqDetalhesModel>> GetItensControleAsync(long? idModelo)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.ReqDetalhes.Where(r => r.id_modelo == idModelo && r.quantidade > 0).ToListAsync();
+                return new ObservableCollection<ReqDetalhesModel>(data);
             }
             catch (Exception)
             {
@@ -890,8 +905,8 @@ namespace Producao.Views.CentralModelos
 
                 QryModeloModel Modelo = await Task.Run(() => vm.GetModeloAsync(dados.id_modelo));
                 var ultimaOS = await Task.Run(() => vm.GetUltimaOSModeloClienteAsync(dados.id_modelo, dados.sigla));
-                //vm.ReqDetalhes = await Task.Run(() => vm.GetRequisicaoDetalServicohesAsync(ultimaOS.num_os_produto));
-                vm.ControleDetalhes = await Task.Run(() => vm.GetItensControleAsync(Modelo.id_modelo));
+                vm.ReqDetalhes = await Task.Run(() => vm.GetItensControleAsync(Modelo.id_modelo));
+                //vm.ControleDetalhes = await Task.Run(() => vm.GetItensControleAsync(Modelo.id_modelo));
 
                 using ExcelEngine excelEngine = new ExcelEngine();
                 IApplication application = excelEngine.Excel;
@@ -924,7 +939,7 @@ namespace Producao.Views.CentralModelos
 
                 var index = 9;
 
-                foreach (var item in vm.ControleDetalhes)
+                foreach (var item in vm.ReqDetalhes)
                 {
                     worksheet.Range[$"A{index}"].Number = Convert.ToDouble(item.codcompladicional);
                     worksheet.Range[$"A{index}"].CellStyle = bodyStyle;
@@ -956,7 +971,7 @@ namespace Producao.Views.CentralModelos
                     //worksheet.Range[$"G{index}"].CellStyle.Font.Size = 8;
                     worksheet.Range[$"G{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
 
-                    worksheet.Range[$"H{index}"].Number = Convert.ToDouble(item.qtd);
+                    worksheet.Range[$"H{index}"].Number = Convert.ToDouble(item.quantidade);
                     worksheet.Range[$"H{index}"].CellStyle = bodyStyle;
                     //worksheet.Range[$"H{index}"].CellStyle.Font.FontName = "Arial";
                     //worksheet.Range[$"H{index}"].CellStyle.Font.Size = 8;
