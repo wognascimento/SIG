@@ -27,8 +27,9 @@
             AutoGenerateColumns="False" 
             ColumnSizer="Auto"
             ItemsSource="{Binding ElementName=dataPager,Path=PagedSource}"
-            FontSize="9"
-            AllowResizingHiddenColumns="True" AllowFiltering="True" PreviewKeyDown="dgTabela_PreviewKeyDown">
+            AllowResizingHiddenColumns="True" 
+            AllowFiltering="True" 
+            PreviewKeyDown="dgTabela_PreviewKeyDown">
 
             <syncfusion:SfDataGrid.RecordContextMenu>
                 <ContextMenu Style="{x:Null}">

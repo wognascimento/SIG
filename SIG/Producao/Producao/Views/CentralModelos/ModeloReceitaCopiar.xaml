@@ -7,10 +7,12 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         mc:Ignorable="d"
         Title="COPIAR RECEITA ANO ANTERIOR"
-        Height="768" Width="1000"
+        Height="768" Width="1024"
         WindowStartupLocation="CenterScreen" 
         WindowStyle="ToolWindow"
-        ResizeMode="NoResize" Loaded="Window_Loaded">
+        ResizeMode="NoResize" 
+        WindowState="Maximized"
+        Loaded="Window_Loaded">
     
     <Grid>
 

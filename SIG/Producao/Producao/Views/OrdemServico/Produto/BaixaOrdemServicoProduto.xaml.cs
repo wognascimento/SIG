@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Producao.Views.CentralModelos;
+using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.Utility;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -107,11 +110,61 @@ namespace Producao.Views.OrdemServico.Produto
             }
         }
 
+        public async Task CancelarAsync(BaixaOsProducaoModel baixa)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var os = await db.ProdutoServicos.FindAsync(baixa.num_os_servico);
+                os.cancelada_os = baixa.cancelada_os;
+                //os.concluida_os_data = baixa.concluida_os_data;
+                await db.ProdutoServicos.SingleMergeAsync(os);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
+    }
+
+    public static class ContextMenuCommandsBaixaOrdemServicoProduto
+    {
+        static BaseCommand? cancelarOS;
+        public static BaseCommand CancelarOS
+        {
+            get
+            {
+                cancelarOS ??= new BaseCommand(OnCancelarOSClicked);
+                return cancelarOS;
+            }
+        }
+
+        private static async void OnCancelarOSClicked(object obj)
+        {
+            var record = ((GridRecordContextMenuInfo)obj).Record as BaixaOsProducaoModel;
+            var grid = ((GridRecordContextMenuInfo)obj).DataGrid;
+            var item = grid.SelectedItem as BaixaOsProducaoModel;
+            BaixaOrdemServicoProdutoViewModel vm = (BaixaOrdemServicoProdutoViewModel)grid.DataContext;
+
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                item.cancelada_os = "-1";
+                await Task.Run(() => vm.CancelarAsync(item));
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }

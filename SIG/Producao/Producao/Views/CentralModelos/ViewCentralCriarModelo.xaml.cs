@@ -3,6 +3,7 @@ using Producao.Views.PopUp;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
+using Syncfusion.UI.Xaml.Utility;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -691,6 +692,36 @@ namespace Producao.Views.CentralModelos
             }
         }
 
+    }
+
+    public static class CentralCriarModeloContextMenuCommands
+    {
+        static BaseCommand? atualizarGrid;
+        public static BaseCommand AtualizarGrid
+        {
+            get
+            {
+                if (atualizarGrid == null)
+                    atualizarGrid = new BaseCommand(OnAtualizarGridClicked);
+                return atualizarGrid;
+            }
+        }
+        private static async void OnAtualizarGridClicked(object obj)
+        {
+            var grid = ((GridColumnContextMenuInfo)obj).DataGrid;
+            CentralCriarModeloViewModel vm = (CentralCriarModeloViewModel)grid.DataContext;
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                vm.QryModelos = await Task.Run(vm.GetModelos);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
     }
 
 }

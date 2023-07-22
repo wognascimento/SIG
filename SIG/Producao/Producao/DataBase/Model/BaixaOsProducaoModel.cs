@@ -12,7 +12,7 @@ namespace Producao
         public long? num_os_servico { get; set; }
         public DateTime? recebido_setor_data { get; set; }
         public DateTime? concluida_os_data { get; set; }
-        //public string? cancelada_os { get; set; }
+        public string? cancelada_os { get; set; }
         //public string? alterado_por { get; set; }
         //public DateTime? alterado_data { get; set; }
         //public string? aprovado { get; set; }

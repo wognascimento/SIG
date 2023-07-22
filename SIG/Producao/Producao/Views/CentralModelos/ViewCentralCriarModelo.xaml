@@ -4,9 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-             xmlns:local="clr-namespace:Producao.Views" 
+             xmlns:app="clr-namespace:Producao.Views" 
+             xmlns:local="clr-namespace:Producao.Views.CentralModelos"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Initialized="UserControl_Initialized" Unloaded="UserControl_Unloaded">
+             d:DesignHeight="450" d:DesignWidth="800" 
+             Initialized="UserControl_Initialized" Unloaded="UserControl_Unloaded">
 
 
     <Grid Margin="5">
@@ -229,7 +231,17 @@
             AllowResizingColumns="True" 
             AutoGenerateColumns="False" 
             ColumnSizer="Auto"
-            ItemsSource="{Binding Path=QryModelos}" MouseDoubleClick="dgModelos_MouseDoubleClick" FontSize="10" SelectionChanged="dgModelos_SelectionChanged">
+            ItemsSource="{Binding Path=QryModelos}" 
+            MouseDoubleClick="dgModelos_MouseDoubleClick" 
+            FontSize="10" 
+            SelectionChanged="dgModelos_SelectionChanged">
+            <syncfusion:SfDataGrid.HeaderContextMenu>
+                <ContextMenu Style="{x:Null}">
+                    <MenuItem Command="{Binding Source={x:Static Member=local:CentralCriarModeloContextMenuCommands.AtualizarGrid}}"
+                              CommandParameter="{Binding}"
+                              Header="Atualizar"/>
+                </ContextMenu>
+            </syncfusion:SfDataGrid.HeaderContextMenu>
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn MappingName="id_modelo" ColumnSizer="SizeToCells" NumberDecimalDigits="0"/>
                 <syncfusion:GridTextColumn MappingName="tema"/>

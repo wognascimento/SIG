@@ -37,5 +37,6 @@ namespace Producao
         public DateTime? data_memo_visual { get; set; }
         public string? obs_especial {  get; set; }
         public string? descricao_completa {  get; set; }
+        public string? laco {  get; set; }
     }
 }

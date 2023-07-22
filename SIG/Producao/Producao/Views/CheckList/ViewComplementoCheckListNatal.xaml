@@ -99,7 +99,7 @@
             ColumnSizer="SizeToCells" AllowFiltering="True"
             ShowRowHeader="True" 
             ItemsSource="{Binding Itens}"
-            SelectedItem="{Binding Item, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            SelectedItem="{Binding Chklist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectionChanged="OnSelectionChanged" FontSize="10" MouseDoubleClick="dgCheckListGeral_MouseDoubleClick">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridTextColumn MappingName="sigla" ColumnSizer="SizeToCells"/>

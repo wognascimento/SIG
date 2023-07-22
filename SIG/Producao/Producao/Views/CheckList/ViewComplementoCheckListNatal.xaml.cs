@@ -110,8 +110,8 @@ namespace Producao.Views.CheckList
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 ViewComplementoCheckListNatalViewModel vm = (ViewComplementoCheckListNatalViewModel)DataContext;
-                vm.CompleAdicionais = await Task.Run(() => vm.GetCompleAdicionaisAsync(vm?.Item?.coduniadicional));
-                vm.CheckListGeralComplementos = await Task.Run(() => vm.GetCheckListGeralComplementoAsync(vm?.Item?.codcompl));
+                vm.CompleAdicionais = await Task.Run(() => vm.GetCompleAdicionaisAsync(vm?.Chklist?.coduniadicional));
+                vm.CheckListGeralComplementos = await Task.Run(() => vm.GetCheckListGeralComplementoAsync(vm?.Chklist?.codcompl));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
@@ -130,7 +130,7 @@ namespace Producao.Views.CheckList
         {
             ViewComplementoCheckListNatalViewModel vm = (ViewComplementoCheckListNatalViewModel)DataContext;
 
-            ((QryCheckListGeralComplementoModel)e.NewObject).codcompl = vm.Item.codcompl;
+            ((QryCheckListGeralComplementoModel)e.NewObject).codcompl = vm.Chklist.codcompl;
         }
 
         private void OnCurrentCellDropDownSelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellDropDownSelectionChangedEventArgs e)
@@ -238,11 +238,11 @@ namespace Producao.Views.CheckList
                 get { return _itens; }
                 set { _itens = value; RaisePropertyChanged("Itens"); }
             }
-            private ChklistNaoCompletadoModel _item;
-            public ChklistNaoCompletadoModel Item
+            private ChklistNaoCompletadoModel _chklist;
+            public ChklistNaoCompletadoModel Chklist
             {
-                get { return _item; }
-                set { _item = value; RaisePropertyChanged("Item"); }
+                get { return _chklist; }
+                set { _chklist = value; RaisePropertyChanged("Chklist"); }
             }
 
             private ObservableCollection<TblComplementoAdicionalModel> _compleAdicionais;

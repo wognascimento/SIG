@@ -391,38 +391,78 @@ namespace Producao.Views.CentralModelos
                 //Console.WriteLine(String.Format(new CultureInfo("pt-BR"), "{0:C}", 189.99));
 
                 //var itens = (from i in vm.ItensReceita where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade }).ToList(); //new { a.Name, a.Age }
+
+                IStyle headerStyle;
+                IStyle bodyStyle;
+
+                bodyStyle = workbook.Styles.Add("BodyStyle");
+                bodyStyle.BeginUpdate();
+                bodyStyle.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeTop].Color = ExcelKnownColors.Grey_25_percent;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeBottom].Color = ExcelKnownColors.Grey_25_percent;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeLeft].Color = ExcelKnownColors.Grey_25_percent;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeRight].Color = ExcelKnownColors.Grey_25_percent;
+                //bodyStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                //bodyStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                //bodyStyle.Font.Bold = true;
+                //bodyStyle.WrapText = true;
+                bodyStyle.EndUpdate();
+
+                headerStyle = workbook.Styles.Add("headerStyle");
+                headerStyle.BeginUpdate();
+                headerStyle.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                headerStyle.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                headerStyle.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                headerStyle.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                headerStyle.Borders[ExcelBordersIndex.EdgeTop].Color = ExcelKnownColors.Grey_25_percent;
+                headerStyle.Borders[ExcelBordersIndex.EdgeBottom].Color = ExcelKnownColors.Grey_25_percent;
+                headerStyle.Borders[ExcelBordersIndex.EdgeLeft].Color = ExcelKnownColors.Grey_25_percent;
+                headerStyle.Borders[ExcelBordersIndex.EdgeRight].Color = ExcelKnownColors.Grey_25_percent;
+                headerStyle.Font.Bold = true;
+                //headerStyle.WrapText = true;
+                headerStyle.EndUpdate();
+
                 var index = 9;
 
                 foreach (var item in vm.ItensReceita)
                 {
                     worksheet.Range[$"A{index}"].Number = (double)item.codcompladicional;
-                    worksheet.Range[$"A{index}"].CellStyle.Font.FontName = "Arial";
-                    worksheet.Range[$"A{index}"].CellStyle.Font.Size = 8;
+                    //worksheet.Range[$"A{index}"].CellStyle.Font.FontName = "Arial";
+                    //worksheet.Range[$"A{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"A{index}"].CellStyle = bodyStyle;
 
                     worksheet.Range[$"B{index}"].Text = item.planilha;
-                    worksheet.Range[$"B{index}"].CellStyle.Font.FontName = "Arial";
-                    worksheet.Range[$"B{index}"].CellStyle.Font.Size = 8;
+                    //worksheet.Range[$"B{index}"].CellStyle.Font.FontName = "Arial";
+                    //worksheet.Range[$"B{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"B{index}"].CellStyle = bodyStyle;
 
                     worksheet.Range[$"C{index}"].Text = item.descricao_completa;
-                    worksheet.Range[$"C{index}"].CellStyle.Font.FontName = "Arial";
-                    worksheet.Range[$"C{index}"].CellStyle.Font.Size = 8;
+                    //worksheet.Range[$"C{index}"].CellStyle.Font.FontName = "Arial";
+                    //worksheet.Range[$"C{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"C{index}:E{index}"].CellStyle = bodyStyle;
                     worksheet.Range[$"C{index}:E{index}"].Merge();
                     worksheet.Range[$"C{index}:E{index}"].WrapText = true;
 
                     worksheet.Range[$"F{index}"].Text = item.observacao;
-                    worksheet.Range[$"F{index}"].CellStyle.Font.FontName = "Arial";
-                    worksheet.Range[$"F{index}"].CellStyle.Font.Size = 8;
+                    //worksheet.Range[$"F{index}"].CellStyle.Font.FontName = "Arial";
+                    //worksheet.Range[$"F{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"F{index}"].CellStyle = bodyStyle;
                     //worksheet.Range[$"F{index}:G{index}"].Merge();
                     worksheet.Range[$"F{index}"].WrapText = true;
 
                     worksheet.Range[$"G{index}"].Number = (double)item.qtd_modelo;
-                    worksheet.Range[$"G{index}"].CellStyle.Font.FontName = "Arial";
-                    worksheet.Range[$"G{index}"].CellStyle.Font.Size = 8;
+                    //worksheet.Range[$"G{index}"].CellStyle.Font.FontName = "Arial";
+                    //worksheet.Range[$"G{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"G{index}"].CellStyle = bodyStyle;
                     worksheet.Range[$"G{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
 
                     worksheet.Range[$"H{index}"].Number = (double)item.qtd_producao;
-                    worksheet.Range[$"H{index}"].CellStyle.Font.FontName = "Arial";
-                    worksheet.Range[$"H{index}"].CellStyle.Font.Size = 8;
+                    //worksheet.Range[$"H{index}"].CellStyle.Font.FontName = "Arial";
+                    //worksheet.Range[$"H{index}"].CellStyle.Font.Size = 8;
+                    worksheet.Range[$"H{index}"].CellStyle = bodyStyle;
                     worksheet.Range[$"H{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
                     index++;
                 }

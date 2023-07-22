@@ -43,5 +43,7 @@ namespace Producao
         public string? historico { get; set; }
         public int? nivel { get; set; }
         public string? agrupar { get; set; }
+        public string? alteradopordescadic { get; set; }
+        public DateTime? dataalteradescadic { get; set; }
     }
 }

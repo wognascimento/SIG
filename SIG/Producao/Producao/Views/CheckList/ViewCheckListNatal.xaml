@@ -142,7 +142,8 @@
                     Hint="PLANILHA" 
                     Width="260" 
                     CharCountVisibility="Collapsed" 
-                    HelperTextVisibility="Collapsed" Margin="0,0,5,0">
+                    HelperTextVisibility="Collapsed" 
+                    Margin="0,0,5,0">
                     <!--<syncfusion:ComboBoxAdv 
                         x:Name="cbPlanilha"
                         IsEditable="true"
@@ -174,7 +175,8 @@
                     Hint="DESCRIÇÃO" 
                     Width="450" 
                     CharCountVisibility="Collapsed" 
-                    HelperTextVisibility="Collapsed">
+                    HelperTextVisibility="Collapsed"
+                    Margin="0,0,5,0">
                     <!--<syncfusion:ComboBoxAdv 
                         x:Name="cbDescricao"
                         IsEditable="true"
@@ -202,6 +204,24 @@
                         ShowClearButton="True"/>
                     
                 </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4"
+                    HintFloatMode="Float" 
+                    Hint="COR PREDOMINANTE" 
+                    Width="300" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+
+                    <syncfusion:SfTextBoxExt 
+                        x:Name="txtCorPredomitante"
+                        ShowSuggestionsOnFocus="True"
+                        ShowClearButton="True"
+                        Text="{Binding Sigla.cor_predominante}" IsEnabled="False"/>
+
+                </syncfusion:SfTextInputLayout>
+
+
 
             </StackPanel>
 
@@ -245,7 +265,8 @@
                     Hint="QTDE" 
                     Width="100" 
                     CharCountVisibility="Collapsed" 
-                    HelperTextVisibility="Collapsed">
+                    HelperTextVisibility="Collapsed"
+                    Margin="0,0,5,0">
                     <syncfusion:DoubleTextBox 
                         x:Name="tbQtde" 
                         UseNullOption="True"
@@ -254,51 +275,124 @@
                         Value="{Binding ComplementoCheckList.qtd}"/>
                 </syncfusion:SfTextInputLayout>
 
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4"
+                    HintFloatMode="Float" 
+                    Hint="P A" 
+                    Width="300" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+
+                    <syncfusion:SfTextBoxExt 
+                        x:Name="txtPa"
+                        ShowSuggestionsOnFocus="True"
+                        ShowClearButton="True"
+                        Text="{Binding Sigla.pa}" IsEnabled="False"/>
+
+                </syncfusion:SfTextInputLayout>
+
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Height="39">
+                
                 <syncfusion:SfTextInputLayout 
                     InputViewPadding="4" 
                     HintFloatMode="Float" 
                     Hint="ORIENTAÇÃO DE PRODUÇÃO" 
                     Width="720" 
                     CharCountVisibility="Collapsed" 
-                    HelperTextVisibility="Collapsed">
+                    HelperTextVisibility="Collapsed"
+                    Margin="0,0,5,0">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbOrientacaoProducao" 
                         ShowClearButton="True"
                         Text="{Binding ComplementoCheckList.obs}"/>
                 </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4"
+                    HintFloatMode="Float" 
+                    Hint="LAÇO" 
+                    Width="300" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+
+                    <syncfusion:SfTextBoxExt 
+                        x:Name="txtLaco"
+                        ShowSuggestionsOnFocus="True"
+                        ShowClearButton="True"
+                        Text="{Binding Sigla.laco}" IsEnabled="False"/>
+
+                </syncfusion:SfTextInputLayout>
+                
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Height="39">
+                
                 <syncfusion:SfTextInputLayout 
                     InputViewPadding="4" 
                     HintFloatMode="Float" 
                     Hint="ORIENTAÇÃO DE MONTAGEM" 
                     Width="720" 
                     CharCountVisibility="Collapsed" 
-                    HelperTextVisibility="Collapsed">
+                    HelperTextVisibility="Collapsed"
+                    Margin="0,0,5,0">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbOrientacaoMontagem" 
                         ShowClearButton="True"
                         Text="{Binding ComplementoCheckList.orient_montagem}"/>
                 </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4"
+                    HintFloatMode="Float" 
+                    Hint="OBS ILUMINAÇÃO" 
+                    Width="300" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+
+                    <syncfusion:SfTextBoxExt 
+                        x:Name="txtObsIluminacao"
+                        ShowSuggestionsOnFocus="True"
+                        ShowClearButton="True"
+                        Text="{Binding Sigla.obs_iluminacao}" IsEnabled="False"/>
+
+                </syncfusion:SfTextInputLayout>
+                
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" Height="39">
+                
                 <syncfusion:SfTextInputLayout 
                     InputViewPadding="4" 
                     HintFloatMode="Float" 
                     Hint="ORIENTAÇÃO DE DESMONTAGEM" 
                     Width="720" 
                     CharCountVisibility="Collapsed" 
-                    HelperTextVisibility="Collapsed">
+                    HelperTextVisibility="Collapsed"
+                    Margin="0,0,5,0">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbOrientacaoDesmontagem" 
                         ShowClearButton="True"
                         Text="{Binding ComplementoCheckList.orient_desmont}"/>
                 </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout 
+                    InputViewPadding="4"
+                    HintFloatMode="Float" 
+                    Hint="MLAMP/LED" 
+                    Width="300" 
+                    CharCountVisibility="Collapsed" 
+                    HelperTextVisibility="Collapsed">
+
+                    <syncfusion:SfTextBoxExt 
+                        x:Name="txtMlampLed"
+                        ShowSuggestionsOnFocus="True"
+                        ShowClearButton="True"
+                        Text="{Binding Sigla.iluminacao}" IsEnabled="False"/>
+
+                </syncfusion:SfTextInputLayout>
+                
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
@@ -391,6 +485,8 @@
                 <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE PRODUÇÃO" MappingName="obs" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE MONTAGEM" MappingName="orient_montagem" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE DESMONTAGEM" MappingName="orient_desmont" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn MappingName="alteradopordescadic" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridDateTimeColumn MappingName="dataalteradescadic" ColumnSizer="SizeToHeader"/>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
 
@@ -470,6 +566,12 @@
                             </DataTemplate>
                         </syncfusion:GridTemplateColumn.CellTemplate>
                     </syncfusion:GridTemplateColumn>
+
+                    <syncfusion:GridTextColumn MappingName="alterado_por" />
+                    <syncfusion:GridDateTimeColumn MappingName="data_alteracao" />
+
+
+
                 </syncfusion:SfDataGrid.Columns>
 
              

@@ -32,10 +32,12 @@
             RowValidated="OnRowValidated" 
             RowValidating="OnRowValidating" AllowResizingHiddenColumns="True" AllowResizingColumns="True" >
             <syncfusion:SfDataGrid.Columns>
+                <!--
                 <syncfusion:GridTextColumn  MappingName="num_os_produto"/>
                 <syncfusion:GridTextColumn  MappingName="num_os_servico"/>
-
                 <syncfusion:GridDateTimeColumn  MappingName="recebido_setor_data" ColumnSizer="SizeToHeader"/>
+                -->
+                <syncfusion:GridTextColumn  MappingName="agrupamento"/>
                 <syncfusion:GridTextColumn  MappingName="caminhao" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn  MappingName="revisado" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn  MappingName="confirmado" ColumnSizer="SizeToCells"/>

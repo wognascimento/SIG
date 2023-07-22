@@ -7,10 +7,12 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         xmlns:syncfusionSfDataGrid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF" 
         mc:Ignorable="d"
-        Title="RECEITA DO MODELO" Height="800" Width="800"
+        Title="RECEITA DO MODELO" Height="800" Width="1024"
         WindowStartupLocation="CenterOwner" 
         WindowStyle="ToolWindow" 
-        ResizeMode="NoResize" Loaded="Window_Loaded">
+        ResizeMode="NoResize" 
+        WindowState="Maximized"
+        Loaded="Window_Loaded">
 
     <Window.Resources>
         <local:ProdutoInativoColorConverter x:Key="converter"/>
@@ -452,6 +454,11 @@
                 <syncfusion:GridNumericColumn MappingName="qtd_modelo" HeaderText="MODELO" Width="90"/>
                 <syncfusion:GridNumericColumn MappingName="qtd_producao" HeaderText="PRODUÇÃO" Width="100"/>
                 <syncfusion:GridTextColumn MappingName="observacao" HeaderText="OBSERVAÇÃO" Width="100"/>
+
+                <syncfusion:GridTextColumn MappingName="cadastrado_por"/>
+                <syncfusion:GridDateTimeColumn MappingName="data_cadastro" />
+                <syncfusion:GridTextColumn MappingName="alterado_por"/>
+                <syncfusion:GridDateTimeColumn MappingName="data_alterado"/>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
 
