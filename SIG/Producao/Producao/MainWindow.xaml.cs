@@ -14,6 +14,7 @@ using Producao.Views;
 using Producao.Views.CadastroProduto;
 using Producao.Views.CentralModelos;
 using Producao.Views.CheckList;
+using Producao.Views.Controlado;
 using Producao.Views.Estoque;
 using Producao.Views.OrdemServico.Produto;
 using Producao.Views.OrdemServico.Requisicao;
@@ -877,6 +878,11 @@ namespace Producao
         private void _mdi_CloseAllTabs(object sender, CloseTabEventArgs e)
         {
             _mdi.Items.Clear();
+        }
+
+        private void OnImprimirEtiquetaControlado(object sender, RoutedEventArgs e)
+        {
+            adicionarFilho(new ImprimirEtiqueta(), "IMPRESSÃO ETIQUETA CONTROLADO", "IMPRESSAO_ETIQUETA_CONTROLADO");
         }
     }
 }

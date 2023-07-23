@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         Title="SISTEMA INTEGRADO DE GERENCIAMENTO - PRODUÇÃO"
-        Height="350" Width="525" WindowState="Maximized">
+        Height="768" Width="1024" WindowState="Maximized">
 
     <Grid x:Name="Etiqueta">
         <Grid.RowDefinitions>
@@ -92,7 +92,7 @@
             </syncfusion:MenuItemAdv>
 
             <syncfusion:MenuItemAdv Header="Controlados">
-                <syncfusion:MenuItemAdv Header="Imprimir"/>
+                <syncfusion:MenuItemAdv Header="Imprimir" Click="OnImprimirEtiquetaControlado"/>
                 <syncfusion:MenuItemAdv Header="Vincular Etiqueta"/>
                 <syncfusion:MenuItemAdv Header="Cobrança"/>
                 <syncfusion:MenuItemAdv Header="Retorno"/>

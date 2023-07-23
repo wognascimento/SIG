@@ -18,5 +18,6 @@ namespace Producao
         public int? impressas { get; set; }
         public int? total_etiquetas { get; set; }
         public string? desc_completa { get; set; }
+        public double? saldo_estoque { get; set; }
     }
 }
