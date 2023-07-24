@@ -97,6 +97,8 @@ namespace Producao.Views.CheckList
                     {
                         vm.Etiqueta.codvol = null;
                         vm.Etiqueta.qtd = 0;
+                        vm.Etiqueta.criado_por = Environment.UserName;
+                        vm.Etiqueta.criado_em = DateTime.Now;
                     }
                         
                     vm.Etiqueta = await Task.Run(() => vm.AddEtiquetaAsync(vm.Etiqueta));
