@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Producao.DataBase.Model;
 using Syncfusion.Windows.Tools.Controls;
+using Syncfusion.XlsIO;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -77,7 +79,12 @@ namespace Producao.Views.OrdemServico.Produto
         {
             //SelectedItems = Count = 2
             var comboBox = (ComboBoxAdv)sender; //= { Syncfusion.Windows.Tools.Controls.ComboBoxAdv Items.Count: 5}
-            var setores = (List<SetorModel>)comboBox.SelectedItem; 
+            var setores = comboBox.SelectedItems;
+
+            /*
+             * 'System.Collections.ObjectModel.ObservableCollection`1[System.Object]' 
+             * 'System.Collections.Generic.List`1[Producao.SetorModel]'.'
+            */
         }
 
         private void OnAddNewRowInitiating(object sender, Syncfusion.UI.Xaml.Grid.AddNewRowInitiatingEventArgs e)
@@ -100,9 +107,129 @@ namespace Producao.Views.OrdemServico.Produto
 
         }
 
-        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        private async void OnPrintClick(object sender, RoutedEventArgs e)
         {
-            //((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                ProgramacaoProducaoViewModel vm = (ProgramacaoProducaoViewModel)DataContext;
+                var filteredResult = programacao.View.Records.Select(recordentry => recordentry.Data);
+                var itens = programacao.View.Records.Count;
+
+                using ExcelEngine excelEngine = new ExcelEngine();
+                IApplication application = excelEngine.Excel;
+                application.DefaultVersion = ExcelVersion.Xlsx;
+                IWorkbook workbook = application.Workbooks.Open("Modelos/PROGRAMACAO_PROGRAMACAO_MODELO.xlsx");
+                IWorksheet worksheet = workbook.Worksheets[0];
+
+                IStyle headerStyle;
+                IStyle bodyStyle;
+
+                bodyStyle = workbook.Styles.Add("BodyStyle");
+                bodyStyle.BeginUpdate();
+                bodyStyle.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeTop].Color = ExcelKnownColors.Grey_25_percent;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeBottom].Color = ExcelKnownColors.Grey_25_percent;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeLeft].Color = ExcelKnownColors.Grey_25_percent;
+                bodyStyle.Borders[ExcelBordersIndex.EdgeRight].Color = ExcelKnownColors.Grey_25_percent;
+                bodyStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                bodyStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                bodyStyle.Font.Bold = true;
+                bodyStyle.WrapText = true;
+                bodyStyle.EndUpdate();
+
+                headerStyle = workbook.Styles.Add("headerStyle");
+                headerStyle.BeginUpdate();
+                headerStyle.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                headerStyle.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                headerStyle.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                headerStyle.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                headerStyle.Borders[ExcelBordersIndex.EdgeTop].Color = ExcelKnownColors.Grey_25_percent;
+                headerStyle.Borders[ExcelBordersIndex.EdgeBottom].Color = ExcelKnownColors.Grey_25_percent;
+                headerStyle.Borders[ExcelBordersIndex.EdgeLeft].Color = ExcelKnownColors.Grey_25_percent;
+                headerStyle.Borders[ExcelBordersIndex.EdgeRight].Color = ExcelKnownColors.Grey_25_percent;
+                headerStyle.Font.Size = 7;
+                headerStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                headerStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+                //headerStyle.Font.FontName = "Calibri (Detalhe)";
+                headerStyle.WrapText = true;
+                //headerStyle.ShrinkToFit = true;
+                headerStyle.EndUpdate();
+
+                int _l = 9;
+
+                foreach (ProgramacaoProducaoModel item in filteredResult)
+                {
+
+                    worksheet.Range[$"B{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"B{_l}"].Value = item.programacao_ordem.ToString();
+
+                    worksheet.Range[$"C{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"C{_l}"].Value = item.data_de_expedicao.ToString();
+                    
+                    worksheet.Range[$"D{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"D{_l}"].Value = item.cliente_os;
+                    
+                    worksheet.Range[$"E{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"E{_l}"].Value = item.cod_compl_adicional.ToString();
+                    
+                    worksheet.Range[$"F{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"F{_l}"].Value = item.planilha;
+                    
+                    worksheet.Range[$"G{_l}:K{_l}"].Merge();
+                    worksheet.Range[$"G{_l}:K{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"G{_l}:K{_l}"].Value = item.descricao_completa;
+
+                    worksheet.Range[$"L{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"L{_l}"].Value = item.num_os.ToString();
+                    
+                    worksheet.Range[$"M{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"M{_l}"].Value = item.quantidade_os.ToString();
+
+                    worksheet.Range[$"N{_l}:O{_l}"].Merge();
+                    worksheet.Range[$"N{_l}:O{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"N{_l}:O{_l}"].Value = item.programacao_status;
+
+                    worksheet.Range[$"P{_l}:Q{_l}"].Merge();
+                    worksheet.Range[$"P{_l}:Q{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"P{_l}:Q{_l}"].Value = item.setor_caminho;
+
+                    worksheet.Range[$"R{_l}:S{_l}"].Merge();
+                    worksheet.Range[$"R{_l}:S{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"R{_l}:S{_l}"].Value = item.programacao_observacao;
+                    
+                    worksheet.Range[$"T{_l}"].CellStyle = headerStyle;
+                    worksheet.Range[$"T{_l}"].Value = item.ht.ToString();
+
+
+                    _l++;
+                }
+
+
+
+
+
+                workbook.SaveAs("Impressos/PROGRAMACAO_PROGRAMACAO_MODELO.xlsx");
+                
+                Process.Start(new ProcessStartInfo("Impressos\\PROGRAMACAO_PROGRAMACAO_MODELO.xlsx")
+                {
+                    UseShellExecute = true
+                });
+                
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+
+
         }
     }
 
@@ -185,6 +312,7 @@ namespace Producao.Views.OrdemServico.Produto
             {
                 using DatabaseContext db = new();
                 var data = await db.ProgramacaoProducoes
+                    .Where(p => p.quantidade_os > 0)
                     .ToListAsync();
 
                 return new ObservableCollection<ProgramacaoProducaoModel>(data);

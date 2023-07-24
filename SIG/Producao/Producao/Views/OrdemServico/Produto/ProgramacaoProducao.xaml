@@ -9,7 +9,7 @@
              xmlns:local="clr-namespace:Producao.Views.OrdemServico.Produto" 
              xmlns:app="clr-namespace:Producao"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded" Unloaded="UserControl_Unloaded">
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
 
     <UserControl.Resources>
         <app:ConverterNumber x:Key="ConverterNumber"/>
@@ -238,10 +238,20 @@
 
             </syncfusion:SfTextInputLayout>
 
+            <syncfusion:ButtonAdv
+                Grid.Row="3"
+                Grid.Column="3"
+                SmallIcon="/icones/icons8-impressão-40.png" 
+                LargeIcon="/icones/icons8-impressão-80.png" 
+                SizeMode="Normal" 
+                Label="IMPRIMIR" 
+                HorizontalAlignment="Right" 
+                Click="OnPrintClick"/>
+
         </Grid>
 
 
-        <syncfusion:SfDataGrid
+        <syncfusion:SfDataGrid x:Name="programacao"
             Grid.Row="1"
             AutoGenerateColumns="False" 
             AllowResizingColumns="True"
@@ -352,7 +362,7 @@
                     MappingName="custo_mao_obra"
                     ColumnSizer="SizeToHeader"/>
 
-               
+
 
 
 
