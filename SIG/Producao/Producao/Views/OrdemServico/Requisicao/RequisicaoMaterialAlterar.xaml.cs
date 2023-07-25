@@ -88,9 +88,6 @@ namespace Producao.Views.OrdemServico.Requisicao
                         Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                         return;
                     }
-
-
-
                     Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
                 catch (FormatException ex)

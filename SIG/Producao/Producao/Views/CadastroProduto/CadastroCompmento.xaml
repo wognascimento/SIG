@@ -33,7 +33,7 @@
             FontSize="10" 
             RowValidated="OnRowValidated" 
             RowValidating="OnRowValidating" 
-            AddNewRowInitiating="OnAddNewRowInitiating" >
+            AddNewRowInitiating="OnAddNewRowInitiating" AllowEditing="True" >
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn
                         HeaderText="CÓDIGO" 

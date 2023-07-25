@@ -19,7 +19,7 @@
     <Grid>
 
         <syncfusion:SfDataGrid
-            x:Name="adicionais"
+            x:Name="ed"
             Grid.Row="1"
             AddNewRowPosition="Bottom"
             ShowRowHeader="True"
@@ -33,7 +33,7 @@
             FontSize="10" 
             RowValidated="OnRowValidated" 
             RowValidating="OnRowValidating" 
-            AddNewRowInitiating="OnAddNewRowInitiating" >
+            AddNewRowInitiating="OnAddNewRowInitiating" AllowEditing="True" >
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn
                         HeaderText="CÓDIGO" 

@@ -78,6 +78,9 @@ namespace Producao
         public DbSet<OrdemServicoEmitidaModel> OrdemServicoEmitidas { get; set; }
         public DbSet<ProgramacaoProducaoModel> ProgramacaoProducoes { get; set; }
         public DbSet<ControladoEtiquetaModel> ControladoEtiquetas { get; set; }
+        public DbSet<TransformaRequisicaoModel> TransformaRequisicoes { get; set; }
+        public DbSet<EtiquetaZebraModel> EtiquetasZebra { get; set; }
+        public DbSet<ControladoShoppingModel> ControladoShoppings { get; set; }
 
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

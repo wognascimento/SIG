@@ -93,7 +93,7 @@
 
             <syncfusion:MenuItemAdv Header="Controlados">
                 <syncfusion:MenuItemAdv Header="Imprimir" Click="OnImprimirEtiquetaControlado"/>
-                <syncfusion:MenuItemAdv Header="Vincular Etiqueta"/>
+                <syncfusion:MenuItemAdv Header="Vincular Etiqueta" Click="OnVinculoRequisicao"/>
                 <syncfusion:MenuItemAdv Header="Cobrança"/>
                 <syncfusion:MenuItemAdv Header="Retorno"/>
                 <syncfusion:MenuItemAdv Header="Relatórios">

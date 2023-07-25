@@ -13,6 +13,27 @@
     <UserControl.Resources>
         <vewModel:ConverterNumber x:Key="ConverterNumber"/>
         <vewModel:ConverterBoolen x:Key="ConverterBoolen"/>
+
+        <Style TargetType="syncfusion:GridRowHeaderCell">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="syncfusion:GridRowHeaderCell">
+                        <Border x:Name="PART_RowHeaderCellBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <Grid>
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding RowIndex,
+                                                          RelativeSource={RelativeSource TemplatedParent}}"
+                                           TextAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     
@@ -21,7 +42,6 @@
         <syncfusion:SfDataGrid
             x:Name="adicionais"
             Grid.Row="1"
-            AddNewRowPosition="Bottom"
             ShowRowHeader="True"
             AutoGenerateColumns="False"
             AllowFiltering="True"

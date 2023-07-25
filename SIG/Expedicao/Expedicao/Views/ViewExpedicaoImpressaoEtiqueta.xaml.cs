@@ -117,7 +117,9 @@ namespace Expedicao.Views
             await streamWriter1.FlushAsync();
             await streamWriter1.DisposeAsync();
             streamWriter1.Close();
-            //tcpClient.Close();
+            client.Close();
+
+            //streamWriter1.Write(buffer, 0, buffer.Length);
 
             MessageBox.Show("Etiquetas impressas", "Impressão de etiquetas", MessageBoxButton.OK, MessageBoxImage.Information);
         }

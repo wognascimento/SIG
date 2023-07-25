@@ -884,5 +884,10 @@ namespace Producao
         {
             adicionarFilho(new ImprimirEtiqueta(), "IMPRESSÃO ETIQUETA CONTROLADO", "IMPRESSAO_ETIQUETA_CONTROLADO");
         }
+
+        private void OnVinculoRequisicao(object sender, RoutedEventArgs e)
+        {
+            adicionarFilho(new VincularRequisicao(), "VINCULAR ETIQUETA A REQUISIÇÃO", "VINCULAR_ETIQUETA_REQUISICAO");
+        }
     }
 }
