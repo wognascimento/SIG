@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Office.Interop.Excel;
 using Producao.DataBase.Model;
 using System;
 
@@ -96,6 +97,12 @@ namespace Producao
                 //$"Timeout=300;" +
                 //$"CommandTimeout=300;"
                 );
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ControladoShoppingModel>()
+                .HasKey(a => new { a.num_requisicao, a.barcode });
         }
     }
 }
