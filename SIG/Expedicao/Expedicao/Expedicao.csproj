@@ -29,7 +29,7 @@
   <ItemGroup>
     <Content Include="favicon.ico" />
     <Content Include="Database.db">
-      <CopyToOutputDirectory></CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="sound\error.wav" />
   </ItemGroup>

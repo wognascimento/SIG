@@ -740,10 +740,10 @@ namespace Expedicao.Views
             AprovadoModel aprovadoModel = await Task.Run(async () => await new AprovadoViewModel().GetAprovadoAsync(sigla));
             using MailMessage emailMessage = new MailMessage();
             emailMessage.From = new MailAddress("envio_relatorio@cipolatti.com.br");
-            //emailMessage.To.Add(new MailAddress("wesley_oliveira@cipolatti.com.br"));
-            emailMessage.To.Add(new MailAddress("grupo_nota_fiscal@cipolatti.com.br"));
-            emailMessage.CC.Add(new MailAddress("expedicao@cipolatti.com.br"));
-            emailMessage.CC.Add(new MailAddress("operacionalinterno@cipolatti.com.br"));
+            emailMessage.To.Add(new MailAddress("wesley_oliveira@cipolatti.com.br"));
+            //emailMessage.To.Add(new MailAddress("grupo_nota_fiscal@cipolatti.com.br"));
+            //emailMessage.CC.Add(new MailAddress("expedicao@cipolatti.com.br"));
+            //emailMessage.CC.Add(new MailAddress("operacionalinterno@cipolatti.com.br"));
             emailMessage.Subject = "Solicitação Nota Fisca Shopping";
             emailMessage.Body = "Em anexo arquivos para emissão da nota fiscal para o cliente " + aprovadoModel.Nome + " - " + aprovadoModel.Sigla + ", caminhão: " + Dispatcher.Invoke(() => txtPlaca.Content.ToString());
             emailMessage.Priority = MailPriority.High;// 2;
