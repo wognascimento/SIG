@@ -114,7 +114,11 @@
                     </syncfusion:SfDataGrid.Columns>
                 </syncfusion:SfDataGrid>
 
-                <Button Grid.Row="2" Content="Criar Arquivo" Click="OnCreateFile"/>
+                <Button 
+                    Grid.Row="2" 
+                    Content="GERAR PEDIDO" 
+                    Click="OnCreateFile" 
+                    Height="40"/>
 
             </Grid>
 

@@ -23,6 +23,7 @@ namespace Compras
         public DbSet<CondicaoPagamentoParcelaModel> CondicaoPagamentoParcelas { get; set; }
         public DbSet<FamiliaProdutoModel> FamiliaProdutos { get; set; }
         public DbSet<SolicitacaoDetalheItem> SolicitacaoDetalhes { get; set; }
+        public DbSet<EmpresaModel> Empresas { get; set; }
         
 
         public DbSet<RelplanModel> Planilhas { get; set; }
