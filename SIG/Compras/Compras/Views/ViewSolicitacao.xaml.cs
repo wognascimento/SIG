@@ -209,7 +209,11 @@ namespace Compras.Views
                 vm.DescAdicional = (from d in vm.DescAdicionais where d.coduniadicional == vm.Descricao.coduniadicional select d).FirstOrDefault();
                 vm.Compledicional = (from c in vm.CompleAdicionais where c.codcompladicional == vm.Descricao.codcompladicional select c).FirstOrDefault();
 
-                unidade.Text = vm.Compledicional.unidade;
+                txtPlanilha.Text = vm.Planilha?.planilha;
+                txtDescricao.Text = vm.Descricao?.descricao;
+                txtDescricaoAdicional.Text = vm.DescAdicional?.descricao_adicional;
+                txtComplementoAdicional.Text = vm.Compledicional?.complementoadicional;
+                unidade.Text = vm.Compledicional?.unidade;
                 txtQuantidade.Focus();
                 _BuscaProdutoCodgo = false;
 
@@ -504,7 +508,11 @@ namespace Compras.Views
                 vm.DescAdicional = (from d in vm.DescAdicionais where d.coduniadicional == vm.Descricao.coduniadicional select d).FirstOrDefault();
                 vm.Compledicional = (from c in vm.CompleAdicionais where c.codcompladicional == vm.Descricao.codcompladicional select c).FirstOrDefault();
 
-                unidade.Text = vm.Compledicional.unidade;
+                txtPlanilha.Text = vm.Planilha?.planilha;
+                txtDescricao.Text = vm.Descricao?.descricao;
+                txtDescricaoAdicional.Text = vm.DescAdicional?.descricao_adicional;
+                txtComplementoAdicional.Text = vm.Compledicional?.complementoadicional;
+                unidade.Text = vm.Compledicional?.unidade;
                 txtQuantidade.Focus();
                 _BuscaProdutoCodgo = false;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
@@ -537,6 +545,8 @@ namespace Compras.Views
                 txtComplementoAdicional.SelectedItem = null;
                 txtComplementoAdicional.Text = string.Empty;
 
+                unidade.Text = string.Empty;
+
                 vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(planilha?.planilha));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtDescricao.Focus();
@@ -567,6 +577,8 @@ namespace Compras.Views
                 vm.DescAdicionais = await Task.Run(() => vm.GetDescAdicionaisAsync(produto?.codigo));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtDescricaoAdicional.Focus();
+
+                unidade.Text = string.Empty;
             }
             catch (Exception ex)
             {
@@ -590,6 +602,8 @@ namespace Compras.Views
                 vm.CompleAdicionais = await Task.Run(() => vm.GetCompleAdicionaisAsync(adicional?.coduniadicional));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 txtComplementoAdicional.Focus();
+
+                unidade.Text = string.Empty;
             }
             catch (Exception ex)
             {
@@ -604,6 +618,7 @@ namespace Compras.Views
             TblComplementoAdicionalModel? complemento = e.NewValue as TblComplementoAdicionalModel;
             vm.Compledicional = complemento;
             idProduto.Text = complemento?.codcompladicional.ToString();
+            unidade.Text = complemento?.unidade;
             txtQuantidade.Focus();
         }
     }
