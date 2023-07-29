@@ -5,6 +5,7 @@ using Syncfusion.XlsIO;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,7 +20,8 @@ namespace Compras
     /// </summary>
     public partial class MainWindow : Window
     {
-		#region Fields
+        DataBaseSettings BaseSettings;
+        #region Fields
         private string currentVisualStyle;
 		private string currentSizeMode;
         #endregion
@@ -66,7 +68,7 @@ namespace Compras
             InitializeComponent();
 			this.Loaded += OnLoaded;
 
-            DataBaseSettings BaseSettings = DataBaseSettings.Instance;
+            BaseSettings = DataBaseSettings.Instance;
             txtUsername.Text = BaseSettings.Username;
             txtDataBase.Text = BaseSettings.Database;
 
@@ -178,11 +180,17 @@ namespace Compras
 
         private async void OnImportFile(object sender, RoutedEventArgs e)
         {
+            //\\192.168.0.1\compras_23\PEDIDOS_DE_COMPRAS_23
+            
+            var dir = $"\\\\192.168.0.1\\compras_{ BaseSettings?.Database?.Remove(0,2) }\\";
             // Configure open file dialog box
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.FileName = "PEDIDO-COMPRA"; // Default file name
-            dialog.DefaultExt = ".xlsx"; // Default file extension
-            dialog.Filter = "Pasta de Trabalho do Excel (.xlsx)|*.xlsx"; // Filter files by extension
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                FileName = "PEDIDO-COMPRA", // Default file name
+                DefaultExt = ".xlsx", // Default file extension
+                Filter = "Pasta de Trabalho do Excel (.xlsx)|*.xlsx", // Filter files by extension
+                InitialDirectory = $"{dir}PEDIDOS_DE_COMPRAS_{BaseSettings?.Database?.Remove(0, 2)}\\ABERTOS_{BaseSettings?.Database?.Remove(0, 2)}",
+            };
 
             // Show open file dialog box
             bool? result = dialog.ShowDialog();
@@ -195,6 +203,7 @@ namespace Compras
                     Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
 
                     string filename = dialog.FileName;
+
                     using ExcelEngine excelEngine = new ExcelEngine();
                     IApplication application = excelEngine.Excel;
                     application.DefaultVersion = ExcelVersion.Xlsx;
@@ -208,6 +217,7 @@ namespace Compras
                     var pedido = worksheet.Range["E4"].Value;
                     var PedidoDt = worksheet.Range["G4"].Value;
                     var PedidoEntrega = worksheet.Range["C9"].Value;
+                    var PedidoNota = worksheet.Range["E9"].Value;
                     var empresa = worksheet.Range["C6"].Value;
                     var fornecedor = worksheet.Range["C7"].Value;
                     var condicoes = worksheet.Range["D8"].Value;
@@ -240,6 +250,10 @@ namespace Compras
                     else if (PedidoEntrega == "" || PedidoEntrega == "#N/A")
                     {
                         MessageBox.Show("Data de entrega não informada", "Valiação de Dados");
+                        return;
+                    }else if (PedidoNota == "" || PedidoNota == "#N/A")
+                    {
+                        MessageBox.Show("Data da emissão da nota não informada", "Valiação de Dados");
                         return;
                     }
 
@@ -290,14 +304,19 @@ namespace Compras
                             status = "FINALIZADO", 
                             status_por = Environment.UserName, 
                             status_data = DateTime.Now,
-                            data_emissao_nf = DateTime.Parse(PedidoEntrega),
+                            data_emissao_nf = DateTime.Parse(PedidoNota),
                             dataentrega = DateTime.Parse(PedidoEntrega),
                             comprador = Environment.UserName,
                         };
 
                         var itens =  await InsertProdutoPedido(produtos, _pedido);
                         Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
-                        MessageBox.Show("Arquivo importado com sucesso!", "Pedido", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+
+                        string arquivo = Path.GetFileName(filename);
+                        string? ano = BaseSettings?.Database?.Remove(0, 2);
+                        File.Move($"\\\\192.168.0.1\\compras_{ano}\\PEDIDOS_DE_COMPRAS_{ano}\\ABERTOS_{ano}\\{arquivo}", $"\\\\192.168.0.1\\compras_{ano}\\PEDIDOS_DE_COMPRAS_{ano}\\FINALIZADOS_{ano}\\{arquivo}");
+
+                        MessageBox.Show("Pedido importado com sucesso e movido para pasta de 'FINALIZADOS'!", "Pedido", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     }
                     catch (Exception ex)
                     {
