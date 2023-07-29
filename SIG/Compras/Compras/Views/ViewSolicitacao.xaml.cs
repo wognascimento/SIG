@@ -314,11 +314,15 @@ namespace Compras.Views
             vm.DescAdicional = null;
             vm.CompleAdicionais = null;
             vm.Compledicional = null;
-            unidade.Text = null;
             txtQuantidade.Text = null;
             dtSolicitacao.DateTime = null;
             cbStatu.SelectedItem = null;
             idProduto.Text = null;
+            txtPlanilha.Text = string.Empty;
+            txtDescricao.Text = string.Empty;
+            txtDescricaoAdicional.Text = string.Empty;
+            txtComplementoAdicional.Text = string.Empty;
+            unidade.Text = string.Empty;
             idProduto.Focus();
         }
 
