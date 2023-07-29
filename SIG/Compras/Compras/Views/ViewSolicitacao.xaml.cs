@@ -819,7 +819,7 @@ namespace Compras.Views
             }
         }
 
-        public async Task<ObservableCollection<DescricaoProducaoModel>> GetDescricoesAsync(string tipo)
+        public async Task<ObservableCollection<DescricaoProducaoModel>> GetDescricoesAsync(string? tipo)
         {
             try
             {
@@ -861,7 +861,7 @@ namespace Compras.Views
             }
         }
 
-        public async Task<ObservableCollection<ProdutoModel>> GetProdutosAsync(string planilha)
+        public async Task<ObservableCollection<ProdutoModel>> GetProdutosAsync(string? planilha)
         {
             try
             {

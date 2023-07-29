@@ -29,7 +29,7 @@ namespace Compras.Views.PopUp
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 SolicitacaoViewModel vm = (SolicitacaoViewModel)DataContext;
-                vm.Descricoes = await Task.Run(async () => await vm.GetDescricoesAsync(vm.SolicitacaoMaterial.tipo));
+                vm.Descricoes = await Task.Run(async () => await vm.GetDescricoesAsync(vm?.SolicitacaoMaterial?.tipo));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }

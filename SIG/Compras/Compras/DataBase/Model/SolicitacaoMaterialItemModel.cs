@@ -41,9 +41,9 @@ namespace Compras
         public string? atendido {get ; set ;}
         public string? atendido_por {get ; set ;}
         public DateTime? atendido_em {get ; set ;}
-        public string atendido_parcial {get ; set ;}
+        public string? atendido_parcial {get ; set ;}
         public long? iddetpedido {get ; set ;}
-        public string status_compra {get ; set ;}
+        public string? status_compra {get ; set ;}
         public long? codfornecedor {get ; set ;}
         public long? codempresa {get ; set ;}
         public long? codlocalcompra {get ; set ;}
