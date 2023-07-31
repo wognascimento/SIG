@@ -224,7 +224,7 @@ namespace Producao.Views.CadastroProduto
             rowDataCommand = new RelayCommand(ChangeCanExecute);
         }
 
-        public async void ChangeCanExecute(object obj)
+        public void ChangeCanExecute(object obj)
         {
             try
             {

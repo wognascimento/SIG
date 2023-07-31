@@ -77,7 +77,7 @@
 		<!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
 		<MauiIcon Include="Resources\AppIcon\fundo.svg" ForegroundFile="Resources\AppIcon\logo.svg" Color="#dbe8c5" />
 		<MauiIcon Include="Resources\AppIcon\fundo.svg" />
-		<MauiSplashScreen Include="Resources\Splash\icon_logo.svg" />
+		<!------><MauiSplashScreen Include="Resources\Splash\icon_logo.svg" />
 
 		<!-- Splash Screen -->
 		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#dbe8c5" />-->

@@ -25,7 +25,7 @@
             AutoGenerateColumns="False"
             FrozenColumnCount="9" 
             AllowResizingColumns="True" 
-            CurrentCellEndEdit="itens_CurrentCellEndEdit">
+            CurrentCellEndEdit="itens_CurrentCellEndEdit" CurrentCellValueChanged="itens_CurrentCellValueChanged">
 
             <Syncfusion:SfDataGrid.Columns>
 
@@ -56,7 +56,8 @@
                 <Syncfusion:GridNumericColumn 
                     HeaderText="Quantidade" 
                     MappingName="qtd" 
-                    DisplayBinding="{Binding qtd, Converter={StaticResource ConverterNumber}}"/>
+                    DisplayBinding="{Binding qtd, Converter={StaticResource ConverterNumber}}"
+                    ColumnSizer="SizeToCells"/>
                 <Syncfusion:GridTextColumn 
                     HeaderText="Descrição Comercial" 
                     MappingName="descricaocomercial" 
@@ -72,18 +73,20 @@
                     HeaderText="Resp Revisão" 
                     MappingName="resp_revisao"
                     SelectedValuePath="revisores"
-                    DisplayMemberPath="revisores"/>
+                    DisplayMemberPath="revisores"
+                    ColumnSizer="SizeToHeader"/>
                 <Syncfusion:GridDateTimeColumn 
                     AllowEditing="True"
                     HeaderText="Prazo Revisão" 
                     MappingName="prazo_revisao" 
-                    ColumnSizer="SizeToCells"/>
+                    ColumnSizer="SizeToHeader"/>
                 <Syncfusion:GridCheckBoxColumn
                     AllowEditing="True"
                     HeaderText="OK" 
                     MappingName="ok" 
                     DisplayBinding="{Binding ok, Converter={StaticResource ConverterBoolen}}"
-                    ValueBinding="{Binding ok, Converter={StaticResource ConverterBoolen}}"/>
+                    ValueBinding="{Binding ok, Converter={StaticResource ConverterBoolen}}"
+                    ColumnSizer="SizeToHeader"/>
                 <Syncfusion:GridTextColumn 
                     AllowEditing="True"
                     HeaderText="Revisado Por" 
@@ -93,7 +96,7 @@
                     AllowEditing="True"
                     HeaderText="Pendência" 
                     MappingName="pendencia" 
-                    ColumnSizer="SizeToCells"/>
+                    ColumnSizer="SizeToHeader"/>
                 <Syncfusion:GridDateTimeColumn 
                     AllowEditing="True"
                     HeaderText="Data Revisado Por" 
@@ -102,13 +105,15 @@
                 <Syncfusion:GridTextColumn 
                     AllowEditing="True"
                     HeaderText="motivo alteração após revisão" 
-                    MappingName="motivo_alt_pos_revisao" />
+                    MappingName="motivo_alt_pos_revisao" 
+                    ColumnSizer="SizeToHeader"/>
                 <Syncfusion:GridCheckBoxColumn
                     AllowEditing="True"
                     HeaderText="Ok Revisão Alterada" 
                     MappingName="ok_revisao_alterada" 
                     DisplayBinding="{Binding ok_revisao_alterada, Converter={StaticResource ConverterBoolen}}"
-                    ValueBinding="{Binding ok_revisao_alterada, Converter={StaticResource ConverterBoolen}}"/>
+                    ValueBinding="{Binding ok_revisao_alterada, Converter={StaticResource ConverterBoolen}}"
+                    ColumnSizer="SizeToCells"/>
                 <Syncfusion:GridTextColumn 
                     AllowEditing="True"
                     HeaderText="revisão Alterada Por"
@@ -139,7 +144,8 @@
                     HeaderText="Altera Ok" 
                     MappingName="altera_ok" 
                     DisplayBinding="{Binding altera_ok, Converter={StaticResource ConverterBoolen}}"
-                    ValueBinding="{Binding altera_ok, Converter={StaticResource ConverterBoolen}}"/>
+                    ValueBinding="{Binding altera_ok, Converter={StaticResource ConverterBoolen}}"
+                    ColumnSizer="SizeToCells"/>
                 <Syncfusion:GridTextColumn
                     AllowEditing="True"
                     HeaderText="Confirma Alteração Por" 
