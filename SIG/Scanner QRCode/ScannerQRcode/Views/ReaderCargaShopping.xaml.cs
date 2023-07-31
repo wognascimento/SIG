@@ -20,6 +20,10 @@ public partial class ReaderCargaShopping : ContentPage
         _volumeScannerRepository = volumeScannerRepository;
         InitializeComponent();
         //BarcodeScanner.Mobile.Methods.SetSupportBarcodeFormat(BarcodeFormats.Code39 | BarcodeFormats.QRCode | BarcodeFormats.Code128);
+        #if ANDROID
+        //Methods.SetSupportBarcodeFormat(BarcodeFormats.QRCode | BarcodeFormats.Code39);
+        Methods.AskForRequiredPermission();
+        #endif
         BindingContext = vm;
         /*
         cameraView.BarCodeOptions = new()
@@ -131,7 +135,7 @@ public partial class ReaderCargaShopping : ContentPage
             //var volume = result.Replace("\n", null);
             //BarcodeFormats.Code39 | BarcodeFormats.QRCode | BarcodeFormats.Code128
             //if (type == BarcodeFormats.Code39)
-            await DisplayAlert("type", $"Tipo {type} ", "OK");
+            //await DisplayAlert("type", $"Tipo {type} ", "OK");
             //return;
 
             if (type == BarcodeFormats.Code39.ToString())

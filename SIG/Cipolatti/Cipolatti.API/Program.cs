@@ -20,11 +20,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAprovadoRepository, AprovadoRepository>();
 builder.Services.AddScoped<ILookupRepository, LookupRepository>();
 builder.Services.AddScoped<IConfCargaGeral, ConfCargaGeralRepository>();
+builder.Services.AddScoped<IMovimentacaoVolumeShoppingRepository, MovimentacaoVolumeShoppingRepository>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsProduction() || app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();

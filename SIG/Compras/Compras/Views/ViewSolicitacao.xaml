@@ -296,7 +296,8 @@
 
             <StackPanel Orientation="Horizontal" Margin="0,5,0,5" >
 
-                <syncfusion:ButtonAdv x:Name="btnAdicionar" 
+                <syncfusion:ButtonAdv 
+                    x:Name="btnAdicionar" 
                     Margin="3,0,3,0"
                     Content="ButtonAdv" 
                     Width="70"
@@ -304,7 +305,8 @@
                     SizeMode="Large" 
                     LargeIcon="/Icones/icons8-adicionar-linha-52.png" Click="OnGravarClick"/>
 
-                <syncfusion:ButtonAdv x:Name="btnExcluir" 
+                <syncfusion:ButtonAdv 
+                    x:Name="btnExcluir" 
                     Margin="3,0,3,0"
                     Content="ButtonAdv" 
                     Width="70"

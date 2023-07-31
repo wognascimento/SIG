@@ -47,6 +47,9 @@ namespace Compras.Views
                     IdSolicitacao.Text = vm.SolicitacaoMaterial.cod_solicitacao.ToString();
                     TipoSolicitacao.Text = vm.SolicitacaoMaterial.tipo;
                     btnEnviar.IsEnabled = true;
+                    btnAdicionar.IsEnabled = true;
+                    btnExcluir.IsEnabled = true;
+                    btnApagar.IsEnabled = true;
                 }
             }
             catch (Exception ex)

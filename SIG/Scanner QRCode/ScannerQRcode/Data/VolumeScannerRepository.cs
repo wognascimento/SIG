@@ -25,6 +25,7 @@ namespace ScannerQRcode.Data
             await database.CreateTableAsync<VolumeScanner>();
             await database.CreateTableAsync<VolumeLookup>();
             await database.CreateTableAsync<LookupCarregamento>();
+            await database.CreateTableAsync<VolumeEnderecamento>();
         }
 
         public async Task<int> CreateLookupCarregamento(LookupCarregamento lookupCarregamento)
@@ -106,6 +107,24 @@ namespace ScannerQRcode.Data
             //return database.DeleteAll<VolumeLookup>();
             await Init();
             return await database.DeleteAllAsync<VolumeLookup>();
+        }
+
+        public async Task<int> CreateVolumeEnderecamento(VolumeEnderecamento enderecamento)
+        {
+            await Init();
+            return await database.InsertAsync(enderecamento);
+        }
+
+        public async Task<List<VolumeEnderecamento>> QueryAllVolumeEnderecados()
+        {
+            await Init();
+            return await database.Table<VolumeEnderecamento>().ToListAsync();
+        }
+
+        public async Task<int> DeleteAllVolumeEnderecados()
+        {
+            await Init();
+            return await database.DeleteAllAsync<VolumeEnderecamento>();
         }
 
         public void Dispose()

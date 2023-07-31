@@ -5,7 +5,7 @@
              xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
              xmlns:gv="clr-namespace:BarcodeScanner.Mobile;assembly=BarcodeScanner.Mobile.Maui"
              x:Class="ScannerQRcode.Views.ReaderCargaShopping"
-             Title="ReaderCargaShopping">
+             Title="Leitura de Carga Shopping">
 
     <Grid>
 

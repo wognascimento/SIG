@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:telerik="http://schemas.telerik.com/2022/xaml/maui"
              xmlns:gv="clr-namespace:BarcodeScanner.Mobile;assembly=BarcodeScanner.Mobile.Maui"
              xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              x:Class="ScannerQRcode.Views.ReaderEnderecamento"
@@ -11,8 +12,16 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <!--<RowDefinition Height="50" />-->
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
+
+        <!--
+        <cv:CameraView 
+            x:Name="cameraView" 
+            CamerasLoaded="cameraView_CamerasLoaded" 
+            BarCodeDetectionEnabled="True"
+            BarcodeDetected="cameraView_BarcodeDetected"/>
+        -->
 
         <gv:CameraView
             x:Name="Camera"
@@ -21,15 +30,35 @@
             VibrationOnDetected="True" 
             ScanInterval="1000"/>
 
-        <Button
-            x:Name="send"
+        <Grid 
             Grid.Row="0"
-            Text="Enviar 0 volumes" 
-            HeightRequest="40" 
-            VerticalOptions="End"
-            BackgroundColor="Green"
-            CornerRadius="0"
-            Clicked="Button_Clicked"/>
+            VerticalOptions="End">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button
+                x:Name="send"
+                Grid.Column="0"
+                Text="Enviar X volumes" 
+                HeightRequest="40" 
+                BackgroundColor="Green"
+                Clicked="Button_Clicked" 
+                CornerRadius="0" />
+
+
+            <telerik:RadBusyIndicator
+                x:Name="BusyIndicator"
+                Grid.Column="1"
+                AnimationContentColor="#2374FF"
+                AnimationType="Animation2"
+                IsBusy="{Binding IsLoading}"/>
+
+        </Grid>
+
+
     </Grid>
 
 
