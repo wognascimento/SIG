@@ -187,8 +187,8 @@ namespace Compras
             var dialog = new Microsoft.Win32.OpenFileDialog
             {
                 FileName = "PEDIDO-COMPRA", // Default file name
-                DefaultExt = ".xlsx", // Default file extension
-                Filter = "Pasta de Trabalho do Excel (.xlsx)|*.xlsx", // Filter files by extension
+                DefaultExt = ".xlsm", // Default file extension
+                Filter = "Pasta de Trabalho do Excel (.xlsm)|*.xlsm", // Filter files by extension
                 InitialDirectory = $"{dir}PEDIDOS_DE_COMPRAS_{BaseSettings?.Database?.Remove(0, 2)}\\ABERTOS_{BaseSettings?.Database?.Remove(0, 2)}",
             };
 

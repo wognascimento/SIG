@@ -82,12 +82,16 @@ namespace Producao
         public DbSet<TransformaRequisicaoModel> TransformaRequisicoes { get; set; }
         public DbSet<EtiquetaZebraModel> EtiquetasZebra { get; set; }
         public DbSet<ControladoShoppingModel> ControladoShoppings { get; set; }
+        public DbSet<PlanilhaConstrucaoModel> PlanilhasConstrucao { get; set; }
+        public DbSet<ConstrucaoDetalheModel> ConstrucaoDetalhes { get; set; }
+        public DbSet<ConstrucaoPecaModel> ConstrucaoPecas { get; set; }
 
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            /*
             optionsBuilder.UseNpgsql(
                 $"host={BaseSettings.Host};" +
                 $"user id={BaseSettings.Username};" +
@@ -97,12 +101,23 @@ namespace Producao
                 //$"Timeout=300;" +
                 //$"CommandTimeout=300;"
                 );
+            */
+            optionsBuilder.UseNpgsql(
+                $"host={BaseSettings.Host};" +
+                $"user id={BaseSettings.Username};" +
+                $"password={BaseSettings.Password};" +
+                $"database={BaseSettings.Database};",
+                options => options.EnableRetryOnFailure()
+                );
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ControladoShoppingModel>()
                 .HasKey(a => new { a.num_requisicao, a.barcode });
+
+            modelBuilder.Entity<ConstrucaoPecaModel>()
+                .HasKey(a => new { a.id_detalhes, a.codcompladicional });
         }
     }
 }

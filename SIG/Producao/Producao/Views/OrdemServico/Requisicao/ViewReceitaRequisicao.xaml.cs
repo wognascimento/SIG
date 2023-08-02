@@ -318,12 +318,16 @@ namespace Producao.Views.OrdemServico.Requisicao
 
         private void Limpar()
         {
+            
+
             txtCodigoProdutoReceita.Text = string.Empty;
             txtPlanilha.Text = string.Empty;
             txtDescricao.Text = string.Empty;
             txtDescricaoAdicional.Text = string.Empty;
             txtComplementoAdicional.Text = string.Empty;
             txtQuantidade.Text = string.Empty;
+            vm.Item = new Item();
+            dgModelos.SelectedItem = null;
             txtPlanilha.Focus();
         }
 
@@ -556,7 +560,7 @@ namespace Producao.Views.OrdemServico.Requisicao
                         inserido_por = o.inserido_por,
                         inserido_em = o.inserido_em
 
-                    }).Take(5);
+                    });
                 
                 /*
                 var data = (from t in db.RequisicaoReceitas
