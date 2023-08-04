@@ -146,6 +146,7 @@ namespace Producao.Views.CentralModelos
                     p.planilha == "KIT ENF TOP" || 
                     p.planilha == "KIT ENF WALL TREE" || 
                     p.planilha == "KIT FITAS" || 
+                    p.planilha == "MÓVEIS" || 
                     p.planilha == "PONTEIRA" || 
                     p.planilha == "TOPIÁRIA" || 
                     p.planilha == "VASO" || 

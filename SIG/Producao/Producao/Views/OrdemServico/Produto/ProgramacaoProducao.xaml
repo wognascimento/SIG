@@ -251,7 +251,8 @@
         </Grid>
 
 
-        <syncfusion:SfDataGrid x:Name="programacao"
+        <syncfusion:SfDataGrid 
+            x:Name="programacao"
             Grid.Row="1"
             AutoGenerateColumns="False" 
             AllowResizingColumns="True"
@@ -262,13 +263,15 @@
             AddNewRowInitiating="OnAddNewRowInitiating"
             RowValidated="OnRowValidated" 
             RowValidating="OnRowValidating" 
-            CurrentCellDropDownSelectionChanged="OnCurrentCellDropDownSelectionChanged" AllowFiltering="True">
+            CurrentCellDropDownSelectionChanged="OnCurrentCellDropDownSelectionChanged" 
+            AllowFiltering="True">
             <syncfusion:SfDataGrid.Columns>
 
                 <syncfusion:GridNumericColumn 
                     HeaderText="ORD." 
                     MappingName="programacao_ordem"
                     DisplayBinding="{Binding programacao_ordem, Converter={StaticResource ConverterNumber}}"
+                    AllowEditing="True"
                     ColumnSizer="SizeToHeader"/>
 
                 <syncfusion:GridTextColumn 

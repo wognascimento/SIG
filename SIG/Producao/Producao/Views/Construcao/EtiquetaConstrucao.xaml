@@ -155,7 +155,7 @@
                 LargeIcon="{x:Null}" 
                 SizeMode="Large" 
                 Label="TÉRMICA" 
-                Click="OnEtiquetaTermicaClick"/>
+                Click="OnEtiquetaTermicaClick" Height="22" VerticalAlignment="Top"/>
 
         </Grid>
 

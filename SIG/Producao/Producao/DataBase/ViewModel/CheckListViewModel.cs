@@ -507,85 +507,90 @@ namespace Producao
         {
             
             using DatabaseContext db = new();
-            using var transaction = db.Database.BeginTransaction();
-
-            try
+            var strategy = db.Database.CreateExecutionStrategy();
+            ProdutoServicoModel produtoServico = new();
+            await strategy.ExecuteAsync(async () => 
             {
-                var produtoOs = new ProdutoOsModel
+                using var transaction = db.Database.BeginTransaction();
+                try
                 {
-                    tipo = "PEÇA NOVA",
-                    planilha = CheckListGeral.planilha,
-                    cod_produto = CheckListGeral.codigo,
-                    cod_desc_adicional = CheckListGeral.coduniadicional,
-                    cod_compl_adicional = CheckListGeralComplemento.codcompladicional,
-                    quantidade = 0,
-                    data_emissao = DateTime.Now,
-                    responsavel_emissao = Environment.UserName,
-                    solicitado_por = Environment.UserName
-                };
-                await db.ProdutoOs.AddAsync(produtoOs);
-                await db.SaveChangesAsync();
-                var produtoServico = new ProdutoServicoModel
-                {
-                    num_os_produto = produtoOs.num_os_produto,
-                    tipo = produtoOs.tipo,
-                    codigo_setor = setorProducao.codigo_setor,
-                    setor_caminho = $"{setorProducao.setor} - {setorProducao.galpao}",
-                    quantidade = produtoOs.quantidade,
-                    data_inicio = DateTime.Now,
-                    data_fim = DateTime.Now.AddDays(1),
-                    cliente = Sigla.sigla_serv,
-                    tema = Sigla.tema,
-                    orientacao_caminho = "OS DESTINADA A REQUISIÇÃO DE MATERIAL PARA A PLANILHA",
-                    codigo_setor_proximo = 39,
-                    setor_caminho_proximo = "FINAL - TODOS",
-                    fase = "PRODUÇÃO",
-                    responsavel_emissao_os = Environment.UserName,
-                    emitida_por = Environment.UserName,
-                    emitida_data = DateTime.Now,
-                    retrabalho = "NÃO",
-                    impresso = "-1",
-                    cod_detalhe_compl = CheckListGeralComplemento.coddetalhescompl
-                };
-                await db.ProdutoServicos.AddAsync(produtoServico);
-                await db.SaveChangesAsync();
-                var requisicao = new RequisicaoModel
-                {
-                    num_os_servico = produtoServico.num_os_servico,
-                    data = DateTime.Now,
-                    alterado_por = Environment.UserName
-
-                };
-                await db.Requisicoes.AddAsync(requisicao);
-                await db.SaveChangesAsync();
-                var receita = await db.RequisicaoReceitas.Where(r => r.codcompladicional_produto == produtoOs.cod_compl_adicional).ToListAsync();
-                foreach (var item in receita)
-                {
-                    var ReqDetalhe = new DetalheRequisicaoModel
+                    var produtoOs = new ProdutoOsModel
                     {
-                        cod_det_req = null,
-                        num_requisicao = requisicao.num_requisicao,
-                        codcompladicional = item.codcompladicional_receita,
-                        quantidade = item.quantidade * CheckListGeralComplemento.qtd,
+                        tipo = "PEÇA NOVA",
+                        planilha = CheckListGeral.planilha,
+                        cod_produto = CheckListGeral.codigo,
+                        cod_desc_adicional = CheckListGeral.coduniadicional,
+                        cod_compl_adicional = CheckListGeralComplemento.codcompladicional,
+                        quantidade = 0,
+                        data_emissao = DateTime.Now,
+                        responsavel_emissao = Environment.UserName,
+                        solicitado_por = Environment.UserName
+                    };
+                    await db.ProdutoOs.AddAsync(produtoOs);
+                    await db.SaveChangesAsync();
+                    produtoServico = new ProdutoServicoModel
+                    {
+                        num_os_produto = produtoOs.num_os_produto,
+                        tipo = produtoOs.tipo,
+                        codigo_setor = setorProducao.codigo_setor,
+                        setor_caminho = $"{setorProducao.setor} - {setorProducao.galpao}",
+                        quantidade = produtoOs.quantidade,
+                        data_inicio = DateTime.Now,
+                        data_fim = DateTime.Now.AddDays(1),
+                        cliente = Sigla.sigla_serv,
+                        tema = Sigla.tema,
+                        orientacao_caminho = "OS DESTINADA A REQUISIÇÃO DE MATERIAL PARA A PLANILHA",
+                        codigo_setor_proximo = 39,
+                        setor_caminho_proximo = "FINAL - TODOS",
+                        fase = "PRODUÇÃO",
+                        responsavel_emissao_os = Environment.UserName,
+                        emitida_por = Environment.UserName,
+                        emitida_data = DateTime.Now,
+                        retrabalho = "NÃO",
+                        impresso = "-1",
+                        cod_detalhe_compl = CheckListGeralComplemento.coddetalhescompl
+                    };
+                    await db.ProdutoServicos.AddAsync(produtoServico);
+                    await db.SaveChangesAsync();
+                    var requisicao = new RequisicaoModel
+                    {
+                        num_os_servico = produtoServico.num_os_servico,
                         data = DateTime.Now,
                         alterado_por = Environment.UserName
+
                     };
-                    await db.RequisicaoDetalhes.AddAsync(ReqDetalhe);
+                    await db.Requisicoes.AddAsync(requisicao);
                     await db.SaveChangesAsync();
-                    
+                    var receita = await db.RequisicaoReceitas.Where(r => r.codcompladicional_produto == produtoOs.cod_compl_adicional).ToListAsync();
+                    foreach (var item in receita)
+                    {
+                        var ReqDetalhe = new DetalheRequisicaoModel
+                        {
+                            cod_det_req = null,
+                            num_requisicao = requisicao.num_requisicao,
+                            codcompladicional = item.codcompladicional_receita,
+                            quantidade = item.quantidade * CheckListGeralComplemento.qtd,
+                            data = DateTime.Now,
+                            alterado_por = Environment.UserName
+                        };
+                        await db.RequisicaoDetalhes.AddAsync(ReqDetalhe);
+                        await db.SaveChangesAsync();
+
+                    }
+
+                    transaction.Commit();
+
+                   
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
                 }
 
-                transaction.Commit();
+            });
 
-                return produtoServico;
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-                throw;
-            }
-            
-
+            return produtoServico;
         }
 
 

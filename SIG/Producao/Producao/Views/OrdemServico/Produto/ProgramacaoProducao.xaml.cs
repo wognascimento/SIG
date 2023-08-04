@@ -99,12 +99,35 @@ namespace Producao.Views.OrdemServico.Produto
 
         private void OnRowValidated(object sender, Syncfusion.UI.Xaml.Grid.RowValidatedEventArgs e)
         {
+            //UpdateProgramacaoAsync(ProdutoServicoModel produtoServico)
 
         }
 
-        private void OnRowValidating(object sender, Syncfusion.UI.Xaml.Grid.RowValidatingEventArgs e)
+        private async void OnRowValidating(object sender, Syncfusion.UI.Xaml.Grid.RowValidatingEventArgs e)
         {
-
+            try
+            {
+                // RowData = { Producao.DataBase.Model.ProgramacaoProducaoModel}
+                ProgramacaoProducaoModel data = (ProgramacaoProducaoModel)e.RowData;
+                ProgramacaoProducaoViewModel vm = (ProgramacaoProducaoViewModel)DataContext;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                await Task.Run(
+                    () => vm.UpdateProgramacaoAsync(
+                        new TGlobalModel
+                        {
+                            num_os = data.num_os, 
+                            programacao_ordem = data.programacao_ordem, 
+                            programacao_inserido_por = Environment.UserName, 
+                            programacao_inserido_data = DateTime.Now
+                        })
+                    );
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private async void OnPrintClick(object sender, RoutedEventArgs e)
@@ -151,7 +174,7 @@ namespace Producao.Views.OrdemServico.Produto
                 headerStyle.Borders[ExcelBordersIndex.EdgeBottom].Color = ExcelKnownColors.Grey_25_percent;
                 headerStyle.Borders[ExcelBordersIndex.EdgeLeft].Color = ExcelKnownColors.Grey_25_percent;
                 headerStyle.Borders[ExcelBordersIndex.EdgeRight].Color = ExcelKnownColors.Grey_25_percent;
-                headerStyle.Font.Size = 7;
+                headerStyle.Font.Size = 10;
                 headerStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
                 headerStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
                 //headerStyle.Font.FontName = "Calibri (Detalhe)";
@@ -165,16 +188,16 @@ namespace Producao.Views.OrdemServico.Produto
                 {
 
                     worksheet.Range[$"B{_l}"].CellStyle = headerStyle;
-                    worksheet.Range[$"B{_l}"].Value = item.programacao_ordem.ToString();
+                    worksheet.Range[$"B{_l}"].Number = item.programacao_ordem.GetValueOrDefault(); //item.programacao_ordem.Value;
 
                     worksheet.Range[$"C{_l}"].CellStyle = headerStyle;
-                    worksheet.Range[$"C{_l}"].Value = item.data_de_expedicao.ToString();
+                    worksheet.Range[$"C{_l}"].DateTime = item.data_de_expedicao.GetValueOrDefault();
                     
                     worksheet.Range[$"D{_l}"].CellStyle = headerStyle;
                     worksheet.Range[$"D{_l}"].Value = item.cliente_os;
                     
                     worksheet.Range[$"E{_l}"].CellStyle = headerStyle;
-                    worksheet.Range[$"E{_l}"].Value = item.cod_compl_adicional.ToString();
+                    worksheet.Range[$"E{_l}"].Number = item.cod_compl_adicional.GetValueOrDefault();
                     
                     worksheet.Range[$"F{_l}"].CellStyle = headerStyle;
                     worksheet.Range[$"F{_l}"].Value = item.planilha;
@@ -182,12 +205,13 @@ namespace Producao.Views.OrdemServico.Produto
                     worksheet.Range[$"G{_l}:K{_l}"].Merge();
                     worksheet.Range[$"G{_l}:K{_l}"].CellStyle = headerStyle;
                     worksheet.Range[$"G{_l}:K{_l}"].Value = item.descricao_completa;
+                    worksheet.Range[$"G{_l}:K{_l}"].RowHeight = 26;
 
                     worksheet.Range[$"L{_l}"].CellStyle = headerStyle;
-                    worksheet.Range[$"L{_l}"].Value = item.num_os.ToString();
+                    worksheet.Range[$"L{_l}"].Number = item.num_os.GetValueOrDefault();
                     
                     worksheet.Range[$"M{_l}"].CellStyle = headerStyle;
-                    worksheet.Range[$"M{_l}"].Value = item.quantidade_os.ToString();
+                    worksheet.Range[$"M{_l}"].Number = item.quantidade_os.GetValueOrDefault();
 
                     worksheet.Range[$"N{_l}:O{_l}"].Merge();
                     worksheet.Range[$"N{_l}:O{_l}"].CellStyle = headerStyle;
@@ -202,15 +226,10 @@ namespace Producao.Views.OrdemServico.Produto
                     worksheet.Range[$"R{_l}:S{_l}"].Value = item.programacao_observacao;
                     
                     worksheet.Range[$"T{_l}"].CellStyle = headerStyle;
-                    worksheet.Range[$"T{_l}"].Value = item.ht.ToString();
-
+                    worksheet.Range[$"T{_l}"].Number = item.ht.GetValueOrDefault();
 
                     _l++;
                 }
-
-
-
-
 
                 workbook.SaveAs("Impressos/PROGRAMACAO_PROGRAMACAO_MODELO.xlsx");
                 
@@ -221,14 +240,12 @@ namespace Producao.Views.OrdemServico.Produto
                 
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
-
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
-
 
         }
     }
@@ -319,6 +336,25 @@ namespace Producao.Views.OrdemServico.Produto
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        public async Task UpdateProgramacaoAsync(TGlobalModel global)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                TGlobalModel servico = await db.Globais.FindAsync(global.num_os);
+                servico.programacao_ordem = global.programacao_ordem;
+                servico.programacao_inserido_por = global.programacao_inserido_por;
+                servico.programacao_inserido_data = global.programacao_inserido_data;
+
+                await db.Globais.SingleUpdateAsync(servico);
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }

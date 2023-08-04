@@ -170,11 +170,15 @@
                         SelectedValuePath="codcompladicional"/>
                     <syncfusion:GridTextColumn
                         HeaderText="UNID" 
-                        MappingName="unidade" TextAlignment="Center"/>
+                        MappingName="unidade" 
+                        TextAlignment="Center" 
+                        AllowEditing="False"/>
                     <syncfusion:GridNumericColumn
                         HeaderText="ESTOQUE" 
                         MappingName="saldoestoque"
-                        DisplayBinding="{Binding saldoestoque, Converter={StaticResource ConverterNumber}}" TextAlignment="Center"/>
+                        DisplayBinding="{Binding saldoestoque, Converter={StaticResource ConverterNumber}}" 
+                        TextAlignment="Center" 
+                        AllowEditing="False"/>
                     <syncfusion:GridNumericColumn
                         AllowEditing="True"
                         HeaderText="QTDE" 
@@ -189,11 +193,14 @@
                     <syncfusion:GridNumericColumn
                         HeaderText="CODDETALHESCOMPL" 
                         MappingName="coddetalhescompl"
-                        DisplayBinding="{Binding coddetalhescompl, Converter={StaticResource ConverterNumber}}"/>
+                        DisplayBinding="{Binding coddetalhescompl, Converter={StaticResource ConverterNumber}}" 
+                        AllowEditing="False"/>
                     <syncfusion:GridNumericColumn
                         HeaderText="QTD EXPEDIDA" 
                         MappingName="qtd_expedida"
-                        DisplayBinding="{Binding qtd_expedida, Converter={StaticResource ConverterNumber}}" TextAlignment="Center"/>
+                        DisplayBinding="{Binding qtd_expedida, Converter={StaticResource ConverterNumber}}" 
+                        TextAlignment="Center" 
+                        AllowEditing="False"/>
                     <syncfusion:GridTemplateColumn 
                         HeaderText="REQUISIÇÃO"
                         MappingName="num_os_produto">

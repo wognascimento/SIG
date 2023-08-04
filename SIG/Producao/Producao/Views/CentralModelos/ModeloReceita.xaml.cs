@@ -1076,22 +1076,26 @@ namespace Producao.Views.CentralModelos
         public async Task AddCopiaReceita(ObservableCollection<ModeloReceitaModel> receita)
         {
             using DatabaseContext db = new();
-            using var transaction = db.Database.BeginTransaction();
+            var strategy = db.Database.CreateExecutionStrategy();
 
-            try
+            await strategy.ExecuteAsync(async () => 
             {
-                foreach (var item in receita)
+                using var transaction = db.Database.BeginTransaction();
+                try
                 {
-                    await db.ReceitaModelos.SingleMergeAsync(item);
-                    await db.SaveChangesAsync();
+                    foreach (var item in receita)
+                    {
+                        await db.ReceitaModelos.SingleMergeAsync(item);
+                        await db.SaveChangesAsync();
+                    }
+                    transaction.Commit();
                 }
-                transaction.Commit();
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-                throw;
-            }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            });
         }
 
         public async Task<ExportEnfeitesInfClienteModel> GetInfClienteAsync(long? idmodelo)

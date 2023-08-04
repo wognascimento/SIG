@@ -27,6 +27,7 @@ namespace Producao
         public DbSet<TblTipoOs> tblTipoOs { get; set; }
         public DbSet<ProdutoOsModel> ProdutoOs { get; set; }
         public DbSet<ProdutoServicoModel> ProdutoServicos { get; set; }
+        public DbSet<TGlobalModel> Globais { get; set; }
         public DbSet<OrdemServicoAbertaEmissaoAgrupadoModel> OrdemServicoAbertas { get; set; }
         public DbSet<OrdemServicoEmissaoAbertaForm> OrdemServicoEmissaoAbertas { get; set; }
         public DbSet<AlteraSolicitacaoOsProducao> AlteraSolicitacaoOsProducaos { get; set; }
@@ -85,6 +86,8 @@ namespace Producao
         public DbSet<PlanilhaConstrucaoModel> PlanilhasConstrucao { get; set; }
         public DbSet<ConstrucaoDetalheModel> ConstrucaoDetalhes { get; set; }
         public DbSet<ConstrucaoPecaModel> ConstrucaoPecas { get; set; }
+        public DbSet<ChecklistPrdutoConstrucaoModel> ChecklistPrdutoConstrucaos { get; set; }
+        public DbSet<ChecklistPrdutoRequisicaoModel> ChecklistPrdutooRequisicoes { get; set; }
 
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -106,7 +109,7 @@ namespace Producao
                 $"host={BaseSettings.Host};" +
                 $"user id={BaseSettings.Username};" +
                 $"password={BaseSettings.Password};" +
-                $"database={BaseSettings.Database};",
+                $"database={BaseSettings.Database};" ,
                 options => options.EnableRetryOnFailure()
                 );
         }

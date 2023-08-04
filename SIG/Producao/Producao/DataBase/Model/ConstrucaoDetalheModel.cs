@@ -12,6 +12,6 @@ namespace Producao
         public string? nome_fantasia { get; set; }
         public int? item { get; set; }
         public string? descricao_peca { get; set; }
-        public long? volume { get; set; }
+        public int? volume { get; set; }
     }
 }

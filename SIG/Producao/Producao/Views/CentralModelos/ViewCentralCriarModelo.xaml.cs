@@ -658,38 +658,43 @@ namespace Producao.Views.CentralModelos
         public async Task<ModeloModel> AddModeloAsync(ModeloModel modelo, TemaModel tema)
         {
             using DatabaseContext db = new();
-            var transaction = db.Database.BeginTransaction();
-            try
-            {
-                await db.Modelos.SingleMergeAsync(modelo);
-                await db.SaveChangesAsync();
-                /*
-                var historico =  await db.HistoricosModelo.Where(c =>  c.codcompladicional_modelo == modelo.codcompladicional && c.idtema == tema.idtema ).ToListAsync();
-                foreach (HistoricoModelo item in historico)
-                {
-                    var receita = new ModeloReceitaModel
-                    {
-                        id_modelo = modelo.id_modelo,
-                        codcompladicional = item.codcompladicional_receita,
-                        qtd_modelo = item.media_qtd_modelo,
-                        qtd_producao = item.media_qtd_producao,
-                        cadastrado_por = Environment.UserName,
-                        data_cadastro = DateTime.Now,
-                    };
-                    await db.ReceitaModelos.SingleMergeAsync(receita);
-                    await db.SaveChangesAsync();
-                }
-                */
-                //<ObservableCollection<TemaModel>>
-                transaction.Commit();
 
-                return modelo;
-            }
-            catch (Exception)
+            var strategy = db.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
             {
-                transaction.Rollback();
-                throw;
-            }
+                var transaction = db.Database.BeginTransaction();
+                try
+                {
+                    await db.Modelos.SingleMergeAsync(modelo);
+                    await db.SaveChangesAsync();
+                    /*
+                    var historico =  await db.HistoricosModelo.Where(c =>  c.codcompladicional_modelo == modelo.codcompladicional && c.idtema == tema.idtema ).ToListAsync();
+                    foreach (HistoricoModelo item in historico)
+                    {
+                        var receita = new ModeloReceitaModel
+                        {
+                            id_modelo = modelo.id_modelo,
+                            codcompladicional = item.codcompladicional_receita,
+                            qtd_modelo = item.media_qtd_modelo,
+                            qtd_producao = item.media_qtd_producao,
+                            cadastrado_por = Environment.UserName,
+                            data_cadastro = DateTime.Now,
+                        };
+                        await db.ReceitaModelos.SingleMergeAsync(receita);
+                        await db.SaveChangesAsync();
+                    }
+                    */
+                    //<ObservableCollection<TemaModel>>
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            });
+
+            return modelo;
         }
 
     }

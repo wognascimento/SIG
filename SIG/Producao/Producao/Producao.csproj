@@ -46,7 +46,9 @@
     <None Remove="icones\icons8-usu_0025c3_0025a1rio-de-g_0025c3_0025aanero-neutro-windows-metro-16.png" />
     <None Remove="icones\icons8-vassoura-40.png" />
     <None Remove="icones\icons8-vassoura-80.png" />
+    <None Remove="Modelos\DESCRICOES_CONSTRUCAO_MODELO.xlsx" />
     <None Remove="Modelos\ETIQUETA_MODELO.xlsx" />
+    <None Remove="Modelos\ETIQUETA_REQUISICAO_MODELO.xlsx" />
     <None Remove="Modelos\ORDEM_SERVICO_MODELO.xlsx" />
     <None Remove="Modelos\ORDEM_SERVICO_SERVICO_MODELO.xlsx" />
     <None Remove="Modelos\PROGRAMACAO_PROGRAMACAO_MODELO.xlsx" />
@@ -124,7 +126,13 @@
     <Resource Include="icones\icons8-usu_0025c3_0025a1rio-de-g_0025c3_0025aanero-neutro-windows-metro-16.png" />
     <Resource Include="icones\icons8-vassoura-40.png" />
     <Resource Include="icones\icons8-vassoura-80.png" />
+    <Content Include="Modelos\DESCRICOES_CONSTRUCAO_MODELO.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modelos\ETIQUETA_MODELO.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modelos\ETIQUETA_REQUISICAO_MODELO.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Modelos\ORDEM_SERVICO_MODELO.xlsx">

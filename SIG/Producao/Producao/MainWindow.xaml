@@ -87,7 +87,7 @@
             </syncfusion:MenuItemAdv>
 
             <syncfusion:MenuItemAdv Header="Construção">
-                <syncfusion:MenuItemAdv Header="Cadastro" Click="OnCadastroConstrucao"/>
+                <syncfusion:MenuItemAdv Header="Cadastro Shopping" Click="OnCadastroConstrucao"/>
                 <syncfusion:MenuItemAdv Header="Cadastro de Peças" Click="OnCadastroPecaConstrucao"/>
             </syncfusion:MenuItemAdv>
 

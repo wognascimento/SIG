@@ -39,5 +39,6 @@ namespace Producao
         public long? coduniadicional { get; set; }
         public long? codigo { get; set; }
         public double? saldo_estoque { get; set; }
+        public int? volume { get; set; }
     }
 }
