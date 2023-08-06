@@ -164,6 +164,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "expedicao.qry_enderecamento_galpao",
+         "ObjectType": 3
+      },
+      {
          "Name": "expedicao.qry_lookup",
          "ObjectType": 3
       },

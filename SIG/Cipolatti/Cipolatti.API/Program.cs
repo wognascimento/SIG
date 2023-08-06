@@ -21,6 +21,7 @@ builder.Services.AddScoped<IAprovadoRepository, AprovadoRepository>();
 builder.Services.AddScoped<ILookupRepository, LookupRepository>();
 builder.Services.AddScoped<IConfCargaGeral, ConfCargaGeralRepository>();
 builder.Services.AddScoped<IMovimentacaoVolumeShoppingRepository, MovimentacaoVolumeShoppingRepository>();
+builder.Services.AddScoped<IEnderecamentoGalpaoRepository, EnderecamentoGalpaoRepository>();
 
 var app = builder.Build();
 

@@ -1,4 +1,5 @@
-﻿using ScannerQRcode.Models;
+﻿using MLKit.BarcodeScanning;
+using ScannerQRcode.Models;
 using SQLite;
 
 namespace ScannerQRcode.Data
@@ -26,6 +27,7 @@ namespace ScannerQRcode.Data
             await database.CreateTableAsync<VolumeLookup>();
             await database.CreateTableAsync<LookupCarregamento>();
             await database.CreateTableAsync<VolumeEnderecamento>();
+            await database.CreateTableAsync<EnderecoGalpao>();
         }
 
         public async Task<int> CreateLookupCarregamento(LookupCarregamento lookupCarregamento)
@@ -125,6 +127,30 @@ namespace ScannerQRcode.Data
         {
             await Init();
             return await database.DeleteAllAsync<VolumeEnderecamento>();
+        }
+
+        public async Task<int> CreateEndereco(EnderecoGalpao endereco)
+        {
+            await Init();
+            return await database.InsertAsync(endereco);
+        }
+
+        public async Task<List<EnderecoGalpao>> QueryAllEnderecos()
+        {
+            await Init();
+            return await database.Table<EnderecoGalpao>().ToListAsync();
+        }
+
+        public async Task<int> DeleteAllEnderecos()
+        {
+            await Init();
+            return await database.DeleteAllAsync<EnderecoGalpao>();
+        }
+
+        public async Task<EnderecoGalpao> GetEndereco(string Barcode)
+        {
+            await Init();
+            return await database.Table<EnderecoGalpao>().Where(i => i.Barcode == Barcode).FirstOrDefaultAsync();
         }
 
         public void Dispose()
