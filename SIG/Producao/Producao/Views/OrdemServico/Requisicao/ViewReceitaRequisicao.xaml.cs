@@ -326,7 +326,7 @@ namespace Producao.Views.OrdemServico.Requisicao
             txtDescricaoAdicional.Text = string.Empty;
             txtComplementoAdicional.Text = string.Empty;
             txtQuantidade.Text = string.Empty;
-            vm.Item = new Item();
+            vm.Item = null;
             dgModelos.SelectedItem = null;
             txtPlanilha.Focus();
         }
@@ -410,7 +410,7 @@ namespace Producao.Views.OrdemServico.Requisicao
         }
 
         private Item _item;
-        public Item Item
+        public Item? Item
         {
             get { return _item; }
             set { _item = value; RaisePropertyChanged("Item"); }

@@ -1,5 +1,4 @@
-﻿using MLKit.BarcodeScanning;
-using ScannerQRcode.Models;
+﻿using ScannerQRcode.Models;
 using SQLite;
 
 namespace ScannerQRcode.Data
@@ -121,6 +120,12 @@ namespace ScannerQRcode.Data
         {
             await Init();
             return await database.Table<VolumeEnderecamento>().ToListAsync();
+        }
+
+        public async Task<int> DeleteVolumeEnderecados(VolumeEnderecamento enderecamento)
+        {
+            await Init();
+            return await database.DeleteAsync<VolumeEnderecamento>(enderecamento);
         }
 
         public async Task<int> DeleteAllVolumeEnderecados()

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
+using static SQLite.TableMapping;
 
 namespace ScannerQRcode.Views;
 
@@ -20,29 +21,12 @@ public partial class ReaderEnderecamento : ContentPage
 	{
         _volumeScannerRepository = volumeScannerRepository;
         InitializeComponent();
-        //BarcodeScanner.Mobile.Methods.SetSupportBarcodeFormat(BarcodeFormats.Code39 | BarcodeFormats.QRCode | BarcodeFormats.Code128);
-        //BarcodeScanner.Mobile.Methods.SetSupportBarcodeFormat(BarcodeFormats.Code39 | BarcodeFormats.Code39 | BarcodeFormats.Code128);
-
-        //LocalNotificationCenter.Current.NotificationActionTapped += Current_NotificationActionTapped;
-        //var dados = await _volumeScannerRepository.GetVolumeScanners();
-        //send.Text = $"Enviar {dados.Count} volume(s)";
-
-
 #if ANDROID
         Methods.SetSupportBarcodeFormat(BarcodeFormats.QRCode | BarcodeFormats.Code39 | BarcodeFormats.Code128);
         Methods.AskForRequiredPermission();
 #endif
-
         BindingContext = vm;
         this.Loaded += ReaderEnderecamento_Loaded;
-
-        /*
-        new Action(async () =>
-        {
-            var dados = await _volumeScannerRepository.QueryAllVolumeEnderecados();
-            send.Text = $"Enviar {dados.Count} volume(s)";
-        }).Invoke();
-        */
     }
 
     private async void ReaderEnderecamento_Loaded(object sender, EventArgs e)
@@ -50,7 +34,6 @@ public partial class ReaderEnderecamento : ContentPage
         ReaderEnderecamentoViewModel vm = (ReaderEnderecamentoViewModel)BindingContext;
         var dados = await Task.Run(_volumeScannerRepository.QueryAllVolumeEnderecados);
         send.Text = $"Enviar {dados.Count} volume(s)";
-
         var enderecos = await Task.Run(_volumeScannerRepository.QueryAllEnderecos);
         if (enderecos.Count == 0) 
         {
@@ -78,8 +61,7 @@ public partial class ReaderEnderecamento : ContentPage
                 vm.IsLoading = false;
             }
         }
-       
-        
+        //await _volumeScannerRepository.CreateVolumeEnderecamento(new VolumeEnderecamento { Endereco = "01234567000275", Volume = "04567890038293", Created = DateTime.Now });
     }
 
     private void Current_NotificationActionTapped(Plugin.LocalNotification.EventArgs.NotificationActionEventArgs e)
@@ -110,29 +92,37 @@ public partial class ReaderEnderecamento : ContentPage
 
         Dispatcher.Dispatch(async () =>
         {
-            /*
-            if (volumeEndereco == null || volumeEndereco == "")
-            {
-                volumeEndereco = result;
-            }
-            else
-            {
-                await _volumeScannerRepository.CreateVolumeEnderecamento(new VolumeEnderecamento { Endereco = volumeEndereco, Volume = result, Created = DateTime.Now });
-                var dados = await _volumeScannerRepository.QueryAllVolumeEnderecados();
-                send.Text = $"Enviar {dados.Count} volume(s)";
-            }
-            */
-
             if (_endereco == null)
             {
                 var endereco = await Task.Run(() => _volumeScannerRepository.GetEndereco(result));
                 if (endereco != null) 
-                {
                     _endereco = endereco;
+                else
+                {
+                    Camera.IsScanning = false;
+                    int secondsToVibrate = Random.Shared.Next(1, 4);
+                    TimeSpan vibrationLength = TimeSpan.FromSeconds(secondsToVibrate);
+                    Vibration.Default.Vibrate(vibrationLength);
+                    await DisplayAlert("Endereço", "Código não corresponde há um endereço", "OK");
+                    Camera.IsScanning = true;
+                }
+            }
+            else
+            {
+                if (result.Length != 14 || !result.Contains("0456789"))
+                {
+                    Camera.IsScanning = false;
+                    int secondsToVibrate = Random.Shared.Next(1, 4);
+                    TimeSpan vibrationLength = TimeSpan.FromSeconds(secondsToVibrate);
+                    Vibration.Default.Vibrate(vibrationLength);
+                    await DisplayAlert("Volume", "Código não corresponde há um volume de shopping", "OK");
+                    Camera.IsScanning = true;
                 }
                 else
                 {
-                    await DisplayAlert("Endereço", "Código não corresponde há um endereço", "OK");
+                    await _volumeScannerRepository.CreateVolumeEnderecamento(new VolumeEnderecamento { Endereco = _endereco.Barcode, Volume = result, Created = DateTime.Now });
+                    var dados = await _volumeScannerRepository.QueryAllVolumeEnderecados();
+                    send.Text = $"Enviar {dados.Count} volume(s)";
                 }
             }
 
@@ -146,12 +136,20 @@ public partial class ReaderEnderecamento : ContentPage
     private async void Button_Clicked(object sender, EventArgs e)
     {
         ReaderEnderecamentoViewModel vm = (ReaderEnderecamentoViewModel)BindingContext;
-        var dados = await Task.Run(_volumeScannerRepository.QueryAllVolumeEnderecados);
 
-        vm.Status = "ENVIANDO VOLUMES...";
+        vm.Status = "BUSCANDO VOLUMES ENDEREÇADOS NO DISPOSITIVO.";
         vm.IsLoading = true;
 
-        /*
+        var dados = await Task.Run(_volumeScannerRepository.QueryAllVolumeEnderecados);
+        int tot = dados.Count();
+
+        if (tot == 0)
+        {
+            await DisplayAlert("Enviar ", "Não tem volumes para serem enviados", "OK");
+            vm.IsLoading = false;
+            return;
+        }
+
         JsonSerializerOptions _serializerOptions = new()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -164,24 +162,43 @@ public partial class ReaderEnderecamento : ContentPage
             {
                 try
                 {
-                    vm.Status = "Buscando Siglas aprovadas.";
+                    vm.Status = $"ENVIANDO VOLUMES ENDEREÇADOS.";
                     var httpClient = new HttpClient();
-                    var movimentacaoVolumeShopping = new MovimentacaoVolumeShopping()
+                    /*var movimentacaoVolumeShopping = new MovimentacaoVolumeShopping()
                     {
                         barcode_volume = volume.Volume,
                         barcode_endereco = volume.Endereco,
                         inserido_por = "APP ANDROID",
                         inserido_em = DateTime.Now,
 
-                    };
-                    string json = JsonSerializer.Serialize<MovimentacaoVolumeShopping>(movimentacaoVolumeShopping, _serializerOptions);
-                    StringContent content = new(json, Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync("http://mail.cipolatti.com.br:8080/api/MovimentacaoVolumeShopping/GravarVolume", content);
+                    };*/
+                    //string json = JsonSerializer.Serialize<MovimentacaoVolumeShopping>(movimentacaoVolumeShopping, _serializerOptions);
+                    //StringContent content = new(json, Encoding.UTF8, "application/json");
+                    //var response = await httpClient.PostAsync("http://mail.cipolatti.com.br:8080/api/MovimentacaoVolumeShopping/GravarVolume", content);
+                    using StringContent jsonContent = new(
+                        JsonSerializer.Serialize(new
+                        {
+                            //idLinhaInserida = 0,
+                            barcodeVolume = volume.Volume,
+                            barcodeEndereco = volume.Endereco,
+                            inseridoPor = "APP ANDROID",
+                            inseridoEm = DateTime.Now
+                        }),
+                        Encoding.UTF8,
+                        "application/json");
+
+                    using HttpResponseMessage response = await httpClient.PostAsync("http://mail.cipolatti.com.br:8080/api/MovimentacaoVolumeShopping/GravarVolume", jsonContent);
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
                     if (response.IsSuccessStatusCode)
                     {
-                        //var content = await response.Content.ReadAsStringAsync();
-                        //vm.Aprovados = Newtonsoft.Json.JsonConvert.DeserializeObject<ObservableCollection<Aprovado>>(content);
-                        //vm.IsLoading = false;
+                        if (jsonResponse == "Volume enviado com sucesso!")
+                        {
+                            //await Task.Run(()=>_volumeScannerRepository.DeleteVolumeEnderecados(volume));
+                            //var ende = await Task.Run(_volumeScannerRepository.QueryAllVolumeEnderecados);
+                            tot--;
+                            send.Text = $"Enviar {tot} volume(s)";
+
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -190,8 +207,13 @@ public partial class ReaderEnderecamento : ContentPage
                     vm.IsLoading = false;
                 }
             }
+            vm.Status = $"DELETANDO VOLUMES ENDEREÇADOS";
+            await Task.Run(_volumeScannerRepository.DeleteAllVolumeEnderecados);
 
+            send.Text = $"Enviar 0 volume(s)";
+            vm.IsLoading = false;
+            _endereco = null;
         }
-        */
+        
     }
 }

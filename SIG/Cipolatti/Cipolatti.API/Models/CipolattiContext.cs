@@ -8,10 +8,13 @@ namespace Cipolatti.API.Models;
 
 public partial class CipolattiContext : DbContext
 {
+
     public CipolattiContext(DbContextOptions<CipolattiContext> options)
         : base(options)
     {
     }
+
+    static CipolattiContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
     public virtual DbSet<QryAprovados> QryAprovados { get; set; }
 
