@@ -30,11 +30,15 @@
     <None Remove="Icones\icons8-pesquisar-26.png" />
     <None Remove="Icones\icons8-pesquisar-52.png" />
     <None Remove="Icones\icons8-usu_0025c3_0025a1rio-de-g_0025c3_0025aanero-neutro-windows-metro-16.png" />
+    <None Remove="Modelos\PEDIDO-COMPRA.xlsm" />
     <None Remove="Modelos\PEDIDO-COMPRA.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Icones\favicon.ico" />
+    <Content Include="Modelos\PEDIDO-COMPRA.xlsm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   

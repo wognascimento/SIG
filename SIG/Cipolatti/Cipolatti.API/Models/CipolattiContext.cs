@@ -8,11 +8,17 @@ namespace Cipolatti.API.Models;
 
 public partial class CipolattiContext : DbContext
 {
-    public CipolattiContext(DbContextOptions<CipolattiContext> options) : base(options) { }
+
+    public CipolattiContext(DbContextOptions<CipolattiContext> options)
+        : base(options)
+    {
+    }
 
     static CipolattiContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
     public virtual DbSet<QryAprovados> QryAprovados { get; set; }
+
+    public virtual DbSet<QryEnderecamentoGalpao> QryEnderecamentoGalpao { get; set; }
 
     public virtual DbSet<QryLookup> QryLookup { get; set; }
 
@@ -100,6 +106,11 @@ public partial class CipolattiContext : DbContext
         modelBuilder.Entity<QryAprovados>(entity =>
         {
             entity.ToView("qry_aprovados", "producao");
+        });
+
+        modelBuilder.Entity<QryEnderecamentoGalpao>(entity =>
+        {
+            entity.ToView("qry_enderecamento_galpao", "expedicao");
         });
 
         modelBuilder.Entity<QryLookup>(entity =>

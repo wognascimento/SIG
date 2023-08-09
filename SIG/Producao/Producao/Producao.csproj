@@ -46,13 +46,27 @@
     <None Remove="icones\icons8-usu_0025c3_0025a1rio-de-g_0025c3_0025aanero-neutro-windows-metro-16.png" />
     <None Remove="icones\icons8-vassoura-40.png" />
     <None Remove="icones\icons8-vassoura-80.png" />
+    <None Remove="Modelos\DESCRICOES_CONSTRUCAO_MODELO.xlsx" />
     <None Remove="Modelos\ETIQUETA_MODELO.xlsx" />
+    <None Remove="Modelos\ETIQUETA_REQUISICAO_MODELO.xlsx" />
     <None Remove="Modelos\ORDEM_SERVICO_MODELO.xlsx" />
     <None Remove="Modelos\ORDEM_SERVICO_SERVICO_MODELO.xlsx" />
     <None Remove="Modelos\PROGRAMACAO_PROGRAMACAO_MODELO.xlsx" />
     <None Remove="Modelos\RECEITA_CENTRAL_MODELO.xlsx" />
     <None Remove="Modelos\RELATORIO_CCE_MODELO.xlsx" />
     <None Remove="Modelos\REQUISICAO_MODELO.xlsx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <WrapperTool>tlbimp</WrapperTool>
+      <VersionMinor>9</VersionMinor>
+      <VersionMajor>1</VersionMajor>
+      <Guid>00020813-0000-0000-c000-000000000046</Guid>
+      <Lcid>0</Lcid>
+      <Isolated>false</Isolated>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -66,15 +80,14 @@
   
   
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="6.2.4" />
+    <PackageReference Include="EPPlus" Version="6.2.7" />
     <PackageReference Include="itext7" Version="8.0.0" />
     <PackageReference Include="Microsoft.Data.Services.Client" Version="5.8.5" />
-    <PackageReference Include="Microsoft.Office.Interop.Excel" Version="14.0.0.1" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4" />
     <PackageReference Include="syncfusion.ui.wpf.net" Version="20.3.0.56" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
-    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="7.22.2" />
+    <PackageReference Include="Z.EntityFramework.Extensions.EFCore" Version="7.22.4" />
   </ItemGroup>
   
   
@@ -113,7 +126,13 @@
     <Resource Include="icones\icons8-usu_0025c3_0025a1rio-de-g_0025c3_0025aanero-neutro-windows-metro-16.png" />
     <Resource Include="icones\icons8-vassoura-40.png" />
     <Resource Include="icones\icons8-vassoura-80.png" />
+    <Content Include="Modelos\DESCRICOES_CONSTRUCAO_MODELO.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modelos\ETIQUETA_MODELO.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modelos\ETIQUETA_REQUISICAO_MODELO.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Modelos\ORDEM_SERVICO_MODELO.xlsx">

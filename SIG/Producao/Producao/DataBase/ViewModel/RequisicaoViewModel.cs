@@ -146,6 +146,8 @@ namespace Producao
                 MessageBox.Show(ex.Message);
             }
             */
+
+            Requisicao = new RequisicaoModel();
         }
 
         public async Task<QryDescricao> GetDescricaoAsync(long codcompladicional)
@@ -295,6 +297,20 @@ namespace Producao
             }
         }
 
+        public async Task<DetalheRequisicaoModel> GetItemRequisicaoAsync(long? codDetReq)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.RequisicaoDetalhes.FindAsync(codDetReq);
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<ObservableCollection<QryRequisicaoDetalheModel>> GetRequisicaoDetalhesAsync(long? num_requisicao)
         {
             try
@@ -309,14 +325,26 @@ namespace Producao
             }
         }
 
-        
+        public async Task<ChecklistPrdutoRequisicaoModel> GetPrdutoRequisicaoAsync(long? num_requisicao)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.ChecklistPrdutooRequisicoes.Where(r => r.num_requisicao == num_requisicao).FirstOrDefaultAsync();
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propName)
         {
-            if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
-  
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
     }

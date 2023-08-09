@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Producao.Views
 {
@@ -44,6 +45,7 @@ namespace Producao.Views
 
         private async void itens_CurrentCellEndEdit(object sender, CurrentCellEndEditEventArgs args)
         {
+            /*
             ViewModel vm = (ViewModel)DataContext;
 
             var recordIndex = this.itens.ResolveToRecordIndex(args.RowColumnIndex.RowIndex);
@@ -77,13 +79,58 @@ namespace Producao.Views
             {
                 MessageBox.Show(ex.Message);
             }
-
-
+            */
         }
 
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
             //((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+        }
+
+        private async void itens_CurrentCellValueChanged(object sender, CurrentCellValueChangedEventArgs e)
+        {
+            ViewModel vm = (ViewModel)DataContext;
+            SfDataGrid? grid = sender as SfDataGrid;
+            int columnindex = grid.ResolveToGridVisibleColumnIndex(e.RowColumnIndex.ColumnIndex);
+            var column = grid.Columns[columnindex];
+            var rowIndex = grid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
+            var record = grid.View.Records[rowIndex].Data as ControleMemorialModel;
+
+            if (column.GetType() == typeof(GridCheckBoxColumn) && column.MappingName == "altera_ok")
+            {
+                record.confirma_alteracao_por = Environment.UserName;
+                record.confirma_alteracao_data = DateTime.Now;
+                //var value = record.inativo;
+            }
+            
+            if (column.GetType() == typeof(GridCheckBoxColumn) && column.MappingName == "motivo_alt_pos_revisao")
+            {
+                record.ok_revisao_alterada = "-1";
+                record.data_alt_revisao = DateTime.Now;
+                record.revisao_alt_por = Environment.UserName;
+                //var value = record.inativo;
+            }
+            
+            if (column.GetType() == typeof(GridCheckBoxColumn) && column.MappingName == "ok")
+            {
+                record.revisado_por = Environment.UserName;
+                record.data_revisado_por = DateTime.Now;
+                record.ok_revisao_alterada = "-1";
+                //var value = record.inativo;
+            }
+
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                await Task.Run(() => vm.AtualizarControleAsync(record));
+                grid.View.Refresh();
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
         }
     }
 

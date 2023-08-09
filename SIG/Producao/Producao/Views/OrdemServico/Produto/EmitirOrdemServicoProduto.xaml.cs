@@ -129,56 +129,60 @@ namespace Producao.Views.OrdemServico.Produto
         private async static void OnEmitirTodasClicked(object obj)
         {
             using DatabaseContext db = new();
-            //using var transaction = db.Database.BeginTransaction();
-            try
-            {
-                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                var grid = ((GridColumnContextMenuInfo)obj).DataGrid;
-                EmitirOrdemServicoProdutoViewModel vm = (EmitirOrdemServicoProdutoViewModel)grid.DataContext;
-                var filteredResult = grid.View.Records.Select(recordentry => recordentry.Data);
-                var itens = grid.View.Records.Count;
-                var servicos = new ObservableCollection<OsEmissaoProducaoImprimirModel>();
-                foreach (var produtoServicoModel in from OrdemServicoEmissaoAbertaForm item in filteredResult
-                                                    let produtoServicoModel = new ProdutoServicoModel
-                                                    {
-                                                        num_os_produto = item.num_os_produto,
-                                                        tipo = item.tipo,
-                                                        codigo_setor = item.codigo_setor,
-                                                        setor_caminho = item.setor_caminho,
-                                                        quantidade = item.quantidade,
-                                                        data_inicio = DateTime.Now,
-                                                        data_fim = DateTime.Now.AddDays(15),
-                                                        cliente = item.cliente,
-                                                        tema = item.tema,
-                                                        orientacao_caminho = item.orientacao_caminho,
-                                                        codigo_setor_proximo = 39,
-                                                        setor_caminho_proximo = "FINAL - TODOS",
-                                                        fase = "PRODUÇÃO",
-                                                        responsavel_emissao_os = Environment.UserName,
-                                                        emitida_por = Environment.UserName,
-                                                        emitida_data = DateTime.Now,
-                                                        turno = "DIURNO",
-                                                        id_modelo = item.id_modelo,
-                                                    }
-                                                    select produtoServicoModel)
+            //var strategy = db.Database.CreateExecutionStrategy();
+            //await strategy.ExecuteAsync(async () => 
+            //{
+                //using var transaction = db.Database.BeginTransaction();
+                try
                 {
-                    await db.ProdutoServicos.SingleMergeAsync(produtoServicoModel);
-                    await db.SaveChangesAsync();
-                    var servico = await Task.Run(() => vm.GetOsEmitidas(produtoServicoModel.num_os_servico));
-                    servicos.Add(servico);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                    var grid = ((GridColumnContextMenuInfo)obj).DataGrid;
+                    EmitirOrdemServicoProdutoViewModel vm = (EmitirOrdemServicoProdutoViewModel)grid.DataContext;
+                    var filteredResult = grid.View.Records.Select(recordentry => recordentry.Data);
+                    var itens = grid.View.Records.Count;
+                    var servicos = new ObservableCollection<OsEmissaoProducaoImprimirModel>();
+                    foreach (var produtoServicoModel in from OrdemServicoEmissaoAbertaForm item in filteredResult
+                                                        let produtoServicoModel = new ProdutoServicoModel
+                                                        {
+                                                            num_os_produto = item.num_os_produto,
+                                                            tipo = item.tipo,
+                                                            codigo_setor = item.codigo_setor,
+                                                            setor_caminho = item.setor_caminho,
+                                                            quantidade = item.quantidade,
+                                                            data_inicio = DateTime.Now,
+                                                            data_fim = DateTime.Now.AddDays(15),
+                                                            cliente = item.cliente,
+                                                            tema = item.tema,
+                                                            orientacao_caminho = item.orientacao_caminho,
+                                                            codigo_setor_proximo = 39,
+                                                            setor_caminho_proximo = "FINAL - TODOS",
+                                                            fase = "PRODUÇÃO",
+                                                            responsavel_emissao_os = Environment.UserName,
+                                                            emitida_por = Environment.UserName,
+                                                            emitida_data = DateTime.Now,
+                                                            turno = "DIURNO",
+                                                            id_modelo = item.id_modelo,
+                                                        }
+                                                        select produtoServicoModel)
+                    {
+                        await db.ProdutoServicos.SingleMergeAsync(produtoServicoModel);
+                        await db.SaveChangesAsync();
+                        var servico = await Task.Run(() => vm.GetOsEmitidas(produtoServicoModel.num_os_servico));
+                        servicos.Add(servico);
+                    }
+                    await Task.Run(() => ImprimpirOS(servicos, vm));
+                    //transaction.Commit();
+                    vm.OSsAberta = await Task.Run(vm.GetOSsEmAbertasAsync);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 }
-
-                await Task.Run( () => ImprimpirOS(servicos, vm));
-
-                //transaction.Commit();
-                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
-            }
-            catch (Exception ex)
-            {
-                //transaction.Rollback();
-                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
-                MessageBox.Show(ex.Message);
-            }
+                catch (Exception ex)
+                {
+                    //transaction.Rollback();
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                    MessageBox.Show(ex.Message);
+                }
+            //});
+            
         }
 
         static BaseCommand? emitir;
@@ -191,22 +195,26 @@ namespace Producao.Views.OrdemServico.Produto
             }
         }
 
-        private static void OnEmitirClicked(object obj)
+        private async static void OnEmitirClicked(object obj)
         {
             using DatabaseContext db = new();
-            using var transaction = db.Database.BeginTransaction();
-            try
+            var strategy = db.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () => 
             {
-                var grid = ((GridRecordContextMenuInfo)obj).DataGrid;
-                var item = grid.SelectedItem as OrdemServicoEmissaoAbertaForm;
+                using var transaction = db.Database.BeginTransaction();
+                try
+                {
+                    var grid = ((GridRecordContextMenuInfo)obj).DataGrid;
+                    var item = grid.SelectedItem as OrdemServicoEmissaoAbertaForm;
 
-                transaction.Commit();
-            }
-            catch (Exception ex)
-            {
-                transaction.Rollback();
-                MessageBox.Show(ex.Message);
-            }
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    MessageBox.Show(ex.Message);
+                }
+            });
         }
 
 
@@ -257,6 +265,14 @@ namespace Producao.Views.OrdemServico.Produto
 
                         var setores = await Task.Run(() => vm.GetServicos(servico.num_os_produto));
                         var idexSetor = 9;
+                        worksheet.Range["G9"].Text = "";
+                        worksheet.Range["G10"].Text = "";
+                        worksheet.Range["G11"].Text = "";
+                        worksheet.Range["G12"].Text = "";
+                        worksheet.Range["G13"].Text = "";
+                        worksheet.Range["G14"].Text = "";
+                        worksheet.Range["G15"].Text = "";
+                        worksheet.Range["G16"].Text = "";
                         foreach (var setor in setores)
                         {
                             worksheet.Range[$"G{idexSetor}"].Text = setor.setor_caminho;
@@ -306,6 +322,14 @@ namespace Producao.Views.OrdemServico.Produto
 
                         var setores = await Task.Run(() => vm.GetServicos(servico.num_os_produto));
                         var idexSetor = 37;
+                        worksheet.Range["G37"].Text = "";
+                        worksheet.Range["G38"].Text = "";
+                        worksheet.Range["G39"].Text = "";
+                        worksheet.Range["G40"].Text = "";
+                        worksheet.Range["G41"].Text = "";
+                        worksheet.Range["G42"].Text = "";
+                        worksheet.Range["G43"].Text = "";
+                        worksheet.Range["G44"].Text = "";
                         foreach (var setor in setores)
                         {
                             worksheet.Range[$"G{idexSetor}"].Text = setor.setor_caminho;

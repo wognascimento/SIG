@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Collections.ObjectModel;
@@ -6,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Producao.Views.CadastroProduto
@@ -18,8 +20,8 @@ namespace Producao.Views.CadastroProduto
         ProdutoModel produto;
         public CadastroAdicional(ProdutoModel produto)
         {
-            DataContext = new CadastroAdicionalViewModel();
             InitializeComponent();
+            DataContext = new CadastroAdicionalViewModel();
             this.produto = produto;
         }
 
@@ -53,9 +55,80 @@ namespace Producao.Views.CadastroProduto
 
         }
 
-        private void OnCurrentCellValueChanged(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellValueChangedEventArgs e)
+        private async void OnCurrentCellValueChanged(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellValueChangedEventArgs e)
         {
+            /*
+            int columnindex = adicionais.ResolveToGridVisibleColumnIndex(args.RowColumnIndex.ColumnIndex);
+            var column = adicionais.Columns[columnindex];
+            if (column is GridCheckBoxColumn)
+            {
+                var rowIndex = this.adicionais.ResolveToRecordIndex(args.RowColumnIndex.RowIndex);
+                RecordEntry record = null;
+                if (this.adicionais.GroupColumnDescriptions.Count == 0)
+                {
+                    record = this.adicionais.View.Records[rowIndex] as RecordEntry;
+                }
+                else
+                {
+                    record = (RecordEntry)adicionais.View.TopLevelGroup.DisplayElements[rowIndex];
+                }
+                //Checkbox property changed value is stored here.
+                var value = ((TabelaDescAdicionalModel)record.Data).inativo;
+            }
+            */
 
+            CadastroAdicionalViewModel vm = (CadastroAdicionalViewModel)DataContext;
+            SfDataGrid? grid = sender as SfDataGrid;
+            int columnindex = grid.ResolveToGridVisibleColumnIndex(e.RowColumnIndex.ColumnIndex);
+            var column = grid.Columns[columnindex];
+            if (column.GetType() == typeof(GridCheckBoxColumn) && column.MappingName == "inativo")
+            {
+                var rowIndex = grid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
+                var record = grid.View.Records[rowIndex].Data as TabelaDescAdicionalModel;
+                var value = record.inativo;
+
+                try
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                    await Task.Run(() => vm.SaveAsync(record));
+                    grid.View.Refresh();
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+
+                
+            }
+
+            /*
+            SfDataGrid grid = (SfDataGrid)sender;
+            int columnindex = grid.ResolveToGridVisibleColumnIndex(e.RowColumnIndex.ColumnIndex);
+            var column = grid.Columns[columnindex];
+            if (column.GetType() == typeof(GridCheckBoxColumn) && column.MappingName == "inativo")
+            {
+                try
+                {
+                    var rowIndex = grid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
+                    if (rowIndex > -1)
+                    {
+                        var record = (ExpedModel)grid.View.Records[rowIndex].Data;
+                        var value = record.BaiaVirtual;
+                        Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                        ExpedicaoProdutoViewModel vm = (ExpedicaoProdutoViewModel)DataContext;
+                        ExpedModel expedModel = await Task.Run(() => vm.AddExpedAsync(record));
+                        Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+            }
+            */
         }
 
         private async void OnRowValidated(object sender, Syncfusion.UI.Xaml.Grid.RowValidatedEventArgs e)
@@ -76,7 +149,7 @@ namespace Producao.Views.CadastroProduto
                 //data.obsproducaoobrigatoria
                 //data.obsmontagem
                 //data.unidade = produto
-                data.inativo = data.inativo == null ? "0" : "-1";
+                data.inativo = data.inativo == null ? "0" : data.inativo;
 
 
                 data = await Task.Run(() => vm.SaveAsync(data));
@@ -148,7 +221,7 @@ namespace Producao.Views.CadastroProduto
         }
 
 
-        public async void ChangeCanExecute(object obj)
+        public void ChangeCanExecute(object obj)
         {
             try
             {

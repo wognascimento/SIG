@@ -12,7 +12,7 @@ public partial class App : Application
         InitializeComponent();
 
         MainPage = new AppShell();
-        //MainPage = serviceProvider.GetRequiredService<ReaderEnderecamento>();
+        //MainPage = serviceProvider.GetRequiredService<QRCodeReader>();
 
 
     }

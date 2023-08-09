@@ -172,23 +172,27 @@ namespace Producao.Views.CentralModelos
         public async Task<ModeloModel> AddModeloAsync(long? id_modelo, int? qtd_fiada_cascata)
         {
             using DatabaseContext db = new();
-            var transaction = db.Database.BeginTransaction();
-            try
+            var strategy = db.Database.CreateExecutionStrategy();
+            ModeloModel modelo = new();
+            await strategy.ExecuteAsync(async () => 
             {
-                var modelo = await db.Modelos.FindAsync(id_modelo);
-                modelo.qtd_fiada_cascata = qtd_fiada_cascata;
-                await db.Modelos.SingleMergeAsync(modelo);
-                await db.SaveChangesAsync();
+                var transaction = db.Database.BeginTransaction();
+                try
+                {
+                    modelo = await db.Modelos.FindAsync(id_modelo);
+                    modelo.qtd_fiada_cascata = qtd_fiada_cascata;
+                    await db.Modelos.SingleMergeAsync(modelo);
+                    await db.SaveChangesAsync();
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            });
 
-                transaction.Commit();
-
-                return modelo;
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-                throw;
-            }
+            return modelo;
         }
 
 

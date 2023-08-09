@@ -207,15 +207,17 @@
 
 
 
-        <Grid Grid.Row="8" Grid.Column="0">
+        <Grid Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
+                <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="1"/>
-                <ColumnDefinition />
+                <ColumnDefinition Width="75"/>
                 <ColumnDefinition Width="1"/>
-                <ColumnDefinition />
+                <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="1"/>
-                <ColumnDefinition />
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="1"/>
+                <ColumnDefinition Width="65"/>
             </Grid.ColumnDefinitions>
 
             <syncfusion:ButtonAdv
@@ -246,8 +248,16 @@
                 SmallIcon="/icones/icons8-impressão-40.png" 
                 LargeIcon="/icones/icons8-impressão-80.png" 
                 SizeMode="Large" 
-                Label="IMPRIMIR" 
+                Label="REQUISICAO" 
                 Click="OnPrintClick"/>
+
+            <syncfusion:ButtonAdv 
+				Grid.Column="8"
+                SmallIcon="/icones/icons8-impressão-40.png" 
+                LargeIcon="/icones/icons8-impressão-80.png" 
+                SizeMode="Large" 
+                Label="ETIQUETA" 
+                Click="OnPrintEtiquetaClick"/>
 
         </Grid>
 
@@ -262,7 +272,7 @@
             ColumnSizer="AutoWithLastColumnFill"
             ShowRowHeader="True" 
             ItemsSource="{Binding QryRequisicaoDetalhes}"
-            MouseDoubleClick="OnMouseDoubleClick">
+            MouseDoubleClick="OnMouseDoubleClick" RowValidating="itens_RowValidating">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn 
                     HeaderText="ID" 
@@ -280,6 +290,10 @@
                     MappingName="quantidade"
                     DisplayBinding="{Binding quantidade, Converter={StaticResource ConverterNumber}}"/>
                 <syncfusion:GridTextColumn HeaderText="OBSERVAÇÃO" MappingName="observacao"/>
+                <syncfusion:GridNumericColumn 
+                    MappingName="volume"
+                    DisplayBinding="{Binding volume, Converter={StaticResource ConverterNumber}}" 
+                    AllowEditing="True"/>
                 <!--<syncfusion:GridTextColumn HeaderText="VOLTAGEM" MappingName="voltagem"/>-->
                 <!--<syncfusion:GridTextColumn HeaderText="LOCAL SHOPPING" MappingName="local_shop"/>-->
                 <syncfusion:GridDateTimeColumn HeaderText="INSERIDO EM" MappingName="data"/>

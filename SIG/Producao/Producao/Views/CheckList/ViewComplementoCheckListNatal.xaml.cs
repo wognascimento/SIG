@@ -2,6 +2,8 @@
 using Npgsql;
 using Producao.DataBase.Model;
 using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.ScrollAxis;
+using Syncfusion.Windows.Controls.Grid;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -135,6 +137,24 @@ namespace Producao.Views.CheckList
 
         private void OnCurrentCellDropDownSelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellDropDownSelectionChangedEventArgs e)
         {
+            ViewComplementoCheckListNatalViewModel vm = (ViewComplementoCheckListNatalViewModel)DataContext;
+
+            var sfdatagrid = sender as SfDataGrid;
+            int RowIndex = sfdatagrid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
+            var ColumnIndex = sfdatagrid.ResolveToScrollColumnIndex(3);
+            QryCheckListGeralComplementoModel? record;
+            if (RowIndex == -1)
+            {
+                record = sfdatagrid.View.CurrentAddItem as QryCheckListGeralComplementoModel;
+                RowIndex = 1;
+            }
+            else
+            {
+                record = sfdatagrid.View.Records[RowIndex].Data as QryCheckListGeralComplementoModel;
+            }
+            record.unidade = "UNID";
+            record.saldoestoque = 0;
+            sfdatagrid.MoveCurrentCell(new RowColumnIndex(RowIndex, ColumnIndex));
 
         }
 
@@ -151,15 +171,18 @@ namespace Producao.Views.CheckList
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 QryCheckListGeralComplementoModel data = (QryCheckListGeralComplementoModel)e.RowData;
-                vm.DetCompl.coddetalhescompl = data.coddetalhescompl;
-                vm.DetCompl.codcompl = data.codcompl;
-                vm.DetCompl.codcompladicional = data.codcompladicional;
-                vm.DetCompl.qtd = data.qtd;
-                vm.DetCompl.confirmado = data.confirmado;
-                vm.DetCompl.confirmado_data = data.confirmado == "-1" ? DateTime.Now : null;
-                vm.DetCompl.confirmado_por = data.confirmado == "-1" ? Environment.UserName : null;
-                vm.DetCompl.desabilitado_confirmado_data = data.confirmado == "-1" ? DateTime.Now : null;
-                vm.DetCompl.desabilitado_confirmado_por = data.confirmado == "-1" ? Environment.UserName : null;
+                vm.DetCompl = new()
+                {
+                    coddetalhescompl = data?.coddetalhescompl,
+                    codcompl = data.codcompl,
+                    codcompladicional = data.codcompladicional,
+                    qtd = data.qtd,
+                    confirmado = data.confirmado,
+                    confirmado_data = data.confirmado == "-1" ? DateTime.Now : null,
+                    confirmado_por = data.confirmado == "-1" ? Environment.UserName : null,
+                    desabilitado_confirmado_data = data.confirmado == "-1" ? DateTime.Now : null,
+                    desabilitado_confirmado_por = data.confirmado == "-1" ? Environment.UserName : null
+                };
 
                 vm.DetCompl = await Task.Run(() => vm.AddDetalhesComplementoCheckListAsync(vm.DetCompl));
                 ((QryCheckListGeralComplementoModel)e.RowData).coddetalhescompl = vm.DetCompl.coddetalhescompl;

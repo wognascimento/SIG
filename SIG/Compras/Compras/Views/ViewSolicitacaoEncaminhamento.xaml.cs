@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Compras.DataBase.Model;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Utility;
@@ -9,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,7 +62,7 @@ namespace Compras.Views
                 using ExcelEngine excelEngine = new ExcelEngine();
                 IApplication application = excelEngine.Excel;
                 application.DefaultVersion = ExcelVersion.Xlsx;
-                IWorkbook workbook = excelEngine.Excel.Workbooks.Open("Modelos/PEDIDO-COMPRA.xlsx", ExcelParseOptions.Default, false, "1@3mudar");
+                IWorkbook workbook = excelEngine.Excel.Workbooks.Open("Modelos/PEDIDO-COMPRA.xlsm", ExcelParseOptions.Default, false, "1@3mudar");
                 IWorksheet worksheet = workbook.Worksheets[0];
 
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
@@ -75,13 +77,34 @@ namespace Compras.Views
                     var item = vm.ItensPedido.ToList()[i];
                     worksheet.Range[$"A{i + 12}"].Text = item.codcompleadicional.ToString();
                     worksheet.Range[$"B{i + 12}"].Text = item.descricao_completa;
-                    worksheet.Range[$"F{i + 12}"].Text = item.quantidade.ToString();
+                    worksheet.Range[$"F{i + 12}"].Number = (double)item.quantidade;
                     worksheet.Range[$"J{i + 12}"].Text = item.itens;
                 }
 
-                workbook.SaveAs("PEDIDO-COMPRA.xlsx");
+                IWorksheet sheetFornecedores = workbook.Worksheets[1];
+                var fornecedores = await Task.Run(vm.GetFornecedoresAsync);
+                sheetFornecedores.ImportData(fornecedores,1,1,true);
+                //=fornecedores!$2:$1048576
+                IName lnameFornecedores = worksheet.Names.Add("fornecedores");
+                lnameFornecedores.RefersToRange = worksheet.Range["fornecedores!$2:$1048576"];
 
-                Process.Start(new ProcessStartInfo("PEDIDO-COMPRA.xlsx")
+                IWorksheet sheetCondicoes = workbook.Worksheets[2];
+                var condicoes = await Task.Run(vm.GetCondicoesAsync);
+                sheetCondicoes.ImportData(condicoes, 1, 1, true);
+                //=condicoes!$1:$1048576
+                IName lnameCondicoes = worksheet.Names.Add("condicoes");
+                lnameCondicoes.RefersToRange = worksheet.Range["condicoes!$2:$1048576"];
+
+                IWorksheet sheetEmpresas = workbook.Worksheets[3];
+                var empresas = await Task.Run(vm.GetEmpresasAsync);
+                sheetEmpresas.ImportData(empresas, 1, 1, true);
+                //=empresas!$1:$1048576
+                IName lnameEmpresas = worksheet.Names.Add("empresas");
+                lnameEmpresas.RefersToRange = worksheet.Range["empresas!$2:$1048576"];
+
+                workbook.SaveAs($"PEDIDO-COMPRA-{vm.Pedido.idpedido}.xlsm");
+
+                Process.Start(new ProcessStartInfo($"PEDIDO-COMPRA-{vm.Pedido.idpedido}.xlsm")
                 {
                     UseShellExecute = true
                 });
@@ -310,8 +333,50 @@ namespace Compras.Views
             {
                 throw;
             }
-
         }
+
+        public async Task<ObservableCollection<Fornecedor>> GetFornecedoresAsync()
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.Fornecedores.OrderBy(x => x.nomefantasia).ToListAsync();
+                return new ObservableCollection<Fornecedor>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ObservableCollection<CondicaoPagtoModel>> GetCondicoesAsync()
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.CondicaoPagamentos.OrderBy(x => x.descricao_cond_pagamento).ToListAsync();
+                return new ObservableCollection<CondicaoPagtoModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ObservableCollection<EmpresaModel>> GetEmpresasAsync()
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.Empresas.OrderBy(x => x.abreviacao).ToListAsync();
+                return new ObservableCollection<EmpresaModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        
 
     }
 

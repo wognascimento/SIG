@@ -7,7 +7,9 @@
              xmlns:vewModel="clr-namespace:Producao"
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded" Unloaded="UserControl_Unloaded">
+             d:DesignHeight="450" d:DesignWidth="800" 
+             Loaded="UserControl_Loaded" 
+             Unloaded="UserControl_Unloaded">
 
     <UserControl.Resources>
         <vewModel:ConverterNumber x:Key="ConverterNumber"/>
@@ -280,7 +282,6 @@
                     AllowResizingColumns="True" 
                     AutoGenerateColumns="False" 
                     ColumnSizer="Auto"
-                    FontSize="10" 
                     ItemsSource="{Binding Path=Itens}" 
                     MouseDoubleClick="dgModelos_MouseDoubleClick" 
                     SelectionChanged="dgModelos_SelectionChanged">

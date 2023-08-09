@@ -9,9 +9,9 @@
 
     <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
 
-        <ShellContent Title="Home" ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage" />
-        <ShellContent Title="Leior de Volumes" ContentTemplate="{DataTemplate views:QRCodeReader}" Route="QRCodeReader" />
-        <ShellContent Title="Lookup" ContentTemplate="{DataTemplate views:LookupCargaShopping}" Route="LookupCargaShopping" />
+        <!--<ShellContent Title="Home" ContentTemplate="{DataTemplate local:MainPage}" Route="MainPage" />-->
+        <ShellContent Title="Principal" ContentTemplate="{DataTemplate views:QRCodeReader}" Route="QRCodeReader" />
+        <ShellContent Title="Lookup" ContentTemplate="{DataTemplate views:LookupCargaShopping}" Route="LookupCargaShopping"/>
 
     </FlyoutItem>
 

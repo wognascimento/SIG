@@ -135,7 +135,8 @@ namespace Producao.Views.CadastroProduto
                 data.contabil_pldc = comple == null ? null : comple.contabil_pldc;
                 //narrativa
                 //alx
-                data.inativo = data.inativo == null ? "0" : "-1";
+                //data.inativo = data.inativo == null ? "0" : "-1";
+                data.inativo = data.inativo == null ? "0" : data.inativo;
                 //qtd_etiqueta
                 //fracao
                 //dividir_qtd_volume

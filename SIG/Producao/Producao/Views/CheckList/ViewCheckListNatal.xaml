@@ -451,9 +451,16 @@
             SelectedItem="{Binding CheckListGeral, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             SelectionChanged="OnSelectionChanged" FontSize="10">
             <syncfusion:SfDataGrid.Columns>
+
+                <syncfusion:GridNumericColumn 
+                    MappingName="bloco_revisao"
+                    DisplayBinding="{Binding bloco_revisao, Converter={StaticResource ConverterNumber}}" 
+                    ColumnSizer="SizeToCells"/>
+                
                 <syncfusion:GridTextColumn 
                     MappingName="resp_revisao"
                     ColumnSizer="SizeToCells"/>
+                
                 <syncfusion:GridCheckBoxColumn
                         AllowEditing="True"
                         HeaderText="OK REV." 

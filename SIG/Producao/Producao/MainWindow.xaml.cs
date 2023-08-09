@@ -14,6 +14,7 @@ using Producao.Views;
 using Producao.Views.CadastroProduto;
 using Producao.Views.CentralModelos;
 using Producao.Views.CheckList;
+using Producao.Views.Construcao;
 using Producao.Views.Controlado;
 using Producao.Views.Estoque;
 using Producao.Views.OrdemServico.Produto;
@@ -888,6 +889,16 @@ namespace Producao
         private void OnVinculoRequisicao(object sender, RoutedEventArgs e)
         {
             adicionarFilho(new VincularRequisicao(), "VINCULAR ETIQUETA A REQUISIÇÃO", "VINCULAR_ETIQUETA_REQUISICAO");
+        }
+
+        private void OnCadastroPecaConstrucao(object sender, RoutedEventArgs e)
+        {
+            adicionarFilho(new CadastroPeca(), "CADASTRO PEÇAS CONSTRUÇÃO", "CADASTRO_PECAS_CONSTRUCAO");
+        }
+
+        private void OnCadastroConstrucao(object sender, RoutedEventArgs e)
+        {
+            adicionarFilho(new EtiquetaConstrucao(), "CADASTRO DE CONSTRUÇÃO SHOPPING", "CADASTRO_CONSTRUCAO_SHOPPING");
         }
     }
 }

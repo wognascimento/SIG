@@ -2,10 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:telerik="http://schemas.telerik.com/2022/xaml/maui"
-             xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
              xmlns:gv="clr-namespace:BarcodeScanner.Mobile;assembly=BarcodeScanner.Mobile.Maui"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
              x:Class="ScannerQRcode.Views.ReaderCargaShopping"
-             Title="ReaderCargaShopping">
+             Title="Leitura de Carga Shopping">
 
     <Grid>
 
@@ -13,14 +13,6 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-
-        <!--
-        <cv:CameraView 
-            x:Name="cameraView" 
-            CamerasLoaded="cameraView_CamerasLoaded" 
-            BarCodeDetectionEnabled="True"
-            BarcodeDetected="cameraView_BarcodeDetected"/>
-        -->
 
         <gv:CameraView
             x:Name="Camera"

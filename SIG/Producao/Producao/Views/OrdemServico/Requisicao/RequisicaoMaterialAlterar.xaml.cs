@@ -1,4 +1,5 @@
-﻿using Producao.Views.PopUp;
+﻿using Producao.Views.Construcao;
+using Producao.Views.PopUp;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Helpers;
@@ -25,6 +26,14 @@ namespace Producao.Views.OrdemServico.Requisicao
         List<string> lVoltagem = new List<string>{"", "220V", "110V" };
         List<string> lLocalShopping = new List<string>{ "", "INTERNO", "EXTERNO" };
         bool dbClick;
+
+        enum Etiqueta
+        {
+            Primeira,
+            Segunda,
+            Terceira,
+            Quarta
+        }
 
         public RequisicaoMaterialAlterar()
         {
@@ -518,6 +527,239 @@ namespace Producao.Views.OrdemServico.Requisicao
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
             //((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
+        }
+
+        private async void itens_RowValidating(object sender, RowValidatingEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                RequisicaoViewModel vm = (RequisicaoViewModel)DataContext;
+                //QryRequisicaoDetalheModel det = (QryRequisicaoDetalheModel)e.RowData;
+                //e.RowData = {Producao.QryRequisicaoDetalheModel}
+                vm.RequisicaoDetalhe  = await Task.Run(() => vm.GetItemRequisicaoAsync(((QryRequisicaoDetalheModel)e.RowData).cod_det_req));
+                vm.RequisicaoDetalhe.volume = ((QryRequisicaoDetalheModel)e.RowData).volume;
+                var requi = await Task.Run(() => vm.AddProdutoRequisicaoAsync(vm.RequisicaoDetalhe));
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
+
+        private async void OnPrintEtiquetaClick(object sender, RoutedEventArgs e)
+        {
+            RequisicaoViewModel vm = (RequisicaoViewModel)DataContext;
+
+            if (vm.QryRequisicaoDetalhes == null)
+            {
+                MessageBox.Show("Requesição não informada ou sem item!");
+                return;
+            }
+
+            Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+            //var filteredResult = grid.View.Records.Select(recordentry => recordentry.Data);
+            var volumes = vm.QryRequisicaoDetalhes.OrderBy(o => o.volume).GroupBy(user => user.volume).ToList();
+            var count = volumes.Count;
+
+            using ExcelEngine excelEngine = new ExcelEngine();
+            IApplication application = excelEngine.Excel;
+            application.DefaultVersion = ExcelVersion.Xlsx;
+            IWorkbook workbook = application.Workbooks.Open("Modelos/ETIQUETA_REQUISICAO_MODELO.xlsx");
+            IWorksheet worksheet = workbook.Worksheets[0];
+
+            var etiqueta = Enum.Parse(typeof(Etiqueta), "Primeira");
+            int paginas = (int)Math.Ceiling(Decimal.Divide(count, 4));
+            int _etiqueta = 1;
+            int _pagina = 1;
+
+            //vm.Descricao = await Task.Run(() => vm.GetDescricaoAsync(vm.Compledicional.codcompladicional));
+            //vm.ChecklistPrduto = await Task.Run(() => vm.GetChecklistPrdutoAsync(vm.Compledicional.codcompladicional));
+            //foreach (EtiquetaEmitidaModel item in filteredResult)
+
+            var prodChk = await Task.Run(() => vm.GetPrdutoRequisicaoAsync(vm.Requisicao.num_requisicao));
+            for (int i = 0; i < count; i++)
+            {
+                try
+                {
+                    long volume = (long)volumes[i].Key;
+                    switch (etiqueta)
+                    {
+                        case Etiqueta.Primeira:
+                            {
+                                worksheet.Range["A1"].Text = prodChk.sigla;
+                                worksheet.Range["B2"].Text = $"{volume} / {count}"; //item.volumes_total > 1 ? item.volumes + " / " + item.volumes_total : item.qtd.ToString();
+                                worksheet.Range["C2"].Number = DateTime.Now.Year;
+                                worksheet.Range["D2"].Number = prodChk.coddetalhescompl.GetValueOrDefault();
+                                worksheet.Range["B5"].Text = prodChk.local_shoppings;
+                                worksheet.Range["A8"].Text = prodChk.descricao_completa.Replace("ÚNICO", null);
+
+                                var inx = 12;
+                                foreach (var item in GetProdutosEtiqueta(volume))
+                                {
+                                    worksheet.Range[$"A{inx}"].Text = item.descricao_completa;
+                                    inx++;
+                                }
+
+                                worksheet.Range["PRIMEIRA"].Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["PRIMEIRA"].Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["PRIMEIRA"].Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["PRIMEIRA"].Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["PRIMEIRA"].CellStyle.Font.Color = ExcelKnownColors.Black;
+
+                                etiqueta = Enum.Parse(typeof(Etiqueta), "Segunda");
+                                _etiqueta++;
+                                workbook.SaveAs($"Impressos/ETIQUETA_REQUISICAO_MODELO_{_pagina}.xlsx");
+                                break;
+                            }
+                        case Etiqueta.Segunda:
+                            {
+                                worksheet.Range["F1"].Text = prodChk.sigla;
+                                worksheet.Range["G2"].Text = $"{volume} / {count}"; //item.volumes_total > 1 ? item.volumes + " / " + item.volumes_total : item.qtd.ToString();
+                                worksheet.Range["H2"].Number = DateTime.Now.Year;
+                                worksheet.Range["I2"].Number = prodChk.coddetalhescompl.GetValueOrDefault();
+                                worksheet.Range["G5"].Text = prodChk.local_shoppings;
+                                worksheet.Range["F8"].Text = prodChk.descricao_completa.Replace("ÚNICO", null);
+
+                                var inx = 12;
+                                foreach (var item in GetProdutosEtiqueta(volume))
+                                {
+                                    worksheet.Range[$"F{inx}"].Text = item.descricao_completa;
+                                    inx++;
+                                }
+
+                                worksheet.Range["SEGUNDA"].Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["SEGUNDA"].Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["SEGUNDA"].Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["SEGUNDA"].Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["SEGUNDA"].CellStyle.Font.Color = ExcelKnownColors.Black;
+
+                                etiqueta = Enum.Parse(typeof(Etiqueta), "Terceira");
+                                _etiqueta++;
+                                workbook.SaveAs($"Impressos/ETIQUETA_REQUISICAO_MODELO_{_pagina}.xlsx");
+                                break;
+                            }
+                        case Etiqueta.Terceira:
+                            {
+                                worksheet.Range["A18"].Text = prodChk.sigla;
+                                worksheet.Range["B19"].Text = $"{volume} / {count}"; //item.volumes_total > 1 ? item.volumes + " / " + item.volumes_total : item.qtd.ToString();
+                                worksheet.Range["C19"].Number = DateTime.Now.Year;
+                                worksheet.Range["D19"].Number = prodChk.coddetalhescompl.GetValueOrDefault();
+                                worksheet.Range["B22"].Text = prodChk.local_shoppings;
+                                worksheet.Range["A25"].Text = prodChk.descricao_completa.Replace("ÚNICO", null);
+
+                                var inx = 29;
+                                foreach (var item in GetProdutosEtiqueta(volume))
+                                {
+                                    worksheet.Range[$"A{inx}"].Text = item.descricao_completa;
+                                    inx++;
+                                }
+
+                                worksheet.Range["TERCEIRA"].Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["TERCEIRA"].Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["TERCEIRA"].Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["TERCEIRA"].Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["TERCEIRA"].CellStyle.Font.Color = ExcelKnownColors.Black;
+
+                                etiqueta = Enum.Parse(typeof(Etiqueta), "Quarta");
+                                _etiqueta++;
+                                workbook.SaveAs($"Impressos/ETIQUETA_REQUISICAO_MODELO_{_pagina}.xlsx");
+                                break;
+                            }
+                        case Etiqueta.Quarta:
+                            {
+                                worksheet.Range["F18"].Text = prodChk.sigla;
+                                worksheet.Range["G19"].Text = $"{volume} / {count}"; //item.volumes_total > 1 ? item.volumes + " / " + item.volumes_total : item.qtd.ToString();
+                                worksheet.Range["H19"].Number = DateTime.Now.Year;
+                                worksheet.Range["I19"].Number = prodChk.coddetalhescompl.GetValueOrDefault();
+                                worksheet.Range["G22"].Text = prodChk.local_shoppings;
+                                worksheet.Range["F25"].Text = prodChk.descricao_completa.Replace("ÚNICO", null);
+
+                                var inx = 29;
+                                foreach (var item in GetProdutosEtiqueta(volume))
+                                {
+                                    worksheet.Range[$"F{inx}"].Text = item.descricao_completa;
+                                    inx++;
+                                }
+
+                                worksheet.Range["QUARTA"].Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["QUARTA"].Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["QUARTA"].Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["QUARTA"].Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                                worksheet.Range["QUARTA"].CellStyle.Font.Color = ExcelKnownColors.Black;
+
+                                etiqueta = Enum.Parse(typeof(Etiqueta), "Primeira");
+                                _etiqueta = 1;
+                                workbook.SaveAs($"Impressos/ETIQUETA_REQUISICAO_MODELO_{_pagina}.xlsx");
+
+                                worksheet.Range["PRIMEIRA"].Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["PRIMEIRA"].Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["PRIMEIRA"].Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["PRIMEIRA"].Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["PRIMEIRA"].CellStyle.Font.Color = ExcelKnownColors.None;
+
+                                worksheet.Range["SEGUNDA"].Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["SEGUNDA"].Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["SEGUNDA"].Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["SEGUNDA"].Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["SEGUNDA"].CellStyle.Font.Color = ExcelKnownColors.None;
+
+                                worksheet.Range["TERCEIRA"].Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["TERCEIRA"].Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["TERCEIRA"].Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["TERCEIRA"].Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["TERCEIRA"].CellStyle.Font.Color = ExcelKnownColors.None;
+
+                                worksheet.Range["QUARTA"].Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["QUARTA"].Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["QUARTA"].Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["QUARTA"].Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.None;
+                                worksheet.Range["QUARTA"].CellStyle.Font.Color = ExcelKnownColors.None;
+
+                                _pagina++;
+                                break;
+                            }
+                        default: break;
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+
+            }
+
+            
+            try
+            {
+               
+                for (int i = 1; i < _pagina; i++)
+                {
+                    Process.Start(new ProcessStartInfo($"Impressos\\ETIQUETA_REQUISICAO_MODELO_{i}.xlsx")
+                    {
+                        Verb = "Print",
+                        UseShellExecute = true
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            
+
+            Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+        }
+
+        private ObservableCollection<QryRequisicaoDetalheModel> GetProdutosEtiqueta(long volume)
+        {
+            RequisicaoViewModel vm = (RequisicaoViewModel)DataContext;
+            return new ObservableCollection<QryRequisicaoDetalheModel>(vm.QryRequisicaoDetalhes.Where(p => p.volume == volume).Take(5));
         }
     }
 }

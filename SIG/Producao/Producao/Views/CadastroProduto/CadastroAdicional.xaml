@@ -19,7 +19,7 @@
     <Grid>
 
         <syncfusion:SfDataGrid
-            x:Name="ed"
+            x:Name="adicionais"
             Grid.Row="1"
             AddNewRowPosition="Bottom"
             ShowRowHeader="True"
@@ -56,7 +56,7 @@
                             <Button 
                                     Content="Complemento" 
                                     syncfusion:FocusManagerHelper.FocusedElement="True"
-                                    Command="{Binding Path=DataContext.RowDataCommand,ElementName=adicionais}" 
+                                    Command="{Binding Path=DataContext.RowDataCommand, ElementName=adicionais}" 
                                     CommandParameter="{Binding ElementName=adicionais}"/>
                         </DataTemplate>
                     </syncfusion:GridTemplateColumn.CellTemplate>
