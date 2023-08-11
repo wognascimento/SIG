@@ -41,10 +41,10 @@ namespace Expedicao.Views
                     loadingDetalhes.Visibility = Visibility.Hidden;
                     itens.SelectionMode = GridSelectionMode.Single;
                 }
-                else
+                else if(LocalAberto == "CARREGAMENTO")
                 {
                     loadingDetalhes.Visibility = Visibility.Hidden;
-                    BSelecionados.Visibility = Visibility.Visible;
+                    BSelecionadosRomaneio.Visibility = Visibility.Visible;
                     itens.SelectionMode = GridSelectionMode.Multiple;
                     acao.Width = 0;
                 }
@@ -58,6 +58,18 @@ namespace Expedicao.Views
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            
+           foreach (RomaneioModel selectedItem in itens.SelectedItems.Cast<RomaneioModel>())
+           {
+               Romaneios.Add(selectedItem);
+           }
+
+           Window.GetWindow(sender as DependencyObject).DialogResult = new bool?(true);
+           
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
