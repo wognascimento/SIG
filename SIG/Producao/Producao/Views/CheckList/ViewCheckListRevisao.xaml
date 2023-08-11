@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:Syncfusion="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF" 
              xmlns:local="clr-namespace:Producao.Views" 
              xmlns:vewModel="clr-namespace:Producao"
              mc:Ignorable="d" 
@@ -13,6 +13,9 @@
     <UserControl.Resources>
         <vewModel:ConverterNumber x:Key="ConverterNumber"/>
         <vewModel:ConverterBoolen x:Key="ConverterBoolen"/>
+
+        <local:PrazoColorConverter x:Key="prazoCollor"/>
+        <local:SiglaColorConverter x:Key="siglaCollor"/>
     </UserControl.Resources>
     
     <Grid>
@@ -36,7 +39,13 @@
                 <Syncfusion:GridTextColumn 
                     HeaderText="Sigla" 
                     MappingName="sigla_serv" 
-                    ColumnSizer="SizeToCells"/>
+                    ColumnSizer="SizeToCells">
+                    <Syncfusion:GridTextColumn.CellStyle>
+                        <Style TargetType="Syncfusion:GridCell">
+                            <Setter Property="Background" Value="{Binding Converter={StaticResource siglaCollor}}" />
+                        </Style>
+                    </Syncfusion:GridTextColumn.CellStyle>
+                </Syncfusion:GridTextColumn>
                 <Syncfusion:GridTextColumn 
                     HeaderText="Tema" 
                     MappingName="tema" 
@@ -79,7 +88,13 @@
                     AllowEditing="True"
                     HeaderText="Prazo Revisão" 
                     MappingName="prazo_revisao" 
-                    ColumnSizer="SizeToHeader"/>
+                    ColumnSizer="SizeToHeader">
+                    <Syncfusion:GridDateTimeColumn.CellStyle>
+                        <Style TargetType="Syncfusion:GridCell">
+                            <Setter Property="Background" Value="{Binding Converter={StaticResource prazoCollor}}" />
+                        </Style>
+                    </Syncfusion:GridDateTimeColumn.CellStyle>
+                </Syncfusion:GridDateTimeColumn>
                 <Syncfusion:GridCheckBoxColumn
                     AllowEditing="True"
                     HeaderText="OK" 

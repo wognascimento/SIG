@@ -5,11 +5,14 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Producao.Views
 {
@@ -32,8 +35,8 @@ namespace Producao.Views
             {
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Visible;
                 ViewModel vm = (ViewModel)DataContext;
-                await Task.Run(async () => await vm.GetDados());
-                await Task.Run(async () => await vm.GetRevisores());
+                await Task.Run(vm.GetDados);
+                await Task.Run(vm.GetRevisores);
                 itens.Columns["ok"].FilterPredicates.Add(new FilterPredicate() { FilterType = FilterType.Equals, FilterValue = "0    " });
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
@@ -206,6 +209,38 @@ namespace Producao.Views
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propName));
+        }
+    }
+
+    public class PrazoColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var data = value as ControleMemorialModel;
+            return data.ok.Trim().Contains("0") && data?.prazo_revisao < DateTime.Now
+                ? new SolidColorBrush(Colors.Red)
+                : DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class SiglaColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var data = value as ControleMemorialModel;
+            return data.altera_ok.Trim().Contains("0") && data.memorial_alterado_por != null
+                ? new SolidColorBrush(Colors.Yellow)
+                : DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }
