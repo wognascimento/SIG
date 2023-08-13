@@ -1,4 +1,5 @@
 ﻿using Compras.Views;
+using Microsoft.EntityFrameworkCore;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Windows.Tools.Controls;
 using Syncfusion.XlsIO;
@@ -339,28 +340,29 @@ namespace Compras
         private async Task<ObservableCollection<PedidoDetalhesModel>> InsertProdutoPedido(ObservableCollection<PedidoDetalhesModel> produtos, PedidoModel pedido)
         {
             using DatabaseContext db = new();
-            using var transaction = db.Database.BeginTransaction();
-            try
-            {
-                //await db.BulkInsertAsync(produtos);
+            var strategy = db.Database.CreateExecutionStrategy();
 
-                //var pedido = (from p in produtos select p).FirstOrDefault();
+            await strategy.ExecuteAsync(async () => {
+                using var transaction = db.Database.BeginTransaction();
+                try
+                {
+                    db.PedidoDetalhes.AddRange(produtos);
+                    await db.SaveChangesAsync();
 
-                db.PedidoDetalhes.AddRange(produtos);
-                await db.SaveChangesAsync();
+                    db.Pedidos.Update(pedido);
+                    await db.SaveChangesAsync();
 
-                db.Pedidos.Update(pedido);
-                await db.SaveChangesAsync();
+                    transaction.Commit();
+ 
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            });
 
-                transaction.Commit();
-
-                return produtos;
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-                throw;
-            }
+            return produtos;
         }
 
         private void OnAbrirPedidos(object sender, RoutedEventArgs e)

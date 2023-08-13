@@ -129,6 +129,7 @@ namespace Compras.Views
                 await Task.Run(vm.SaveFornecedorTaskAsync);
                 vm.Fornecedor = new Fornecedor();
                 tipo.Focus();
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }
             catch (Exception ex)
