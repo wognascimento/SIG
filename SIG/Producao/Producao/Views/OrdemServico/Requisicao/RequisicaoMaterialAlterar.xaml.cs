@@ -597,6 +597,11 @@ namespace Producao.Views.OrdemServico.Requisicao
                                 worksheet.Range["A8"].Text = prodChk.descricao_completa.Replace("ÚNICO", null);
 
                                 var inx = 12;
+                                worksheet.Range["A12"].Text = "";
+                                worksheet.Range["A13"].Text = "";
+                                worksheet.Range["A14"].Text = "";
+                                worksheet.Range["A15"].Text = "";
+                                worksheet.Range["A16"].Text = "";
                                 foreach (var item in GetProdutosEtiqueta(volume))
                                 {
                                     worksheet.Range[$"A{inx}"].Text = item.descricao_completa;
@@ -624,6 +629,11 @@ namespace Producao.Views.OrdemServico.Requisicao
                                 worksheet.Range["F8"].Text = prodChk.descricao_completa.Replace("ÚNICO", null);
 
                                 var inx = 12;
+                                worksheet.Range["F12"].Text = "";
+                                worksheet.Range["F13"].Text = "";
+                                worksheet.Range["F14"].Text = "";
+                                worksheet.Range["F15"].Text = "";
+                                worksheet.Range["F16"].Text = "";
                                 foreach (var item in GetProdutosEtiqueta(volume))
                                 {
                                     worksheet.Range[$"F{inx}"].Text = item.descricao_completa;
@@ -651,6 +661,11 @@ namespace Producao.Views.OrdemServico.Requisicao
                                 worksheet.Range["A25"].Text = prodChk.descricao_completa.Replace("ÚNICO", null);
 
                                 var inx = 29;
+                                worksheet.Range["A29"].Text = "";
+                                worksheet.Range["A30"].Text = "";
+                                worksheet.Range["A31"].Text = "";
+                                worksheet.Range["A32"].Text = "";
+                                worksheet.Range["A33"].Text = "";
                                 foreach (var item in GetProdutosEtiqueta(volume))
                                 {
                                     worksheet.Range[$"A{inx}"].Text = item.descricao_completa;
@@ -678,6 +693,11 @@ namespace Producao.Views.OrdemServico.Requisicao
                                 worksheet.Range["F25"].Text = prodChk.descricao_completa.Replace("ÚNICO", null);
 
                                 var inx = 29;
+                                worksheet.Range["F29"].Text = "";
+                                worksheet.Range["F30"].Text = "";
+                                worksheet.Range["F31"].Text = "";
+                                worksheet.Range["F32"].Text = "";
+                                worksheet.Range["F33"].Text = "";
                                 foreach (var item in GetProdutosEtiqueta(volume))
                                 {
                                     worksheet.Range[$"F{inx}"].Text = item.descricao_completa;
@@ -736,14 +756,16 @@ namespace Producao.Views.OrdemServico.Requisicao
             
             try
             {
-               
-                for (int i = 1; i < _pagina; i++)
+               int idx = 1;
+                for (int i = 0; i < _pagina; i++)
                 {
-                    Process.Start(new ProcessStartInfo($"Impressos\\ETIQUETA_REQUISICAO_MODELO_{i}.xlsx")
+                    Process.Start(new ProcessStartInfo($"Impressos\\ETIQUETA_REQUISICAO_MODELO_{idx}.xlsx")
                     {
                         Verb = "Print",
                         UseShellExecute = true
                     });
+
+                    idx++;
                 }
             }
             catch (Exception ex)

@@ -714,6 +714,30 @@ namespace Producao.Views.CheckList
         {
             //((MainWindow)Application.Current.MainWindow)._mdi.Items.Remove(this);
         }
+
+        private async void dgCheckListGeral_RowValidating(object sender, RowValidatingEventArgs e)
+        {
+            try
+            {
+                CheckListViewModel vm = (CheckListViewModel)DataContext;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                var dado = e.RowData as QryCheckListGeralModel; //e.RowData = {Producao.QryCheckListGeralModel}
+                ComplementoCheckListModel CompleChkList = new()
+                {
+                    codcompl = dado?.codcompl,
+                    obs = dado?.obs,
+                    orient_montagem = dado?.orient_montagem,
+                    orient_desmont = dado?.orient_desmont
+                };
+                await vm.EditComplementoCheckListAsync(CompleChkList);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex?.InnerException?.Message, "Erro ao inserir", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
     }
 
     public class NameButtonConverter : IValueConverter

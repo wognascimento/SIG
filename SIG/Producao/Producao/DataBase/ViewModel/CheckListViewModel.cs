@@ -866,6 +866,39 @@ namespace Producao
             }
         }
 
+        public async Task EditComplementoCheckListAsync(ComplementoCheckListModel compChkList)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                //db.Entry(ComplementoCheckList).State = ComplementoCheckList.codcompl == null ? EntityState.Added : EntityState.Modified;
+                var comple = await db.ComplementoCheckLists.FirstOrDefaultAsync(p => p.codcompl == compChkList.codcompl);
+                if (compChkList != null)
+                {
+                    if (compChkList.obs != "")
+                    {
+                        comple.obs = compChkList.obs;
+                        db.Entry(comple).Property(p => p.obs).IsModified = true;
+                    }
+                    if (compChkList.orient_montagem != "")
+                    {
+                        comple.orient_montagem = compChkList.orient_montagem;
+                        db.Entry(comple).Property(p => p.orient_montagem).IsModified = true;
+                    }
+                    if (compChkList.orient_desmont != "")
+                    {
+                        comple.orient_desmont = compChkList.orient_desmont;
+                        db.Entry(comple).Property(p => p.orient_desmont).IsModified = true;
+                    }
+                    await db.SaveChangesAsync();
+                }
+            }
+            catch (NpgsqlException)
+            {
+                throw;
+            }
+        }
+
         public async Task<QryCheckListGeralModel> GetSelectCheckListAsync(long CodCompl)
         {
             try

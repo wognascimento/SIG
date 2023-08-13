@@ -449,7 +449,7 @@
             ShowRowHeader="True" 
             ItemsSource="{Binding CheckListGerais}"
             SelectedItem="{Binding CheckListGeral, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            SelectionChanged="OnSelectionChanged" FontSize="10">
+            SelectionChanged="OnSelectionChanged" FontSize="10" RowValidating="dgCheckListGeral_RowValidating">
             <syncfusion:SfDataGrid.Columns>
 
                 <syncfusion:GridNumericColumn 
@@ -489,9 +489,9 @@
                     MappingName="codcompl" 
                     DisplayBinding="{Binding codcompl, Converter={StaticResource ConverterNumber}}" 
                     ColumnSizer="SizeToHeader" />
-                <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE PRODUÇÃO" MappingName="obs" ColumnSizer="SizeToHeader"/>
-                <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE MONTAGEM" MappingName="orient_montagem" ColumnSizer="SizeToHeader"/>
-                <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE DESMONTAGEM" MappingName="orient_desmont" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE PRODUÇÃO" MappingName="obs" ColumnSizer="SizeToHeader" AllowEditing="True"/>
+                <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE MONTAGEM" MappingName="orient_montagem" ColumnSizer="SizeToHeader" AllowEditing="True"/>
+                <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE DESMONTAGEM" MappingName="orient_desmont" ColumnSizer="SizeToHeader" AllowEditing="True"/>
                 <syncfusion:GridTextColumn MappingName="alteradopordescadic" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridDateTimeColumn MappingName="dataalteradescadic" ColumnSizer="SizeToHeader"/>
             </syncfusion:SfDataGrid.Columns>
