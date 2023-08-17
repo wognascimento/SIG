@@ -1,4 +1,5 @@
 using BarcodeScanner.Mobile;
+using Plugin.Maui.Audio;
 using ScannerQRcode.Data;
 using ScannerQRcode.Data.Api.Models;
 using ScannerQRcode.Models;
@@ -15,12 +16,14 @@ public partial class ReaderEnderecamento : ContentPage
 {
 
     private readonly VolumeScannerRepository _volumeScannerRepository;
+    private readonly IAudioManager audioManager;
     private EnderecoGalpao _endereco;
 
-    public ReaderEnderecamento(VolumeScannerRepository volumeScannerRepository, ReaderEnderecamentoViewModel vm)
+    public ReaderEnderecamento(VolumeScannerRepository volumeScannerRepository, ReaderEnderecamentoViewModel vm, IAudioManager audioManager)
 	{
-        _volumeScannerRepository = volumeScannerRepository;
         InitializeComponent();
+        _volumeScannerRepository = volumeScannerRepository;
+        this.audioManager = audioManager;
 #if ANDROID
         Methods.SetSupportBarcodeFormat(BarcodeFormats.QRCode | BarcodeFormats.Code39 | BarcodeFormats.Code128);
         Methods.AskForRequiredPermission();
@@ -103,6 +106,10 @@ public partial class ReaderEnderecamento : ContentPage
                     int secondsToVibrate = Random.Shared.Next(1, 4);
                     TimeSpan vibrationLength = TimeSpan.FromSeconds(secondsToVibrate);
                     Vibration.Default.Vibrate(vibrationLength);
+
+                    var pError = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("error.mp3"));
+                    pError.Play();
+
                     await DisplayAlert("Endereço", "Código não corresponde há um endereço", "OK");
                     Camera.IsScanning = true;
                 }
@@ -115,6 +122,10 @@ public partial class ReaderEnderecamento : ContentPage
                     int secondsToVibrate = Random.Shared.Next(1, 4);
                     TimeSpan vibrationLength = TimeSpan.FromSeconds(secondsToVibrate);
                     Vibration.Default.Vibrate(vibrationLength);
+
+                    var pError = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("error.mp3"));
+                    pError.Play();
+
                     await DisplayAlert("Volume", "Código não corresponde há um volume de shopping", "OK");
                     Camera.IsScanning = true;
                 }
@@ -122,14 +133,16 @@ public partial class ReaderEnderecamento : ContentPage
                 {
                     await _volumeScannerRepository.CreateVolumeEnderecamento(new VolumeEnderecamento { Endereco = _endereco.Barcode, Volume = result, Created = DateTime.Now });
                     var dados = await _volumeScannerRepository.QueryAllVolumeEnderecados();
-                    send.Text = $"Enviar {dados.Count} volume(s)";
+                    //var groupedCustomerList = (dados.GroupBy(u => u.Volume).Select(grp => grp.ToList()).ToList()).Count;
+                    send.Text = $"Enviar {(dados.GroupBy(u => u.Volume).Select(grp => grp.ToList()).ToList()).Count} volume(s)";
+
+                    var pSucess = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("sucess.mp3"));
+                    pSucess.Play();
                 }
             }
 
             Camera.IsScanning = true;
         });
-
-
 
     }
 

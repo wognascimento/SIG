@@ -1,5 +1,6 @@
 
 using BarcodeScanner.Mobile;
+using Plugin.Maui.Audio;
 using ScannerQRcode.Data;
 using ScannerQRcode.Data.Api.Models;
 using ScannerQRcode.Models;
@@ -12,18 +13,19 @@ namespace ScannerQRcode.Views;
 public partial class ReaderCargaShopping : ContentPage
 {
     private readonly VolumeScannerRepository _volumeScannerRepository;
-
+    private readonly IAudioManager audioManager;
     private LookupCarregamento lookupCarregamento;
 
-    public ReaderCargaShopping(VolumeScannerRepository volumeScannerRepository, ReaderCargaShoppingViewModel vm)
+    public ReaderCargaShopping(VolumeScannerRepository volumeScannerRepository, ReaderCargaShoppingViewModel vm, IAudioManager audioManager)
 	{
-        _volumeScannerRepository = volumeScannerRepository;
         InitializeComponent();
+        _volumeScannerRepository = volumeScannerRepository;
+        this.audioManager = audioManager;
         //BarcodeScanner.Mobile.Methods.SetSupportBarcodeFormat(BarcodeFormats.Code39 | BarcodeFormats.QRCode | BarcodeFormats.Code128);
-        #if ANDROID
+#if ANDROID
         //Methods.SetSupportBarcodeFormat(BarcodeFormats.QRCode | BarcodeFormats.Code39);
         Methods.AskForRequiredPermission();
-        #endif
+#endif
         BindingContext = vm;
         /*
         cameraView.BarCodeOptions = new()
@@ -138,7 +140,7 @@ public partial class ReaderCargaShopping : ContentPage
             //await DisplayAlert("type", $"Tipo {type} ", "OK");
             //return;
 
-            if (type == BarcodeFormats.Code39.ToString())
+            if (type == BarcodeFormats.Code39.ToString() || type == BarcodeFormats.Code128.ToString())
                 lookup = await _volumeScannerRepository.GetVolumeLookupByCode39(result);
             else if (type == BarcodeFormats.QRCode.ToString())
                 lookup = await _volumeScannerRepository.GetVolumeLookupByQrCode(result);
@@ -149,14 +151,20 @@ public partial class ReaderCargaShopping : ContentPage
                 await _volumeScannerRepository.CreateVolumeScanner(new VolumeScanner { Volume = lookup.Volume, Created = DateTime.Now ,Tipo = "CARGA-SHOPPING" });
                 var dados = await _volumeScannerRepository.GetVolumeScanners();
                 send.Text = $"Enviar {dados.Count} volume(s)";
+
+                var pSucess = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("sucess.mp3"));
+                pSucess.Play();
             }
             else
             {
                 Camera.IsScanning = false;
                 int secondsToVibrate = Random.Shared.Next(1, 4);
                 TimeSpan vibrationLength = TimeSpan.FromSeconds(secondsToVibrate);
-
                 Vibration.Default.Vibrate(vibrationLength);
+
+                var pError = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("error.mp3"));
+                pError.Play();
+
                 await DisplayAlert("Volume", $"Volume {result} Não presente no Lookup", "OK");
                 Camera.IsScanning = true;
             }

@@ -34,42 +34,58 @@
 	  <ApplicationTitle>Coletor Expedição</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.expedicao.coletor</ApplicationId>
 	  <AndroidKeyStore>False</AndroidKeyStore>
+	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.0.2</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
 	  <ApplicationTitle>Coletor Expedição</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.expedicao.coletor</ApplicationId>
+	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.0.2</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Coletor Expedição</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.expedicao.coletor</ApplicationId>
+	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.0.2</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationTitle>Coletor Expedição</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.expedicao.coletor</ApplicationId>
+	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.0.2</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
 	  <ApplicationTitle>Coletor Expedição</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.expedicao.coletor</ApplicationId>
 	  <AndroidKeyStore>False</AndroidKeyStore>
+	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.0.2</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
 	  <ApplicationTitle>Coletor Expedição</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.expedicao.coletor</ApplicationId>
+	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.0.2</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Coletor Expedição</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.expedicao.coletor</ApplicationId>
+	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.0.2</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationTitle>Coletor Expedição</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.expedicao.coletor</ApplicationId>
+	  <ApplicationVersion>2</ApplicationVersion>
+	  <ApplicationDisplayVersion>1.0.0.2</ApplicationDisplayVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
@@ -104,6 +120,10 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\AppIcon\fundo.svg" />
+	  <None Remove="Resources\Raw\dotnetbot.json" />
+	  <None Remove="Resources\Raw\error.mp3" />
+	  <None Remove="Resources\Raw\sucess.mp3" />
+	  <None Remove="Resources\Raw\ukelele.mp3" />
 	  <None Remove="Resources\Splash\icon_logo.svg" />
 	  <None Remove="Resources\Splash\logo_splash.svg" />
 	  <None Remove="Resources\Splash\splash.svg" />
@@ -117,11 +137,12 @@
 	<ItemGroup>
 		<PackageReference Include="BarcodeScanner.Mobile.Maui" Version="7.0.0.1-pre" />
 		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Plugin.LocalNotification" Version="10.1.8" />
+		<PackageReference Include="Plugin.Maui.Audio" Version="1.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.5" />
 		<PackageReference Include="SQLitePCLRaw.core" Version="2.1.5" />

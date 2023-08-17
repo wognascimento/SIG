@@ -50,7 +50,12 @@
             SelectedItem="{Binding ControlePlanilhaGrupo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             CurrentCellValueChanged="OnCurrentCellValueChanged" 
             RowValidated="OnRowValidated" 
-            RowValidating="OnRowValidating" AllowResizingHiddenColumns="True" AllowResizingColumns="True" >
+            RowValidating="OnRowValidating" 
+            AllowResizingHiddenColumns="True" 
+            AllowResizingColumns="True" 
+            SelectionUnit="Row"
+            SelectionMode="Multiple"
+            GridCopyOption="CopyData,IncludeHeaders,IncludeFormat" >
             <syncfusion:SfDataGrid.Columns>
                 <!--
                 <syncfusion:GridTextColumn  MappingName="num_os_produto"/>

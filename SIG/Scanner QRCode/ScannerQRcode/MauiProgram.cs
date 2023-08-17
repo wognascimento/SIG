@@ -2,6 +2,7 @@ using BarcodeScanner.Mobile;
 using Camera.MAUI;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Plugin.Maui.Audio;
 using ScannerQRcode.Data;
 using ScannerQRcode.ViewModels;
 using ScannerQRcode.Views;
@@ -43,6 +44,8 @@ public static class MauiProgram
         //builder.Services.AddSingleton<DatabaseContext>();
         //builder.Services.AddSingleton<ReaderEnderecamentoViewModel>();
         //builder.Services.AddSingleton<ReaderEnderecamento>();
+
+        builder.Services.AddSingleton(AudioManager.Current);
 
         builder.Services.AddSingleton(new VolumeScannerRepository("coletor.db"));
 

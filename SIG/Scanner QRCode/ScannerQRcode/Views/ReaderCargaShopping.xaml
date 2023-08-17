@@ -19,7 +19,7 @@
             OnDetected="Camera_OnDetected" 
             TorchOn="False" 
             VibrationOnDetected="True" 
-            ScanInterval="1000"/>
+            ScanInterval="2000"/>
 
         <Grid 
             Grid.Row="0"

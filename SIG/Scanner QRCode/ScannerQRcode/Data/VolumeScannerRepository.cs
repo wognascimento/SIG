@@ -121,6 +121,7 @@ namespace ScannerQRcode.Data
             await Init();
             return await database.Table<VolumeEnderecamento>().ToListAsync();
         }
+        
 
         public async Task<int> DeleteVolumeEnderecados(VolumeEnderecamento enderecamento)
         {

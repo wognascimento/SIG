@@ -18,8 +18,8 @@
             x:Name="Camera"
             OnDetected="Camera_OnDetected" 
             TorchOn="False" 
-            VibrationOnDetected="True" 
-            ScanInterval="1000"/>
+            VibrationOnDetected="False" 
+            ScanInterval="2000"/>
 
         <telerik:RadBusyIndicator x:Name="BusyIndicator"
                                     AnimationContentHeightRequest="100"
