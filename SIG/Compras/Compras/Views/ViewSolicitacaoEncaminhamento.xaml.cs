@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.Utility;
 using Syncfusion.Windows.Controls.Gantt;
 using Syncfusion.XlsIO;
@@ -17,6 +18,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Compras.Views
 {
@@ -29,7 +31,151 @@ namespace Compras.Views
         {
             InitializeComponent();
             this.DataContext = new SolicitacaoEncaminhadaViewModel();
+
+            this.itensSolicitados.RowDragDropController = new GridRowDragDropControllerExt();
+            this.ItensPedido.DragOver += ListView_DragOver;
+            this.ItensPedido.PreviewMouseMove += ListView_PreviewMouseMove;
+            this.ItensPedido.Drop += ListView_Drop;
         }
+
+        /// <summary>
+        /// to add the dropped records in the ListView control
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListView_Drop(object sender, DragEventArgs e)
+        {
+            SolicitacaoEncaminhadaViewModel vm = (SolicitacaoEncaminhadaViewModel)DataContext;
+            
+            foreach (SolicitacaoEncaminhadaModel item in records)
+            {
+                /*
+                var prod = new ItemPedidoFileModel
+                {
+                    cod_item = item.cod_item,
+                    codcompleadicional = item.codcompleadicional,
+                    planilha = item.planilha,
+                    descricao_completa = item.descricao_completa,
+                    unidade = item.unidade,
+                    quantidade = item.quantidade,
+                    itens = JsonConvert.SerializeObject((from i in vm.ItensMontarPedido where i.codcompleadicional == item.codcompleadicional select new { i.cod_item }).ToList())
+                };
+                this.itensSolicitados.View.Remove(item);
+                ((SolicitacaoEncaminhadaViewModel)DataContext).ItensPedido.Add(prod);
+                */
+
+
+                var dados = (from t in vm.ItensMontarPedido where t.cod_item == item.cod_item select t).ToList();
+                if (dados.Count > 0)
+                {
+                    MessageBox.Show("Item já presente no pedido", "Adicionar Item", MessageBoxButton.OK, MessageBoxImage.Information);
+                    continue;
+                }
+
+                if (item?.quantidade_compra == null)
+                {
+                    MessageBox.Show("Quantidade de compras esta em branco", "Adicionar Item", MessageBoxButton.OK, MessageBoxImage.Information);
+                    continue;
+                }
+
+                vm.ItensMontarPedido.Add(
+                    new ItemPedidoFileModel
+                    {
+                        cod_item = item.cod_item,
+                        codcompleadicional = item.codcompleadicional,
+                        planilha = item.planilha,
+                        descricao_completa = item.descricao_completa,
+                        unidade = item.unidade,
+                        quantidade = item.quantidade_compra
+                    });
+
+                vm.ItensPedido = (from t in vm.ItensMontarPedido
+                                  group t by new { t.codcompleadicional, t.planilha, t.descricao_completa, t.unidade }
+                                  into grp
+                                  select new ItemPedidoFileModel
+                                  {
+                                      codcompleadicional = grp.Key.codcompleadicional,
+                                      planilha = grp.Key.planilha,
+                                      descricao_completa = grp.Key.descricao_completa,
+                                      unidade = grp.Key.unidade,
+                                      quantidade = grp.Sum(t => t.quantidade),
+                                      itens = JsonConvert.SerializeObject((from i in vm.ItensMontarPedido where i.codcompleadicional == grp.Key.codcompleadicional select new { i.cod_item }).ToList())
+                                  }).ToList();
+
+                this.itensSolicitados.View.Remove(item);
+            }
+            
+        }
+
+        /// <summary>
+        /// to select and dragged the record from ListView to other control
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListView_PreviewMouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                ListBox dragSource = null;
+                var records = new ObservableCollection<object>();
+                ListBox parent = (ListBox)sender;
+                dragSource = parent;
+                object data = GetDataFromListBox(dragSource, e.GetPosition(parent));
+
+                records.Add(data);
+
+                var dataObject = new DataObject();
+                dataObject.SetData("ListViewRecords", records);
+                dataObject.SetData("ListView", ItensPedido);
+
+                if (data != null)
+                {
+                    DragDrop.DoDragDrop(parent, dataObject, DragDropEffects.Move);
+                }
+
+            }
+            e.Handled = true;
+        }
+
+        private static object GetDataFromListBox(ListBox source, Point point)
+        {
+            UIElement element = source.InputHitTest(point) as UIElement;
+            if (element != null)
+            {
+                object data = DependencyProperty.UnsetValue;
+                while (data == DependencyProperty.UnsetValue)
+                {
+                    data = source.ItemContainerGenerator.ItemFromContainer(element);
+                    if (data == DependencyProperty.UnsetValue)
+                    {
+                        element = VisualTreeHelper.GetParent(element) as UIElement;
+                    }
+                    if (element == source)
+                    {
+                        return null;
+                    }
+                }
+                if (data != DependencyProperty.UnsetValue)
+                {
+                    return data;
+                }
+            }
+            return null;
+        }
+        //[0] = {Compras.SolicitacaoEncaminhadaModel}
+        ObservableCollection<object> records = new ObservableCollection<object>();
+
+        /// <summary>
+        /// to move the dragged items form the ListView control
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListView_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("Records"))
+                records = e.Data.GetData("Records") as ObservableCollection<object>;
+        }
+
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -281,6 +427,7 @@ namespace Compras.Views
         public SolicitacaoEncaminhadaViewModel() 
         {
             this.ItensMontarPedido = new ObservableCollection<ItemPedidoFileModel>();
+            this.ItensPedido = new ObservableCollection<ItemPedidoFileModel>();
         }
 
 
@@ -548,6 +695,107 @@ namespace Compras.Views
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
+        }
+    }
+
+    public class GridRowDragDropControllerExt : GridRowDragDropController
+    {
+        ObservableCollection<object> draggingRecords = new ObservableCollection<object>();
+
+        /// <summary>
+        /// Occurs when the input system reports an underlying dragover event with this element as the potential drop target.
+        /// </summary>
+        /// <param name="args">An <see cref="T:Windows.UI.Xaml.DragEventArgs">DragEventArgs</see> that contains the event data.</param>
+        /// <param name="rowColumnIndex">Specifies the row column index based on the mouse point.</param>
+        protected override void ProcessOnDragOver(DragEventArgs args, RowColumnIndex rowColumnIndex)
+        {
+            if (args.Data.GetDataPresent("ListViewRecords"))
+                draggingRecords = args.Data.GetData("ListViewRecords") as ObservableCollection<object>;
+            else
+                draggingRecords = args.Data.GetData("Records") as ObservableCollection<object>;
+
+            if (draggingRecords == null)
+                return;
+
+            //To get the dropping position of the record
+            var dropPosition = GetDropPosition(args, rowColumnIndex, draggingRecords);
+
+            //To Show the draggable popup with the DropAbove/DropBelow message
+            ShowDragDropPopup(dropPosition, draggingRecords, args);
+            //To Show the up and down indicators while dragging the row
+            ShowDragIndicators(dropPosition, rowColumnIndex, args);
+
+            args.Handled = true;
+        }
+
+        ListView listview;
+
+        /// <summary>
+        /// Occurs when the input system reports an underlying drop event with this element as the drop target.
+        /// </summary>
+        /// <param name="args">An <see cref="T:Windows.UI.Xaml.DragEventArgs">DragEventArgs</see> that contains the event data.</param>
+        /// <param name="rowColumnIndex">Specifies the row column index based on the mouse point.</param>
+        protected override void ProcessOnDrop(DragEventArgs args, RowColumnIndex rowColumnIndex)
+        {
+            if (args.Data.GetDataPresent("ListView"))
+                listview = args.Data.GetData("ListView") as ListView;
+
+            if (!DataGrid.SelectionController.CurrentCellManager.CheckValidationAndEndEdit())
+                return;
+
+            //To get the dropping position of the record
+            var dropPosition = GetDropPosition(args, rowColumnIndex, draggingRecords);
+            if (dropPosition == DropPosition.None)
+                return;
+
+            // to get the index of dropping record
+            var droppingRecordIndex = this.DataGrid.ResolveToRecordIndex(rowColumnIndex.RowIndex);
+
+            if (droppingRecordIndex < 0)
+                return;
+
+            // to insert the dragged records based on dropping records index 
+            foreach (var record in draggingRecords)
+            {
+                if (listview != null)
+                {
+                    (listview.ItemsSource as ObservableCollection<SolicitacaoEncaminhadaModel>).Remove(record as SolicitacaoEncaminhadaModel);
+                    var sourceCollection = this.DataGrid.View.SourceCollection as IList;
+
+                    if (dropPosition == DropPosition.DropBelow)
+                        sourceCollection.Insert(droppingRecordIndex + 1, record);
+                    else
+                        sourceCollection.Insert(droppingRecordIndex, record);
+                }
+                else
+                {
+                    var draggingIndex = this.DataGrid.ResolveToRowIndex(draggingRecords[0]);
+
+                    if (draggingIndex < 0)
+                    {
+                        return;
+                    }
+
+                    // to get the index of dragging row
+                    var recordindex = this.DataGrid.ResolveToRecordIndex(draggingIndex);
+                    // to ger the record based on index
+                    var recordEntry = this.DataGrid.View.Records[recordindex];
+                    this.DataGrid.View.Records.Remove(recordEntry);
+
+                    // to insert the dragged records to particular position
+                    if (draggingIndex < rowColumnIndex.RowIndex && dropPosition == DropPosition.DropAbove)
+                        this.DataGrid.View.Records.Insert(droppingRecordIndex - 1, this.DataGrid.View.Records.CreateRecord(record));
+                    else if (draggingIndex > rowColumnIndex.RowIndex && dropPosition == DropPosition.DropBelow)
+                        this.DataGrid.View.Records.Insert(droppingRecordIndex + 1, this.DataGrid.View.Records.CreateRecord(record));
+                    else
+                        this.DataGrid.View.Records.Insert(droppingRecordIndex, this.DataGrid.View.Records.CreateRecord(record));
+                }
+            }
+
+            //Closes the Drag arrow indication all the rows
+            CloseDragIndicators();
+            //Closes the Drag arrow indication all the rows
+            CloseDraggablePopUp();
         }
     }
 }

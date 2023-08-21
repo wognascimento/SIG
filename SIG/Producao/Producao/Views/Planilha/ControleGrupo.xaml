@@ -54,7 +54,7 @@
             AllowResizingHiddenColumns="True" 
             AllowResizingColumns="True" 
             SelectionUnit="Row"
-            SelectionMode="Multiple"
+            SelectionMode="Extended"
             GridCopyOption="CopyData,IncludeHeaders,IncludeFormat" >
             <syncfusion:SfDataGrid.Columns>
                 <!--

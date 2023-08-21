@@ -33,7 +33,12 @@
                 AllowResizingColumns="True" 
                 FontSize="10" 
                 FontFamily="Verdana"
-                MouseDoubleClick="OnDbClick" RowValidated="itensSolicitados_RowValidated">
+                MouseDoubleClick="OnDbClick" 
+                RowValidated="itensSolicitados_RowValidated"
+                SelectionMode="Extended"
+                RowSelectionBrush="Green"
+                ShowRowHeader="True"
+                AllowDraggingRows="True">
 
 
                 <syncfusion:SfDataGrid.RecordContextMenu>
@@ -98,14 +103,17 @@
                     HorizontalAlignment="Center" 
                     FontSize="15"/>
 
-                <syncfusion:SfDataGrid x:Name="ItensPedido"
+                <syncfusion:SfDataGrid 
+                    x:Name="ItensPedido"
                     Grid.Row="1"
                     ItemsSource="{Binding ItensPedido}"
                     ColumnSizer="AutoLastColumnFill" 
                     AutoGenerateColumns="false" 
                     AllowFiltering="True" 
                     AllowResizingColumns="True"
-                    FontSize="10" MouseDoubleClick="SfDataGrid_MouseDoubleClick">
+                    FontSize="10" 
+                    MouseDoubleClick="SfDataGrid_MouseDoubleClick"
+                    AllowDrop="True">
                     <syncfusion:SfDataGrid.Columns>
                         <syncfusion:GridTextColumn MappingName="planilha"/>
                         <syncfusion:GridTextColumn MappingName="descricao_completa"/>

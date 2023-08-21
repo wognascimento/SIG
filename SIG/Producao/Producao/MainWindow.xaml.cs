@@ -900,5 +900,15 @@ namespace Producao
         {
             adicionarFilho(new EtiquetaConstrucao(), "CADASTRO DE CONSTRUÇÃO SHOPPING", "CADASTRO_CONSTRUCAO_SHOPPING");
         }
+
+        private void OnLiberarProdutoBloqueadoClick(object sender, RoutedEventArgs e)
+        {
+            adicionarFilho(new DesbloqueioAcertoEstoque(), "LIBERA PRODUTO BLOQUEADO", "LIBERA_PRODUTO_BLOQUEADO");
+        }
+
+        private void OnOpenMemorial(object sender, RoutedEventArgs e)
+        {
+            adicionarFilho(new ViewMemorial(), "MEMORIAL", "MEMORIAL");
+        }
     }
 }

@@ -217,7 +217,11 @@ namespace Producao.Views
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var data = value as ControleMemorialModel;
-            return data.ok.Trim().Contains("0") && data?.prazo_revisao < DateTime.Now
+
+            if (data == null)
+                return DependencyProperty.UnsetValue;
+
+            return data.ok.Trim().Contains('0') && data?.prazo_revisao < DateTime.Now
                 ? new SolidColorBrush(Colors.Red)
                 : DependencyProperty.UnsetValue;
         }
@@ -232,8 +236,13 @@ namespace Producao.Views
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+      
             var data = value as ControleMemorialModel;
-            return data.altera_ok.Trim().Contains("0") && data.memorial_alterado_por != null
+
+            if (data == null)
+                return DependencyProperty.UnsetValue;
+
+            return data.altera_ok.Trim().Contains('0') && data.memorial_alterado_por != null
                 ? new SolidColorBrush(Colors.Yellow)
                 : DependencyProperty.UnsetValue;
         }

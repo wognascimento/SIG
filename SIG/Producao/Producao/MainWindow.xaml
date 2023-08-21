@@ -29,6 +29,7 @@
                         <syncfusion:MenuItemAdv Header="Imprimir" Click="OnEtiquetaChecklistEmitidaClick"/>
                     </syncfusion:MenuItemAdv>
                 </syncfusion:MenuItemAdv>
+                <syncfusion:MenuItemAdv Header="Memorial" Click="OnOpenMemorial"/>
                 <syncfusion:MenuItemAdv Header="Funxma"/>
                 <syncfusion:MenuItemAdv Header="Prefeitura"/>
             </syncfusion:MenuItemAdv>
@@ -129,6 +130,7 @@
                 <syncfusion:MenuItemAdv Header="Movimentações">
                     <syncfusion:MenuItemAdv Header="Entrada" Click="OnEntradaEstoqueClick"/>
                     <syncfusion:MenuItemAdv Header="Saida" Click="OnSaidaEstoqueClick"/>
+                    <syncfusion:MenuItemAdv Header="Libera Produto Bloqueado" Click="OnLiberarProdutoBloqueadoClick"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Baixa de Requisição" Click="OnBaixaRequisicaoClick"/>
             </syncfusion:MenuItemAdv>

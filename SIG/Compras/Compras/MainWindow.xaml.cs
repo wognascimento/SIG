@@ -218,7 +218,8 @@ namespace Compras
                     var pedido = worksheet.Range["E4"].Value;
                     var PedidoDt = worksheet.Range["G4"].Value;
                     var PedidoEntrega = worksheet.Range["C9"].Value;
-                    var PedidoNota = worksheet.Range["E9"].Value;
+                    var PedidoDnota = worksheet.Range["E9"].Value;
+                    var PedidoNnota = worksheet.Range["G9"].Value;
                     var empresa = worksheet.Range["C6"].Value;
                     var fornecedor = worksheet.Range["C7"].Value;
                     var condicoes = worksheet.Range["D8"].Value;
@@ -252,9 +253,15 @@ namespace Compras
                     {
                         MessageBox.Show("Data de entrega não informada", "Valiação de Dados");
                         return;
-                    }else if (PedidoNota == "" || PedidoNota == "#N/A")
+                    }
+                    else if (PedidoDnota == "" || PedidoDnota == "#N/A")
                     {
                         MessageBox.Show("Data da emissão da nota não informada", "Valiação de Dados");
+                        return;
+                    }
+                    else if (PedidoNnota == "" || PedidoNnota == "#N/A")
+                    {
+                        MessageBox.Show("Número da nota não informada", "Valiação de Dados");
                         return;
                     }
 
@@ -305,7 +312,8 @@ namespace Compras
                             status = "FINALIZADO", 
                             status_por = Environment.UserName, 
                             status_data = DateTime.Now,
-                            data_emissao_nf = DateTime.Parse(PedidoNota),
+                            data_emissao_nf = DateTime.Parse(PedidoDnota),
+                            nf = PedidoNnota,
                             dataentrega = DateTime.Parse(PedidoEntrega),
                             comprador = Environment.UserName,
                         };
