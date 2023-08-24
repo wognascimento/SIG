@@ -217,6 +217,37 @@ namespace Producao.Views.OrdemServico.Produto
             });
         }
 
+        static BaseCommand? cancelar;
+        public static BaseCommand Cancelar
+        {
+            get
+            {
+                cancelar ??= new BaseCommand(OnCancelarClicked);
+                return cancelar;
+            }
+        }
+
+        private async static void OnCancelarClicked(object obj)
+        {
+            var grid = ((GridRecordContextMenuInfo)obj).DataGrid;
+            EmitirOrdemServicoProdutoViewModel vm = (EmitirOrdemServicoProdutoViewModel)grid.DataContext;
+            var item = grid.SelectedItem as OrdemServicoEmissaoAbertaForm;
+            try
+            {
+                using DatabaseContext db = new();
+                ObsOsModel obs = await db.ObsOs.Where(x => x.num_os_produto == item.num_os_produto || x.num_caminho == item.num_caminho).FirstOrDefaultAsync();
+                obs.cancelar = true;
+                obs.cancelado_por = Environment.UserName;
+                obs.cancelado_em = DateTime.Now;
+                await db.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+
 
         private static async Task ImprimpirOS(ObservableCollection<OsEmissaoProducaoImprimirModel> servicos, EmitirOrdemServicoProdutoViewModel vm)
         {

@@ -21,5 +21,8 @@ namespace Producao
         public DateTime? solicitado_data { get; set; }
         public string? emitida { get; set; }
         public long? produtos_servico_num_os_servico {  get; set; }
+        public bool? cancelar { get; set; }
+        public string? cancelado_por { get; set; }
+        public DateTime? cancelado_em { get; set; }
     }
 }

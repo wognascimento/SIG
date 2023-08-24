@@ -102,7 +102,8 @@ namespace Producao.Views.OrdemServico.Produto
                 var os = await db.ProdutoServicos.FindAsync(baixa.num_os_servico);
                 os.recebido_setor_data = baixa.recebido_setor_data;
                 os.concluida_os_data = baixa.concluida_os_data;
-                await db.ProdutoServicos.SingleMergeAsync(os);
+                //await db.ProdutoServicos.SingleMergeAsync(os);
+                await db.SaveChangesAsync();
             }
             catch (Exception)
             {

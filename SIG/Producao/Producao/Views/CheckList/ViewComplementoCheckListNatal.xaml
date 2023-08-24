@@ -112,6 +112,7 @@
                 <syncfusion:GridTextColumn MappingName="descricao"/>
                 <syncfusion:GridTextColumn MappingName="obs"/>
                 <syncfusion:GridTextColumn MappingName="orient_montagem"/>
+                <syncfusion:GridTextColumn MappingName="ordem" HeaderText="ID"/>
                 <syncfusion:GridTextColumn MappingName="item_memorial"/>
                 <syncfusion:GridNumericColumn 
                     MappingName="codcompl" 
