@@ -890,6 +890,11 @@ namespace Producao
                         comple.orient_desmont = compChkList.orient_desmont;
                         db.Entry(comple).Property(p => p.orient_desmont).IsModified = true;
                     }
+                    if (compChkList.ordem != "")
+                    {
+                        comple.ordem = compChkList.ordem;
+                        db.Entry(comple).Property(p => p.ordem).IsModified = true;
+                    }
                     await db.SaveChangesAsync();
                 }
             }

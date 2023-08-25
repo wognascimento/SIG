@@ -234,15 +234,25 @@ namespace Producao.Views.OrdemServico.Produto
             var item = grid.SelectedItem as OrdemServicoEmissaoAbertaForm;
             try
             {
+                var mensage = MessageBox.Show("Deseja cancelar essa solicitação?", "Cacelar", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (mensage == MessageBoxResult.No)
+                    return;
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 using DatabaseContext db = new();
-                ObsOsModel obs = await db.ObsOs.Where(x => x.num_os_produto == item.num_os_produto || x.num_caminho == item.num_caminho).FirstOrDefaultAsync();
+                ObsOsModel? obs = await db.ObsOs.Where(x => x.num_os_produto == item.num_os_produto || x.num_caminho == item.num_caminho).FirstOrDefaultAsync();
                 obs.cancelar = true;
                 obs.cancelado_por = Environment.UserName;
                 obs.cancelado_em = DateTime.Now;
                 await db.SaveChangesAsync();
+
+                vm.OSsAberta = await Task.Run(vm.GetOSsEmAbertasAsync);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
             }
             catch (Exception ex)
             {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
 

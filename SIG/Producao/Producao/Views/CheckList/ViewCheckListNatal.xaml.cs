@@ -727,7 +727,8 @@ namespace Producao.Views.CheckList
                     codcompl = dado?.codcompl,
                     obs = dado?.obs,
                     orient_montagem = dado?.orient_montagem,
-                    orient_desmont = dado?.orient_desmont
+                    orient_desmont = dado?.orient_desmont,
+                    ordem = dado?.id
                 };
                 await vm.EditComplementoCheckListAsync(CompleChkList);
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });

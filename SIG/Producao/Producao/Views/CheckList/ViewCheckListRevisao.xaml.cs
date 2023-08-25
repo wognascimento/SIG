@@ -121,12 +121,16 @@ namespace Producao.Views
                 record.ok_revisao_alterada = "-1";
                 //var value = record.inativo;
             }
+        }
 
+        private async void itens_RowValidating(object sender, RowValidatingEventArgs e)
+        {
             try
             {
+                ViewModel vm = (ViewModel)DataContext;
+                var record = e.RowData as ControleMemorialModel; 
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 await Task.Run(() => vm.AtualizarControleAsync(record));
-                grid.View.Refresh();
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)

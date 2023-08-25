@@ -97,8 +97,8 @@ namespace Producao.Views.CheckList
                     {
                         vm.Etiqueta.codvol = null;
                         vm.Etiqueta.qtd = 0;
-                        vm.Etiqueta.criado_por = Environment.UserName;
-                        vm.Etiqueta.criado_em = DateTime.Now;
+                        //vm.Etiqueta.criado_por = Environment.UserName;
+                        //vm.Etiqueta.criado_em = DateTime.Now;
                     }
                         
                     vm.Etiqueta = await Task.Run(() => vm.AddEtiquetaAsync(vm.Etiqueta));
@@ -177,7 +177,14 @@ namespace Producao.Views.CheckList
         private void dgEtiqueta_AddNewRowInitiating(object sender, Syncfusion.UI.Xaml.Grid.AddNewRowInitiatingEventArgs e)
         {
             EtiquetaViewModel vm = (EtiquetaViewModel)DataContext;
-            ((EtiquetaProducaoModel)e.NewObject).coddetalhescompl = vm.Dado.coddetalhescompl; // = new long?(ProdutoExpedido.CodDetalhesCompl);
+            ((EtiquetaProducaoModel)e.NewObject).coddetalhescompl = vm.Dado.coddetalhescompl; 
+            ((EtiquetaProducaoModel)e.NewObject).criado_por = Environment.UserName; 
+            ((EtiquetaProducaoModel)e.NewObject).criado_em = DateTime.Now;
+
+            /*
+             * vm.Etiqueta.criado_por = Environment.UserName;
+             * vm.Etiqueta.criado_em = DateTime.Now;
+            */
         }
 
         private async void dgEtiqueta_RecordDeleting(object sender, Syncfusion.UI.Xaml.Grid.RecordDeletingEventArgs e)

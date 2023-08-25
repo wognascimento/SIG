@@ -118,7 +118,7 @@ namespace Producao.Views.Estoque
                 txtComplementoAdicional.Text = string.Empty;
 
                 vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(planilha?.planilha));
-                vm.Itens = await Task.Run(() => vm.GetItensAsync(planilha?.planilha));
+                //vm.Itens = await Task.Run(() => vm.GetItensAsync(planilha?.planilha));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
                 txtDescricao.Focus();
@@ -237,8 +237,9 @@ namespace Producao.Views.Estoque
                     };
                     acerto = await Task.Run(() => vm.SaveAcertoAsync(acerto));
                 }
+                vm.Itens.Add( await Task.Run(() => vm.GetItensAsync(entrada.codigo_entrada)) );
+                //
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
-                
             }
             catch (Exception ex)
             {
@@ -335,6 +336,12 @@ namespace Producao.Views.Estoque
 
         //List<string> lVoltagem = new List<string> { "", "220V", "110V" };
 
+        public MovimentacaoEntradaViewModel()
+        {
+            Itens = new ObservableCollection<object>();
+        }
+
+
         public async Task<ObservableCollection<RelplanModel>> GetPlanilhasAsync()
         {
             try
@@ -419,7 +426,7 @@ namespace Producao.Views.Estoque
             }
         }
 
-        public async Task<IList> GetItensAsync(string? planilha)
+        public async Task<object> GetItensAsync(long? codigo_entrada)
         {
             try
             {
@@ -427,7 +434,7 @@ namespace Producao.Views.Estoque
 
                 var resultado = db.Entradas
                     .Join(db.Descricoes, entrada => entrada.codcompladicional, descricao => descricao.codcompladicional, (entrada, descricao) => new { entrada, descricao })
-                    .Where(x => x.descricao.planilha == planilha)
+                    .Where(x => x.entrada.codigo_entrada == codigo_entrada)
                     .Select(x => new
                     {
                         x.entrada.codigo_entrada,
@@ -443,7 +450,7 @@ namespace Producao.Views.Estoque
 
                 //var resultadoToList = await resultado.ToListAsync();
 
-                return await resultado.ToListAsync();
+                return await resultado.FirstOrDefaultAsync();
             }
             catch (Exception)
             {

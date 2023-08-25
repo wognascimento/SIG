@@ -28,7 +28,7 @@
             AutoGenerateColumns="False"
             FrozenColumnCount="9" 
             AllowResizingColumns="True" 
-            CurrentCellEndEdit="itens_CurrentCellEndEdit" CurrentCellValueChanged="itens_CurrentCellValueChanged">
+            CurrentCellEndEdit="itens_CurrentCellEndEdit" CurrentCellValueChanged="itens_CurrentCellValueChanged" RowValidating="itens_RowValidating">
 
             <Syncfusion:SfDataGrid.Columns>
 

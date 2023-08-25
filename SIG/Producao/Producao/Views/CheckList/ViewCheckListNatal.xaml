@@ -467,7 +467,7 @@
                         MappingName="ok_revisao_alterada"
                         DisplayBinding="{Binding ok_revisao_alterada, Converter={StaticResource ConverterBoolen}}"
                         ValueBinding="{Binding ok_revisao_alterada, Converter={StaticResource ConverterBoolen}}" />
-                <syncfusion:GridTextColumn HeaderText="ID" MappingName="id" ColumnSizer="SizeToCells"/>
+                <syncfusion:GridTextColumn HeaderText="ID" MappingName="id" ColumnSizer="SizeToCells" AllowEditing="True"/>
                 <syncfusion:GridTextColumn HeaderText="ITEM" MappingName="item_memorial"/>
                 <syncfusion:GridTextColumn HeaderText="LOCAL DO SHOPPING" MappingName="local_shoppings"/>
                 <syncfusion:GridTextColumn HeaderText="PLANILHA" MappingName="planilha">
@@ -526,14 +526,15 @@
                 CurrentCellValueChanged="dgComplemento_CurrentCellValueChanged" 
                 FontSize="10" RowValidated="dgComplemento_RowValidated"
                 RowValidating="dgComplemento_RowValidating" 
-                AddNewRowInitiating="dgComplemento_AddNewRowInitiating" >
+                AddNewRowInitiating="dgComplemento_AddNewRowInitiating" AllowResizingColumns="True" AllowResizingHiddenColumns="True" >
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridComboBoxColumn
                         HeaderText="COMPLEMENTO ADICIONAL" 
                         MappingName="codcompladicional"
                         ItemsSource="{Binding CompleAdicionais}"
                         DisplayMemberPath="complementoadicional"
-                        SelectedValuePath="codcompladicional"/>
+                        SelectedValuePath="codcompladicional" 
+                        ColumnSizer="Auto"/>
                     <syncfusion:GridTextColumn
                         HeaderText="UNID" 
                         MappingName="unidade" TextAlignment="Center"/>

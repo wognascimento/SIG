@@ -118,7 +118,7 @@ namespace Producao.Views.Estoque
                 txtComplementoAdicional.Text = string.Empty;
 
                 vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(planilha?.planilha));
-                vm.Itens = await Task.Run(() => vm.GetItensAsync(planilha?.planilha));
+                //vm.Itens = await Task.Run(() => vm.GetItensAsync(planilha?.planilha));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
                 txtDescricao.Focus();
@@ -237,8 +237,8 @@ namespace Producao.Views.Estoque
                     };
                     acerto = await Task.Run(() => vm.SaveAcertoAsync(acerto));
                 }
+                vm.Itens.Add( await Task.Run(() => vm.GetItensAsync(saida.codigo_saida)) );
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
-
             }
             catch (Exception ex)
             {
@@ -333,6 +333,11 @@ namespace Producao.Views.Estoque
             set { _procedencias = value; RaisePropertyChanged("Procedencias"); }
         }
 
+        public MovimentacaoSaidaViewModel()
+        {
+            Itens = new ObservableCollection<object>();
+        }
+
         public async Task<ObservableCollection<RelplanModel>> GetPlanilhasAsync()
         {
             try
@@ -417,7 +422,7 @@ namespace Producao.Views.Estoque
             }
         }
 
-        public async Task<IList> GetItensAsync(string? planilha)
+        public async Task<object> GetItensAsync(long? codigo_saida)
         {
             try
             {
@@ -425,7 +430,7 @@ namespace Producao.Views.Estoque
 
                 var resultado = db.Saidas
                     .Join(db.Descricoes, saidas => saidas.codcompladicional, descricao => descricao.codcompladicional, (saidas, descricao) => new { saidas, descricao })
-                    .Where(x => x.descricao.planilha == planilha)
+                    .Where(x => x.saidas.codigo_saida == codigo_saida)
                     .Select(x => new
                     {
                         x.saidas.codigo_saida,
@@ -441,7 +446,7 @@ namespace Producao.Views.Estoque
 
                 //var resultadoToList = await resultado.ToListAsync();
 
-                return await resultado.ToListAsync();
+                return await resultado.FirstOrDefaultAsync();
             }
             catch (Exception)
             {

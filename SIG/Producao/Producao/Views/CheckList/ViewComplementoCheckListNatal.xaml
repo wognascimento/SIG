@@ -161,14 +161,14 @@
                 CurrentCellValueChanged="dgComplemento_CurrentCellValueChanged" 
                 FontSize="10" RowValidated="dgComplemento_RowValidated"
                 RowValidating="dgComplemento_RowValidating" 
-                AddNewRowInitiating="dgComplemento_AddNewRowInitiating" >
+                AddNewRowInitiating="dgComplemento_AddNewRowInitiating" AllowResizingColumns="True" AllowResizingHiddenColumns="True" >
                 <syncfusion:SfDataGrid.Columns>
                     <syncfusion:GridComboBoxColumn
                         HeaderText="COMPLEMENTO ADICIONAL" 
                         MappingName="codcompladicional"
                         ItemsSource="{Binding CompleAdicionais}"
                         DisplayMemberPath="complementoadicional"
-                        SelectedValuePath="codcompladicional"/>
+                        SelectedValuePath="codcompladicional" ColumnSizer="Auto"/>
                     <syncfusion:GridTextColumn
                         HeaderText="UNID" 
                         MappingName="unidade" 

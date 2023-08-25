@@ -704,7 +704,7 @@ namespace Producao.Views.CentralModelos
                                         {
                                             num_requisicao = requisicao.num_requisicao,
                                             codcompladicional = detalhe.codcompladicional,
-                                            quantidade = modeloControle.planilha == "ADEREÇO" || modeloControle.planilha == "FIADA" || modeloControle.planilha == "ENF PISO" ? detalhe.qtd : (detalhe.qtd * produtoServicoModel.quantidade),
+                                            quantidade = modeloControle.planilha == "ADEREÇO" || modeloControle.planilha == "FIADA" || modeloControle.planilha == "ENF PISO" ? Math.Ceiling((double)detalhe.qtd) : Math.Ceiling((double)(detalhe.qtd * produtoServicoModel.quantidade)),
                                             observacao = detalhe.observacao,
                                             data = DateTime.Now,
                                             alterado_por = Environment.UserName
