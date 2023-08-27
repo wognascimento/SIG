@@ -972,7 +972,7 @@ namespace Producao.Views.CentralModelos
                     //worksheet.Range[$"G{index}"].CellStyle.Font.Size = 8;
                     worksheet.Range[$"G{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
 
-                    worksheet.Range[$"H{index}"].Number = Convert.ToDouble(item.qtd * dados.qtde_os);
+                    worksheet.Range[$"H{index}"].Number = Math.Ceiling(Convert.ToDouble(item.qtd * dados.qtde_os));
                     worksheet.Range[$"H{index}"].CellStyle = bodyStyle;
                     //worksheet.Range[$"H{index}"].CellStyle.Font.FontName = "Arial";
                     //worksheet.Range[$"H{index}"].CellStyle.Font.Size = 8;
