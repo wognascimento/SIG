@@ -116,7 +116,8 @@ namespace Producao.Views.OrdemServico.Produto
                         new TGlobalModel
                         {
                             num_os = data.num_os, 
-                            programacao_ordem = data.programacao_ordem, 
+                            programacao_ordem = data.programacao_ordem,
+                            programacao_observacao = data.programacao_observacao,
                             programacao_inserido_por = Environment.UserName, 
                             programacao_inserido_data = DateTime.Now
                         })
@@ -347,10 +348,12 @@ namespace Producao.Views.OrdemServico.Produto
                 using DatabaseContext db = new();
                 TGlobalModel servico = await db.Globais.FindAsync(global.num_os);
                 servico.programacao_ordem = global.programacao_ordem;
+                servico.programacao_observacao = global.programacao_observacao;
                 servico.programacao_inserido_por = global.programacao_inserido_por;
                 servico.programacao_inserido_data = global.programacao_inserido_data;
 
-                await db.Globais.SingleUpdateAsync(servico);
+                await db.SaveChangesAsync();
+                //await db.Globais.SingleUpdateAsync(servico);
             }
             catch (Exception)
             {

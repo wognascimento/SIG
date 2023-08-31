@@ -75,7 +75,8 @@
                 IsTextSearchEnabled="True" 
                 AutoCompleteMode="Suggest" 
                 AllowMultiSelect="True" 
-                EnableOKCancel="True" SelectionChanged="SetoresSelectionChanged"/>
+                EnableOKCancel="True" 
+                    SelectionChanged="SetoresSelectionChanged"/>
 
             </syncfusion:SfTextInputLayout>
 
@@ -336,6 +337,7 @@
                 <syncfusion:GridTextColumn 
                     HeaderText="PENDENCIA E/OU OBSERVAÇÃO" 
                     MappingName="programacao_observacao"
+                    AllowEditing="True"
                     ColumnSizer="SizeToHeader"/>
 
                 <syncfusion:GridNumericColumn  

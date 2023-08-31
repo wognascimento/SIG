@@ -120,6 +120,7 @@
             
             <syncfusion:MenuItemAdv Header="Estoque">
                 <syncfusion:MenuItemAdv Header="Saldo Estoque" Click="OnSaldoEstoqueClick"/>
+                <syncfusion:MenuItemAdv Header="Planejamento Estoque" Click="OnPlanejamentoEstoqueClick"/>
                 <syncfusion:MenuItemAdv Header="Sobra"/>
                 <syncfusion:MenuItemAdv Header="Relatório Iventário"/>
                 <syncfusion:MenuItemAdv Header="CCE">

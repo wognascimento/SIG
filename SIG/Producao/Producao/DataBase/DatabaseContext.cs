@@ -71,6 +71,7 @@ namespace Producao
         public DbSet<SaidaEstoqueModel> Saidas { get; set; }
         public DbSet<ControleAcertoEstoque> ControleAcertoEstoques { get; set; }
         public DbSet<BaixaEstoqueRequisicaoModel> BaixaEstoqueRequisicoes { get; set; }
+        public DbSet<PlanejamentoEstoqueModel> PlanejamentoEstoques { get; set; }
         public DbSet<SaldoDetalhadoModel> SaldoDetalhados { get; set; }
         public DbSet<BarcodeModel> Barcodes { get; set; }
         public DbSet<ContaProcessSemanaModel> ContaProcessSemanas { get; set; }
@@ -88,6 +89,10 @@ namespace Producao
         public DbSet<ConstrucaoPecaModel> ConstrucaoPecas { get; set; }
         public DbSet<ChecklistPrdutoConstrucaoModel> ChecklistPrdutoConstrucaos { get; set; }
         public DbSet<ChecklistPrdutoRequisicaoModel> ChecklistPrdutooRequisicoes { get; set; }
+        public DbSet<PropostaFechaSiglaModel> PropostaFechaSiglas { get; set; }
+        public DbSet<PropostaFechaTemaModel> PropostaFechaTemas { get; set; }
+        public DbSet<ViewFechaModel> ViewFechas { get; set; }
+        public DbSet<FechaLinkModel> FechaLinks { get; set; }
 
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

@@ -990,7 +990,6 @@ namespace Producao
         {
             if (this.PropertyChanged != null)
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propName));
-
         }
 
     }

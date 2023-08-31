@@ -910,5 +910,47 @@ namespace Producao
         {
             adicionarFilho(new ViewMemorial(), "MEMORIAL", "MEMORIAL");
         }
+
+        private async void OnPlanejamentoEstoqueClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                try
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                    using DatabaseContext db = new();
+                    var data = await db.PlanejamentoEstoques.ToListAsync();
+
+                    using ExcelEngine excelEngine = new ExcelEngine();
+                    IApplication application = excelEngine.Excel;
+
+                    application.DefaultVersion = ExcelVersion.Xlsx;
+
+                    //Create a workbook
+                    IWorkbook workbook = application.Workbooks.Create(1);
+                    IWorksheet worksheet = workbook.Worksheets[0];
+                    //worksheet.IsGridLinesVisible = false;
+                    worksheet.ImportData(data, 1, 1, true);
+
+                    workbook.SaveAs("Impressos/PLANEJAMENTO_ESTOQUE.xlsx");
+                    Process.Start(new ProcessStartInfo("Impressos\\PLANEJAMENTO_ESTOQUE.xlsx")
+                    {
+                        UseShellExecute = true
+                    });
+
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+                catch (Exception ex)
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 }
