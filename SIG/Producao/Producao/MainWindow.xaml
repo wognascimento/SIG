@@ -138,8 +138,19 @@
             
             
             <syncfusion:MenuItemAdv Header="Kit">
-                <syncfusion:MenuItemAdv Header="Solução"/>
-                <syncfusion:MenuItemAdv Header="Manutenção"/>
+                
+                <syncfusion:MenuItemAdv Header="Solução">
+                    <syncfusion:MenuItemAdv Header="Checklist"/>
+                    <syncfusion:MenuItemAdv Header="Consulta"/>
+                </syncfusion:MenuItemAdv>
+                
+                <syncfusion:MenuItemAdv Header="Manutenção">
+                    <syncfusion:MenuItemAdv Header="Checklist"/>
+                    <syncfusion:MenuItemAdv Header="Consulta"/>
+                </syncfusion:MenuItemAdv>
+
+                <syncfusion:MenuItemAdv Header="Responsável"/>
+
             </syncfusion:MenuItemAdv>
         </syncfusion:MenuAdv>
 

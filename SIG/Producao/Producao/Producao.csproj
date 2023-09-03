@@ -158,6 +158,7 @@
   
   <ItemGroup>
     <Folder Include="Impressos\" />
+    <Folder Include="Views\Solucao\" />
   </ItemGroup>
   
   

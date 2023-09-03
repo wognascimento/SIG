@@ -121,6 +121,18 @@ namespace Producao.Views
                 record.ok_revisao_alterada = "-1";
                 //var value = record.inativo;
             }
+
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                await Task.Run(() => vm.AtualizarControleAsync(record));
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
         }
 
         private async void itens_RowValidating(object sender, RowValidatingEventArgs e)
