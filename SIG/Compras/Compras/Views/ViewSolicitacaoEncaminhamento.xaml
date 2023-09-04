@@ -79,6 +79,7 @@
                     <syncfusion:GridTextColumn MappingName="orientacao_compra" ColumnSizer="SizeToHeader" AllowEditing="True"/>
                     <syncfusion:GridTextColumn MappingName="orientacao_roteiro" ColumnSizer="SizeToHeader" AllowEditing="True"/>
                     <syncfusion:GridTextColumn MappingName="solicitante"/>
+                    <syncfusion:GridTextColumn MappingName="cliente"/>
                     <syncfusion:GridDateTimeColumn MappingName="data_utilizacao" HeaderText="utilização"/>
                     <syncfusion:GridTextColumn MappingName="planilha"/>
                     <syncfusion:GridTextColumn MappingName="resp_compra" HeaderText="compradora(o)"/>

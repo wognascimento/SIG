@@ -274,11 +274,28 @@
                     Margin="5,0,5,0"
                     HintFloatMode="Float"
                     Hint="SOLICITANTE"
-                     Width="370"
+                    Width="370"
                     InputViewPadding="5"
                     CharCountVisibility="Collapsed"
                     HelperTextVisibility="Collapsed">
                     <TextBox x:Name="txtSolicitante" TextAlignment="Center" />
+                </syncfusion:SfTextInputLayout>
+
+                <syncfusion:SfTextInputLayout
+                    Margin="5,0,5,0"
+                    HintFloatMode="Float"
+                    Hint="SIGLA"
+                    Width="120"
+                    InputViewPadding="5"
+                    CharCountVisibility="Collapsed"
+                    HelperTextVisibility="Collapsed">
+
+                    <syncfusion:ComboBoxAdv 
+                        x:Name="cbSigla"
+                        AutoCompleteMode="Suggest"
+                        ItemsSource="{Binding Siglas}" 
+                        SelectedItem="{Binding Sigla}"
+                        DisplayMemberPath="sigla_serv" />
                 </syncfusion:SfTextInputLayout>
 
             </StackPanel>

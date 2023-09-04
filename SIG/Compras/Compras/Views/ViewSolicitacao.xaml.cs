@@ -105,6 +105,7 @@ namespace Compras.Views
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.Planilhas = await Task.Run(vm.RelplansAsync);
                 vm.Status = await Task.Run(vm.GetStatusAsync);
+                vm.Siglas = await Task.Run(vm.GetSiglasAsync);
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }
@@ -759,6 +760,21 @@ namespace Compras.Views
         }
         #endregion
 
+        #region Solicitação Sigla
+        private ObservableCollection<SiglaChkListModel> _siglas;
+        public ObservableCollection<SiglaChkListModel> Siglas
+        { 
+            get { return _siglas; }
+            set { _siglas = value; RaisePropertyChanged("Siglas"); }
+        }
+        private SiglaChkListModel _sigla;
+        public SiglaChkListModel Sigla
+        {
+            get { return _sigla; }
+            set { _sigla = value; RaisePropertyChanged("Sigla"); }
+        }
+        #endregion
+
         #region
         #endregion
 
@@ -928,6 +944,20 @@ namespace Compras.Views
                     .OrderBy(c => c.cod_status)
                     .ToListAsync();
                 return new ObservableCollection<SolicitacaoStatusModel>(data);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ObservableCollection<SiglaChkListModel>> GetSiglasAsync()
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.Siglas.OrderBy(c => c.sigla_serv).ToListAsync();
+                return new ObservableCollection<SiglaChkListModel>(data);
             }
             catch (Exception)
             {

@@ -11,6 +11,7 @@ namespace Compras
         public DbSet<SolicitacaoSolicitanteModel> SolicitacaoSolicitantes { get; set; }
         public DbSet<SolicitacaoMaterialModel> SolicitacaoMaterias { get; set; }
         public DbSet<SolicitacaoStatusModel> SolicitacaoStatus { get; set; }
+        public DbSet<SiglaChkListModel> Siglas { get; set; }
         public DbSet<SolicitacaoMaterialItemModel> SolicitacaoMateriaisItens { get; set; }
         public DbSet<SolicitacaoItenSolicitadoModel> QrySolicitacaoMateriaisItens { get; set; }
         public DbSet<SolicitacaoEncaminhadaModel> SolicitacaoEncaminhadas { get; set; }
