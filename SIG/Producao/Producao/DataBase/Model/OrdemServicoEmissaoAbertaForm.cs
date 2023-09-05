@@ -29,5 +29,7 @@ namespace Producao
         public long? codigo_setor { get; set; }
         public long? num_os_servico {  get; set; }
         public string? descricao_completa {  get; set; }
+        public bool? cancelar { get; set; }
+        public long? cod_obs { get; set; }
     }
 }

@@ -270,6 +270,7 @@ namespace Producao.Views.OrdemServico.Produto
             SolicitacaoOrdemServicoProdutoViewModel vm = (SolicitacaoOrdemServicoProdutoViewModel)DataContext;
             ((ObsOsModel)e.NewObject).num_os_produto = vm.ProdutoOs?.num_os_produto;
             ((ObsOsModel)e.NewObject).cod_compl_adicional = vm.ProdutoOs?.cod_compl_adicional;
+            ((ObsOsModel)e.NewObject).cancelar = false;
         }
 
         private async void caminhos_RowValidated(object sender, Syncfusion.UI.Xaml.Grid.RowValidatedEventArgs e)

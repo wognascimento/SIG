@@ -68,7 +68,7 @@ namespace Producao.Views.OrdemServico.Produto
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.OrdemServicoEmissaoAbertas.ToListAsync();
+                var data = await db.OrdemServicoEmissaoAbertas.Where(x => x.cancelar == false).ToListAsync();
                 return new ObservableCollection<OrdemServicoEmissaoAbertaForm>(data);
             }
             catch (Exception)
@@ -240,10 +240,15 @@ namespace Producao.Views.OrdemServico.Produto
 
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 using DatabaseContext db = new();
-                ObsOsModel? obs = await db.ObsOs.Where(x => x.num_os_produto == item.num_os_produto || x.num_caminho == item.num_caminho).FirstOrDefaultAsync();
+                ObsOsModel? obs = await db.ObsOs.FindAsync(item.cod_obs); //Where(x => x.num_os_produto == item.num_os_produto || x.num_caminho == item.num_caminho).FirstOrDefaultAsync();
                 obs.cancelar = true;
                 obs.cancelado_por = Environment.UserName;
                 obs.cancelado_em = DateTime.Now;
+
+                db.Entry(obs).Property(p => p.cancelar).IsModified = true;
+                db.Entry(obs).Property(p => p.cancelado_por).IsModified = true;
+                db.Entry(obs).Property(p => p.cancelado_em).IsModified = true;
+
                 await db.SaveChangesAsync();
 
                 vm.OSsAberta = await Task.Run(vm.GetOSsEmAbertasAsync);

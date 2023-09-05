@@ -35,5 +35,6 @@ namespace Producao
         public long? codcompladicional {  get; set; }
         public string? descricao_completa { get; set;}
         public long? id_modelo { get; set;}
+        public int? volume { get; set;}
     }
 }

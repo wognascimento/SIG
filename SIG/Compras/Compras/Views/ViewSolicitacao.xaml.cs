@@ -262,7 +262,7 @@ namespace Compras.Views
                     //quantidade_compra = Me.Dados_txtQuantidade
                     //qtde_compra_final = Me.Dados_txtQuantidade
                     //setor = Me.Dados_cmbSetor
-                    //cliente = Me.Dados_cmbCliente
+                    cliente = txtSigla?.Text,
                     data_utilizacao = dtSolicitacao.DateTime,
                     //etapa = Me.cmbFase
                     //classificacao = Me.cmbClassificacaoDSL
