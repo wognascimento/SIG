@@ -92,6 +92,7 @@ namespace Producao.Views.OrdemServico.Produto
             AlterarSolicitacaoOrdemServicoProdutoViewModel vm = (AlterarSolicitacaoOrdemServicoProdutoViewModel)DataContext;
             ((ObsOsModel)e.NewObject).num_os_produto = vm.OrdemServico?.num_os_produto;
             ((ObsOsModel)e.NewObject).cod_compl_adicional = vm.OrdemServico?.cod_compl_adicional;
+            ((ObsOsModel)e.NewObject).cancelar = false;
         }
 
         private async void caminhos_RowValidated(object sender, RowValidatedEventArgs e)

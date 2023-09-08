@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using Microsoft.EntityFrameworkCore;
-using Npgsql;
-using Producao.DataBase.Model;
+﻿using Microsoft.EntityFrameworkCore;
 using Producao.Views;
 using Producao.Views.CadastroProduto;
 using Producao.Views.CentralModelos;
@@ -24,6 +13,11 @@ using Producao.Views.Planilha;
 using Syncfusion.SfSkinManager;
 using Syncfusion.Windows.Tools.Controls;
 using Syncfusion.XlsIO;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 using SizeMode = Syncfusion.SfSkinManager.SizeMode;
 
 namespace Producao
@@ -949,6 +943,78 @@ namespace Producao
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private async void OnAnaliseCliente(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                using DatabaseContext db = new();
+                //var data = await db.PendenciaProducaos.ToListAsync();
+                var data = await db.BaseAnaliseClientes.ToListAsync();
+
+                using ExcelEngine excelEngine = new ExcelEngine();
+                IApplication application = excelEngine.Excel;
+
+                application.DefaultVersion = ExcelVersion.Xlsx;
+
+                //Create a workbook
+                IWorkbook workbook = application.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+                //worksheet.IsGridLinesVisible = false;
+                worksheet.ImportData(data, 1, 1, true);
+
+                workbook.SaveAs("Impressos/ANALISE_CLIENTE.xlsx");
+                Process.Start(new ProcessStartInfo("Impressos\\ANALISE_CLIENTE.xlsx")
+                {
+                    UseShellExecute = true
+                });
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private async void OnAnalisePlanilha(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                using DatabaseContext db = new();
+                //var data = await db.PendenciaProducaos.ToListAsync();
+                var data = await db.BaseAnalisePlans.ToListAsync();
+
+                using ExcelEngine excelEngine = new ExcelEngine();
+                IApplication application = excelEngine.Excel;
+
+                application.DefaultVersion = ExcelVersion.Xlsx;
+
+                //Create a workbook
+                IWorkbook workbook = application.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+                //worksheet.IsGridLinesVisible = false;
+                worksheet.ImportData(data, 1, 1, true);
+
+                workbook.SaveAs("Impressos/ANALISE_PLANILHA.xlsx");
+                Process.Start(new ProcessStartInfo("Impressos\\ANALISE_PLANILHA.xlsx")
+                {
+                    UseShellExecute = true
+                });
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
         }
