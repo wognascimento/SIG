@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using iText.Commons.Actions.Contexts;
+using Microsoft.EntityFrameworkCore;
 using Producao.Views.PopUp;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace Producao.Views.OrdemServico.Produto
 {
@@ -37,6 +39,7 @@ namespace Producao.Views.OrdemServico.Produto
                 vm.ObsOSs = new ObservableCollection<ObsOsModel>();
                 vm.Setores = await Task.Run(vm.GetSetorsAsync);
                 vm.Siglas = await Task.Run(vm.GetSiglasAsync);
+                //vm.SelectObsOSs = new ObservableCollection<ObsOsModel>();
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
@@ -89,6 +92,7 @@ namespace Producao.Views.OrdemServico.Produto
             AlterarSolicitacaoOrdemServicoProdutoViewModel vm = (AlterarSolicitacaoOrdemServicoProdutoViewModel)DataContext;
             ((ObsOsModel)e.NewObject).num_os_produto = vm.OrdemServico?.num_os_produto;
             ((ObsOsModel)e.NewObject).cod_compl_adicional = vm.OrdemServico?.cod_compl_adicional;
+            ((ObsOsModel)e.NewObject).cancelar = false;
         }
 
         private async void caminhos_RowValidated(object sender, RowValidatedEventArgs e)
@@ -174,16 +178,31 @@ namespace Producao.Views.OrdemServico.Produto
         {
             try
             {
+                AlterarSolicitacaoOrdemServicoProdutoViewModel vm = (AlterarSolicitacaoOrdemServicoProdutoViewModel)DataContext;
+
+                if (caminhos.SelectedItems.Count == 0)
+                {
+                    MessageBox.Show("Precisa selecionar o caminho para imprimir");
+                    return;
+                }
+                //[0] = {Producao.ObsOsModel}
+
+                /*List<long?> list = new List<long?>();
+                foreach (ObsOsModel item in caminhos.SelectedItems.Cast<ObsOsModel>())
+                    list.Add(item.num_caminho);*/
+
+
+                List<long?> list = caminhos.SelectedItems.Cast<ObsOsModel>().Select(c => c.num_caminho).Distinct().ToList();
+
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
 
-                AlterarSolicitacaoOrdemServicoProdutoViewModel vm = (AlterarSolicitacaoOrdemServicoProdutoViewModel)DataContext;
                 using ExcelEngine excelEngine = new ExcelEngine();
                 IApplication application = excelEngine.Excel;
                 application.DefaultVersion = ExcelVersion.Xlsx;
                 IWorkbook workbook = excelEngine.Excel.Workbooks.Open("Modelos/ORDEM_SERVICO_MODELO.xlsx");
                 IWorksheet worksheet = workbook.Worksheets[0];
 
-                var servicos = await Task.Run(() => vm.GetOsEmitidas(vm.OrdemServico.num_os_produto));
+                var servicos = await Task.Run(() => vm.GetOsEmitidas(vm.OrdemServico.num_os_produto, list));
 
                 IRange range = worksheet[27, 23, 53, 23];
                 if (servicos.Count == 1)
@@ -335,6 +354,13 @@ namespace Producao.Views.OrdemServico.Produto
         {
             get { return _obsOSs; }
             set { _obsOSs = value; RaisePropertyChanged("ObsOSs"); }
+        }
+
+        private ObservableCollection<ObsOsModel> _selectobsOSs;
+        public ObservableCollection<ObsOsModel> SelectObsOSs
+        {
+            get { return _selectobsOSs; }
+            set { _selectobsOSs = value; RaisePropertyChanged("SelectObsOSs"); }
         }
 
         private SetorModel _setor;
@@ -502,12 +528,16 @@ namespace Producao.Views.OrdemServico.Produto
             }
         }
 
-        public async Task<ObservableCollection<OsEmissaoProducaoImprimirModel>> GetOsEmitidas(long? num_os_produto)
+        public async Task<ObservableCollection<OsEmissaoProducaoImprimirModel>> GetOsEmitidas(long? num_os_produto, List<long?> list)
         {
+            //List<long?> list = new List<long?>();
+            //var customerIds = deserializedCustomers.Select(x => x.CustomerID).ToList();
+            //var customers = context.Customers.Where(x => customerIds.Contains(x.CustomerID)).ToList();
+            //&& ids.Contains(i.num_caminho)
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.ImprimirOsS.OrderBy(o => o.num_os_servico).Where(i => i.num_os_produto == num_os_produto).ToListAsync();
+                var data = await db.ImprimirOsS.OrderBy(o => o.num_os_servico).Where(i => i.num_os_produto == num_os_produto && list.Contains(i.num_caminho)).ToListAsync();
                 return new ObservableCollection<OsEmissaoProducaoImprimirModel>(data);
             }
             catch (Exception)

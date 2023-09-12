@@ -40,6 +40,8 @@ namespace Producao
         public DbSet<QryDescricao> Descricoes { get; set; }
         public DbSet<ControleMemorialModel> ControleMemorials { get; set; }
         public DbSet<RevisorModel> Revisores { get; set; }
+        public DbSet<BaseAnaliseClienteModel> BaseAnaliseClientes { get; set; }
+        public DbSet<BaseAnalisePlanModel> BaseAnalisePlans { get; set; }
         public DbSet<EtiquetaCheckListModel> EtiquetaCheckLists { get; set; }
         public DbSet<EtiquetaProducaoModel> EtiquetaProducaos { get; set; }
         public DbSet<EtiquetaEmitidaModel> EtiquetaEmitidas { get; set; }

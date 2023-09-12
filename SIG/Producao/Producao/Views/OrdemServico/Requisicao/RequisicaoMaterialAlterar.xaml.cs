@@ -1,6 +1,7 @@
 ﻿using Producao.Views.Construcao;
 using Producao.Views.PopUp;
 using Syncfusion.Data;
+using Syncfusion.UI.Xaml.Diagram;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.XlsIO;
@@ -217,39 +218,55 @@ namespace Producao.Views.OrdemServico.Requisicao
                 worksheet.Range["C6"].Text = requi?.num_os_servico.ToString();
                 worksheet.Range["F6"].Text = requi?.produtocompleto;
 
-                var itens = (from i in vm.ReqDetalhes where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade, i.observacao, i.codcompladicional }).ToList();
+                var itens = (from i in vm.ReqDetalhes where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade, i.observacao, i.codcompladicional, i.volume }).ToList();
+
+                var volumes = from r in itens
+                         orderby r.volume
+                         group r by r.volume into grp
+                         select new { key = grp.Key, cnt = grp.Count() };
+
+                worksheet.Range["A7"].Text = $"TOTAL DE {volumes.Count()} VOLUMES";
+
                 var index = 9;
                 foreach (var item in itens)
                 {
                     worksheet.Range[$"A{index}"].Number = (double)item.quantidade;
                     worksheet.Range[$"A{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                    worksheet.Range[$"A{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"A{index}"].CellStyle.Font.Size = 7;
 
                     worksheet.Range[$"B{index}"].Number = (double)item.codcompladicional;
                     worksheet.Range[$"B{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                    worksheet.Range[$"B{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"B{index}"].CellStyle.Font.Size = 7;
 
                     worksheet.Range[$"C{index}:D{index}"].Text = item.planilha;
                     worksheet.Range[$"C{index}:D{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                    worksheet.Range[$"C{index}:D{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"C{index}:D{index}"].CellStyle.Font.Size = 7;
                     worksheet.Range[$"C{index}:D{index}"].Merge();
                     worksheet.Range[$"C{index}:D{index}"].WrapText = true;
 
                     worksheet.Range[$"E{index}:K{index}"].Text = item.descricao_completa;
                     worksheet.Range[$"E{index}:K{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                    worksheet.Range[$"E{index}:K{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"E{index}:K{index}"].CellStyle.Font.Size = 7;
                     worksheet.Range[$"E{index}:K{index}"].Merge();
                     worksheet.Range[$"E{index}:K{index}"].WrapText = true;
+                    worksheet.Range[$"E{index}:K{index}"].RowHeight = 26;
 
                     worksheet.Range[$"L{index}"].Text = item.unidade;
                     worksheet.Range[$"L{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                    worksheet.Range[$"L{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"L{index}"].CellStyle.Font.Size = 7;
 
                     worksheet.Range[$"M{index}:N{index}"].Text = item.observacao;
                     worksheet.Range[$"M{index}:N{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                    worksheet.Range[$"M{index}:N{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"M{index}:N{index}"].CellStyle.Font.Size = 7;
                     worksheet.Range[$"M{index}:N{index}"].Merge();
                     worksheet.Range[$"M{index}:N{index}"].WrapText = true;
+
+                    worksheet.Range[$"O{index}"].Text = item.volume.ToString();
+                    worksheet.Range[$"O{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                    //worksheet.Range[$"O{index}"].CellStyle.Font.Size = 7;
+                    worksheet.Range[$"O{index}"].WrapText = true;
+
+
                     index++;
                 }
                 //workbook.SaveAs($"Impressos/REQUISICAO_{requi.num_requisicao}.xlsx");
@@ -561,7 +578,7 @@ namespace Producao.Views.OrdemServico.Requisicao
 
             Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
             //var filteredResult = grid.View.Records.Select(recordentry => recordentry.Data);
-            var volumes = vm.QryRequisicaoDetalhes.OrderBy(o => o.volume).GroupBy(user => user.volume).ToList();
+            var volumes = vm.QryRequisicaoDetalhes.Where(v => v.quantidade > 0).OrderBy(v => v.volume).GroupBy(v => v.volume).ToList();
             var count = volumes.Count;
 
             using ExcelEngine excelEngine = new ExcelEngine();
@@ -578,7 +595,7 @@ namespace Producao.Views.OrdemServico.Requisicao
             //vm.Descricao = await Task.Run(() => vm.GetDescricaoAsync(vm.Compledicional.codcompladicional));
             //vm.ChecklistPrduto = await Task.Run(() => vm.GetChecklistPrdutoAsync(vm.Compledicional.codcompladicional));
             //foreach (EtiquetaEmitidaModel item in filteredResult)
-
+            //var itens = (from i in vm.ReqDetalhes where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade, i.observacao, i.codcompladicional, i.volume }).ToList();
             var prodChk = await Task.Run(() => vm.GetPrdutoRequisicaoAsync(vm.Requisicao.num_requisicao));
             for (int i = 0; i < count; i++)
             {
@@ -781,7 +798,7 @@ namespace Producao.Views.OrdemServico.Requisicao
         private ObservableCollection<QryRequisicaoDetalheModel> GetProdutosEtiqueta(long volume)
         {
             RequisicaoViewModel vm = (RequisicaoViewModel)DataContext;
-            return new ObservableCollection<QryRequisicaoDetalheModel>(vm.QryRequisicaoDetalhes.Where(p => p.volume == volume).Take(5));
+            return new ObservableCollection<QryRequisicaoDetalheModel>(vm.QryRequisicaoDetalhes.Where(p => p.volume == volume && p.quantidade > 0).Take(5));
         }
     }
 }

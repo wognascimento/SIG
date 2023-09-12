@@ -34,8 +34,8 @@
                 <syncfusion:MenuItemAdv Header="Prefeitura"/>
             </syncfusion:MenuItemAdv>
             <syncfusion:MenuItemAdv Header="Planilha">
-                <syncfusion:MenuItemAdv Header="Análise Cliente"/>
-                <syncfusion:MenuItemAdv Header="Análise Planilha"/>
+                <syncfusion:MenuItemAdv Header="Análise Cliente" Click="OnAnaliseCliente"/>
+                <syncfusion:MenuItemAdv Header="Análise Planilha" Click="OnAnalisePlanilha"/>
                 <syncfusion:MenuItemAdv Header="Análise ShowRoom"/>
                 <syncfusion:MenuItemAdv Header="Controle por Grupo" Click="ControleGrupoClick"/>
                 <syncfusion:MenuItemAdv Header="Pendência de Produção" Click="OnPendenciaProducaoClick"/>

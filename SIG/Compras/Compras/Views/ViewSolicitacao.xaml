@@ -289,13 +289,26 @@
                     InputViewPadding="5"
                     CharCountVisibility="Collapsed"
                     HelperTextVisibility="Collapsed">
-
+                    <!--
                     <syncfusion:ComboBoxAdv 
                         x:Name="cbSigla"
                         AutoCompleteMode="Suggest"
                         ItemsSource="{Binding Siglas}" 
                         SelectedItem="{Binding Sigla}"
-                        DisplayMemberPath="sigla_serv" />
+                        DisplayMemberPath="sigla_serv" 
+                        IsEditable="True" />
+                    -->
+
+                    <syncfusion:SfTextBoxExt
+                        x:Name="txtSigla"
+                        SearchItemPath="sigla_serv"
+                        ShowDropDownButton="False"
+                        AutoCompleteMode="SuggestAppend"
+                        ShowClearButton="True"
+                        AutoCompleteSource="{Binding Path=Siglas}" 
+                        SelectedItem="{Binding Sigla}"
+                        ShowSuggestionsOnFocus="True"/>
+                    
                 </syncfusion:SfTextInputLayout>
 
             </StackPanel>

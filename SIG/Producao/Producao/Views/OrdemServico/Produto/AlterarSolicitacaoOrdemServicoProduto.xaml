@@ -155,8 +155,11 @@
             ShowRowHeader="True" 
             RowHeight="50"
             ItemsSource="{Binding ObsOSs}" 
-            SelectedItem="{Binding ObsOs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-            AddNewRowInitiating="caminhos_AddNewRowInitiating" RowValidated="caminhos_RowValidated" RowValidating="caminhos_RowValidating" CurrentCellDropDownSelectionChanged="caminhos_CurrentCellDropDownSelectionChanged">
+            AddNewRowInitiating="caminhos_AddNewRowInitiating" 
+            RowValidated="caminhos_RowValidated" 
+            RowValidating="caminhos_RowValidating" 
+            CurrentCellDropDownSelectionChanged="caminhos_CurrentCellDropDownSelectionChanged" 
+            SelectionMode="Multiple">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn 
                     HeaderText="ORDEM CAMINHO" 
