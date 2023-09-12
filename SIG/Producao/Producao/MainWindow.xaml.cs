@@ -491,7 +491,8 @@ namespace Producao
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
 
                 using DatabaseContext db = new();
-                var data = await db.PendenciaProducaos.ToListAsync();
+                //var data = await db.PendenciaProducaos.ToListAsync();
+                var data = await db.DetalhesPendenciaProducao.ToListAsync();
 
                 using ExcelEngine excelEngine = new ExcelEngine();
                 IApplication application = excelEngine.Excel;
