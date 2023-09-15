@@ -354,6 +354,9 @@ namespace Producao.Views.CheckList
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.ComplementoCheckList.codcompl = null;
                 vm.ComplementoCheckList.sigla = vm.Sigla.sigla_serv;
+                vm.ComplementoCheckList.inserido_por = Environment.UserName;
+                vm.ComplementoCheckList.inserido_em = DateTime.Now;
+
                 ComplementoCheckListModel compl = await vm.AddComplementoCheckListAsync(vm.ComplementoCheckList);
 
                 SiglaChkListModel valor = (SiglaChkListModel)this.cbSiglaShopping.SelectedItem;
@@ -384,6 +387,8 @@ namespace Producao.Views.CheckList
             {
                 CheckListViewModel vm = (CheckListViewModel)DataContext;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                vm.ComplementoCheckList.alterado_por = Environment.UserName;
+                vm.ComplementoCheckList.alterado_em = DateTime.Now;
                 ComplementoCheckListModel compl = await vm.AddComplementoCheckListAsync(vm.ComplementoCheckList);
 
                 SiglaChkListModel valor = (SiglaChkListModel)this.cbSiglaShopping.SelectedItem;

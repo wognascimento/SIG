@@ -492,8 +492,16 @@
                 <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE PRODUÇÃO" MappingName="obs" ColumnSizer="SizeToHeader" AllowEditing="True"/>
                 <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE MONTAGEM" MappingName="orient_montagem" ColumnSizer="SizeToHeader" AllowEditing="True"/>
                 <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE DESMONTAGEM" MappingName="orient_desmont" ColumnSizer="SizeToHeader" AllowEditing="True"/>
+                
                 <syncfusion:GridTextColumn MappingName="alteradopordescadic" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridDateTimeColumn MappingName="dataalteradescadic" ColumnSizer="SizeToHeader"/>
+
+                <syncfusion:GridTextColumn MappingName="inserido_por" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridDateTimeColumn MappingName="inserido_em" ColumnSizer="SizeToHeader"/>
+
+                <syncfusion:GridTextColumn MappingName="alterado_por" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridDateTimeColumn MappingName="alterado_em" ColumnSizer="SizeToHeader"/>
+                
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
 

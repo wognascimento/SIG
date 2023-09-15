@@ -45,5 +45,9 @@ namespace Producao
         public string? agrupar { get; set; }
         public string? alteradopordescadic { get; set; }
         public DateTime? dataalteradescadic { get; set; }
+        public string? inserido_por { get; set; }
+        public DateTime? inserido_em { get; set; }
+        public string? alterado_por { get; set; }
+        public DateTime? alterado_em { get; set; }
     }
 }

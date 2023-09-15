@@ -29,6 +29,7 @@ namespace Producao.DataBase.Model
         public long? codcompl { get; set; } 
         public long? coddetalhescompl { get; set; } 
         public double? qtd_chlist { get; set; } 
+        public double? qtd_det_compl { get; set; } 
         public double? somadeqtd_expedida { get; set; } 
         public string? revisado { get; set; } 
         public string? confirmado { get; set; } 
@@ -38,7 +39,6 @@ namespace Producao.DataBase.Model
         public DateTime? meta_de_producao { get; set; } 
         public string? caminao { get; set; } 
         public DateTime? data_individual_caminhao { get; set; } 
-        public double? qtd_det_compl { get; set; } 
         public long? numero_de_caminhoes { get; set; } 
     }
 }

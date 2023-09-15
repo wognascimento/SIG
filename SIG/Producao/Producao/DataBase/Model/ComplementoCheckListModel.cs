@@ -34,5 +34,9 @@ namespace Producao
         public string? historico { get; set; }
         public string? agrupar { get; set; }
         public string? motivos { get; set; }
+        public string? inserido_por { get; set; }
+        public DateTime? inserido_em { get; set; }
+        public string? alterado_por { get; set; }
+        public DateTime? alterado_em { get; set; }
     }
 }
