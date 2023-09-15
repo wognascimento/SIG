@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -12,6 +13,7 @@ using Syncfusion.SfSkinManager;
 using Syncfusion.UI.Xaml.Spreadsheet;
 using Syncfusion.Windows.Tools.Controls;
 using Syncfusion.XlsIO;
+using Syncfusion.XlsIO.Implementation.Collections;
 using Syncfusion.XlsIO.Implementation.PivotTables;
 using SizeMode = Syncfusion.SfSkinManager.SizeMode;
 
@@ -305,7 +307,6 @@ namespace Expedicao
                 IWorksheet worksheet = workbook.Worksheets[0];
 
                 using AppDatabase db = new();
-
                 IList<SaldoGeralShoppingModel> dados = await db.SaldoGeralShoppings.ToListAsync();
                 ExcelImportDataOptions importDataOptions = new()
                 {
@@ -314,6 +315,54 @@ namespace Expedicao
                     IncludeHeader = true,
                     PreserveTypes = true
                 };
+
+        
+
+                
+                IConditionalFormats ConditionalFormats1 = worksheet.Range[$"A2:J{dados.Count+1}"].ConditionalFormats;
+                IConditionalFormat condition1 = ConditionalFormats1.AddCondition();
+                condition1.FormatType = ExcelCFType.Formula;
+                condition1.FirstFormula = "=$I2 >= 1";
+                condition1.BackColorRGB = Color.FromArgb(83, 255, 161);
+                
+                
+                IConditionalFormats ConditionalFormats2 = worksheet.Range[$"A2:J{dados.Count + 1}"].ConditionalFormats;
+                IConditionalFormat condition2 = ConditionalFormats2.AddCondition();
+                condition2.FormatType = ExcelCFType.Formula;
+                condition2.FirstFormula = "=$I2 > 0.5";
+                condition2.BackColorRGB = Color.FromArgb(29, 158, 255);
+                
+
+                
+                IConditionalFormats ConditionalFormats3 = worksheet.Range[$"A2:J{dados.Count + 1}"].ConditionalFormats;
+                IConditionalFormat condition3 = ConditionalFormats3.AddCondition();
+                condition3.Operator = ExcelComparisonOperator.Equal;
+                condition3.FormatType = ExcelCFType.Formula;
+                condition3.FirstFormula = "=$I2 < 0.5";
+                condition3.BackColorRGB = Color.FromArgb(255, 255, 255);
+
+                //worksheet.Range["C:C"].NumberFormat = "_-* #.##0,00_-;-* #.##0,00_-;_-* "-"??_-;_-@_-";
+
+                /*
+                 * 
+                 * Columns("C:C").Select
+                   Selection.Style = "Comma"
+                   Columns("D:D").Select
+                   Selection.Style = "Comma"
+                   Columns("E:E").Select
+                   Selection.Style = "Comma"
+                   Columns("F:F").Select
+                   Selection.Style = "Comma"
+                   Columns("G:G").Select
+                   Selection.Style = "Comma"
+                   Columns("I:I").Select
+                   Selection.Style = "Percent"
+                   Columns("J:J").Select
+                   Selection.Style = "Comma" 
+                 * */
+
+
+
                 worksheet.ImportData(dados, importDataOptions);
                 worksheet.UsedRange.AutofitColumns();
                 workbook.SaveAs(@"c:\relatorios\saldo_geral_shopping.xlsx");

@@ -87,7 +87,10 @@
             AddNewRowPosition="Bottom"
             AllowEditing="True"
             AllowDeleting="True" 
-            CurrentCellValueChanged="Exped_CurrentCellValueChanged">
+            CurrentCellValueChanged="Exped_CurrentCellValueChanged"
+            SelectionUnit="Row"
+            SelectionMode="Extended"
+            GridCopyOption="CopyData,IncludeHeaders,IncludeFormat">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridNumericColumn MappingName="QtdExpedida"     DisplayBinding="{Binding Path=QtdExpedida, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
                 <syncfusion:GridNumericColumn MappingName="VolExp"          DisplayBinding="{Binding Path=VolExp, Converter={StaticResource ConverterNumber}, Mode=TwoWay}"    />
