@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Expedicao
 {
     [Keyless]
-    [Table("qry_pre_conferencia_itens_faltantes", Schema = "expedicao")]
+    [Table("qry_pre_conferencia_item_faltante", Schema = "expedicao")]
     public class PreConferenciaItemFaltanteModel
     {
         public string? sigla { get; set; }
@@ -19,5 +19,6 @@ namespace Expedicao
         public string? codvol { get; set; }
         public string? item_memorial { get; set; }
         public string? baia_caminhao { get; set; }
+        public string? endereco { get; set; }
     }
 }
