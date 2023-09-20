@@ -6,6 +6,7 @@ using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.UI.Xaml.Utility;
 using Syncfusion.Windows.Controls.Gantt;
 using Syncfusion.XlsIO;
+using Syncfusion.XlsIO.Implementation.Security;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -367,6 +368,37 @@ namespace Compras.Views
                 MessageBox.Show(ex.Message);
             }
         }
+
+        private async void itensSolicitados_CurrentCellValueChanged(object sender, CurrentCellValueChangedEventArgs e)
+        {
+            SolicitacaoEncaminhadaViewModel vm = (SolicitacaoEncaminhadaViewModel)DataContext;
+            SfDataGrid? grid = sender as SfDataGrid;
+            int columnindex = grid.ResolveToGridVisibleColumnIndex(e.RowColumnIndex.ColumnIndex);
+            var column = grid.Columns[columnindex];
+            var rowIndex = grid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
+            var record = grid.View.Records[rowIndex].Data as SolicitacaoEncaminhadaModel;
+
+            if (column.GetType() == typeof(GridCheckBoxColumn) && column.MappingName == "finalizado")
+            {
+                record.finalizado_por = Environment.UserName;
+                record.finalizado_em = DateTime.Now;
+                //var value = record.inativo;
+            }
+
+
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                await Task.Run(() => vm.FinalizarItemSolicitadoAsync(record));
+                vm.SolicitacoesEncaminhadas.Remove(record);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+        }
     }
 
     public class SolicitacaoEncaminhadaViewModel : INotifyPropertyChanged
@@ -443,7 +475,7 @@ namespace Compras.Views
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.SolicitacaoEncaminhadas.Where(e => e.tipo != "SERVIÇO").ToListAsync();
+                var data = await db.SolicitacaoEncaminhadas.Where(e => e.tipo != "SERVIÇO" && e.finalizado == false).ToListAsync();
                 return new ObservableCollection<SolicitacaoEncaminhadaModel>(data);
             }
             catch (Exception)
@@ -460,6 +492,39 @@ namespace Compras.Views
                 await db.SolicitacaoEncaminhadas.SingleUpdateAsync(solicitacao);
                 await db.SaveChangesAsync();
                 return solicitacao;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task FinalizarItemSolicitadoAsync(SolicitacaoEncaminhadaModel solicitacao)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+
+                var item = await db.SolicitacaoEncaminhadas.FirstOrDefaultAsync(p => p.cod_item == solicitacao.cod_item);
+                if (item != null)
+                {
+ 
+                    item.finalizado = solicitacao.finalizado;
+                    db.Entry(item).Property(p => p.finalizado).IsModified = true;
+
+                    item.finalizado_em = solicitacao.finalizado_em;
+                    db.Entry(item).Property(p => p.finalizado_em).IsModified = true;
+
+                    item.finalizado_por = solicitacao.finalizado_por;
+                    db.Entry(item).Property(p => p.finalizado_por).IsModified = true;
+
+                    // Salva apenas a atualização do campo modificado
+                    await db.SaveChangesAsync();
+                }
+
+                //await db.SolicitacaoEncaminhadas.SingleUpdateAsync(solicitacao);
+                //await db.SaveChangesAsync();
+                //return solicitacao;
             }
             catch (Exception)
             {

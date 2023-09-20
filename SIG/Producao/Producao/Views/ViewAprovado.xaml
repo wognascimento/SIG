@@ -18,6 +18,9 @@
             AllowFiltering="True" AutoGenerateColumns="False"
             FrozenColumnCount="12"
             AllowResizingColumns="True" 
+            SelectionUnit="Row"
+            SelectionMode="Extended"
+            GridCopyOption="CopyData,IncludeHeaders,IncludeFormat"
             CurrentCellEndEdit="OnCurrentCellEndEdit" 
             CurrentCellValueChanged="OnCurrentCellValueChanged" 
             RowValidated="itens_RowValidated">

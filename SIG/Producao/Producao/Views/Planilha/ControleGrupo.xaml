@@ -75,7 +75,7 @@
                 <syncfusion:GridTextColumn  MappingName="tema" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn  MappingName="descricao_completa"/>
                 <syncfusion:GridTextColumn  MappingName="obs" HeaderText="observacao_producao" ColumnSizer="SizeToHeader"/>
-                <syncfusion:GridTextColumn  MappingName="obs_planilheiro" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridTextColumn  MappingName="obs_planilheiro" ColumnSizer="SizeToHeader" AllowEditing="True"/>
                 <syncfusion:GridNumericColumn
                     MappingName="qtd_detalhe"
                     DisplayBinding="{Binding qtd_detalhe, Converter={StaticResource ConverterNumber}}"

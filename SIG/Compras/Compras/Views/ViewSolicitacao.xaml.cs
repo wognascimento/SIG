@@ -295,6 +295,7 @@ namespace Compras.Views
                     //origem = Dados_cmb_origem
                     //linha_fluxo = txtIdFluxo
                     solicitante = txtSolicitante.Text,
+                    finalizado = false,
                 };
                 await Task.Run(async () => await vm.InserirIntemTaskAsync(item));
                 vm.ItensSolicitado = await Task.Run(async () => await vm.GetItensSolicitadoAsync(vm.SolicitacaoMaterial.cod_solicitacao));

@@ -38,7 +38,7 @@
                 SelectionMode="Extended"
                 RowSelectionBrush="Green"
                 ShowRowHeader="True"
-                AllowDraggingRows="True">
+                AllowDraggingRows="True" CurrentCellValueChanged="itensSolicitados_CurrentCellValueChanged">
 
 
                 <syncfusion:SfDataGrid.RecordContextMenu>
@@ -67,13 +67,33 @@
                 
                 <syncfusion:SfDataGrid.Columns>
                     <!--<syncfusion:GridNumericColumn MappingName="cod_item" NumberNegativePattern="0" NumberDecimalDigits="0"/>-->
+                    <syncfusion:GridCheckBoxColumn MappingName="finalizado" AllowEditing="True"/>
                     <syncfusion:GridDateTimeColumn MappingName="data_informado" HeaderText="data solicitado" Pattern="CustomPattern" CustomPattern="dd/M/yyyy HH:mm:ss"/>
                     <syncfusion:GridTextColumn MappingName="familia"/>
                     <syncfusion:GridNumericColumn MappingName="codcompleadicional" ColumnSizer="SizeToCells" ParsingMode="Int" NumberDecimalDigits="0"/>
                     <syncfusion:GridTextColumn MappingName="descricao_completa"/>
-                    <syncfusion:GridNumericColumn MappingName="quantidade" HeaderText="qtde."/>
-                    <syncfusion:GridNumericColumn MappingName="quantidade_compra" HeaderText="qtde compra" AllowEditing="True"/>
-                    <syncfusion:GridNumericColumn MappingName="saldo_estoque" HeaderText="estoque"/>
+                    <syncfusion:GridNumericColumn 
+                        MappingName="quantidade" 
+                        HeaderText="qtde."
+                        NumberDecimalDigits="2"
+                        NumberDecimalSeparator="," 
+                        NumberGroupSizes="3" 
+                        NumberGroupSeparator="."/>
+                    <syncfusion:GridNumericColumn 
+                        MappingName="quantidade_compra" 
+                        HeaderText="qtde compra" 
+                        AllowEditing="True"
+                        NumberDecimalDigits="2"
+                        NumberDecimalSeparator="," 
+                        NumberGroupSizes="3" 
+                        NumberGroupSeparator="."/>
+                    <syncfusion:GridNumericColumn 
+                        MappingName="saldo_estoque" 
+                        HeaderText="estoque"
+                        NumberDecimalDigits="2"
+                        NumberDecimalSeparator="," 
+                        NumberGroupSizes="3" 
+                        NumberGroupSeparator="."/>
                     <syncfusion:GridTextColumn MappingName="unidade" HeaderText="unid."/>
                     <syncfusion:GridTextColumn MappingName="obs_solicitacao" ColumnSizer="SizeToHeader"/>
                     <syncfusion:GridTextColumn MappingName="orientacao_compra" ColumnSizer="SizeToHeader" AllowEditing="True"/>

@@ -82,7 +82,7 @@ namespace Producao.Views.Planilha
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 ControleGrupoViewModel vm = (ControleGrupoViewModel)DataContext;
                 ControlePlanilhaGrupoModel data = (ControlePlanilhaGrupoModel)e.RowData;
-                //data = await Task.Run(() => vm.SaveAsync(data));
+                data = await Task.Run(() => vm.SaveAsync(data));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
