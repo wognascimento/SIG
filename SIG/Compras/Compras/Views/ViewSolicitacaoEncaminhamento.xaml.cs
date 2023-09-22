@@ -382,22 +382,23 @@ namespace Compras.Views
             {
                 record.finalizado_por = Environment.UserName;
                 record.finalizado_em = DateTime.Now;
-                //var value = record.inativo;
+
+                try
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                    await Task.Run(() => vm.FinalizarItemSolicitadoAsync(record));
+                    vm.SolicitacoesEncaminhadas.Remove(record);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
             }
 
 
-            try
-            {
-                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                await Task.Run(() => vm.FinalizarItemSolicitadoAsync(record));
-                vm.SolicitacoesEncaminhadas.Remove(record);
-                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
-            }
+            
         }
     }
 

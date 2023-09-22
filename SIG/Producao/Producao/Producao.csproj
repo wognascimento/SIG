@@ -158,7 +158,7 @@
   
   <ItemGroup>
     <Folder Include="Impressos\" />
-    <Folder Include="Views\Solucao\" />
+    <Folder Include="Views\kit\manutencao\" />
   </ItemGroup>
   
   
