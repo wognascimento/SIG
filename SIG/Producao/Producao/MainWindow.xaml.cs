@@ -6,6 +6,7 @@ using Producao.Views.CheckList;
 using Producao.Views.Construcao;
 using Producao.Views.Controlado;
 using Producao.Views.Estoque;
+using Producao.Views.kit.solucao;
 using Producao.Views.OrdemServico.Produto;
 using Producao.Views.OrdemServico.Requisicao;
 using Producao.Views.OrdemServico.Servicos;
@@ -1018,6 +1019,11 @@ namespace Producao
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void OnKitSolucaoCheckList(object sender, RoutedEventArgs e)
+        {
+            adicionarFilho(new ViewKitSolucao(), "CHECKLIST KIT SOLUÇÃO", "CHECKLIST_KIT_SOLUCAO");
         }
     }
 }

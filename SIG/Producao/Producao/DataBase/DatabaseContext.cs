@@ -95,6 +95,7 @@ namespace Producao
         public DbSet<PropostaFechaTemaModel> PropostaFechaTemas { get; set; }
         public DbSet<ViewFechaModel> ViewFechas { get; set; }
         public DbSet<FechaLinkModel> FechaLinks { get; set; }
+        public DbSet<OsKitSolucaoModel> OsKitSolucaos { get; set; }
 
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
