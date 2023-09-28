@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Producao.DataBase.Model
+namespace Producao
 {
     [Table("t_os_kitsolucao", Schema = "kitsolucao")]
     public class OsKitSolucaoModel

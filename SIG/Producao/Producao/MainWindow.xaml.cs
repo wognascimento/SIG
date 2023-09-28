@@ -121,7 +121,7 @@ namespace Producao
             }
         }
 
-        private void adicionarFilho(object filho, string title, string name)
+        public void adicionarFilho(object filho, string title, string name)
         {
             var doc = ExistDocumentInDocumentContainer(name);
             if (doc == null)

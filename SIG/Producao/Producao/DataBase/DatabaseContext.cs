@@ -96,6 +96,8 @@ namespace Producao
         public DbSet<ViewFechaModel> ViewFechas { get; set; }
         public DbSet<FechaLinkModel> FechaLinks { get; set; }
         public DbSet<OsKitSolucaoModel> OsKitSolucaos { get; set; }
+        public DbSet<ClassificacaoSolucaoModel> ClassificacaoSolucaos { get; set; }
+        public DbSet<KitChkGeralModel> KitChkGerals { get; set; }
 
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -120,6 +122,7 @@ namespace Producao
                 $"database={BaseSettings.Database};" ,
                 options => options.EnableRetryOnFailure()
                 );
+            //optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

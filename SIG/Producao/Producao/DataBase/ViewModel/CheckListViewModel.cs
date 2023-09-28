@@ -833,7 +833,7 @@ namespace Producao
                 using DatabaseContext db = new();
                 var data = await db.CheckListGerals
                     .OrderBy(c => c.id)
-                    .Where(c => c.id_aprovado == id_aprovado)
+                    .Where(c => c.id_aprovado == id_aprovado && c.kp == null)
                     .ToListAsync();
                 return new ObservableCollection<QryCheckListGeralModel>(data);
             }

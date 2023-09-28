@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Producao
 {
@@ -38,6 +34,7 @@ namespace Producao
         public string? ok_revisao_alterada { get; set; }
         public double? kp { get; set; }
         public string? class_solucao { get; set; }
+        public string? motivos { get; set; }
         public int? condicao { get; set; }
         public long? id_aprovado { get; set; }
         public string? historico { get; set; }
