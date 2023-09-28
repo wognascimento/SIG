@@ -110,7 +110,10 @@
             AllowFiltering="True"
             ShowRowHeader="True" 
             ItemsSource="{Binding Itens}"
-            Margin="5,5,5,0">
+            Margin="5,5,5,0"
+            SelectionUnit="Row"
+            SelectionMode="Extended"
+            GridCopyOption="CopyData,IncludeHeaders,IncludeFormat">
             <syncfusion:SfDataGrid.Columns>
                 
                 <syncfusion:GridTextColumn 
