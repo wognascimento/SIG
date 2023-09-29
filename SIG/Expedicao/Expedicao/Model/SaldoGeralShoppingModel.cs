@@ -18,7 +18,7 @@ namespace Expedicao
         public double? volumes { get; set; }
         public double? perc_shop { get; set; }
         //public DateTime? fechamento_shopp { get; set; }
-        //public double? cubagem_memorial { get; set; }
-        public double? novo_perc {  get; set; }
+        public double? cubagem_memorial { get; set; }
+        //public double? novo_perc {  get; set; }
     }
 }
