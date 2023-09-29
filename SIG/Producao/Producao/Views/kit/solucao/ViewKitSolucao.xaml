@@ -88,8 +88,12 @@
                     <syncfusion:GridTextColumn
                         HeaderText="OBSERVAÇÃO" 
                         MappingName="obs_de_envio"/>
-                    
-                    <syncfusion:GridTemplateColumn 
+
+                <syncfusion:GridTextColumn
+                        HeaderText="CONTROLE" 
+                        MappingName="os"/>
+
+                <syncfusion:GridTemplateColumn 
                     HeaderText="DETALHES"
                     MappingName="os">
                         <syncfusion:GridTemplateColumn.CellTemplate>

@@ -7,17 +7,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Producao.Views.OrdemServico.Produto
 {
@@ -263,6 +256,10 @@ namespace Producao.Views.OrdemServico.Produto
             txtDescricaoAdicional.Text = null;
             txtComplementoAdicional.Text = null;
             txtQuantidade.Text = null;
+
+            SolicitacaoOrdemServicoProdutoViewModel vm = (SolicitacaoOrdemServicoProdutoViewModel)DataContext;
+            vm.ObsOSs = new ObservableCollection<ObsOsModel>();
+            //vm.ObsOs
         }
 
         private void caminhos_AddNewRowInitiating(object sender, Syncfusion.UI.Xaml.Grid.AddNewRowInitiatingEventArgs e)

@@ -213,10 +213,11 @@ namespace Producao.Views.kit.solucao
                 worksheet.Range["L3"].Text = vm.ChkGeral.est;
                 worksheet.Range["C4"].Text = vm.ChkGeral.solicitante;
                 worksheet.Range["J4"].Text = String.Format("{0:dd/MM/yyyy HH:mm:ss}", vm.ChkGeral.data_solicitacao); //(DateTime)vm.ChkGeral.data_solicitacao;
+                worksheet.Range["C6"].Text = vm.ChkGeral.noite_montagem;
 
                 //worksheet.Range["C6"].Text = requi.num_os_servico.ToString();
                 //worksheet.Range["F6"].Text = requi.produtocompleto;
-                
+
                 //var itens = (from i in vm.QryRequisicaoDetalhes where i.quantidade > 0 select new { i.quantidade, i.planilha, i.descricao_completa, i.unidade, i.observacao, i.codcompladicional }).ToList(); //new { a.Name, a.Age }
                 var index = 9;
                 foreach (var item in vm.ChkGerais)
@@ -250,6 +251,11 @@ namespace Producao.Views.kit.solucao
                     worksheet.Range[$"M{index}:N{index}"].CellStyle.Font.Size = 7;
                     worksheet.Range[$"M{index}:N{index}"].Merge();
                     worksheet.Range[$"M{index}:N{index}"].WrapText = true;
+
+                    worksheet.Range[$"O{index}"].Number = (double)item.coddetalhescompl;
+                    worksheet.Range[$"O{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+                    worksheet.Range[$"O{index}"].CellStyle.Font.Size = 7;
+
                     index++;
                 }
                 
