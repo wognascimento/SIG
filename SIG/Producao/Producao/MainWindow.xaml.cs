@@ -1067,5 +1067,10 @@ namespace Producao
         {
             adicionarFilho(new ViewControleGeralSolicitacao(), "CONTROLE GERAL DE SOLICITAÇÕES", "CONTROLE_GERAL_SOLICITACOES");
         }
+
+        private void OnProdutosShopping(object sender, RoutedEventArgs e)
+        {
+            adicionarFilho(new ViewProdutoShopping(), "PRODUTO SHOPPING", "PRODUTO_SHOPPING");
+        }
     }
 }

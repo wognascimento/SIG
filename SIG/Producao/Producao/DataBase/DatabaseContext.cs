@@ -11,6 +11,7 @@ namespace Producao
         public DbSet<ProdutoModel> Produtos { get; set; }
         public DbSet<TabelaDescAdicionalModel> DescAdicionais { get; set; }
         public DbSet<TblComplementoAdicionalModel> ComplementoAdicionais { get; set; }
+        public DbSet<ProdutoShoppingModel> ProdutoShopping { get; set; }
         public DbSet<AprovadoModel> Aprovados { get; set; }
         public DbSet<SiglaChkListModel> Siglas { get; set; }
         public DbSet<ComplementoCheckListModel> ComplementoCheckLists { get; set; }
