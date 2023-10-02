@@ -141,7 +141,7 @@
                 
                 <syncfusion:MenuItemAdv Header="Solução">
                     <syncfusion:MenuItemAdv Header="Checklist" Click="OnKitSolucaoCheckList"/>
-                    <syncfusion:MenuItemAdv Header="Consulta"/>
+                    <syncfusion:MenuItemAdv Header="Consulta" Click="OnQueryKitsolucaoGeral"/>
                 </syncfusion:MenuItemAdv>
                 
                 <syncfusion:MenuItemAdv Header="Manutenção">
@@ -149,7 +149,7 @@
                     <syncfusion:MenuItemAdv Header="Consulta"/>
                 </syncfusion:MenuItemAdv>
 
-                <syncfusion:MenuItemAdv Header="Responsável"/>
+                <syncfusion:MenuItemAdv Header="Controle Geral" Click="OnControleGeral"/>
 
             </syncfusion:MenuItemAdv>
         </syncfusion:MenuAdv>

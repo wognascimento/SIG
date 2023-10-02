@@ -80,9 +80,9 @@ namespace Expedicao.Views
                 bau_altura.Value = new double?((double)vm.Romaneio.BauAltura);
                 bau_largura.Value = new double?((double)vm.Romaneio.BauLargura);
                 bau_profundidade.Value = new double?((double)vm.Romaneio.BauProfundidade);
-                m3_carregado.Value = new double?((double)vm.Romaneio.M3Carregado);
-                bau_soba.Value = new double?((double)vm.Romaneio.BauSoba);
-                m3_portaria.Value = new double?((double)vm.Romaneio.M3Portaria);
+                m3_carregado.Value = new double?((double)vm.Romaneio?.M3Carregado);
+                bau_soba.Value = new double?((double)vm.Romaneio?.BauSoba);
+                m3_portaria.Value = new double?((double)vm.Romaneio?.M3Portaria);
                 nome_conferente.Text = vm.Romaneio.NomeConferente;
                 num_lacres.Text = vm.Romaneio.NumLacres;
                 numero_container.Text = vm.Romaneio.NumeroContainer;

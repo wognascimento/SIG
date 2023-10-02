@@ -27,6 +27,7 @@ namespace Producao.Views
         {
             InitializeComponent();
             this.DataContext = new ViewModel();
+            itens.Columns["ok"].FilterPredicates.Add(new FilterPredicate() { FilterType = FilterType.Equals, FilterValue = "0    " });
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -37,7 +38,7 @@ namespace Producao.Views
                 ViewModel vm = (ViewModel)DataContext;
                 await Task.Run(vm.GetDados);
                 await Task.Run(vm.GetRevisores);
-                itens.Columns["ok"].FilterPredicates.Add(new FilterPredicate() { FilterType = FilterType.Equals, FilterValue = "0    " });
+                //itens.Columns["ok"].FilterPredicates.Add(new FilterPredicate() { FilterType = FilterType.Equals, FilterValue = "0    " });
                 ((MainWindow)Application.Current.MainWindow).PbLoading.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)

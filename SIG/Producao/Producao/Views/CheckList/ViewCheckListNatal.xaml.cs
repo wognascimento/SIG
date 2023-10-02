@@ -99,9 +99,12 @@ namespace Producao.Views.CheckList
                     nivel = vm?.CheckListGeral?.nivel,
                     carga = vm?.CheckListGeral?.carga,
                     class_solucao = vm?.CheckListGeral?.class_solucao,
+                    motivos = vm?.CheckListGeral?.motivos,
                     id_aprovado = vm?.CheckListGeral?.id_aprovado,
                     historico = vm?.CheckListGeral?.historico,
-                    agrupar = vm?.CheckListGeral?.agrupar
+                    agrupar = vm?.CheckListGeral?.agrupar,
+                    inserido_por = vm?.CheckListGeral?.inserido_por,
+                    inserido_em = vm?.CheckListGeral?.inserido_em,
                 };
 
                 vm.Planilha = (from p in vm.Planilhas where p.planilha == record?.planilha select p).FirstOrDefault();

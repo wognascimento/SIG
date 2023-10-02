@@ -98,6 +98,9 @@ namespace Producao
         public DbSet<OsKitSolucaoModel> OsKitSolucaos { get; set; }
         public DbSet<ClassificacaoSolucaoModel> ClassificacaoSolucaos { get; set; }
         public DbSet<KitChkGeralModel> KitChkGerals { get; set; }
+        public DbSet<KitSolicaoGeralModel> KitSolicaoGeral { get; set; }
+        public DbSet<ControleSolicaoGeralModel> ControleSolicaoGeral { get; set; }
+        public DbSet<ControleEnvioModel> ControleEnvio { get; set; }
 
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

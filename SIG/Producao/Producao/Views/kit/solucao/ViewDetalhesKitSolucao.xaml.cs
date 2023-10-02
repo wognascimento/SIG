@@ -1,27 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using Producao.DataBase.Model;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
 using Syncfusion.XlsIO;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Producao.Views.kit.solucao
 {
@@ -224,37 +215,38 @@ namespace Producao.Views.kit.solucao
                 {
                     worksheet.Range[$"A{index}"].Number = (double)item.qtd;
                     worksheet.Range[$"A{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                    worksheet.Range[$"A{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"A{index}"].CellStyle.Font.Size = 7;
 
                     worksheet.Range[$"B{index}"].Number = (double)item.codcompladicional;
                     worksheet.Range[$"B{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                    worksheet.Range[$"B{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"B{index}"].CellStyle.Font.Size = 7;
 
                     worksheet.Range[$"C{index}:D{index}"].Text = item.planilha;
                     worksheet.Range[$"C{index}:D{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                    worksheet.Range[$"C{index}:D{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"C{index}:D{index}"].CellStyle.Font.Size = 7;
                     worksheet.Range[$"C{index}:D{index}"].Merge();
                     worksheet.Range[$"C{index}:D{index}"].WrapText = true;
 
                     worksheet.Range[$"E{index}:K{index}"].Text = item.descricao_completa;
                     worksheet.Range[$"E{index}:K{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                    worksheet.Range[$"E{index}:K{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"E{index}:K{index}"].CellStyle.Font.Size = 7;
                     worksheet.Range[$"E{index}:K{index}"].Merge();
                     worksheet.Range[$"E{index}:K{index}"].WrapText = true;
 
                     worksheet.Range[$"L{index}"].Text = item.unidade;
                     worksheet.Range[$"L{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                    worksheet.Range[$"L{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"L{index}"].CellStyle.Font.Size = 7;
 
                     worksheet.Range[$"M{index}:N{index}"].Text = item.obs;
                     worksheet.Range[$"M{index}:N{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-                    worksheet.Range[$"M{index}:N{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"M{index}:N{index}"].CellStyle.Font.Size = 7;
                     worksheet.Range[$"M{index}:N{index}"].Merge();
                     worksheet.Range[$"M{index}:N{index}"].WrapText = true;
+                    worksheet.Range[$"E{index}:K{index}"].RowHeight = 26;
 
                     worksheet.Range[$"O{index}"].Number = (double)item.coddetalhescompl;
                     worksheet.Range[$"O{index}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                    worksheet.Range[$"O{index}"].CellStyle.Font.Size = 7;
+                    //worksheet.Range[$"O{index}"].CellStyle.Font.Size = 7;
 
                     index++;
                 }
@@ -310,9 +302,12 @@ namespace Producao.Views.kit.solucao
                     nivel = vm?.CheckListGeral?.nivel,
                     carga = vm?.CheckListGeral?.carga,
                     class_solucao = vm?.CheckListGeral?.class_solucao,
+                    motivos = vm?.CheckListGeral?.motivos,
                     id_aprovado = vm?.CheckListGeral?.id_aprovado,
                     historico = vm?.CheckListGeral?.historico,
-                    agrupar = vm?.CheckListGeral?.agrupar
+                    agrupar = vm?.CheckListGeral?.agrupar,
+                    inserido_por = vm?.CheckListGeral?.inserido_por,
+                    inserido_em = vm?.CheckListGeral?.inserido_em,
                 };
 
                 vm.Planilha = (from p in vm.Planilhas where p.planilha == record?.planilha select p).FirstOrDefault();
