@@ -737,7 +737,7 @@ namespace Producao
                     Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
 
                     using DatabaseContext db = new();
-                    var data = await db.OrdemServicoEmitidas.Where(os => os.concluida_os_data != null).ToListAsync();
+                    var data= await db.OrdemServicoEmitidas.Where(os => os.concluida_os_data != null).ToListAsync();
 
                     using ExcelEngine excelEngine = new ExcelEngine();
                     IApplication application = excelEngine.Excel;
@@ -750,8 +750,8 @@ namespace Producao
                     //worksheet.IsGridLinesVisible = false;
                     worksheet.ImportData(data, 1, 1, true);
 
-                    workbook.SaveAs("Impressos/EMITIDAS.xlsx");
-                    Process.Start(new ProcessStartInfo("Impressos\\EMITIDAS.xlsx")
+                    workbook.SaveAs("Impressos/CONCLUIDAS.xlsx");
+                    Process.Start(new ProcessStartInfo("Impressos\\CONCLUIDAS.xlsx")
                     {
                         UseShellExecute = true
                     });
@@ -792,8 +792,8 @@ namespace Producao
                     //worksheet.IsGridLinesVisible = false;
                     worksheet.ImportData(data, 1, 1, true);
 
-                    workbook.SaveAs("Impressos/EMITIDAS.xlsx");
-                    Process.Start(new ProcessStartInfo("Impressos\\EMITIDAS.xlsx")
+                    workbook.SaveAs("Impressos/NAO-CONCLUIDAS.xlsx");
+                    Process.Start(new ProcessStartInfo("Impressos\\NAO-CONCLUIDAS.xlsx")
                     {
                         UseShellExecute = true
                     });
@@ -834,8 +834,8 @@ namespace Producao
                     //worksheet.IsGridLinesVisible = false;
                     worksheet.ImportData(data, 1, 1, true);
 
-                    workbook.SaveAs("Impressos/EMITIDAS.xlsx");
-                    Process.Start(new ProcessStartInfo("Impressos\\EMITIDAS.xlsx")
+                    workbook.SaveAs("Impressos/CANCELADAS.xlsx");
+                    Process.Start(new ProcessStartInfo("Impressos\\CANCELADAS.xlsx")
                     {
                         UseShellExecute = true
                     });

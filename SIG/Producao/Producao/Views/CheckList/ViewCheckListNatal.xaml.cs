@@ -634,23 +634,26 @@ namespace Producao.Views.CheckList
 
             QryCheckListGeralComplementoModel? dado = e.Record as QryCheckListGeralComplementoModel; //e.Record = {Producao.QryCheckListGeralComplementoModel}
             CheckListViewModel vm = (CheckListViewModel)DataContext;
+
+            SfDataGrid? grid = sender as SfDataGrid;
+            int columnindex = grid.ResolveToGridVisibleColumnIndex(e.RowColumnIndex.ColumnIndex);
+            var column = grid.Columns[columnindex];
+            var rowIndex = grid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
+            var record = grid.View.Records[rowIndex].Data as ControleMemorialModel;
+
             try
             {
-                //QryCheckListGeralComplementoModel data = (QryCheckListGeralComplementoModel)e.RowData;
-                vm.DetCompl.coddetalhescompl = dado.coddetalhescompl;
-                vm.DetCompl.codcompl = dado.codcompl;
-                vm.DetCompl.codcompladicional = dado.codcompladicional;
-                vm.DetCompl.qtd = dado.qtd;
-                vm.DetCompl.confirmado = dado.confirmado;
-                vm.DetCompl.confirmado_data = dado.confirmado == "-1" ? DateTime.Now : null;
-                vm.DetCompl.confirmado_por = dado.confirmado == "-1" ? Environment.UserName : null;
-                vm.DetCompl.desabilitado_confirmado_data = dado.confirmado == "-1" ? DateTime.Now : null;
-                vm.DetCompl.desabilitado_confirmado_por = dado.confirmado == "-1" ? Environment.UserName : null;
-                vm.DetCompl.local_producao = "JACAREÍ";
-                vm.DetCompl.os = dado.os;
+                if (column.GetType() == typeof(GridCheckBoxColumn) && column.MappingName == "confirmado")
+                {
+                    vm.DetCompl.coddetalhescompl = dado.coddetalhescompl;
+                    vm.DetCompl.confirmado = dado.confirmado;
+                    vm.DetCompl.confirmado_data = dado.confirmado == "-1" ? DateTime.Now : null;
+                    vm.DetCompl.confirmado_por = dado.confirmado == "-1" ? Environment.UserName : null;
+                    vm.DetCompl.desabilitado_confirmado_data = dado.confirmado == "-1" ? DateTime.Now : null;
+                    vm.DetCompl.desabilitado_confirmado_por = dado.confirmado == "-1" ? Environment.UserName : null;
+                    vm.DetCompl = await Task.Run(() => vm.ConfirmarComplementoCheckListAsync(vm.DetCompl));
+                }
 
-                vm.DetCompl = await Task.Run(() => vm.AddDetalhesComplementoCheckListAsync(vm.DetCompl));
-                //vm.CheckListGeralComplementos = await Task.Run(() => vm.GetCheckListGeralComplementoAsync(vm.DetCompl.codcompl));
 
             }
             catch (Exception ex)

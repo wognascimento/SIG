@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 
 namespace Producao
 {
@@ -949,6 +950,48 @@ namespace Producao
                 await db.SaveChangesAsync();
 
                 return detCompl;
+            }
+            catch (NpgsqlException)
+            {
+                throw;
+            }
+        }
+
+        public async Task<DetalhesComplemento> ConfirmarComplementoCheckListAsync(DetalhesComplemento detCompl)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+
+                var det = db.DetalhesComplementos.FirstOrDefault(p => p.coddetalhescompl == detCompl.coddetalhescompl);
+                if (det != null)
+                {
+                    // Atualiza somente o campo necessário (no caso, o nome)
+                    //produto.Nome = novoNome;
+
+                    // Informa ao Entity Framework que o objeto foi modificado
+
+                    det.confirmado = detCompl.confirmado;
+                    det.confirmado_data = detCompl.confirmado_data;
+                    det.confirmado_por = detCompl.confirmado_por;
+                    det.desabilitado_confirmado_data = detCompl.desabilitado_confirmado_data;
+                    det.desabilitado_confirmado_por = detCompl.desabilitado_confirmado_por;
+
+                    db.Entry(det).Property(p => p.confirmado).IsModified = true;
+                    db.Entry(det).Property(p => p.confirmado_data).IsModified = true;
+                    db.Entry(det).Property(p => p.confirmado_por).IsModified = true;
+                    db.Entry(det).Property(p => p.desabilitado_confirmado_data).IsModified = true;
+                    db.Entry(det).Property(p => p.desabilitado_confirmado_por).IsModified = true;
+
+                    // Salva apenas a atualização do campo modificado
+                    await db.SaveChangesAsync();
+                }
+
+                //db.Entry(detCompl).State = detCompl.coddetalhescompl == null ? EntityState.Added : EntityState.Modified;
+                //await db.DetalhesComplementos.SingleMergeAsync(detCompl);
+                //await db.SaveChangesAsync();
+
+                return det;
             }
             catch (NpgsqlException)
             {
