@@ -16,23 +16,23 @@ using System.Windows.Input;
 using Telerik.Windows.Controls.Map;
 using Telerik.Windows.Documents.Spreadsheet.Model;
 
-namespace Producao.Views.kit.solucao
+namespace Producao.Views.kit.manutencao
 {
     /// <summary>
-    /// Interação lógica para ViewDetalhesKitSolucao.xam
+    /// Interação lógica para ViewDetalhesKitManutencao.xam
     /// </summary>
-    public partial class ViewDetalhesKitSolucao : UserControl
+    public partial class ViewDetalhesKitManutencao : UserControl
     {
         private OsKitSolucaoModel OsKit;
-        public ViewDetalhesKitSolucao(OsKitSolucaoModel osKit)
+        public ViewDetalhesKitManutencao(OsKitSolucaoModel osKit)
         {
             InitializeComponent();
             this.OsKit = osKit;
             cbSiglaShopping.Text = OsKit.shopping[..^2];
             tbId.Text = "0";
             tbItem.Text = "0";
-            tbLocalShopping.Text = "KIT SOLUÇÃO";
-            DataContext = new DetalhesKitSolucaoViewModel();
+            tbLocalShopping.Text = "KIT MANUTENÇÃO";
+            DataContext = new ViewDetalhesKitManutencaoViewModel();
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -40,7 +40,7 @@ namespace Producao.Views.kit.solucao
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
                 vm.Planilhas = await Task.Run(vm.GetPlanilhasAsync);
                 vm.CheckListGerais = await Task.Run(async () => await vm.GetCheckListGeralAsync(OsKit.os));
                 vm.Classificacoes = await Task.Run(vm.GetClassificacoesAsync);
@@ -62,7 +62,7 @@ namespace Producao.Views.kit.solucao
             {
 
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
 
                 vm.ComplementoCheckList.codproduto = null;
                 vm.Produtos = new ObservableCollection<ProdutoModel>();
@@ -89,7 +89,7 @@ namespace Producao.Views.kit.solucao
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
 
                 vm.ComplementoCheckList.coduniadicional = null;
                 vm.DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>();
@@ -114,7 +114,7 @@ namespace Producao.Views.kit.solucao
         {
             try
             {
-                DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.ComplementoCheckList.codcompl = null;
                 vm.ComplementoCheckList.sigla = cbSiglaShopping.Text;
@@ -151,7 +151,7 @@ namespace Producao.Views.kit.solucao
         {
             try
             {
-                DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.ComplementoCheckList.class_solucao = cmbClassificacoes.SelectedItem.ToString();
                 vm.ComplementoCheckList.motivos = cmbMotivos.SelectedItem.ToString();
@@ -184,7 +184,7 @@ namespace Producao.Views.kit.solucao
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
 
-                DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
 
                 //QryRequisicaoDetalheModel requi = (from r in vm.QryRequisicaoDetalhes select r).FirstOrDefault();
 
@@ -501,8 +501,8 @@ namespace Producao.Views.kit.solucao
                     }
                 }
 
-                //wsheet.PageSetup.LeftMargin = 1;
-                //wsheet.PageSetup.RightMargin = 1;
+                wsheet.PageSetup.LeftMargin = 2;
+                wsheet.PageSetup.RightMargin = 2;
 
                 //Save the Excel document
                 workbook.SaveAs($"Impressos/REQUISICAO_KIT_{vm.ChkGeral.os}.xlsx");
@@ -530,7 +530,7 @@ namespace Producao.Views.kit.solucao
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
                 var record = vm.CheckListGeral;
 
                 vm.ComplementoCheckList = new ComplementoCheckListModel
@@ -583,7 +583,7 @@ namespace Producao.Views.kit.solucao
 
         private void dgComplemento_AddNewRowInitiating(object sender, Syncfusion.UI.Xaml.Grid.AddNewRowInitiatingEventArgs e)
         {
-            DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+            ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
 
             ((QryCheckListGeralComplementoModel)e.NewObject).codcompl = vm.CheckListGeral.codcompl;
         }
@@ -591,7 +591,7 @@ namespace Producao.Views.kit.solucao
         private void OnCurrentCellDropDownSelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellDropDownSelectionChangedEventArgs e)
         {
             var sfdatagrid = sender as SfDataGrid;
-            var viewModel = (DetalhesKitSolucaoViewModel)sfdatagrid.DataContext;
+            var viewModel = (ViewDetalhesKitManutencaoViewModel)sfdatagrid.DataContext;
             int rowIndex = sfdatagrid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
 
             QryCheckListGeralComplementoModel record;
@@ -614,7 +614,7 @@ namespace Producao.Views.kit.solucao
         private async void dgComplemento_RowValidated(object sender, Syncfusion.UI.Xaml.Grid.RowValidatedEventArgs e)
         {
             var sfdatagrid = sender as SfDataGrid;
-            DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+            ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
@@ -660,7 +660,7 @@ namespace Producao.Views.kit.solucao
                 string classificacao = e.AddedItems[0].ToString();
                 //sender = {Syncfusion.Windows.Tools.Controls.ComboBoxAdv Items.Count:6}
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
                 vm.Motivos = await Task.Run(async () => await vm.GetMotivosAsync(classificacao));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
@@ -673,7 +673,7 @@ namespace Producao.Views.kit.solucao
 
         void Limpar()
         {
-            DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+            ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
 
             //tbId.Text = string.Empty;
             //tbItem.Text = string.Empty;
@@ -702,7 +702,7 @@ namespace Producao.Views.kit.solucao
         }
     }
 
-    public class DetalhesKitSolucaoViewModel : INotifyPropertyChanged
+    public class ViewDetalhesKitManutencaoViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propName)
@@ -847,7 +847,7 @@ namespace Producao.Views.kit.solucao
             set { _chkGerais = value; RaisePropertyChanged("ChkGerais"); }
         }
 
-        public DetalhesKitSolucaoViewModel()
+        public ViewDetalhesKitManutencaoViewModel()
         {
             DetCompl = new DetalhesComplemento();
             ComplementoCheckList = new ComplementoCheckListModel();

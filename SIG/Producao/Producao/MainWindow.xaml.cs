@@ -7,6 +7,7 @@ using Producao.Views.Construcao;
 using Producao.Views.Controlado;
 using Producao.Views.Estoque;
 using Producao.Views.kit;
+using Producao.Views.kit.manutencao;
 using Producao.Views.kit.solucao;
 using Producao.Views.OrdemServico.Produto;
 using Producao.Views.OrdemServico.Requisicao;
@@ -1035,7 +1036,7 @@ namespace Producao
 
                 using DatabaseContext db = new();
                 //var data = await db.PendenciaProducaos.ToListAsync();
-                var data = await db.KitSolicaoGeral.ToListAsync();
+                var data = await db.KitSolicaoGeral.Where(c => c.local_shoppings == "KIT SOLUÇÃO").ToListAsync();
 
                 using ExcelEngine excelEngine = new ExcelEngine();
                 IApplication application = excelEngine.Excel;
@@ -1071,6 +1072,47 @@ namespace Producao
         private void OnProdutosShopping(object sender, RoutedEventArgs e)
         {
             adicionarFilho(new ViewProdutoShopping(), "PRODUTO SHOPPING", "PRODUTO_SHOPPING");
+        }
+
+        private void OnKitManutencaoCheckList(object sender, RoutedEventArgs e)
+        {
+            adicionarFilho(new ViewKitManutencao(), "CHECKLIST KIT MANUTENÇÃO", "CHECKLIST_KIT_MANUTENCAO");
+        }
+
+        private async void OnQueryKitManutencaoGeral(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                using DatabaseContext db = new();
+                //var data = await db.PendenciaProducaos.ToListAsync();
+                var data = await db.KitSolicaoGeral.Where(c => c.local_shoppings == "KIT MANUTENÇÃO").ToListAsync();
+
+                using ExcelEngine excelEngine = new ExcelEngine();
+                IApplication application = excelEngine.Excel;
+
+                application.DefaultVersion = ExcelVersion.Xlsx;
+
+                //Create a workbook
+                IWorkbook workbook = application.Workbooks.Create(1);
+                IWorksheet worksheet = workbook.Worksheets[0];
+                //worksheet.IsGridLinesVisible = false;
+                worksheet.ImportData(data, 1, 1, true);
+
+                workbook.SaveAs("Impressos/KITSOLUCAO_GERAL.xlsx");
+                Process.Start(new ProcessStartInfo("Impressos\\KITSOLUCAO_GERAL.xlsx")
+                {
+                    UseShellExecute = true
+                });
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

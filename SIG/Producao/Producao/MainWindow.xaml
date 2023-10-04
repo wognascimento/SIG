@@ -146,8 +146,8 @@
                 </syncfusion:MenuItemAdv>
                 
                 <syncfusion:MenuItemAdv Header="Manutenção">
-                    <syncfusion:MenuItemAdv Header="Checklist"/>
-                    <syncfusion:MenuItemAdv Header="Consulta"/>
+                    <syncfusion:MenuItemAdv Header="Checklist" Click="OnKitManutencaoCheckList"/>
+                    <syncfusion:MenuItemAdv Header="Consulta" Click="OnQueryKitManutencaoGeral"/>
                 </syncfusion:MenuItemAdv>
 
                 <syncfusion:MenuItemAdv Header="Controle Geral" Click="OnControleGeral"/>

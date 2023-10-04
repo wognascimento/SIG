@@ -631,27 +631,33 @@ namespace Producao.Views.CheckList
 
         private async void dgComplemento_CurrentCellValueChanged(object sender, CurrentCellValueChangedEventArgs e)
         {
-            /*
-            DetalhesComplemento? dado = e.Record as DetalhesComplemento;
+
+            QryCheckListGeralComplementoModel? dado = e.Record as QryCheckListGeralComplementoModel; //e.Record = {Producao.QryCheckListGeralComplementoModel}
             CheckListViewModel vm = (CheckListViewModel)DataContext;
             try
             {
+                //QryCheckListGeralComplementoModel data = (QryCheckListGeralComplementoModel)e.RowData;
+                vm.DetCompl.coddetalhescompl = dado.coddetalhescompl;
+                vm.DetCompl.codcompl = dado.codcompl;
+                vm.DetCompl.codcompladicional = dado.codcompladicional;
                 vm.DetCompl.qtd = dado.qtd;
                 vm.DetCompl.confirmado = dado.confirmado;
-                vm.DetCompl.confirmado_data = vm.DetCompl.confirmado == "-1" ? DateTime.Now : null;
-                vm.DetCompl.confirmado_por = vm.DetCompl.confirmado == "-1" ? Environment.UserName : null;
-                vm.DetCompl.desabilitado_confirmado_data = vm.DetCompl.confirmado == "-1" ? DateTime.Now : null;
-                vm.DetCompl.desabilitado_confirmado_por = vm.DetCompl.confirmado == "-1" ? Environment.UserName : null;
+                vm.DetCompl.confirmado_data = dado.confirmado == "-1" ? DateTime.Now : null;
+                vm.DetCompl.confirmado_por = dado.confirmado == "-1" ? Environment.UserName : null;
+                vm.DetCompl.desabilitado_confirmado_data = dado.confirmado == "-1" ? DateTime.Now : null;
+                vm.DetCompl.desabilitado_confirmado_por = dado.confirmado == "-1" ? Environment.UserName : null;
+                vm.DetCompl.local_producao = "JACAREÍ";
+                vm.DetCompl.os = dado.os;
 
                 vm.DetCompl = await Task.Run(() => vm.AddDetalhesComplementoCheckListAsync(vm.DetCompl));
-                vm.CheckListGeralComplementos = await Task.Run(() => vm.GetCheckListGeralComplementoAsync(vm.DetCompl.codcompl));
+                //vm.CheckListGeralComplementos = await Task.Run(() => vm.GetCheckListGeralComplementoAsync(vm.DetCompl.codcompl));
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            */
+            
             
         }
 

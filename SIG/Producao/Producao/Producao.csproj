@@ -153,12 +153,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Impressos\" />
-    <Folder Include="Views\kit\manutencao\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icones\icons8-detalhes-40.png" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\kit\manutencao\ViewDetalhesKitManutencao.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\kit\manutencao\ViewKitManutencao.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\OrdemServico\Produto\AlterarSolicitacaoOrdemServicoProduto.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
