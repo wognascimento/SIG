@@ -639,7 +639,7 @@ namespace Producao.Views.CheckList
             int columnindex = grid.ResolveToGridVisibleColumnIndex(e.RowColumnIndex.ColumnIndex);
             var column = grid.Columns[columnindex];
             var rowIndex = grid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
-            var record = grid.View.Records[rowIndex].Data as ControleMemorialModel;
+            //var record = grid.View.Records[rowIndex].Data as QryCheckListGeralComplementoModel;
 
             try
             {
