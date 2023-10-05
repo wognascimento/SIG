@@ -367,7 +367,7 @@ namespace Expedicao
             {
                 using AppDatabase db = new();
                 listAsync = await db.CarregamentoItemCaminhaos
-                    .Where(x => siglas.Contains(x.SiglaServ) && x.ExportadoFolhamatic != "1")
+                    .Where(x => siglas.Contains(x.SiglaServ) && x.ExportadoFolhamatic == null)
                     .GroupBy(x => new
                     {
                         x.CodComplAdicional,
