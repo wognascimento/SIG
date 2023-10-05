@@ -247,6 +247,7 @@
                 <syncfusion:GridTextColumn MappingName="tema"/>
                 <syncfusion:GridTextColumn MappingName="planilha"/>
                 <syncfusion:GridTextColumn MappingName="descricao_completa"/>
+                <syncfusion:GridTextColumn MappingName="obs_modelo" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridTextColumn MappingName="unidade" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn MappingName="cadastrado_por" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridDateTimeColumn MappingName="data_cadastro" ColumnSizer="SizeToCells"/>
