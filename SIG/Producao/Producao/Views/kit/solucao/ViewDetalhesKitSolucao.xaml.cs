@@ -13,8 +13,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Telerik.Windows.Controls.Map;
-using Telerik.Windows.Documents.Spreadsheet.Model;
 
 namespace Producao.Views.kit.solucao
 {

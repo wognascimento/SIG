@@ -647,10 +647,10 @@ namespace Producao.Views.CheckList
                 {
                     vm.DetCompl.coddetalhescompl = dado.coddetalhescompl;
                     vm.DetCompl.confirmado = dado.confirmado;
-                    vm.DetCompl.confirmado_data = dado.confirmado == "-1" ? DateTime.Now : null;
-                    vm.DetCompl.confirmado_por = dado.confirmado == "-1" ? Environment.UserName : null;
-                    vm.DetCompl.desabilitado_confirmado_data = dado.confirmado == "-1" ? DateTime.Now : null;
-                    vm.DetCompl.desabilitado_confirmado_por = dado.confirmado == "-1" ? Environment.UserName : null;
+                    vm.DetCompl.confirmado_data = dado.confirmado == "-1" ? DateTime.Now : dado.confirmado_data;
+                    vm.DetCompl.confirmado_por = dado.confirmado == "-1" ? Environment.UserName : dado.confirmado_por;
+                    vm.DetCompl.desabilitado_confirmado_data = dado.confirmado == "0" ? DateTime.Now : dado.desabilitado_confirmado_data;
+                    vm.DetCompl.desabilitado_confirmado_por = dado.confirmado == "0" ? Environment.UserName : dado.desabilitado_confirmado_por;
                     vm.DetCompl = await Task.Run(() => vm.ConfirmarComplementoCheckListAsync(vm.DetCompl));
                 }
 
@@ -672,17 +672,20 @@ namespace Producao.Views.CheckList
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 QryCheckListGeralComplementoModel data = (QryCheckListGeralComplementoModel)e.RowData;
-                vm.DetCompl.coddetalhescompl = data.coddetalhescompl;
-                vm.DetCompl.codcompl = data.codcompl;
-                vm.DetCompl.codcompladicional = data.codcompladicional;
-                vm.DetCompl.qtd = data.qtd;
-                vm.DetCompl.confirmado = data.confirmado;
-                vm.DetCompl.confirmado_data = data.confirmado == "-1" ? DateTime.Now : null;
-                vm.DetCompl.confirmado_por = data.confirmado == "-1" ? Environment.UserName : null;
-                vm.DetCompl.desabilitado_confirmado_data = data.confirmado == "-1" ? DateTime.Now : null;
-                vm.DetCompl.desabilitado_confirmado_por = data.confirmado == "-1" ? Environment.UserName : null;
-                vm.DetCompl.local_producao = "JACAREÍ";
-                vm.DetCompl.os = data.os;
+                vm.DetCompl = new()
+                {
+                    coddetalhescompl = data?.coddetalhescompl,
+                    codcompl = data.codcompl,
+                    codcompladicional = data.codcompladicional,
+                    qtd = data.qtd,
+                    confirmado = data.confirmado,
+                    confirmado_data = data.confirmado == "-1" ? DateTime.Now : null,
+                    confirmado_por = data.confirmado == "-1" ? Environment.UserName : null,
+                    desabilitado_confirmado_data = data.confirmado == "0" ? DateTime.Now : null,
+                    desabilitado_confirmado_por = data.confirmado == "0" ? Environment.UserName : null,
+                    local_producao = "JACAREÍ",
+                    os = data.os
+                };
 
                 vm.DetCompl = await Task.Run(() => vm.AddDetalhesComplementoCheckListAsync(vm.DetCompl));
                 //QryCheckListGeralComplementoModel record = (QryCheckListGeralComplementoModel)sfdatagrid.View.CurrentAddItem;

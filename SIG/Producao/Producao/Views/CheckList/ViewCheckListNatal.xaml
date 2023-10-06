@@ -542,7 +542,7 @@
                         ItemsSource="{Binding CompleAdicionais}"
                         DisplayMemberPath="complementoadicional"
                         SelectedValuePath="codcompladicional" 
-                        ColumnSizer="Auto"/>
+                        ColumnSizer="Auto" AllowEditing="True"/>
                     <syncfusion:GridTextColumn
                         HeaderText="UNID" 
                         MappingName="unidade" TextAlignment="Center"/>
