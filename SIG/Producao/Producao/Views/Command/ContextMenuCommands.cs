@@ -4,10 +4,11 @@ using Syncfusion.UI.Xaml.Utility;
 using Syncfusion.XlsIO;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using Excel = Microsoft.Office.Interop.Excel;
+//using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Producao
 {
@@ -351,15 +352,22 @@ namespace Producao
                     for (int i = 1; i <= paginas; i++)
                     {
                         string file = @$"{path}\Impressos\ETIQUETA_{i}.xlsx";
-                        var excelApp = new Excel.Application();
+                        //var excelApp = new Excel.Application();
 
-                        Excel.Workbooks books = excelApp.Workbooks;
-                        Excel._Workbook sheet = books.Open(file);
-                        sheet.PrintOutEx();
+                        //Excel.Workbooks books = excelApp.Workbooks;
+                        //Excel._Workbook sheet = books.Open(file);
+                        //sheet.PrintOutEx();
 
-                        sheet.Close();
-                        books.Close();
-                        excelApp.Quit();
+                        //sheet.Close();
+                        //books.Close();
+                        //excelApp.Quit();
+
+                        Process.Start(
+                            new ProcessStartInfo(file)
+                            {
+                                Verb = "Print",
+                                UseShellExecute = true,
+                            });
 
                     }
 
