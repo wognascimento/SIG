@@ -40,8 +40,8 @@ namespace HT.Views.Producao
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 DigitacaoFichaAtivosViewModel vm = (DigitacaoFichaAtivosViewModel)DataContext;
                 var data = await Task.Run(() => vm.GetDataAsync(DateTime.Now));
-                vm.Apontamentos = await Task.Run(() => vm.GetApontamentosAsync(DateTime.Now));
                 vm.Funcionarios = await Task.Run(vm.GetFuncionariosAsync);
+                vm.Apontamentos = await Task.Run(() => vm.GetApontamentosAsync(DateTime.Now));
                 txtSemana.Text = data.semana.ToString();
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
@@ -78,14 +78,14 @@ namespace HT.Views.Producao
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propName) { this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName)); }
 
-        private ObservableCollection<ApontamentoModel> _apontamentos;
-        public ObservableCollection<ApontamentoModel> Apontamentos
+        private ObservableCollection<ViewApontamentoModel> _apontamentos;
+        public ObservableCollection<ViewApontamentoModel> Apontamentos
         {
             get { return _apontamentos; }
             set { _apontamentos = value; RaisePropertyChanged("Apontamentos"); }
         }
-        private ApontamentoModel _apontamento;
-        public ApontamentoModel Apontamento
+        private ViewApontamentoModel _apontamento;
+        public ViewApontamentoModel Apontamento
         {
             get { return _apontamento; }
             set { _apontamento = value; RaisePropertyChanged("Apontamento"); }
@@ -131,13 +131,13 @@ namespace HT.Views.Producao
             }
         }
 
-        public async Task<ObservableCollection<ApontamentoModel>> GetApontamentosAsync(DateTime date)
+        public async Task<ObservableCollection<ViewApontamentoModel>> GetApontamentosAsync(DateTime date)
         {
             try
             {
                 using DatabaseContext db = new();
-                var data = await db.Apontamentos.Where(d => d.data.Date == date.Date).ToListAsync();
-                return new ObservableCollection<ApontamentoModel>(data);
+                var data = await db.ViewApontamentos.Where(d => d.data.Date == date.Date).ToListAsync();
+                return new ObservableCollection<ViewApontamentoModel>(data);
             }
             catch (Exception)
             {

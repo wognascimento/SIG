@@ -29,7 +29,7 @@
                 x:Name="dtApontamento" 
                 Margin="0,0,10,0" 
                 Width="100" 
-                Height="30" 
+      
                 DateTimeChanged="DateTimeEdit_DateTimeChanged"/>
             
             <syncfusion:SfTextInputLayout
@@ -63,13 +63,14 @@
                     ColumnSizer="SizeToHeader" />-->
                 <syncfusion:GridMultiColumnDropDownList
                     AutoGenerateColumns="False"
-                    DisplayMember="nome_apelido"
+                    DisplayMember="codfun"
                     ItemsSource="{Binding Funcionarios}"
                     MappingName="codfun"
                     ValueMember="codfun">
                     <syncfusion:GridMultiColumnDropDownList.Columns>
                         <syncfusion:Columns>
                             <syncfusion:GridTextColumn MappingName="nome_apelido" />
+                            <syncfusion:GridTextColumn MappingName="codfun" />
                         </syncfusion:Columns>
                     </syncfusion:GridMultiColumnDropDownList.Columns>
                 </syncfusion:GridMultiColumnDropDownList>

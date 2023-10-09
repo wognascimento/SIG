@@ -32,6 +32,7 @@ namespace HT.DataBase
         */
 
         public DbSet<ApontamentoModel> Apontamentos { get; set; }
+        public DbSet<ViewApontamentoModel> ViewApontamentos { get; set; }
         public DbSet<DataPlanejamentoModel> DataPlanejamentos { get; set; }
         public DbSet<FuncionarioAtivoModel> FuncionarioAtivos { get; set; }
     }
