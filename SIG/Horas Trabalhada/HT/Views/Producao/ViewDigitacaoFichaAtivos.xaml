@@ -5,9 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HT.Views.Producao"
              xmlns:converters="clr-namespace:HT.Views.Converters"
+             xmlns:custon="clr-namespace:HT.Views.Custom"
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Initialized="UserControl_Initialized">
+             d:DesignHeight="450" d:DesignWidth="800" 
+             Initialized="UserControl_Initialized">
 
     <UserControl.Resources>
         <converters:ConverterNumber x:Key="ConverterNumber"/>
@@ -57,30 +59,38 @@
             ShowRowHeader="True" 
             AddNewRowPosition="FixedTop">
             <syncfusion:SfDataGrid.Columns>
-                <!--<syncfusion:GridNumericColumn
+                
+                <syncfusion:GridNumericColumn
                     MappingName="codfun" 
                     DisplayBinding="{Binding codfun, Converter={StaticResource ConverterNumber}}" 
-                    ColumnSizer="SizeToHeader" />-->
+                    ColumnSizer="SizeToHeader" />
+
+                <syncfusion:GridTextColumn
+                    MappingName="nome_apelido" 
+                    ColumnSizer="SizeToHeader" AllowEditing="False" />
+                
+<!--               
                 <syncfusion:GridMultiColumnDropDownList
                     AutoGenerateColumns="False"
-                    DisplayMember="codfun"
+                    DisplayMember="nome_apelido"
                     ItemsSource="{Binding Funcionarios}"
                     MappingName="codfun"
-                    ValueMember="codfun">
+                    ValueMember="nome_apelido">
                     <syncfusion:GridMultiColumnDropDownList.Columns>
                         <syncfusion:Columns>
                             <syncfusion:GridTextColumn MappingName="nome_apelido" />
-                            <syncfusion:GridTextColumn MappingName="codfun" />
                         </syncfusion:Columns>
                     </syncfusion:GridMultiColumnDropDownList.Columns>
                 </syncfusion:GridMultiColumnDropDownList>
+-->                
                 <syncfusion:GridNumericColumn
                     MappingName="num_os" 
                     DisplayBinding="{Binding num_os, Converter={StaticResource ConverterNumber}}" 
                     ColumnSizer="SizeToHeader" />
+                
                 <syncfusion:GridNumericColumn
                     HeaderText="H.T"
-                    MappingName="quantidadehorastrabalhadas" 
+                    MappingName="ht" 
                     DisplayBinding="{Binding quantidadehorastrabalhadas, Converter={StaticResource ConverterNumber}}" 
                     ColumnSizer="SizeToHeader" />
                 <syncfusion:GridTextColumn

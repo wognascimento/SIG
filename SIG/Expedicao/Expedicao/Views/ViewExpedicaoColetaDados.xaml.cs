@@ -28,7 +28,8 @@ namespace Expedicao.Views
     {
         SerialPort port = new();
         int index;
-        
+        DateTime DataCarregamento = new DateTime();
+
         public ViewExpedicaoColetaDados()
         {
             InitializeComponent();
@@ -115,6 +116,8 @@ namespace Expedicao.Views
                 label.Content = await new ViewModelLocal().GetPlaca();
                 label = txtConferente;
                 label.Content = await new ViewModelLocal().GetConferente();
+
+                this.DataCarregamento =  await new ViewModelLocal().GetDataCarregamento();
             }
             else
             {
@@ -826,7 +829,7 @@ namespace Expedicao.Views
                     bodyStyle.WrapText = true;
                     bodyStyle.EndUpdate();
 
-                    IList list = await Task.Run(async () => await new ExpedicaoViewModel().GetPacklistCarregCaminhaoAsync(aprovado.SiglaServ, Dispatcher.Invoke(()=>txtPlaca.Content.ToString())));
+                    IList list = await Task.Run(async () => await new ExpedicaoViewModel().GetPacklistCarregCaminhaoAsync(aprovado.SiglaServ, Dispatcher.Invoke(()=>txtPlaca.Content.ToString()), this.DataCarregamento));
                     IRange range = worksheet.Range;
 
                     //DefaultInterpolatedStringHandler interpolatedStringHandler = new DefaultInterpolatedStringHandler(4, 1);

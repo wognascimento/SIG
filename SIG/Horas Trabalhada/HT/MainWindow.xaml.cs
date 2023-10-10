@@ -135,7 +135,8 @@ namespace HT
 
         private void OnDigitacaoFichaAtivo(object sender, RoutedEventArgs e)
         {
-            adicionarFilho(new ViewDigitacaoFichaAtivos(), "DIGITAÇÃO FICHA DE ATIVOS", "DIGITACAO_FICHA_ATIVOS");
+            //adicionarFilho(new ViewDigitacaoFichaAtivos(), "DIGITAÇÃO FICHA DE ATIVOS", "DIGITACAO_FICHA_ATIVOS");
+            adicionarFilho(new DigitacaoFichaAtivos(), "DIGITAÇÃO FICHA DE ATIVOS", "DIGITACAO_FICHA_ATIVOS");
         }
     }
 }

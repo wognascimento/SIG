@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Expedicao
@@ -25,5 +26,6 @@ namespace Expedicao
     public double? bruto { get; set; }
     public string? descricao_completa { get; set; }
     public string? caminhao { get; set; }
+    public DateTime? data { get; set; }
   }
 }

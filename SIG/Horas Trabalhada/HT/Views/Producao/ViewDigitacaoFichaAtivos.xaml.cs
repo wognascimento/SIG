@@ -1,6 +1,8 @@
 ﻿using HT.DataBase;
 using HT.DataBase.Model;
 using Microsoft.EntityFrameworkCore;
+using Syncfusion.Data;
+using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -71,6 +73,42 @@ namespace HT.Views.Producao
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
         }
+
+        private async void OnChangedValueCell(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellValueChangedEventArgs e)
+        {
+            //QryCheckListGeralComplementoModel? dado = e.Record as QryCheckListGeralComplementoModel; //e.Record = Record = {HT.DataBase.Model.ViewApontamentoModel}
+            //CheckListViewModel vm = (CheckListViewModel)DataContext;
+
+            SfDataGrid? grid = sender as SfDataGrid;
+            int columnindex = grid.ResolveToGridVisibleColumnIndex(e.RowColumnIndex.ColumnIndex);
+            var column = grid.Columns[columnindex];
+            var rowIndex = grid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
+            //var record = grid.View.Records[rowIndex].Data as QryCheckListGeralComplementoModel;
+
+            try
+            {
+                if (column.GetType() == typeof(GridCheckBoxColumn) && column.MappingName == "confirmado")
+                {
+                    /*
+                    vm.DetCompl.coddetalhescompl = dado.coddetalhescompl;
+                    vm.DetCompl.confirmado = dado.confirmado;
+                    vm.DetCompl.confirmado_data = dado.confirmado == "-1" ? DateTime.Now : dado.confirmado_data;
+                    vm.DetCompl.confirmado_por = dado.confirmado == "-1" ? Environment.UserName : dado.confirmado_por;
+                    vm.DetCompl.desabilitado_confirmado_data = dado.confirmado == "0" ? DateTime.Now : dado.desabilitado_confirmado_data;
+                    vm.DetCompl.desabilitado_confirmado_por = dado.confirmado == "0" ? Environment.UserName : dado.desabilitado_confirmado_por;
+                    vm.DetCompl = await Task.Run(() => vm.ConfirmarComplementoCheckListAsync(vm.DetCompl));
+                    */
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+        }
+
     }
 
     public class DigitacaoFichaAtivosViewModel : INotifyPropertyChanged

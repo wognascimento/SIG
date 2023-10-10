@@ -481,14 +481,14 @@ namespace Expedicao
             return listAsync;
         }
 
-        public async Task<IList> GetPacklistCarregCaminhaoAsync(string sigla, string caminhao)
+        public async Task<IList> GetPacklistCarregCaminhaoAsync(string sigla, string caminhao, DateTime data)
         {
             IList listAsync;
             try
             {
                 using AppDatabase db = new AppDatabase();
                 listAsync = await db.PacklistCarregCaminhaos
-                    .Where<PacklistCarregCaminhaoModel>(x => x.sigla == sigla && x.caminhao == caminhao)
+                    .Where<PacklistCarregCaminhaoModel>(x => x.sigla == sigla && x.caminhao == caminhao && x.data == data)
                     .Select(x => new
                     {
                         cod = x.coddetalhescompl,

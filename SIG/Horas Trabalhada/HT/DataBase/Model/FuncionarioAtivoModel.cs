@@ -10,7 +10,7 @@ namespace HT.DataBase.Model
     {
         public long? codfun { get; set; }
         public string? barcode { get; set; }
-        public string? nome_apelido { get; set; }
+        public string nome_apelido { get; set; }
         public string? setor { get; set; }
         public DateTime? data_admissao { get; set; }
         public DateTime? data_demissao { get; set; }
