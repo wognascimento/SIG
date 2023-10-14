@@ -220,7 +220,7 @@ namespace Producao.Views.kit.solucao
                 worksheet.Range["G3"].Text = vm.ChkGeral.cidade;
                 worksheet.Range["L3"].Text = vm.ChkGeral.est;
                 worksheet.Range["C4"].Text = vm.ChkGeral.solicitante;
-                worksheet.Range["J4"].Text = String.Format("{0:dd/MM/yyyy HH:mm:ss}", vm.ChkGeral.data_solicitacao); //(DateTime)vm.ChkGeral.data_solicitacao;
+                worksheet.Range["J4"].Text = System.String.Format("{0:dd/MM/yyyy HH:mm:ss}", vm.ChkGeral.data_solicitacao); //(DateTime)vm.ChkGeral.data_solicitacao;
                 worksheet.Range["C6"].Text = vm.ChkGeral.noite_montagem;
 
                 //worksheet.Range["C6"].Text = requi.num_os_servico.ToString();
@@ -276,7 +276,7 @@ namespace Producao.Views.kit.solucao
 
 
                 IWorksheet wsheet = workbook.Worksheets[1];
-                wsheet.SetColumnWidth(6, 1);
+                //wsheet.SetColumnWidth(6, 1);
                 int etiqueta = 1;
                 int col1E1 = 1;
                 int col2E1 = 2;
@@ -284,223 +284,157 @@ namespace Producao.Views.kit.solucao
                 int col2E2 = 2;
                 foreach (var item in vm.ChkGerais)
                 {
-                    if(etiqueta == 1)
+                    if (etiqueta == 1)
                     {
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].Text = item.nome;
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].CellStyle = borderStyle;
-                        col1E1+=2;
-                        col2E1+=2;
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].Text = item.nome;
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].CellStyle.Font.Size = 24;
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 2;
+                        col2E1 += 2;
 
-                        wsheet.Range[$"A{col1E1}:C{col2E1}"].Text = item.shopping;
-                        wsheet.Range[$"A{col1E1}:C{col2E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:C{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].Text = item.shopping;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].Merge();
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].CellStyle.Font.Size = 24;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Text = "CONTROLE";
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle.Font.Bold = true;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].Text = "CONTROLE";
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].Merge();
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].CellStyle.Font.Size = 24;
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Number = (double)item.kp;
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Number = (double)item.kp;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Size = 24;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 2;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:D{col1E1}"].Text = item.cidade;
-                        wsheet.Range[$"A{col1E1}:D{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:D{col1E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Text = item.cidade;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle.Font.Size = 20;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"E{col1E1}"].Text = item.est;
-                        wsheet.Range[$"E{col1E1}"].Merge();
-                        wsheet.Range[$"E{col1E1}"].CellStyle = borderStyle;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Text = item.est;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle.Font.Size = 20;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].Text = "CODDETCOMPL";
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Text = "CODDETCOMPL";
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].Text = "PLANILHA";
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].CellStyle.Font.Bold = true;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Text = "PLANILHA";
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].Number = (double)item.coddetalhescompl;
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Number = (double)item.coddetalhescompl;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle.Font.Size = 20;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].Text = item.planilha;
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Text = item.planilha;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle.Font.Size = 20;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Text = "DESCRIÇÃO";
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Text = "DESCRIÇÃO";
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"D{col1E1}"].Text = "QTD";
-                        wsheet.Range[$"D{col1E1}"].Merge();
-                        wsheet.Range[$"D{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"D{col1E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Text = "QTD";
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 3;
 
-                        wsheet.Range[$"E{col1E1}"].Number = (double)item.qtd;
-                        wsheet.Range[$"E{col1E1}"].Merge();
-                        wsheet.Range[$"E{col1E1}"].CellStyle = borderStyle;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].Text = item.descricao_completa;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].Merge();
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].CellStyle.Font.Size = 20;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].Text = item.descricao_completa;
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].CellStyle = borderStyle;
-                        col1E1+=2;
-                        col2E1+=2;
+                        wsheet.Range[$"H{col1E1}:J{col2E1}"].Number = (double)item.qtd;
+                        wsheet.Range[$"H{col1E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"H{col1E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col1E1}:J{col2E1}"].CellStyle.Font.Size = 40;
+                        wsheet.Range[$"H{col1E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 3;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Text = "SOLICITANTE";
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Text = "SOLICITANTE";
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Text = "ATENDENTE";
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle.Font.Bold = true;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Text = "ATENDENTE";
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Text = item.solicitante;
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Text = item.solicitante; 
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Text = item.atendente;
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        col1E1+=2;
-                        col2E1+=2;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Text = item.atendente;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 2;
 
-                        etiqueta = 2;   
-                        continue;       
-                                        
-                    }                   
-                                        
-                    if (etiqueta == 2)  
-                    {
-                        // col1E2
-                        // col2E2
+                        wsheet.Range[$"A{col1E1}: J{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].Text = item.nome;
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].CellStyle = borderStyle;
-                        col1E2+=2;
-                        col2E2+=2;
+                        col1E1 += 1;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"G{col1E2}:I{col2E2}"].Text = item.shopping;
-                        wsheet.Range[$"G{col1E2}:I{col2E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:I{col2E2}"].CellStyle = borderStyle;
-                                             
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Text = "CONTROLE";
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle.Font.Bold = true;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Number = (double)item.kp;
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:J{col1E2}"].Text = item.cidade;
-                        wsheet.Range[$"G{col1E2}:J{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:J{col1E2}"].CellStyle = borderStyle;
-                                             
-                        wsheet.Range[$"K{col1E2}"].Text = item.est;
-                        wsheet.Range[$"K{col1E2}"].Merge();
-                        wsheet.Range[$"K{col1E2}"].CellStyle = borderStyle;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].Text = "CODDETCOMPL";
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].CellStyle.Font.Bold = true;
-                                             
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].Text = "PLANILHA";
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].CellStyle.Font.Bold = true;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].Number = (double)item.coddetalhescompl;
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].CellStyle = borderStyle;
-                                             
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].Text = item.planilha;
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Text = "DESCRIÇÃO";
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].CellStyle.Font.Bold = true;
-                                        
-                        wsheet.Range[$"J{col1E2}"].Text = "QTD";
-                        wsheet.Range[$"J{col1E2}"].Merge();
-                        wsheet.Range[$"J{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"J{col1E2}"].CellStyle.Font.Bold = true;
-                                        
-                        wsheet.Range[$"K{col1E2}"].Number = (double)item.qtd;
-                        wsheet.Range[$"K{col1E2}"].Merge();
-                        wsheet.Range[$"K{col1E2}"].CellStyle = borderStyle;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].Text = item.descricao_completa;
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].CellStyle = borderStyle;
-                        col1E2+=2;
-                        col2E2+=2;
-
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Text = "SOLICITANTE";
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].CellStyle.Font.Bold = true;
-                                              
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Text = "ATENDENTE";
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle.Font.Bold = true;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Text = item.solicitante;
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].CellStyle = borderStyle;
-                                              
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Text = item.atendente;
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        col1E2 += 2;
-                        col2E2 += 2;
-
-                        etiqueta = 1;
-                        continue;
                     }
                 }
 
-                //wsheet.PageSetup.LeftMargin = 1;
-                //wsheet.PageSetup.RightMargin = 1;
+                wsheet.PageSetup.LeftMargin = 0.5;
+                wsheet.PageSetup.RightMargin = 0.5;
+
+                wsheet.PageSetup.TopMargin = 0.8;
+                wsheet.PageSetup.BottomMargin = 0.8;
 
                 //Save the Excel document
                 workbook.SaveAs($"Impressos/REQUISICAO_KIT_{vm.ChkGeral.os}.xlsx");

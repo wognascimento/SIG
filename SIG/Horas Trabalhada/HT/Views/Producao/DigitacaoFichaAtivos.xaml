@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:HT.Views.Producao"
              xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="OnLoaded">
 
 
     
@@ -23,13 +23,49 @@
             HorizontalAlignment="Left"
             Orientation="Horizontal">
 
-            <telerik:RadDateTimePicker x:Name="dtDigitacao"  InputMode="DatePicker"/>
+            <telerik:RadDateTimePicker x:Name="dtDigitacao"  InputMode="DatePicker" SelectionChanged="dtDigitacao_SelectionChanged"/>
 
             <telerik:RadAutoCompleteBox x:Name="txtSemana" IsEnabled="False" />
 
         </StackPanel>
 
-        
+        <telerik:RadGridView 
+            x:Name="gridView" 
+            Grid.Row="2"
+            GroupRenderMode="Flat"
+            NewRowPosition="Top"
+            AutoGenerateColumns="False"
+            ShowGroupPanel="False"
+            ItemsSource="{Binding Apontamentos}">
+            <telerik:RadGridView.Columns>
+
+                <telerik:GridViewMultiColumnComboBoxColumn 
+                    AutoGenerateColumns="False" 
+                    CloseDropDownAfterSelectionInput="True"
+                    SelectionMode="Single"
+                    CanUserSearchInHiddenColumns="False"
+                    DataMemberBinding="{Binding codfun}" 
+                    ItemsSource="{Binding Funcionarios}" 
+                    DisplayMemberPath="codfun" 
+                    SelectedValuePath="codfun" 
+                    AutoCompleteMode="Search">
+                    <telerik:GridViewMultiColumnComboBoxColumn.Columns>
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding codfun}" />
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding nome_apelido}" />
+                    </telerik:GridViewMultiColumnComboBoxColumn.Columns>
+                </telerik:GridViewMultiColumnComboBoxColumn>
+
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding num_os}" Header="O.S"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding quantidadehorastrabalhadas}" Header="H.T"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding cod}" Header="ID" />
+
+                
+            </telerik:RadGridView.Columns>
+            
+            
+        </telerik:RadGridView>
+
+
 
     </Grid>
 </UserControl>

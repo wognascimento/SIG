@@ -25,7 +25,12 @@
             ColumnSizer="AutoWithLastColumnFill" AllowFiltering="True"
             ShowRowHeader="True" 
             ItemsSource="{Binding Produtos}"
-            SelectedItem="{Binding Produto, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="10" RowValidating="OnRowValidating">
+            SelectedItem="{Binding Produto, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            FontSize="10"
+            RowValidating="OnRowValidating"
+            SelectionUnit="Row"
+            SelectionMode="Extended"
+            GridCopyOption="CopyData,IncludeHeaders,IncludeFormat">
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridDateTimeColumn HeaderText="data_de_expedicao" MappingName="primeirodedata_de_expedicao" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridNumericColumn
