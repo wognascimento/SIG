@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
 
 namespace Expedicao
 {
@@ -367,7 +368,8 @@ namespace Expedicao
             {
                 using AppDatabase db = new();
                 listAsync = await db.CarregamentoItemCaminhaos
-                    .Where(x => siglas.Contains(x.SiglaServ) && x.ExportadoFolhamatic == null)
+                    //.Where(x => siglas.Contains(x.SiglaServ) && x.ExportadoFolhamatic == null)
+                    .Where(x => siglas.Contains(x.SiglaServ))
                     .GroupBy(x => new
                     {
                         x.CodComplAdicional,
@@ -375,13 +377,58 @@ namespace Expedicao
                         x.Qtd,
                         x.Custo,
                         x.Peso,
-                        x.Unidade
+                        x.Unidade,
+                        x.Ncm
                     })
-                    .OrderBy(x => x.Key.DescricaoFiscal).Select(x => new
+                    .OrderBy(x => x.Key.DescricaoFiscal)
+                    .Select(x => new
                     {
-                        x.Key.CodComplAdicional,
-                        x.Key.DescricaoFiscal,
-                        x.Key.Unidade
+                        //x.Key.CodComplAdicional,
+                        //x.Key.DescricaoFiscal,
+                        //x.Key.Unidade
+
+                        IDENTIFICACAO               = x.Key.CodComplAdicional,
+                        DESCRICAO                   = x.Key.DescricaoFiscal,
+                        NCM                         = x.Key.Ncm,
+                        CODBARRA                    = "",
+                        UNIDADEDECOMPRA             = x.Key.Unidade,
+                        UNIDADEVENDA                = x.Key.Unidade,
+                        SITUACAOTRIBUTARIAA         = "0",
+                        SITUACAOTRIBUTARIAB         = "41",
+                        CSOSN                       = "",
+                        SITTRIBPIS                  = "PIS 70 - Operação de Aquisição sem Direito a Crédito",
+                        SITTRIBCOFINS               = "COFINS 70 - Operação de Aquisição sem Direito a Crédito",
+                        SITTRIBIPI                  = "IPI 99 - Outras saídas",
+                        IPI                         = "0",
+                        ICMS                        = "",
+                        REDUCAOICMS                 = "",
+                        ALIQCOFINS                  = "0",
+                        ALIQPIS                     = "",
+                        CATEGORIA                   = "",
+                        CEST                        = "",
+                        CFOP                        = "",
+                        CODIGODEBENEFICIOFISCAL     = "",
+                        COMISSAODEVENDA             = "",
+                        CUSTO                       = "",
+                        ESTOQUECOMPRA               = "",
+                        ESTOQUEMAXIMO               = "",
+                        ESTOQUEMINIMO               = "",
+                        FATORUNIDDEVENDA            = "1",
+                        ATIVO                       = "Sim",
+                        INDICADORDEESCALARELEVANTE  = "",
+                        CNPJFABRICANTE              = "",
+                        PESO                        = "",
+                        MATERIAPRIMA                = "FALSO",
+                        PARAVENDA                   = "VERDADEIRO",
+                        MOEDA                       = "R$",
+                        OBSERVACOES                 = "",
+                        PRECODEVENDA1               = "",
+                        PRECODEVENDA2               = "",
+                        TIPODOPRODUTO               = "3",
+                        PRODUTOTERCEIRO             = "FALSO",
+                        CODTRIBUTACAONOSISTEMA      = "7",
+                        CODENQUADRAMENTOIPI         = "999",
+                        OPERACAOFATORCONVERSAO      = ""
                     })
                     .ToListAsync();
             }

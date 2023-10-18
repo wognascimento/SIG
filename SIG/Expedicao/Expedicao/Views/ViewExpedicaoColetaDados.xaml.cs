@@ -18,6 +18,12 @@ using System.Net;
 using Syncfusion.XlsIO.Interfaces;
 using System.Runtime.CompilerServices;
 using System.Drawing;
+using Microsoft.VisualBasic;
+using System.Linq;
+using System.IO.Compression;
+using System.Formats.Asn1;
+using System.Globalization;
+using CsvHelper;
 
 namespace Expedicao.Views
 {
@@ -214,9 +220,15 @@ namespace Expedicao.Views
                 }
                 else
                 {
+
+                    /*
                     long codigo = await Task.Run(async () => await new ExpedicaoViewModel().OrcamentoSequenceAsync(new OrcamentoSequenceModel { Cliente = "CARREGAMNETO" }));
                     await Task.Run(async () => await CriarOrcamento1TaskAsync(codigo));
                     await Task.Run(async () => await CriarOrcamento2TaskAsync(codigo));
+                    */
+                    await Task.Run(CriarOrcamentokAsync);
+                    
+
                     await Task.Run(async () => await GetInformacoesNF());
                     var NExportado =  await Task.Run(async () => await GetProdutosNaoExportadosMaticAsync());
                     await Task.Run(async () => await SendMailAsync(NExportado));
@@ -239,6 +251,7 @@ namespace Expedicao.Views
             }
             catch (Exception ex)
             {
+                loading.Visibility = Visibility.Hidden;
                 MessageBox.Show(ex.Message);
             }
         }
@@ -260,11 +273,135 @@ namespace Expedicao.Views
             await Task.Delay(2000);
         }
 
+        private async Task CriarOrcamentokAsync()
+        {
+            try
+            {
+                var siglas = await Task.Run(() =>  new ViewModelLocal().GetRomaneios());
+                var itens = await Task.Run(() => new ExpedicaoViewModel().GetCarregamentoItemCaminhaosAsync(siglas, Dispatcher.Invoke(() => txtPlaca.Content.ToString())));
+                int tamanhoDoPedaco = 30;
+                int arquivo = 1;
+                
+                var pedacos = itens
+                    .Select((value, index) => new { value, index })
+                    .GroupBy(x => x.index / tamanhoDoPedaco)
+                    .Select(group => group.Select(x => x.value).ToList())
+                    .ToList();
+
+
+                if (Directory.Exists(@"C:\Temp\NF"))
+                    Directory.Delete(@"C:\Temp\NF", true);
+                Directory.CreateDirectory(@"C:\Temp\NF");
+
+                foreach (var pedaco in pedacos)
+                {
+                    long codigo = await Task.Run(async () => await new ExpedicaoViewModel().OrcamentoSequenceAsync(new OrcamentoSequenceModel { Cliente = "CARREGAMNETO" }));
+                    Directory.CreateDirectory(@$"C:\Temp\NF\ORCAMENTO-{codigo}");
+                    StreamWriter sw = new(@$"C:\Temp\NF\ORCAMENTO-{codigo}\ORCAMEN1.FSI");
+                    await sw.WriteLineAsync(
+                        "F210" +
+                        Convert.ToString(codigo).ToString().PadLeft(6, '0') +
+                        DateTime.Now.ToString("ddMMyyyy") +
+                        Convert.ToString("").PadRight(6) +
+                        Convert.ToString("").PadRight(30) +
+                        Convert.ToString("").PadRight(30) +
+                        Convert.ToString("").PadRight(10) +
+                        Convert.ToString("").PadRight(50) +
+                        Convert.ToString("").PadRight(30) +
+                        Convert.ToString("").PadRight(2) +
+                        Convert.ToString("").PadRight(9) +
+                        Convert.ToString("").PadRight(50) +
+                        Convert.ToString("").PadRight(30) +
+                        Convert.ToString("").PadRight(2) +
+                        Convert.ToString("").PadRight(9) +
+                        Convert.ToString("").PadRight(3) +
+                        Convert.ToString("").PadRight(3) +
+                        DateTime.Now.ToString("ddMMyyyy") +
+                        Convert.ToString("").PadRight(4) +
+                        DateTime.Now.ToString("ddMMyyyy") +
+                        Convert.ToString("").PadRight(14) +
+                        Convert.ToString("").PadRight(6) +
+                        Convert.ToString("").PadRight(8) +
+                        Convert.ToString("A").PadRight(2) +
+                        Convert.ToString("").PadRight(60) +
+                        Convert.ToString("").PadRight(60) +
+                        Convert.ToString("").PadRight(60) +
+                        Convert.ToString("").PadRight(60) +
+                        Convert.ToString("").PadRight(60) +
+                        Convert.ToString("").PadRight(60) +
+                        Convert.ToString("").PadRight(60) +
+                        Convert.ToString("").PadRight(60) +
+                        Convert.ToString("").PadRight(4) +
+                        Convert.ToString("").PadRight(2) +
+                        Convert.ToString("").PadRight(50) +
+                        Convert.ToString("").PadRight(30) +
+                        Convert.ToString("").PadRight(30) +
+                        Convert.ToString("A").PadRight(1));
+                    sw.Close();
+
+
+                    sw = new(@$"C:\Temp\NF\ORCAMENTO-{codigo}\ORCAMEN2.FSI");
+                    int item = 1;
+                    foreach (var p in pedaco)
+                    {
+                        await sw.WriteLineAsync(
+                            "F220" +
+                            Convert.ToString(codigo).ToString().PadLeft(6, '0') +
+                            Convert.ToString(item).PadRight(14) +
+                            Convert.ToString(p.CodComplAdicional).PadRight(30) +
+                            Convert.ToString(p.DescricaoFiscal).PadRight(60) +
+                            Convert.ToString("N").PadRight(1) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            string.Format("{0:000000000000.00}", p.Qtd).Replace(",", null) +
+                            Convert.ToString(p.Unidade).PadRight(3) +
+                            string.Format("{0:000000000000.00}", p.Custo).Replace(",", null) +
+                            Convert.ToString("").PadRight(14) +
+                            Convert.ToString("").PadRight(14) +
+                            Convert.ToString("").PadRight(14) +
+                            Convert.ToString("").PadRight(14, '0') +
+                            Convert.ToString("").PadRight(14) +
+                            Convert.ToString("").PadRight(14, '0') +
+                            Convert.ToString("").PadRight(14) +
+                            Convert.ToString("").PadRight(14) +
+                            Convert.ToString("").PadRight(14) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(60) +
+                            Convert.ToString("").PadRight(14) +
+                            Convert.ToString("A").PadRight(1));
+                        item++;
+                    }
+                    sw.Close();
+
+
+
+                    arquivo++;
+                }
+                File.Delete(@"C:\Temp\ORCAMENTO.zip");
+                ZipFile.CreateFromDirectory(@"C:\Temp\NF", @"C:\Temp\ORCAMENTO.zip");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         private async Task CriarOrcamento1TaskAsync(long codigo)
         {
             try
             {
-                StreamWriter sw = new StreamWriter("ORCAMEN1.FSI");
+                StreamWriter sw = new StreamWriter("ORCAMEN1{}.FSI");
                 await sw.WriteLineAsync(
                     "F210" + 
                     Convert.ToString(codigo).ToString().PadLeft(6, '0') + 
@@ -305,6 +442,7 @@ namespace Expedicao.Views
                     Convert.ToString("").PadRight(30) + 
                     Convert.ToString("A").PadRight(1));
                 sw.Close();
+
             }
             catch (Exception ex)
             {
@@ -719,11 +857,13 @@ namespace Expedicao.Views
         }
         private async Task<int> GetProdutosNaoExportadosMaticAsync()
         {
+            /*
             IWorkbook workbook;
             IWorksheet worksheet;
             using (ExcelEngine excelEngine = new ExcelEngine())
             {
                 var dados = await Task.Run(async () => await new ExpedicaoViewModel().GetCarregamentoItemCaminhaosNaoExportadoMaticAsync(await Task.Run(async () => await new ViewModelLocal().GetRomaneios())));
+                
                 IApplication excel = excelEngine.Excel;
                 excel.DefaultVersion = ExcelVersion.Xlsx;
                 workbook = excel.Workbooks.Create(1);
@@ -732,32 +872,54 @@ namespace Expedicao.Views
                 workbook.SaveAs("ProdutosNaoExportadosMatic.xlsx");
                 workbook.Close();
                 excelEngine.Dispose();
-
+                
                 return dados.Count;
             }
+            */
+
+            var dados = await Task.Run(async () => await new ExpedicaoViewModel().GetCarregamentoItemCaminhaosNaoExportadoMaticAsync(await Task.Run(async () => await new ViewModelLocal().GetRomaneios())));
+
+            var nomePasta = "NF";
+            var nomeArquivo = "Produtos.csv";
+            var caminhoArquivo = @"C:\Temp\" + nomePasta;
+
+            if (!Directory.Exists(caminhoArquivo))
+                Directory.CreateDirectory(caminhoArquivo);
+
+            using (var streamWriter = new StreamWriter(Path.Combine(caminhoArquivo, nomeArquivo)))
+            using (var csvWriter = new CsvWriter(streamWriter, new CultureInfo("pt-BR", true)))
+            {
+                //csvWriter.Context.RegisterClassMap<DadosAnexoMap>();                                               
+                csvWriter.WriteRecords(dados);
+                streamWriter.Flush();
+            }
+
+            return dados.Count;
         }
 
         private async Task SendMailAsync(int prodNExport)
         {
             string sigla = Dispatcher.Invoke(() => txtSigla.Content.ToString().Split(";")[0]);
             AprovadoModel aprovadoModel = await Task.Run(async () => await new AprovadoViewModel().GetAprovadoAsync(sigla));
-            using MailMessage emailMessage = new MailMessage();
+            using MailMessage emailMessage = new();
             emailMessage.From = new MailAddress("envio_relatorio@cipolatti.com.br");
-            //emailMessage.To.Add(new MailAddress("wesley_oliveira@cipolatti.com.br"));
             emailMessage.To.Add(new MailAddress("grupo_nota_fiscal@cipolatti.com.br"));
             emailMessage.CC.Add(new MailAddress("expedicao@cipolatti.com.br"));
             emailMessage.CC.Add(new MailAddress("operacionalinterno@cipolatti.com.br"));
+            emailMessage.CC.Add(new MailAddress("wesley_oliveira@cipolatti.com.br"));
             emailMessage.Subject = "Solicitação Nota Fisca Shopping";
             emailMessage.Body = "Em anexo arquivos para emissão da nota fiscal para o cliente " + aprovadoModel.Nome + " - " + aprovadoModel.Sigla + ", caminhão: " + Dispatcher.Invoke(() => txtPlaca.Content.ToString());
             emailMessage.Priority = MailPriority.High;// 2;
-            Attachment attachment1 = new("ORCAMEN1.FSI");
-            Attachment attachment2 = new("ORCAMEN2.FSI");
+            //Attachment attachment1 = new("ORCAMEN1.FSI");
+            //Attachment attachment2 = new("ORCAMEN2.FSI");
+            Attachment attachment = new(@"C:\Temp\ORCAMENTO.zip");
             Attachment attachment3 = new("Informacoes_Complementares.xlsx");
-            emailMessage.Attachments.Add(attachment1);
-            emailMessage.Attachments.Add(attachment2);
+            //emailMessage.Attachments.Add(attachment1);
+            //emailMessage.Attachments.Add(attachment2);
+            emailMessage.Attachments.Add(attachment);
             emailMessage.Attachments.Add(attachment3);
             if (prodNExport > 0)
-                emailMessage.Attachments.Add(new Attachment("ProdutosNaoExportadosMatic.xlsx"));
+                emailMessage.Attachments.Add(new Attachment(@"C:\Temp\NF\Produtos.csv"));
             using SmtpClient MailClient = new("192.168.0.209", 25);
             MailClient.EnableSsl = false;
             MailClient.Credentials = new NetworkCredential("envio_relatorio@cipolatti.com.br", "@n0dh@n0dh1966");

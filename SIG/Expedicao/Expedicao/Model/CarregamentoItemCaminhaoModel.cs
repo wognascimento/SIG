@@ -52,5 +52,7 @@ namespace Expedicao
         public string? ExportadoFolhamatic { get; set; }
         [Column("operacao")]
         public string? Operacao { get; set; }
+        [Column("ncm")]
+        public string? Ncm { get; set; }
     }
 }
