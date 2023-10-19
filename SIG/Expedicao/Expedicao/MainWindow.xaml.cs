@@ -826,5 +826,16 @@ namespace Expedicao
             this._dc.CanMDIMaximize = false;
             this._dc.Items.Add((object)viewExpedicaoExcel);
         }
+
+        private void expedNotaCaminhao(object sender, RoutedEventArgs e)
+        {
+            ViewSolicitarNotaCaminhao expedicaoRomaneio = new();
+            DocumentContainer.SetHeader(expedicaoRomaneio, "SOLICITA NOTA FISCAL POR CAMINHÃO");
+            DocumentContainer.SetSizetoContentInMDI(expedicaoRomaneio, true);
+            DocumentContainer.SetMDIBounds(expedicaoRomaneio, new Rect((this._dc.ActualWidth - 1024.0) / 2.0, (this._dc.ActualHeight - 780.0) / 2.0, 1024.0, 780.0));
+            DocumentContainer.SetMDIWindowState(expedicaoRomaneio, MDIWindowState.Maximized);
+            this._dc.CanMDIMaximize = false;
+            this._dc.Items.Add(expedicaoRomaneio);
+        }
     }
 }

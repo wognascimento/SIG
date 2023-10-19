@@ -221,12 +221,13 @@ namespace Expedicao.Views
                 else
                 {
 
-                    /*
+                    
                     long codigo = await Task.Run(async () => await new ExpedicaoViewModel().OrcamentoSequenceAsync(new OrcamentoSequenceModel { Cliente = "CARREGAMNETO" }));
                     await Task.Run(async () => await CriarOrcamento1TaskAsync(codigo));
                     await Task.Run(async () => await CriarOrcamento2TaskAsync(codigo));
-                    */
-                    await Task.Run(CriarOrcamentokAsync);
+                    
+                    
+                    //await Task.Run(CriarOrcamentokAsync);
                     
 
                     await Task.Run(async () => await GetInformacoesNF());
@@ -886,7 +887,8 @@ namespace Expedicao.Views
             if (!Directory.Exists(caminhoArquivo))
                 Directory.CreateDirectory(caminhoArquivo);
 
-            using (var streamWriter = new StreamWriter(Path.Combine(caminhoArquivo, nomeArquivo)))
+            //using (var streamWriter = new StreamWriter(Path.Combine(caminhoArquivo, nomeArquivo)))
+            using (var streamWriter = new StreamWriter("Produtos.csv"))
             using (var csvWriter = new CsvWriter(streamWriter, new CultureInfo("pt-BR", true)))
             {
                 //csvWriter.Context.RegisterClassMap<DadosAnexoMap>();                                               
@@ -910,16 +912,16 @@ namespace Expedicao.Views
             emailMessage.Subject = "Solicitação Nota Fisca Shopping";
             emailMessage.Body = "Em anexo arquivos para emissão da nota fiscal para o cliente " + aprovadoModel.Nome + " - " + aprovadoModel.Sigla + ", caminhão: " + Dispatcher.Invoke(() => txtPlaca.Content.ToString());
             emailMessage.Priority = MailPriority.High;// 2;
-            //Attachment attachment1 = new("ORCAMEN1.FSI");
-            //Attachment attachment2 = new("ORCAMEN2.FSI");
-            Attachment attachment = new(@"C:\Temp\ORCAMENTO.zip");
+            Attachment attachment1 = new("ORCAMEN1.FSI");
+            Attachment attachment2 = new("ORCAMEN2.FSI");
+            //Attachment attachment = new(@"C:\Temp\ORCAMENTO.zip");
             Attachment attachment3 = new("Informacoes_Complementares.xlsx");
-            //emailMessage.Attachments.Add(attachment1);
-            //emailMessage.Attachments.Add(attachment2);
-            emailMessage.Attachments.Add(attachment);
+            emailMessage.Attachments.Add(attachment1);
+            emailMessage.Attachments.Add(attachment2);
+            //emailMessage.Attachments.Add(attachment);
             emailMessage.Attachments.Add(attachment3);
             if (prodNExport > 0)
-                emailMessage.Attachments.Add(new Attachment(@"C:\Temp\NF\Produtos.csv"));
+                emailMessage.Attachments.Add(new Attachment("Produtos.csv"));
             using SmtpClient MailClient = new("192.168.0.209", 25);
             MailClient.EnableSsl = false;
             MailClient.Credentials = new NetworkCredential("envio_relatorio@cipolatti.com.br", "@n0dh@n0dh1966");
