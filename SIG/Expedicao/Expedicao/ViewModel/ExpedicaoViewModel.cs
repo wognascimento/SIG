@@ -474,6 +474,48 @@ namespace Expedicao
             return listAsync;
         }
 
+        public async Task<List<VolumeSolicitacaoNotaFiscalModel>> GetCarregamentoVolumesAsync(List<string> siglas, string caminhao)
+        {
+            try
+            {
+                using AppDatabase db = new();
+                var listAsync = await db.VolumesSolicitacaoNotaFiscal
+                    .Where(x => siglas.Contains(x.sigla))
+                    .Where(c => c.caminhao.Contains(caminhao))
+                    .OrderBy(x => x.codexped)
+                    .ToListAsync();
+
+                return listAsync;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task GetVolumeCarregado(long? codexped)
+        {
+            try
+            {
+                using AppDatabase db = new();
+                var volume = await db.Expeds.FirstOrDefaultAsync(v => v.CodExped == codexped);
+                if (volume != null)
+                {
+                    volume.nf_emitida = true;
+                    db.Entry(volume).Property(v => v.nf_emitida).IsModified = true;
+                    await db.SaveChangesAsync();
+                }
+                
+                //EntityEntry entityEntry = await db.Expeds.AddAsync(model);
+                
+                //int num = await db.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
 
         public async Task<List<ResumoNotaModel>> GetInformasoesNfAsync(List<string> siglas, string caminhao)
         {

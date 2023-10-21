@@ -200,7 +200,7 @@ namespace Expedicao.Views
                     var itens = await Task.Run(async () => await new ExpedicaoViewModel().GetCarregamentoItemCaminhaosAsync(arr, Dispatcher.Invoke(() => txtPlaca.Content.ToString())));
                     if (itens.Count == 0)
                     {
-                        MessageBox.Show($"Não tem itens carregados na sigla {sigla}, por este motivo e-mail não será enviado", "Itens carregados", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show($"Não há itens carregados para o romaneio selecionado, por este motivo o e-mail não será enviado.", "Itens carregados", MessageBoxButton.OK, MessageBoxImage.Warning);
                         return;
                     }
                 }
@@ -222,24 +222,24 @@ namespace Expedicao.Views
                 {
 
                     
-                    long codigo = await Task.Run(async () => await new ExpedicaoViewModel().OrcamentoSequenceAsync(new OrcamentoSequenceModel { Cliente = "CARREGAMNETO" }));
-                    await Task.Run(async () => await CriarOrcamento1TaskAsync(codigo));
-                    await Task.Run(async () => await CriarOrcamento2TaskAsync(codigo));
+                    long codigo = await Task.Run(() => new ExpedicaoViewModel().OrcamentoSequenceAsync(new OrcamentoSequenceModel { Cliente = "CARREGAMNETO" }));
+                    await Task.Run(() => CriarOrcamento1TaskAsync(codigo));
+                    await Task.Run(() => CriarOrcamento2TaskAsync(codigo));
                     
                     
                     //await Task.Run(CriarOrcamentokAsync);
                     
 
-                    await Task.Run(async () => await GetInformacoesNF());
-                    var NExportado =  await Task.Run(async () => await GetProdutosNaoExportadosMaticAsync());
-                    await Task.Run(async () => await SendMailAsync(NExportado));
+                    await Task.Run(() => GetInformacoesNF());
+                    var NExportado =  await Task.Run(() => GetProdutosNaoExportadosMaticAsync());
+                    await Task.Run(() => SendMailAsync(NExportado));
 
     
-                    await Task.Run(async () => await new ViewModelLocal().GetRemoveAllItemFaltante());
-                    await Task.Run(async () => await new ViewModelLocal().GetRemoveAllItemCarregado());
-                    await Task.Run(async () => await new ViewModelLocal().GetRemoveAllIRomaneios());
+                    await Task.Run(() => new ViewModelLocal().GetRemoveAllItemFaltante());
+                    await Task.Run(() => new ViewModelLocal().GetRemoveAllItemCarregado());
+                    await Task.Run(() => new ViewModelLocal().GetRemoveAllIRomaneios());
 
-                    itens.ItemsSource = await Task.Run(async () => await new ViewModelLocal().Getaitens());
+                    itens.ItemsSource = await Task.Run(() => new ViewModelLocal().Getaitens());
    
 
                     loading.Visibility = Visibility.Hidden;
@@ -402,7 +402,7 @@ namespace Expedicao.Views
         {
             try
             {
-                StreamWriter sw = new StreamWriter("ORCAMEN1{}.FSI");
+                StreamWriter sw = new StreamWriter("ORCAMEN1.FSI");
                 await sw.WriteLineAsync(
                     "F210" + 
                     Convert.ToString(codigo).ToString().PadLeft(6, '0') + 
@@ -461,8 +461,8 @@ namespace Expedicao.Views
             {
                 //Dispatcher.Invoke(() => txtPlaca.Content.ToString());
 
-                var siglas = await Task.Run(async () => await new ViewModelLocal().GetRomaneios());
-                var itens = await Task.Run(async () => await new ExpedicaoViewModel().GetCarregamentoItemCaminhaosAsync(siglas, Dispatcher.Invoke(() => txtPlaca.Content.ToString())));  //await new ExpedicaoViewModel().GetCarregamentoItemCaminhaosAsync(siglas, "");
+                var siglas = await Task.Run(() => new ViewModelLocal().GetRomaneios());
+                var itens = await Task.Run(() => new ExpedicaoViewModel().GetCarregamentoItemCaminhaosAsync(siglas, Dispatcher.Invoke(() => txtPlaca.Content.ToString())));  //await new ExpedicaoViewModel().GetCarregamentoItemCaminhaosAsync(siglas, "");
                 StreamWriter sw = new StreamWriter("ORCAMEN2.FSI");
                 int item = 0;
                 for (int i = 0; i < itens.Count; ++i)
@@ -506,6 +506,14 @@ namespace Expedicao.Views
                         Convert.ToString("A").PadRight(1));
                 }
                 sw.Close();
+
+                var volumes = await Task.Run(() => new ExpedicaoViewModel().GetCarregamentoVolumesAsync(siglas, Dispatcher.Invoke(() => txtPlaca.Content.ToString())));
+                foreach (var volume in volumes)
+                {
+                    await Task.Run(() => new ExpedicaoViewModel().GetVolumeCarregado(volume.codexped));
+                    //GetVolumeCarregado
+                }
+                
             }
             catch (Exception ex)
             {
@@ -902,13 +910,16 @@ namespace Expedicao.Views
         private async Task SendMailAsync(int prodNExport)
         {
             string sigla = Dispatcher.Invoke(() => txtSigla.Content.ToString().Split(";")[0]);
-            AprovadoModel aprovadoModel = await Task.Run(async () => await new AprovadoViewModel().GetAprovadoAsync(sigla));
+            AprovadoModel aprovadoModel = await Task.Run(() => new AprovadoViewModel().GetAprovadoAsync(sigla));
             using MailMessage emailMessage = new();
             emailMessage.From = new MailAddress("envio_relatorio@cipolatti.com.br");
+            //emailMessage.To.Add(new MailAddress("wesley_oliveira@cipolatti.com.br"));
+            
             emailMessage.To.Add(new MailAddress("grupo_nota_fiscal@cipolatti.com.br"));
             emailMessage.CC.Add(new MailAddress("expedicao@cipolatti.com.br"));
             emailMessage.CC.Add(new MailAddress("operacionalinterno@cipolatti.com.br"));
             emailMessage.CC.Add(new MailAddress("wesley_oliveira@cipolatti.com.br"));
+            
             emailMessage.Subject = "Solicitação Nota Fisca Shopping";
             emailMessage.Body = "Em anexo arquivos para emissão da nota fiscal para o cliente " + aprovadoModel.Nome + " - " + aprovadoModel.Sigla + ", caminhão: " + Dispatcher.Invoke(() => txtPlaca.Content.ToString());
             emailMessage.Priority = MailPriority.High;// 2;

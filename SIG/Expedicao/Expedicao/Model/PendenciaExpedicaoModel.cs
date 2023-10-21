@@ -9,6 +9,7 @@ namespace Expedicao
     {
         public string? sigla { get; set; }
         public string? item_memorial { get; set; }
+        public string? baia_caminhao {  get; set; }
         public string? planilha { get; set; }
         public string? descricao { get; set; }
         public string? descricao_adicional { get; set; }

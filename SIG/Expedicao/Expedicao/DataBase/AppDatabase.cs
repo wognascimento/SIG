@@ -22,6 +22,7 @@ namespace Expedicao
         public DbSet<ConfCargaGeralModel> ConfCargaGerals { get; set; }
         public DbSet<OrcamentoSequenceModel> OrcamentoSequences { get; set; }
         public DbSet<CarregamentoItemCaminhaoModel> CarregamentoItemCaminhaos { get; set; }
+        public DbSet<VolumeSolicitacaoNotaFiscalModel> VolumesSolicitacaoNotaFiscal { get; set; }
         public DbSet<RelatorioNfTotalCompletoModel> RelatorioNfTotalCompletos { get; set; }
         public DbSet<PacklistCarregCaminhaoModel> PacklistCarregCaminhaos { get; set; }
 

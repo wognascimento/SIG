@@ -50,5 +50,6 @@ namespace Expedicao
     public string? Operacao { get; set; }
     [Column("volume")]
     public int? Volume { get; set; }
+    public bool? nf_emitida { get; set; }
   }
 }

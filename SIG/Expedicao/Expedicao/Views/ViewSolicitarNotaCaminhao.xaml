@@ -18,8 +18,7 @@
             AllowFiltering="True"
             ShowRowHeader="True" 
             ItemsSource="{Binding Cubagens}"
-            SelectedItem="{Binding Cubagem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-            RowValidated="dataGrid_RowValidated">
+            SelectedItem="{Binding Cubagem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridTextColumn MappingName="sigla" ColumnSizer="SizeToCells"/>
                 <syncfusion:GridTextColumn MappingName="item" ColumnSizer="SizeToCells"/>
