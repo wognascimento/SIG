@@ -231,7 +231,7 @@ namespace Expedicao.Views
                     
 
                     await Task.Run(() => GetInformacoesNF());
-                    var NExportado =  await Task.Run(() => GetProdutosNaoExportadosMaticAsync());
+                    var NExportado =  await Task.Run(GetProdutosNaoExportadosMaticAsync);
                     await Task.Run(() => SendMailAsync(NExportado));
 
     
@@ -484,9 +484,9 @@ namespace Expedicao.Views
                         Convert.ToString("").PadRight(60) + 
                         Convert.ToString("").PadRight(60) + 
                         Convert.ToString("").PadRight(60) + 
-                        string.Format("{0:000000000000.00}", itens[i].Qtd).Replace(",", null) + 
+                        string.Format("{0:000000000000.00}", itens[i].Qtd).Replace(",", null).Replace(".", null) + 
                         Convert.ToString(itens[i].Unidade).PadRight(3) + 
-                        string.Format("{0:000000000000.00}", itens[i].Custo).Replace(",", null) + 
+                        string.Format("{0:000000000000.00}", itens[i].Custo).Replace(",", null).Replace(".", null) + 
                         Convert.ToString("").PadRight(14) + 
                         Convert.ToString("").PadRight(14) + 
                         Convert.ToString("").PadRight(14) + 
