@@ -1,6 +1,11 @@
 ﻿using LeitorControladoShopping.ViewModels;
 using LeitorControladoShopping.views;
 using Telerik.Maui.Controls.Compatibility;
+using ZXing.Net.Maui.Controls;
+
+#if ANDROID
+[assembly: Android.App.UsesPermission(Android.Manifest.Permission.Camera)]
+#endif
 
 namespace LeitorControladoShopping
 {
@@ -11,6 +16,7 @@ namespace LeitorControladoShopping
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseTelerik()
+                .UseBarcodeReader()
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {
