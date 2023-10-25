@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Producao.Views.CadastroProduto;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
@@ -220,7 +221,7 @@ namespace Producao.Views.kit.solucao
                 worksheet.Range["G3"].Text = vm.ChkGeral.cidade;
                 worksheet.Range["L3"].Text = vm.ChkGeral.est;
                 worksheet.Range["C4"].Text = vm.ChkGeral.solicitante;
-                worksheet.Range["J4"].Text = System.String.Format("{0:dd/MM/yyyy HH:mm:ss}", vm.ChkGeral.data_solicitacao); //(DateTime)vm.ChkGeral.data_solicitacao;
+                worksheet.Range["J4"].Text = String.Format("{0:dd/MM/yyyy HH:mm:ss}", vm.ChkGeral.data_solicitacao); //(DateTime)vm.ChkGeral.data_solicitacao;
                 worksheet.Range["C6"].Text = vm.ChkGeral.noite_montagem;
 
                 //worksheet.Range["C6"].Text = requi.num_os_servico.ToString();
@@ -270,6 +271,12 @@ namespace Producao.Views.kit.solucao
                     //worksheet.Range[$"P{index}"].Number = (double)item.coddetalhescompl;
                     worksheet.Range[$"P{index}"].CellStyle = borderStyle;
                     //worksheet.Range[$"O{index}"].CellStyle.Font.Size = 7;
+
+                    worksheet.Range[$"Q{index}"].Number = (double)item.custo;
+                    worksheet.Range[$"Q{index}"].CellStyle = borderStyle;
+
+                    worksheet.Range[$"R{index}"].Number = (double)item.peso;
+                    worksheet.Range[$"R{index}"].CellStyle = borderStyle;
 
                     index++;
                 }
@@ -451,9 +458,32 @@ namespace Producao.Views.kit.solucao
             }
         }
 
-        private void dgCheckListGeral_RowValidating(object sender, Syncfusion.UI.Xaml.Grid.RowValidatingEventArgs e)
+        private async void dgCheckListGeral_RowValidating(object sender, Syncfusion.UI.Xaml.Grid.RowValidatingEventArgs e)
         {
-
+            try
+            {
+                DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                var dado = e.RowData as QryCheckListGeralModel; //e.RowData = {Producao.QryCheckListGeralModel}
+                ComplementoCheckListModel CompleChkList = new()
+                {
+                    codcompl = dado?.codcompl,
+                    obs = dado?.obs,
+                    orient_montagem = dado?.orient_montagem,
+                    orient_desmont = dado?.orient_desmont,
+                    qtd = dado.qtd,
+                    alterado_por = Environment.UserName,
+                    alterado_em = DateTime.Now
+                //ordem = dado?.id
+            };
+                await vm.EditComplementoCheckListAsync(CompleChkList);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro ao inserir", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
         }
 
         private async void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
@@ -479,7 +509,7 @@ namespace Producao.Views.kit.solucao
                     incluidopordesc = vm?.CheckListGeral?.incluidopordesc,
                     kp = vm?.CheckListGeral?.kp,
                     orient_desmont = vm?.CheckListGeral?.orient_desmont,
-                    qtd = vm?.CheckListGeral?.qtd,
+                    qtd = vm.CheckListGeral.qtd,
                     coduniadicional = vm?.CheckListGeral?.coduniadicional,
                     codcompl = vm?.CheckListGeral?.codcompl,
                     nivel = vm?.CheckListGeral?.nivel,
@@ -632,6 +662,48 @@ namespace Producao.Views.kit.solucao
 
             tbId.Focus();
         }
+
+        private async void OnProdutos(object sender, RoutedEventArgs e)
+        {
+            DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+
+            var window = new Window
+            {
+                Title = "BUSCAR PRODUTO",
+                Height = 600,
+                Width = 900,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                WindowStyle = WindowStyle.ToolWindow,
+                ResizeMode = ResizeMode.NoResize,
+                Content = new LocalizaProduto(/*this.DataContext*/),
+                Owner = Window.GetWindow(dgCheckListGeral.Parent), //GetTopParent();
+                ShowInTaskbar = false
+            };
+            window.ShowDialog();
+
+            var descricao = ((LocalizaProdutoViewModel)((LocalizaProduto)window.Content).DataContext).Descricao; 
+
+            if (descricao == null)
+                return;
+
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                cbPlanilha.SelectedItem = (from p in vm.Planilhas where p.planilha == descricao.planilha select p).FirstOrDefault();
+                vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(descricao.planilha));
+                cbDescricao.SelectedItem = (from p in vm.Produtos where p.codigo == descricao.codigo select p).FirstOrDefault(); 
+                vm.DescAdicionais = await Task.Run(async () => await vm.GetDescAdicionaisAsync(descricao.codigo));
+                cbDescricaoAdicional.SelectedItem = (from d in vm.DescAdicionais where d.coduniadicional == descricao.coduniadicional select d).FirstOrDefault();
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+                tbQtde.Focus();
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 
     public class DetalhesKitSolucaoViewModel : INotifyPropertyChanged
@@ -697,6 +769,13 @@ namespace Producao.Views.kit.solucao
         {
             get { return _compledicional; }
             set { _compledicional = value; RaisePropertyChanged("Compledicional"); }
+        }
+
+        private QryDescricao descricao;
+        public QryDescricao Descricao
+        {
+            get { return descricao; }
+            set { descricao = value; RaisePropertyChanged("Descricao"); }
         }
 
         private ObservableCollection<ComplementoCheckListModel> _complementoCheckLists;
@@ -891,6 +970,60 @@ namespace Producao.Views.kit.solucao
                 return new ObservableCollection<TabelaDescAdicionalModel>(data);
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task EditComplementoCheckListAsync(ComplementoCheckListModel compChkList)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                //db.Entry(ComplementoCheckList).State = ComplementoCheckList.codcompl == null ? EntityState.Added : EntityState.Modified;
+                var comple = await db.ComplementoCheckLists.FirstOrDefaultAsync(p => p.codcompl == compChkList.codcompl);
+                if (compChkList != null)
+                {
+                    if (compChkList.obs != "")
+                    {
+                        comple.obs = compChkList.obs;
+                        db.Entry(comple).Property(p => p.obs).IsModified = true;
+                    }
+                    if (compChkList.orient_montagem != "")
+                    {
+                        comple.orient_montagem = compChkList.orient_montagem;
+                        db.Entry(comple).Property(p => p.orient_montagem).IsModified = true;
+                    }
+                    if (compChkList.orient_desmont != "")
+                    {
+                        comple.orient_desmont = compChkList.orient_desmont;
+                        db.Entry(comple).Property(p => p.orient_desmont).IsModified = true;
+                    }
+                    if (compChkList.ordem != "")
+                    {
+                        comple.ordem = compChkList.ordem;
+                        db.Entry(comple).Property(p => p.ordem).IsModified = true;
+                    }
+                    if (compChkList.qtd != null)
+                    {
+                        comple.qtd = compChkList.qtd;
+                        db.Entry(comple).Property(p => p.qtd).IsModified = true;
+                    }
+                    if (compChkList.alterado_por != null)
+                    {
+                        comple.alterado_por = compChkList.alterado_por;
+                        db.Entry(comple).Property(p => p.alterado_por).IsModified = true;
+                    }
+                    if (compChkList.alterado_em != null)
+                    {
+                        comple.alterado_em = compChkList.alterado_em;
+                        db.Entry(comple).Property(p => p.alterado_em).IsModified = true;
+                    }
+
+                    await db.SaveChangesAsync();
+                }
+            }
+            catch (NpgsqlException)
             {
                 throw;
             }

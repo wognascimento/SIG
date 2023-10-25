@@ -204,7 +204,7 @@ namespace Producao.Views.CheckList
                 e.IsValid = false;
                 e.ErrorMessages.Add("codcompladicional", "Seleciona o COMPLEMENTO ADICIONAL.");
             }
-            else if (!rowData.qtd.HasValue)
+            else if (rowData.qtd == null)
             {
                 e.IsValid = false;
                 e.ErrorMessages.Add("qtd", "Informa a QTDE.");

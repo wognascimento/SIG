@@ -93,7 +93,7 @@ namespace Producao.Views.CheckList
                     incluidopordesc = vm?.CheckListGeral?.incluidopordesc,
                     kp = vm?.CheckListGeral?.kp,
                     orient_desmont = vm?.CheckListGeral?.orient_desmont,
-                    qtd = vm?.CheckListGeral?.qtd,
+                    qtd = vm.CheckListGeral.qtd,
                     coduniadicional = vm?.CheckListGeral?.coduniadicional,
                     codcompl = vm?.CheckListGeral?.codcompl,
                     nivel = vm?.CheckListGeral?.nivel,
@@ -718,7 +718,7 @@ namespace Producao.Views.CheckList
                 e.IsValid = false;
                 e.ErrorMessages.Add("codcompladicional", "Seleciona o COMPLEMENTO ADICIONAL.");
             }
-            else if (!rowData.qtd.HasValue)
+            else if (rowData.qtd == null)
             {
                 e.IsValid = false;
                 e.ErrorMessages.Add("qtd", "Informa a QTDE.");

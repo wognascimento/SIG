@@ -85,7 +85,9 @@
                     Height="30" 
                     Label="Pesquisar"
                     SmallIcon="/Icones/icons8-pesquisar-52.png" 
-                    LargeIcon="/Icones/icons8-pesquisar-104.png" Width="78" Click="OnListProdutos"/>
+                    LargeIcon="/Icones/icons8-pesquisar-104.png" 
+                    Width="78" 
+                    Click="OnListProdutos"/>
 
             </StackPanel>
 

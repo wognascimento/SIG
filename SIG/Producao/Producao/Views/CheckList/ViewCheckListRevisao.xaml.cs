@@ -256,12 +256,29 @@ namespace Producao.Views
       
             var data = value as ControleMemorialModel;
 
+            /*
             if (data == null)
                 return DependencyProperty.UnsetValue;
+            */
 
+            if (data.altera_ok.Trim().Contains('0') && data.memorial_alterado_por != null)
+                return new SolidColorBrush(Colors.Yellow);
+            else if(data.memorial_data_alterado > data.confirma_alteracao_data)
+                return new SolidColorBrush(Colors.Red);
+            else
+                return DependencyProperty.UnsetValue;
+
+            /*
             return data.altera_ok.Trim().Contains('0') && data.memorial_alterado_por != null
                 ? new SolidColorBrush(Colors.Yellow)
                 : DependencyProperty.UnsetValue;
+
+            return data.memorial_data_alterado > data.confirma_alteracao_data
+                ? new SolidColorBrush(Colors.Yellow)
+                : DependencyProperty.UnsetValue;
+            */
+
+            return DependencyProperty.UnsetValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

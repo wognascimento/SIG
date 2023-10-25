@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Producao.Views.CadastroProduto;
 using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.ScrollAxis;
@@ -14,7 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Producao.Views.kit.manutencao
+namespace Producao.Views.kit.solucao
 {
     /// <summary>
     /// Interação lógica para ViewDetalhesKitManutencao.xam
@@ -30,7 +31,7 @@ namespace Producao.Views.kit.manutencao
             tbId.Text = "0";
             tbItem.Text = "0";
             tbLocalShopping.Text = "KIT MANUTENÇÃO";
-            DataContext = new ViewDetalhesKitManutencaoViewModel();
+            DataContext = new DetalhesKitManutencaoViewModel();
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -38,7 +39,7 @@ namespace Producao.Views.kit.manutencao
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
+                DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
                 vm.Planilhas = await Task.Run(vm.GetPlanilhasAsync);
                 vm.CheckListGerais = await Task.Run(async () => await vm.GetCheckListGeralAsync(OsKit.os));
                 vm.Classificacoes = await Task.Run(vm.GetClassificacoesAsync);
@@ -60,7 +61,7 @@ namespace Producao.Views.kit.manutencao
             {
 
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
+                DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
 
                 vm.ComplementoCheckList.codproduto = null;
                 vm.Produtos = new ObservableCollection<ProdutoModel>();
@@ -87,7 +88,7 @@ namespace Producao.Views.kit.manutencao
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
+                DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
 
                 vm.ComplementoCheckList.coduniadicional = null;
                 vm.DescAdicionais = new ObservableCollection<TabelaDescAdicionalModel>();
@@ -112,7 +113,7 @@ namespace Producao.Views.kit.manutencao
         {
             try
             {
-                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
+                DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.ComplementoCheckList.codcompl = null;
                 vm.ComplementoCheckList.sigla = cbSiglaShopping.Text;
@@ -149,7 +150,7 @@ namespace Producao.Views.kit.manutencao
         {
             try
             {
-                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
+                DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 vm.ComplementoCheckList.class_solucao = cmbClassificacoes.SelectedItem.ToString();
                 vm.ComplementoCheckList.motivos = cmbMotivos.SelectedItem.ToString();
@@ -182,7 +183,7 @@ namespace Producao.Views.kit.manutencao
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
 
-                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
+                DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
 
                 //QryRequisicaoDetalheModel requi = (from r in vm.QryRequisicaoDetalhes select r).FirstOrDefault();
 
@@ -212,7 +213,7 @@ namespace Producao.Views.kit.manutencao
 
                 IWorksheet worksheet = workbook.Worksheets[0];
 
-                worksheet.Range["A1"].Text = "KIT SOLUÇÃO";
+                worksheet.Range["A1"].Text = "KIT MANUTENÇÃO";
                 worksheet.Range["C2"].Text = vm.ChkGeral.sigla;
                 worksheet.Range["F2"].Number = (double)vm.ChkGeral.t_os_mont;
                 worksheet.Range["I2"].Number = (double)vm.ChkGeral.os;
@@ -271,12 +272,18 @@ namespace Producao.Views.kit.manutencao
                     worksheet.Range[$"P{index}"].CellStyle = borderStyle;
                     //worksheet.Range[$"O{index}"].CellStyle.Font.Size = 7;
 
+                    worksheet.Range[$"Q{index}"].Number = (double)item.custo;
+                    worksheet.Range[$"Q{index}"].CellStyle = borderStyle;
+
+                    worksheet.Range[$"R{index}"].Number = (double)item.peso;
+                    worksheet.Range[$"R{index}"].CellStyle = borderStyle;
+
                     index++;
                 }
 
 
                 IWorksheet wsheet = workbook.Worksheets[1];
-                wsheet.SetColumnWidth(6, 1);
+                //wsheet.SetColumnWidth(6, 1);
                 int etiqueta = 1;
                 int col1E1 = 1;
                 int col2E1 = 2;
@@ -284,223 +291,157 @@ namespace Producao.Views.kit.manutencao
                 int col2E2 = 2;
                 foreach (var item in vm.ChkGerais)
                 {
-                    if(etiqueta == 1)
+                    if (etiqueta == 1)
                     {
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].Text = item.nome;
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].CellStyle = borderStyle;
-                        col1E1+=2;
-                        col2E1+=2;
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].Text = item.nome;
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].CellStyle.Font.Size = 24;
+                        wsheet.Range[$"A{col1E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 2;
+                        col2E1 += 2;
 
-                        wsheet.Range[$"A{col1E1}:C{col2E1}"].Text = item.shopping;
-                        wsheet.Range[$"A{col1E1}:C{col2E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:C{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].Text = item.shopping;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].Merge();
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].CellStyle.Font.Size = 24;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Text = "CONTROLE";
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle.Font.Bold = true;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].Text = "CONTROLE";
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].Merge();
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].CellStyle.Font.Size = 24;
+                        wsheet.Range[$"H{col1E1}:J{col1E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Number = (double)item.kp;
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Number = (double)item.kp;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Size = 24;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 2;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:D{col1E1}"].Text = item.cidade;
-                        wsheet.Range[$"A{col1E1}:D{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:D{col1E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Text = item.cidade;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle.Font.Size = 20;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"E{col1E1}"].Text = item.est;
-                        wsheet.Range[$"E{col1E1}"].Merge();
-                        wsheet.Range[$"E{col1E1}"].CellStyle = borderStyle;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Text = item.est;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle.Font.Size = 20;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].Text = "CODDETCOMPL";
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Text = "CODDETCOMPL";
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].Text = "PLANILHA";
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].CellStyle.Font.Bold = true;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Text = "PLANILHA";
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].Number = (double)item.coddetalhescompl;
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:B{col1E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Number = (double)item.coddetalhescompl;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].CellStyle.Font.Size = 20;
+                        wsheet.Range[$"A{col2E1}:E{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].Text = item.planilha;
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"C{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Text = item.planilha;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].CellStyle.Font.Size = 20;
+                        wsheet.Range[$"F{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Text = "DESCRIÇÃO";
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Text = "DESCRIÇÃO";
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"D{col1E1}"].Text = "QTD";
-                        wsheet.Range[$"D{col1E1}"].Merge();
-                        wsheet.Range[$"D{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"D{col1E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Text = "QTD";
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 3;
 
-                        wsheet.Range[$"E{col1E1}"].Number = (double)item.qtd;
-                        wsheet.Range[$"E{col1E1}"].Merge();
-                        wsheet.Range[$"E{col1E1}"].CellStyle = borderStyle;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].Text = item.descricao_completa;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].Merge();
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].CellStyle.Font.Size = 20;
+                        wsheet.Range[$"A{col1E1}:G{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].Text = item.descricao_completa;
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:E{col2E1}"].CellStyle = borderStyle;
-                        col1E1+=2;
-                        col2E1+=2;
+                        wsheet.Range[$"H{col1E1}:J{col2E1}"].Number = (double)item.qtd;
+                        wsheet.Range[$"H{col1E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"H{col1E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col1E1}:J{col2E1}"].CellStyle.Font.Size = 40;
+                        wsheet.Range[$"H{col1E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 3;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Text = "SOLICITANTE";
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Text = "SOLICITANTE";
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Text = "ATENDENTE";
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle.Font.Bold = true;
-                        col1E1++;
-                        col2E1++;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Text = "ATENDENTE";
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Bold = true;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Text = item.solicitante;
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].Merge();
-                        wsheet.Range[$"A{col1E1}:C{col1E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Text = item.solicitante; 
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].Merge();
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"A{col2E1}:G{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Text = item.atendente;
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].Merge();
-                        wsheet.Range[$"D{col1E1}:E{col1E1}"].CellStyle = borderStyle;
-                        col1E1+=2;
-                        col2E1+=2;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Text = item.atendente;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].Merge();
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle = borderStyle;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].CellStyle.Font.Size = 22;
+                        wsheet.Range[$"H{col2E1}:J{col2E1}"].RowHeight = 26.25;
+                        col1E1 += 1;
+                        col2E1 += 2;
 
-                        etiqueta = 2;   
-                        continue;       
-                                        
-                    }                   
-                                        
-                    if (etiqueta == 2)  
-                    {
-                        // col1E2
-                        // col2E2
+                        wsheet.Range[$"A{col1E1}: J{col2E1}"].RowHeight = 26.25;
 
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].Text = item.nome;
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].CellStyle = borderStyle;
-                        col1E2+=2;
-                        col2E2+=2;
+                        col1E1 += 1;
+                        col2E1 += 1;
 
-                        wsheet.Range[$"G{col1E2}:I{col2E2}"].Text = item.shopping;
-                        wsheet.Range[$"G{col1E2}:I{col2E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:I{col2E2}"].CellStyle = borderStyle;
-                                             
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Text = "CONTROLE";
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle.Font.Bold = true;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Number = (double)item.kp;
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:J{col1E2}"].Text = item.cidade;
-                        wsheet.Range[$"G{col1E2}:J{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:J{col1E2}"].CellStyle = borderStyle;
-                                             
-                        wsheet.Range[$"K{col1E2}"].Text = item.est;
-                        wsheet.Range[$"K{col1E2}"].Merge();
-                        wsheet.Range[$"K{col1E2}"].CellStyle = borderStyle;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].Text = "CODDETCOMPL";
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].CellStyle.Font.Bold = true;
-                                             
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].Text = "PLANILHA";
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].CellStyle.Font.Bold = true;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].Number = (double)item.coddetalhescompl;
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:H{col1E2}"].CellStyle = borderStyle;
-                                             
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].Text = item.planilha;
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"I{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Text = "DESCRIÇÃO";
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].CellStyle.Font.Bold = true;
-                                        
-                        wsheet.Range[$"J{col1E2}"].Text = "QTD";
-                        wsheet.Range[$"J{col1E2}"].Merge();
-                        wsheet.Range[$"J{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"J{col1E2}"].CellStyle.Font.Bold = true;
-                                        
-                        wsheet.Range[$"K{col1E2}"].Number = (double)item.qtd;
-                        wsheet.Range[$"K{col1E2}"].Merge();
-                        wsheet.Range[$"K{col1E2}"].CellStyle = borderStyle;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].Text = item.descricao_completa;
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:K{col2E2}"].CellStyle = borderStyle;
-                        col1E2+=2;
-                        col2E2+=2;
-
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Text = "SOLICITANTE";
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].CellStyle.Font.Bold = true;
-                                              
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Text = "ATENDENTE";
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle.Font.Bold = true;
-                        col1E2++;
-                        col2E2++;
-
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Text = item.solicitante;
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].Merge();
-                        wsheet.Range[$"G{col1E2}:I{col1E2}"].CellStyle = borderStyle;
-                                              
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Text = item.atendente;
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].Merge();
-                        wsheet.Range[$"J{col1E2}:K{col1E2}"].CellStyle = borderStyle;
-                        col1E2 += 2;
-                        col2E2 += 2;
-
-                        etiqueta = 1;
-                        continue;
                     }
                 }
 
-                wsheet.PageSetup.LeftMargin = 2;
-                wsheet.PageSetup.RightMargin = 2;
+                wsheet.PageSetup.LeftMargin = 0.5;
+                wsheet.PageSetup.RightMargin = 0.5;
+
+                wsheet.PageSetup.TopMargin = 0.8;
+                wsheet.PageSetup.BottomMargin = 0.8;
 
                 //Save the Excel document
                 workbook.SaveAs($"Impressos/REQUISICAO_KIT_{vm.ChkGeral.os}.xlsx");
@@ -517,9 +458,32 @@ namespace Producao.Views.kit.manutencao
             }
         }
 
-        private void dgCheckListGeral_RowValidating(object sender, Syncfusion.UI.Xaml.Grid.RowValidatingEventArgs e)
+        private async void dgCheckListGeral_RowValidating(object sender, Syncfusion.UI.Xaml.Grid.RowValidatingEventArgs e)
         {
-
+            try
+            {
+                DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                var dado = e.RowData as QryCheckListGeralModel; //e.RowData = {Producao.QryCheckListGeralModel}
+                ComplementoCheckListModel CompleChkList = new()
+                {
+                    codcompl = dado?.codcompl,
+                    obs = dado?.obs,
+                    orient_montagem = dado?.orient_montagem,
+                    orient_desmont = dado?.orient_desmont,
+                    qtd = dado.qtd,
+                    alterado_por = Environment.UserName,
+                    alterado_em = DateTime.Now
+                //ordem = dado?.id
+            };
+                await vm.EditComplementoCheckListAsync(CompleChkList);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erro ao inserir", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
         }
 
         private async void OnSelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.GridSelectionChangedEventArgs e)
@@ -528,7 +492,7 @@ namespace Producao.Views.kit.manutencao
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
+                DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
                 var record = vm.CheckListGeral;
 
                 vm.ComplementoCheckList = new ComplementoCheckListModel
@@ -545,7 +509,7 @@ namespace Producao.Views.kit.manutencao
                     incluidopordesc = vm?.CheckListGeral?.incluidopordesc,
                     kp = vm?.CheckListGeral?.kp,
                     orient_desmont = vm?.CheckListGeral?.orient_desmont,
-                    qtd = vm?.CheckListGeral?.qtd,
+                    qtd = vm.CheckListGeral.qtd,
                     coduniadicional = vm?.CheckListGeral?.coduniadicional,
                     codcompl = vm?.CheckListGeral?.codcompl,
                     nivel = vm?.CheckListGeral?.nivel,
@@ -581,7 +545,7 @@ namespace Producao.Views.kit.manutencao
 
         private void dgComplemento_AddNewRowInitiating(object sender, Syncfusion.UI.Xaml.Grid.AddNewRowInitiatingEventArgs e)
         {
-            ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
+            DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
 
             ((QryCheckListGeralComplementoModel)e.NewObject).codcompl = vm.CheckListGeral.codcompl;
         }
@@ -589,7 +553,7 @@ namespace Producao.Views.kit.manutencao
         private void OnCurrentCellDropDownSelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellDropDownSelectionChangedEventArgs e)
         {
             var sfdatagrid = sender as SfDataGrid;
-            var viewModel = (ViewDetalhesKitManutencaoViewModel)sfdatagrid.DataContext;
+            var viewModel = (DetalhesKitManutencaoViewModel)sfdatagrid.DataContext;
             int rowIndex = sfdatagrid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
 
             QryCheckListGeralComplementoModel record;
@@ -612,7 +576,7 @@ namespace Producao.Views.kit.manutencao
         private async void dgComplemento_RowValidated(object sender, Syncfusion.UI.Xaml.Grid.RowValidatedEventArgs e)
         {
             var sfdatagrid = sender as SfDataGrid;
-            ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
+            DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
             try
             {
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
@@ -658,7 +622,7 @@ namespace Producao.Views.kit.manutencao
                 string classificacao = e.AddedItems[0].ToString();
                 //sender = {Syncfusion.Windows.Tools.Controls.ComboBoxAdv Items.Count:6}
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
+                DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
                 vm.Motivos = await Task.Run(async () => await vm.GetMotivosAsync(classificacao));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
@@ -671,7 +635,7 @@ namespace Producao.Views.kit.manutencao
 
         void Limpar()
         {
-            ViewDetalhesKitManutencaoViewModel vm = (ViewDetalhesKitManutencaoViewModel)DataContext;
+            DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
 
             //tbId.Text = string.Empty;
             //tbItem.Text = string.Empty;
@@ -698,9 +662,51 @@ namespace Producao.Views.kit.manutencao
 
             tbId.Focus();
         }
+
+        private async void OnProdutos(object sender, RoutedEventArgs e)
+        {
+            DetalhesKitManutencaoViewModel vm = (DetalhesKitManutencaoViewModel)DataContext;
+
+            var window = new Window
+            {
+                Title = "BUSCAR PRODUTO",
+                Height = 600,
+                Width = 900,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                WindowStyle = WindowStyle.ToolWindow,
+                ResizeMode = ResizeMode.NoResize,
+                Content = new LocalizaProduto(/*this.DataContext*/),
+                Owner = Window.GetWindow(dgCheckListGeral.Parent), //GetTopParent();
+                ShowInTaskbar = false
+            };
+            window.ShowDialog();
+
+            var descricao = ((LocalizaProdutoViewModel)((LocalizaProduto)window.Content).DataContext).Descricao; 
+
+            if (descricao == null)
+                return;
+
+            try
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+                cbPlanilha.SelectedItem = (from p in vm.Planilhas where p.planilha == descricao.planilha select p).FirstOrDefault();
+                vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(descricao.planilha));
+                cbDescricao.SelectedItem = (from p in vm.Produtos where p.codigo == descricao.codigo select p).FirstOrDefault(); 
+                vm.DescAdicionais = await Task.Run(async () => await vm.GetDescAdicionaisAsync(descricao.codigo));
+                cbDescricaoAdicional.SelectedItem = (from d in vm.DescAdicionais where d.coduniadicional == descricao.coduniadicional select d).FirstOrDefault();
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+
+                tbQtde.Focus();
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 
-    public class ViewDetalhesKitManutencaoViewModel : INotifyPropertyChanged
+    public class DetalhesKitManutencaoViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propName)
@@ -763,6 +769,13 @@ namespace Producao.Views.kit.manutencao
         {
             get { return _compledicional; }
             set { _compledicional = value; RaisePropertyChanged("Compledicional"); }
+        }
+
+        private QryDescricao descricao;
+        public QryDescricao Descricao
+        {
+            get { return descricao; }
+            set { descricao = value; RaisePropertyChanged("Descricao"); }
         }
 
         private ObservableCollection<ComplementoCheckListModel> _complementoCheckLists;
@@ -845,7 +858,7 @@ namespace Producao.Views.kit.manutencao
             set { _chkGerais = value; RaisePropertyChanged("ChkGerais"); }
         }
 
-        public ViewDetalhesKitManutencaoViewModel()
+        public DetalhesKitManutencaoViewModel()
         {
             DetCompl = new DetalhesComplemento();
             ComplementoCheckList = new ComplementoCheckListModel();
@@ -957,6 +970,60 @@ namespace Producao.Views.kit.manutencao
                 return new ObservableCollection<TabelaDescAdicionalModel>(data);
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task EditComplementoCheckListAsync(ComplementoCheckListModel compChkList)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                //db.Entry(ComplementoCheckList).State = ComplementoCheckList.codcompl == null ? EntityState.Added : EntityState.Modified;
+                var comple = await db.ComplementoCheckLists.FirstOrDefaultAsync(p => p.codcompl == compChkList.codcompl);
+                if (compChkList != null)
+                {
+                    if (compChkList.obs != "")
+                    {
+                        comple.obs = compChkList.obs;
+                        db.Entry(comple).Property(p => p.obs).IsModified = true;
+                    }
+                    if (compChkList.orient_montagem != "")
+                    {
+                        comple.orient_montagem = compChkList.orient_montagem;
+                        db.Entry(comple).Property(p => p.orient_montagem).IsModified = true;
+                    }
+                    if (compChkList.orient_desmont != "")
+                    {
+                        comple.orient_desmont = compChkList.orient_desmont;
+                        db.Entry(comple).Property(p => p.orient_desmont).IsModified = true;
+                    }
+                    if (compChkList.ordem != "")
+                    {
+                        comple.ordem = compChkList.ordem;
+                        db.Entry(comple).Property(p => p.ordem).IsModified = true;
+                    }
+                    if (compChkList.qtd != null)
+                    {
+                        comple.qtd = compChkList.qtd;
+                        db.Entry(comple).Property(p => p.qtd).IsModified = true;
+                    }
+                    if (compChkList.alterado_por != null)
+                    {
+                        comple.alterado_por = compChkList.alterado_por;
+                        db.Entry(comple).Property(p => p.alterado_por).IsModified = true;
+                    }
+                    if (compChkList.alterado_em != null)
+                    {
+                        comple.alterado_em = compChkList.alterado_em;
+                        db.Entry(comple).Property(p => p.alterado_em).IsModified = true;
+                    }
+
+                    await db.SaveChangesAsync();
+                }
+            }
+            catch (NpgsqlException)
             {
                 throw;
             }

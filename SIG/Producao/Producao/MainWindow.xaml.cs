@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using Telerik.Windows.Controls;
 using SizeMode = Syncfusion.SfSkinManager.SizeMode;
 
 namespace Producao
@@ -72,12 +73,15 @@ namespace Producao
             }
         }
         #endregion
+
+        DataBaseSettings BaseSettings = DataBaseSettings.Instance;
+
         public MainWindow()
         {
             InitializeComponent();
 			this.Loaded += OnLoaded;
+            StyleManager.ApplicationTheme = new Windows8Theme();
 
-            DataBaseSettings BaseSettings = DataBaseSettings.Instance;
             txtUsername.Text = BaseSettings.Username;
             txtDataBase.Text = BaseSettings.Database;
         }
@@ -1113,6 +1117,23 @@ namespace Producao
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            RadWindow.Prompt("Entre com o ano:", this.OnClosed, BaseSettings.Database);
+        }
+
+        private void OnClosed(object sender, WindowClosedEventArgs e)
+        {
+            if (e.PromptResult != null)
+            {
+                BaseSettings.Database = e.PromptResult;
+                txtDataBase.Text = BaseSettings.Database;
+                _mdi.Items.Clear();
+            }
+                
+            //var message = "Hello " + result + "!";
         }
     }
 }

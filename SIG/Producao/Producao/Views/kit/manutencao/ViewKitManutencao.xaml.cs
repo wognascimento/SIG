@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Producao.DataBase.Model;
+using Producao.Views.kit.solucao;
 using Syncfusion.UI.Xaml.Grid;
 using System;
 using System.Collections.ObjectModel;
