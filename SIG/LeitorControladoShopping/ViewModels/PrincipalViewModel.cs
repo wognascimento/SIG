@@ -1,19 +1,36 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using LeitorControladoShopping.Data.Local;
+using LeitorControladoShopping.Data.Local.Model;
 using LeitorControladoShopping.views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace LeitorControladoShopping.ViewModels
 {
     public partial class PrincipalViewModel : ObservableObject
     {
-        public PrincipalViewModel()
+
+        private readonly VolumeScannerRepository _volumeScannerRepository;
+        public PrincipalViewModel(VolumeScannerRepository volumeScannerRepository)
         {
+            _volumeScannerRepository = volumeScannerRepository;
+        }
+
+        [ObservableProperty]
+        ObservableCollection<VolumeControlado> volumeControlados;
+
+
+        public async Task<ObservableCollection<VolumeControlado>> GetVolumesAsync()
+        {
+            try
+            {
+                var dados  = await _volumeScannerRepository.GetAllVolumeScanners();
+                return new ObservableCollection<VolumeControlado>(dados);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         [RelayCommand]

@@ -5,7 +5,7 @@
              x:Class="LeitorControladoShopping.views.Principal"
              xmlns:viewmodel="clr-namespace:LeitorControladoShopping.ViewModels"
              x:DataType="viewmodel:PrincipalViewModel"
-             Title="Principal">
+             Title="Principal" Loaded="ContentPage_Loaded">
 
     
     <Grid>
@@ -15,11 +15,16 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <telerik:RadDataGrid x:Name="dataGrid"
-                     AutoGenerateColumns="False">
+        <telerik:RadDataGrid 
+            x:Name="dataGrid"
+            AutoGenerateColumns="False"
+            ItemsSource="{Binding VolumeControlados}">
             <telerik:RadDataGrid.Columns>
-                <telerik:DataGridTextColumn HeaderText="SIGLA" PropertyName="Country" />
-                <telerik:DataGridTextColumn HeaderText="VOLUME" PropertyName="Capital" />
+                <telerik:DataGridNumericalColumn PropertyName="Id" />
+                <telerik:DataGridTextColumn PropertyName="Sigla" />
+                <telerik:DataGridNumericalColumn PropertyName="Volume" />
+                <telerik:DataGridDateColumn PropertyName="Created" />
+                <telerik:DataGridBooleanColumn PropertyName="IsEnviado" />
             </telerik:RadDataGrid.Columns>
         </telerik:RadDataGrid>
 

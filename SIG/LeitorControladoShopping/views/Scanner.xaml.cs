@@ -1,3 +1,5 @@
+using LeitorControladoShopping.Data.Local;
+using LeitorControladoShopping.Data.Local.Model;
 using System.Text.RegularExpressions;
 using ZXing.Net.Maui;
 using ZXing.Net.Maui.Controls;
@@ -6,10 +8,12 @@ namespace LeitorControladoShopping.views;
 
 public partial class Scanner : ContentPage
 {
-	public Scanner()
+    private readonly VolumeScannerRepository _volumeScannerRepository;
+
+    public Scanner(VolumeScannerRepository volumeScannerRepository)
 	{
 		InitializeComponent();
-
+        _volumeScannerRepository = volumeScannerRepository;
         barcodeView.Options = new BarcodeReaderOptions
         {
             Formats = BarcodeFormats.TwoDimensional,
@@ -31,17 +35,29 @@ public partial class Scanner : ContentPage
         if (first is not null)
         {
             Match match = Regex.Match(first.Value, pattern);
-            Dispatcher.Dispatch(() =>
+            string[] volume = first.Value.Split('|');
+            Dispatcher.Dispatch(async () =>
             {
                 // Update BarcodeGeneratorView
-                barcodeGenerator.ClearValue(BarcodeGeneratorView.ValueProperty);
-                barcodeGenerator.Format = first.Format;
-                barcodeGenerator.Value = first.Value;
+                //barcodeGenerator.ClearValue(BarcodeGeneratorView.ValueProperty);
+                //barcodeGenerator.Format = first.Format;
+                //barcodeGenerator.Value = first.Value;
 
                 if (match.Success)
                 {
                     //string numeroEncontrado = match.Groups[1].Value;
                     //Console.WriteLine($"Número encontrado: {numeroEncontrado}");
+
+                    try
+                    {
+                        var controlado = await Task.Run(() => _volumeScannerRepository.GetVolume(volume[0], long.Parse(volume[1])));
+                        if (controlado == null)
+                            await Task.Run(() => _volumeScannerRepository.CreateVolumeControlado(new VolumeControlado { Sigla = volume[0], Volume = long.Parse(volume[1]) }));
+                    }
+                    catch (Exception ex)
+                    {
+                        await DisplayAlert("Error", ex.Message, "OK");
+                    }
                     ResultLabel.Text = $"Barcodes: {first.Format} -> {first.Value}";
                 }
                 else

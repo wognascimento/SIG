@@ -1,5 +1,7 @@
-﻿using LeitorControladoShopping.ViewModels;
+﻿using LeitorControladoShopping.Data.Local;
+using LeitorControladoShopping.ViewModels;
 using LeitorControladoShopping.views;
+using Microsoft.Extensions.Logging;
 using Telerik.Maui.Controls.Compatibility;
 using ZXing.Net.Maui.Controls;
 
@@ -23,6 +25,11 @@ namespace LeitorControladoShopping
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+#if DEBUG
+            builder.Logging.AddDebug();
+#endif
+
+            builder.Services.AddSingleton(new VolumeScannerRepository("ColetorSQLite.db3"));
 
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<Principal>();
