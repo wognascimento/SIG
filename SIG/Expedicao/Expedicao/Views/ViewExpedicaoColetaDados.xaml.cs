@@ -221,20 +221,16 @@ namespace Expedicao.Views
                 else
                 {
 
-                    
+                    await Task.Run(() => GetInformacoesNF());
+                    var NExportado =  await Task.Run(GetProdutosNaoExportadosMaticAsync);
                     long codigo = await Task.Run(() => new ExpedicaoViewModel().OrcamentoSequenceAsync(new OrcamentoSequenceModel { Cliente = "CARREGAMNETO" }));
                     await Task.Run(() => CriarOrcamento1TaskAsync(codigo));
                     await Task.Run(() => CriarOrcamento2TaskAsync(codigo));
-                    
-                    
                     //await Task.Run(CriarOrcamentokAsync);
-                    
 
-                    await Task.Run(() => GetInformacoesNF());
-                    var NExportado =  await Task.Run(GetProdutosNaoExportadosMaticAsync);
                     await Task.Run(() => SendMailAsync(NExportado));
 
-    
+
                     await Task.Run(() => new ViewModelLocal().GetRemoveAllItemFaltante());
                     await Task.Run(() => new ViewModelLocal().GetRemoveAllItemCarregado());
                     await Task.Run(() => new ViewModelLocal().GetRemoveAllIRomaneios());
@@ -508,6 +504,7 @@ namespace Expedicao.Views
                 sw.Close();
 
                 var volumes = await Task.Run(() => new ExpedicaoViewModel().GetCarregamentoVolumesAsync(siglas, Dispatcher.Invoke(() => txtPlaca.Content.ToString())));
+                
                 foreach (var volume in volumes)
                 {
                     await Task.Run(() => new ExpedicaoViewModel().GetVolumeCarregado(volume.codexped));

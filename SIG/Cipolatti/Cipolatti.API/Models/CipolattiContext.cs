@@ -8,13 +8,10 @@ namespace Cipolatti.API.Models;
 
 public partial class CipolattiContext : DbContext
 {
-
     public CipolattiContext(DbContextOptions<CipolattiContext> options)
         : base(options)
     {
     }
-
-    static CipolattiContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
     public virtual DbSet<QryAprovados> QryAprovados { get; set; }
 
@@ -95,6 +92,8 @@ public partial class CipolattiContext : DbContext
     public virtual DbSet<TblResumoAnoAnteriorAtual> TblResumoAnoAnteriorAtual { get; set; }
 
     public virtual DbSet<TblRetornoCliente> TblRetornoCliente { get; set; }
+
+    public virtual DbSet<TblVolumeControlado> TblVolumeControlado { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -234,6 +233,7 @@ public partial class CipolattiContext : DbContext
             entity.Property(e => e.BaiaVirtual)
                 .HasDefaultValueSql("0")
                 .IsFixedLength();
+            entity.Property(e => e.NfEmitida).HasDefaultValueSql("false");
             entity.Property(e => e.Pb).HasDefaultValueSql("0");
             entity.Property(e => e.Pl).HasDefaultValueSql("0");
 
@@ -378,6 +378,13 @@ public partial class CipolattiContext : DbContext
 
             entity.Property(e => e.InseridoEm).HasDefaultValueSql("(now())::timestamp(0) with time zone");
             entity.Property(e => e.InseridoPor).HasDefaultValueSql("\"current_user\"()");
+        });
+
+        modelBuilder.Entity<TblVolumeControlado>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("tbl_volume_controlado_pkey");
+
+            entity.Property(e => e.Recebido).HasDefaultValueSql("CURRENT_DATE");
         });
         modelBuilder.HasSequence("carregamento_itens_shopp_seq", "expedicao");
         modelBuilder.HasSequence("conceito_idconceito_seq", "comercial");

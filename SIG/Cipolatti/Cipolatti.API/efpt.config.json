@@ -164,6 +164,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "producao.tbl_volume_controlado",
+         "ObjectType": 0
+      },
+      {
          "Name": "expedicao.qry_enderecamento_galpao",
          "ObjectType": 3
       },
@@ -189,6 +193,7 @@
    "UseLegacyPluralizer": false,
    "UseManyToManyEntity": false,
    "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
    "UseNoObjectFilter": false,
    "UseNodaTime": false,
    "UseNullableReferences": false,

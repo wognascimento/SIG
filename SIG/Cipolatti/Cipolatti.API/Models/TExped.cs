@@ -82,5 +82,8 @@ public partial class TExped
     [Column("volume")]
     public int? Volume { get; set; }
 
+    [Column("nf_emitida")]
+    public bool? NfEmitida { get; set; }
+
     public virtual TCaixas CodvolNavigation { get; set; }
 }
