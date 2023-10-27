@@ -101,7 +101,11 @@
                     MappingName="os"
                     DisplayBinding="{Binding os, Converter={StaticResource ConverterBoolen}}"
                     ValueBinding="{Binding os, Converter={StaticResource ConverterBoolen}}" />
-                
+                <syncfusion:GridDateTimeColumn
+                    AllowEditing="True"
+                    MappingName="enviado_baia"
+                    ColumnSizer="SizeToCells"/>
+
             </syncfusion:SfDataGrid.Columns>
 
 

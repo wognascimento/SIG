@@ -152,8 +152,8 @@ namespace Producao.Views.kit.solucao
             {
                 DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
-                vm.ComplementoCheckList.class_solucao = cmbClassificacoes.SelectedItem.ToString();
-                vm.ComplementoCheckList.motivos = cmbMotivos.SelectedItem.ToString();
+                vm.ComplementoCheckList.class_solucao = cmbClassificacoes!.SelectedItem!.ToString();
+                vm.ComplementoCheckList.motivos = cmbMotivos!.SelectedItem!.ToString();
                 vm.ComplementoCheckList.alterado_por = Environment.UserName;
                 vm.ComplementoCheckList.alterado_em = DateTime.Now;
                 ComplementoCheckListModel compl = await vm.AddComplementoCheckListAsync(vm.ComplementoCheckList);
@@ -166,7 +166,9 @@ namespace Producao.Views.kit.solucao
                 this.dgCheckListGeral.SearchHelper.FindNext(compl.codcompl.ToString());
                 rowColumnIndex.RowIndex = this.dgCheckListGeral.SearchHelper.CurrentRowColumnIndex.RowIndex;
                 dgCheckListGeral.ScrollInView(rowColumnIndex);
-                
+
+                dgCheckListGeral.View.Refresh();
+
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }
@@ -495,6 +497,10 @@ namespace Producao.Views.kit.solucao
                 DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
                 var record = vm.CheckListGeral;
 
+                
+                if (record == null)
+                    return;
+                
                 vm.ComplementoCheckList = new ComplementoCheckListModel
                 {
                     ordem = vm?.CheckListGeral?.id,
@@ -619,7 +625,7 @@ namespace Producao.Views.kit.solucao
         {
             try
             {
-                string classificacao = e.AddedItems[0].ToString();
+                string classificacao = cmbClassificacoes.SelectedItem?.ToString(); //e.AddedItems[0].ToString(); 
                 //sender = {Syncfusion.Windows.Tools.Controls.ComboBoxAdv Items.Count:6}
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
@@ -654,8 +660,11 @@ namespace Producao.Views.kit.solucao
             dgCheckListGeral.SelectedItem = null;
             dgComplemento.SelectedItem = null;
 
-            cmbMotivos.SelectedItem = null; 
-            cmbClassificacoes.SelectedItem = null;
+
+            //cmbClassificacoes.SelectedItem = null;
+            cmbClassificacoes.SelectedIndex = -1;
+            vm.Motivos = null;
+            cmbMotivos.SelectedItem = null;
             //btnAddicionar.Visibility = Visibility.Collapsed;
 
             vm.ComplementoCheckList = new ComplementoCheckListModel();

@@ -60,7 +60,8 @@
                     HelperTextVisibility="Collapsed">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbId"
-                        IsEnabled="False" />
+                        IsEnabled="False" 
+                        Text="{Binding ComplementoCheckList.ordem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </syncfusion:SfTextInputLayout>
 
                 <syncfusion:SfTextInputLayout 
@@ -72,7 +73,8 @@
                     HelperTextVisibility="Collapsed" Margin="5,0,0,0">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbItem" 
-                        IsEnabled="False"/>
+                        IsEnabled="False"
+                        Text="{Binding ComplementoCheckList.item_memorial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </syncfusion:SfTextInputLayout>
 
                 <syncfusion:SfTextInputLayout 
@@ -84,7 +86,8 @@
                     HelperTextVisibility="Collapsed" Margin="5,0,0,0">
                     <syncfusion:SfTextBoxExt 
                         x:Name="tbLocalShopping"
-                        IsEnabled="False" />
+                        IsEnabled="False" 
+                        Text="{Binding ComplementoCheckList.local_shoppings, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </syncfusion:SfTextInputLayout>
 
             </StackPanel>
@@ -258,7 +261,10 @@
                     CharCountVisibility="Collapsed" 
                     HelperTextVisibility="Collapsed"
                     Margin="0,0,5,0">
-                    <syncfusion:ComboBoxAdv x:Name="cmbClassificacoes" ItemsSource="{Binding Classificacoes}" SelectionChanged="ComboBoxAdv_SelectionChanged"/>
+                    <syncfusion:ComboBoxAdv 
+                        x:Name="cmbClassificacoes" 
+                        ItemsSource="{Binding Classificacoes}" 
+                        SelectionChanged="ComboBoxAdv_SelectionChanged"/>
                 </syncfusion:SfTextInputLayout>
 
 

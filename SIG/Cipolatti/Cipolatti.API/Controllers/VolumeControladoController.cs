@@ -1,4 +1,5 @@
 ﻿using Cipolatti.API.Interfaces;
+using Cipolatti.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cipolatti.API.Controllers
@@ -8,5 +9,27 @@ namespace Cipolatti.API.Controllers
     public class VolumeControladoController : Controller
     {
         private readonly IVolumeControladoRepository _volumeControladoRepository;
+
+        public VolumeControladoController(IVolumeControladoRepository volumeControladoRepository)
+        {
+            _volumeControladoRepository = volumeControladoRepository;
+        }
+
+        [HttpPost("ReceberControlado")]
+        public async Task<ActionResult> ReceberControlado(TblVolumeControlado volumeControlado)
+        {
+            var volume = await _volumeControladoRepository.SelecionarBySiglaByVolume(volumeControlado.Sigla, volumeControlado.Volume);
+            if (volume == null)
+            {
+                _volumeControladoRepository.Incluir(volumeControlado);
+                if (await _volumeControladoRepository.SaveAllAsync())
+                {
+                    return Ok("Volume enviado com sucesso!");
+                }
+
+                return BadRequest("Ocorreu um erro ao enviar o volume.");
+            }
+            return Ok("Nada a fazer.");
+        }
     }
 }

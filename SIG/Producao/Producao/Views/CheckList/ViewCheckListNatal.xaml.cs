@@ -79,6 +79,9 @@ namespace Producao.Views.CheckList
                 CheckListViewModel vm = (CheckListViewModel)DataContext;
                 var record = vm.CheckListGeral;
 
+                if (record == null)
+                    return;
+
                 vm.ComplementoCheckList = new ComplementoCheckListModel
                 {
                     ordem = vm?.CheckListGeral?.id,
@@ -406,7 +409,7 @@ namespace Producao.Views.CheckList
                 this.dgCheckListGeral.SearchHelper.FindNext(compl.ordem);
                 rowColumnIndex.RowIndex = this.dgCheckListGeral.SearchHelper.CurrentRowColumnIndex.RowIndex;
                 dgCheckListGeral.ScrollInView(rowColumnIndex);
-
+                dgCheckListGeral.View.Refresh();
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }
