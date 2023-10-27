@@ -28,6 +28,33 @@
             </telerik:RadDataGrid.Columns>
         </telerik:RadDataGrid>
 
+        <telerik:RadBusyIndicator x:Name="BusyIndicator"
+                                    AnimationContentHeightRequest="100"
+                                    AnimationContentWidthRequest="100"  
+                                    AnimationType="Animation6"                                            
+                                    IsBusy="{Binding IsLoading}" VerticalOptions="Center" HorizontalOptions="Center">
+            <telerik:RadBusyIndicator.BusyContent>
+                <Grid BindingContext="{Binding BindingContext, Source={RelativeSource AncestorType={x:Type telerik:RadBusyIndicator}}}">
+                    <Label Text="{Binding Status}" />
+                </Grid>
+            </telerik:RadBusyIndicator.BusyContent>
+            <telerik:RadBusyIndicator.BusyContentTemplate>
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <ContentPresenter Content="{TemplateBinding Path=AnimationContent}" />
+                        <ContentPresenter Grid.Row="1"
+                                  Content="{TemplateBinding Path=BusyContent}"
+                                  HorizontalOptions="Center" />
+                    </Grid>
+                </ControlTemplate>
+            </telerik:RadBusyIndicator.BusyContentTemplate>
+        </telerik:RadBusyIndicator>
+
 
 
         <Grid 

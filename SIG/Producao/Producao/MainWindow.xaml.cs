@@ -19,11 +19,12 @@ using Syncfusion.XlsIO;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using Telerik.Windows.Controls;
 using SizeMode = Syncfusion.SfSkinManager.SizeMode;
-
 namespace Producao
 {
     /// <summary>
@@ -80,7 +81,8 @@ namespace Producao
         {
             InitializeComponent();
 			this.Loaded += OnLoaded;
-            StyleManager.ApplicationTheme = new Windows8Theme();
+            //StyleManager.ApplicationTheme = new GreenTheme();
+            
 
             txtUsername.Text = BaseSettings.Username;
             txtDataBase.Text = BaseSettings.Database;
@@ -1134,6 +1136,29 @@ namespace Producao
             }
                 
             //var message = "Hello " + result + "!";
+        }
+
+        
+
+        private void MenuItemAdv_Click_1(object sender, RoutedEventArgs e)
+        {
+
+
+            
+            var alert = new RadDesktopAlert
+            {
+                Header = "INFORMAÇÃO SOBRE O SISTEMA",
+                Content = $"VERSÃO: {string.Format("{0}.{1}.{2}.{3}", 1, 0, 0, 103)}",
+                Height = 90,
+                Width = 300,
+                Background = Brushes.Red,
+
+            };
+
+
+            RadDesktopAlertManager manager = new();
+            manager.ShowAlert(alert);
+            
         }
     }
 }

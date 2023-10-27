@@ -24,10 +24,10 @@ namespace Cipolatti.API.Controllers
                 _volumeControladoRepository.Incluir(volumeControlado);
                 if (await _volumeControladoRepository.SaveAllAsync())
                 {
-                    return Ok("Volume enviado com sucesso!");
+                    return Ok("Volume controlado enviado com sucesso!");
                 }
 
-                return BadRequest("Ocorreu um erro ao enviar o volume.");
+                return BadRequest("Ocorreu um erro ao enviar o volume controlado.");
             }
             return Ok("Nada a fazer.");
         }
