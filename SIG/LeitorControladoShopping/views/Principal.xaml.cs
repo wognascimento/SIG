@@ -10,8 +10,10 @@ public partial class Principal : ContentPage
     public Principal(PrincipalViewModel viewModel, VolumeScannerRepository volumeScannerRepository)
 	{
 		InitializeComponent();
+        
         _volumeScannerRepository = volumeScannerRepository;
         BindingContext = viewModel;
+        
     }
 
     private async void ContentPage_Loaded(object sender, EventArgs e)

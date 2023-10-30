@@ -20,11 +20,11 @@
             AutoGenerateColumns="False"
             ItemsSource="{Binding VolumeControlados}">
             <telerik:RadDataGrid.Columns>
-                <telerik:DataGridNumericalColumn PropertyName="Id" />
-                <telerik:DataGridTextColumn PropertyName="Sigla" />
-                <telerik:DataGridNumericalColumn PropertyName="Volume" />
-                <telerik:DataGridDateColumn PropertyName="Created" />
-                <telerik:DataGridBooleanColumn PropertyName="IsEnviado" />
+                <telerik:DataGridNumericalColumn    PropertyName="Id"           Width="80"             SizeMode="Fixed"    CanUserFilter="False"/>
+                <telerik:DataGridTextColumn         PropertyName="Sigla"                               SizeMode="Auto"/>
+                <telerik:DataGridNumericalColumn    PropertyName="Volume"       Width="100"            SizeMode="Fixed"/>
+                <telerik:DataGridDateColumn         PropertyName="Created"      Width="100"            SizeMode="Fixed"/>
+                <telerik:DataGridBooleanColumn      PropertyName="IsEnviado"    Width="70"             SizeMode="Fixed"/>
             </telerik:RadDataGrid.Columns>
         </telerik:RadDataGrid>
 
@@ -78,7 +78,7 @@
 
             <ImageButton 
                 x:Name="send1"
-                Source="enviar.png"
+                Source="send_email_svgrepo_com.png"
                 Grid.Column="0"
                 HeightRequest="40" 
                 WidthRequest="40"
@@ -88,7 +88,7 @@
 
             <ImageButton 
                 x:Name="send2"
-                Source="qr.png"
+                Source="qrcode_svgrepo_com.png"
                 Grid.Column="1"
                 HeightRequest="40" 
                 WidthRequest="40" 

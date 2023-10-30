@@ -274,10 +274,10 @@ namespace Producao.Views.kit.solucao
                     worksheet.Range[$"P{index}"].CellStyle = borderStyle;
                     //worksheet.Range[$"O{index}"].CellStyle.Font.Size = 7;
 
-                    worksheet.Range[$"Q{index}"].Number = (double)item.custo;
+                    worksheet.Range[$"Q{index}"].Number = Convert.ToDouble(item.custo);
                     worksheet.Range[$"Q{index}"].CellStyle = borderStyle;
 
-                    worksheet.Range[$"R{index}"].Number = (double)item.peso;
+                    worksheet.Range[$"R{index}"].Number = Convert.ToDouble(item.peso);
                     worksheet.Range[$"R{index}"].CellStyle = borderStyle;
 
                     index++;

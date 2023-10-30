@@ -4,11 +4,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="LeitorControladoShopping.AppShell"
     xmlns:views="clr-namespace:LeitorControladoShopping.views"
-    Shell.TabBarIsVisible="False">
+    Shell.TabBarIsVisible="False"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.BackgroundColor="#DBE8C5">
 
-    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
+    <!--
+    <FlyoutItem >
         <ShellContent Title="Principal" ContentTemplate="{DataTemplate views:Principal}" Route="Principal" />
         <ShellContent Title="Scanner" ContentTemplate="{DataTemplate views:Scanner}" Route="Scanner" />
     </FlyoutItem>
+    -->
 
+    <ShellContent
+        Title="Principal"
+        ContentTemplate="{DataTemplate views:Principal}"
+        Route="MainPage"/>
+    
 </Shell>

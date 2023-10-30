@@ -13,7 +13,7 @@
 		<ApplicationTitle>LeitorControladoShopping</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.leitorcontroladoshopping</ApplicationId>
+		<ApplicationId>br.com.cipolatti.leitorcontroladoshopping</ApplicationId>
 		<ApplicationIdGuid>F9953E83-9EBA-48B7-A52B-D7C58A46CD69</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -31,53 +31,83 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
 	  <ApplicationTitle>Controlado Shopping</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.leitorcontroladoshopping</ApplicationId>
+	  <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
+	  <ApplicationVersion>2</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
 	  <ApplicationTitle>Controlado Shopping</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.leitorcontroladoshopping</ApplicationId>
+	  <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
+	  <ApplicationVersion>2</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Controlado Shopping</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.leitorcontroladoshopping</ApplicationId>
+	  <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
+	  <ApplicationVersion>2</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041|AnyCPU'">
 	  <ApplicationTitle>Controlado Shopping</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.leitorcontroladoshopping</ApplicationId>
+	  <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
+	  <ApplicationVersion>2</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
 	  <ApplicationTitle>Controlado Shopping</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.leitorcontroladoshopping</ApplicationId>
+	  <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
+	  <ApplicationVersion>2</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
 	  <ApplicationTitle>Controlado Shopping</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.leitorcontroladoshopping</ApplicationId>
+	  <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
+	  <ApplicationVersion>2</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Controlado Shopping</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.leitorcontroladoshopping</ApplicationId>
+	  <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
+	  <ApplicationVersion>2</ApplicationVersion>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041|AnyCPU'">
 	  <ApplicationTitle>Controlado Shopping</ApplicationTitle>
 	  <ApplicationId>br.com.cipolatti.leitorcontroladoshopping</ApplicationId>
+	  <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
+	  <ApplicationVersion>2</ApplicationVersion>
 	</PropertyGroup>
+
+	<PropertyGroup Condition="$(TargetFramework.Contains('-android')) and '$(Configuration)' == 'Release'">
+		<AndroidKeyStore>True</AndroidKeyStore>
+		<AndroidSigningKeyStore>D:\Source\Repos\wognascimento\SIG\cipolatti.app.keystore</AndroidSigningKeyStore>
+		<AndroidSigningKeyAlias>key</AndroidSigningKeyAlias>
+		<AndroidSigningKeyPass></AndroidSigningKeyPass>
+		<AndroidSigningStorePass></AndroidSigningStorePass>
+	</PropertyGroup>
+
+
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<!--<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />-->
+		<MauiIcon Include="Resources\AppIcon\fundo.svg" ForegroundFile="Resources\AppIcon\logo.svg" Color="#DBE8C5" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<!--<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />-->
+		<MauiSplashScreen Include="Resources\Splash\icon_logo.svg" Color="#DBE8C5" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
+		<MauiImage Update="Resources\Images\qrcode_svgrepo_com.svg" BaseSize="168,208" />
+		<MauiImage Update="Resources\Images\send_email_svgrepo_com.svg" BaseSize="168,208" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -87,8 +117,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\AppIcon\fundo.svg" />
+	  <None Remove="Resources\AppIcon\logo.svg" />
 	  <None Remove="Resources\Images\enviar.png" />
 	  <None Remove="Resources\Images\qr.png" />
+	  <None Remove="Resources\Images\qrcode_svgrepo_com.svg" />
+	  <None Remove="Resources\Images\send_email_svgrepo_com.svg" />
+	  <None Remove="Resources\Splash\icon_logo.svg" />
+	  <None Remove="Resources\Splash\splash.svg" />
 	</ItemGroup>
 
 	<ItemGroup>

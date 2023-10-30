@@ -57,6 +57,12 @@
                         MappingName="inativo"
                         DisplayBinding="{Binding inativo, Converter={StaticResource ConverterBoolen}}"
                         ValueBinding="{Binding inativo, Converter={StaticResource ConverterBoolen}}" />
+                <syncfusion:GridCheckBoxColumn
+                    AllowEditing="True"
+                    HeaderText="CONTROLADO" 
+                    MappingName="prodcontrolado"
+                    DisplayBinding="{Binding prodcontrolado, Converter={StaticResource ConverterBoolen}}"
+                    ValueBinding="{Binding prodcontrolado, Converter={StaticResource ConverterBoolen}}" />
             </syncfusion:SfDataGrid.Columns>
 
 
