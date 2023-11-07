@@ -14,6 +14,7 @@ using Producao.Views.OrdemServico.Requisicao;
 using Producao.Views.OrdemServico.Servicos;
 using Producao.Views.Planilha;
 using Syncfusion.SfSkinManager;
+using Syncfusion.UI.Xaml.Spreadsheet;
 using Syncfusion.Windows.Tools.Controls;
 using Syncfusion.XlsIO;
 using System;
@@ -24,6 +25,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using Telerik.Windows.Controls;
+using Telerik.Windows.Documents.Spreadsheet.Model;
 using SizeMode = Syncfusion.SfSkinManager.SizeMode;
 namespace Producao
 {
@@ -73,6 +75,7 @@ namespace Producao
                 OnSizeModeChanged();
             }
         }
+
         #endregion
 
         DataBaseSettings BaseSettings = DataBaseSettings.Instance;
@@ -1123,7 +1126,8 @@ namespace Producao
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            RadWindow.Prompt("Entre com o ano:", this.OnClosed, BaseSettings.Database);
+            RadWindow.Prompt("ANO BANCO DE DADOS", this.OnClosed, BaseSettings.Database);
+            //RadWindow.Prompt(new DialogParameters { Header = "ANO BANCO DE DADOS", Content = "INFORMA O ANO " }, this.OnClosed);
         }
 
         private void OnClosed(object sender, WindowClosedEventArgs e)
@@ -1142,9 +1146,7 @@ namespace Producao
 
         private void MenuItemAdv_Click_1(object sender, RoutedEventArgs e)
         {
-
-
-            
+            /*
             var alert = new RadDesktopAlert
             {
                 Header = "INFORMAÇÃO SOBRE O SISTEMA",
@@ -1154,11 +1156,254 @@ namespace Producao
                 Background = Brushes.Red,
 
             };
-
-
             RadDesktopAlertManager manager = new();
             manager.ShowAlert(alert);
-            
+            */
+        }
+
+        private void OnRetornoControlado(object sender, RoutedEventArgs e)
+        {
+            adicionarFilho(new ControladoRecebimento(), "RECEBIMENTO DE CONTROLADO", "RECEBIMENTO_CONTROLADO");
+        }
+
+        private void OnRelatorioSigla(object sender, RoutedEventArgs e)
+        {
+            RadWindow.Prompt(
+                new DialogParameters
+                { 
+                    Header = "RELATÓRIO POR CLIENTE", 
+                    Content = "DIGITA A SIGLA DO CLIENTE", 
+                    Closed = this.OnPrintReportControladoSigla 
+                });
+        }
+
+        private async void OnPrintReportControladoSigla(object sender, WindowClosedEventArgs e)
+        {
+            var result = e.PromptResult.ToUpper();
+            if (result != null)
+            {
+                try
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                    using DatabaseContext db = new();
+                    var data = await db.ProdutoControladoRecebimento.Where(c => c.sigla == result).ToListAsync();
+
+                    using ExcelEngine excelEngine = new ExcelEngine();
+                    IApplication application = excelEngine.Excel;
+
+                    application.DefaultVersion = ExcelVersion.Xlsx;
+
+                    //Create a workbook
+                    IWorkbook workbook = application.Workbooks.Create(1);
+                    IWorksheet worksheet = workbook.Worksheets[0];
+
+                    worksheet.Range["A1"].Text = $"CONTROLADOS RETORNO SIGLA - {result}";
+                    worksheet.Range["A1:F1"].Merge();
+                    worksheet.Range["A1:F1"].CellStyle.Font.Bold = true;
+                    worksheet.Range["A1:F1"].CellStyle.Font.Size = 20;
+                    worksheet.Range["A1:F1"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                    worksheet.Range["A1:F1"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignTop;
+
+                    IStyle headerStyle = workbook.Styles.Add("HeaderStyle");
+                    headerStyle.BeginUpdate();
+                    headerStyle.Font.Bold = true;
+                    headerStyle.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                    headerStyle.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                    headerStyle.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                    headerStyle.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                    headerStyle.EndUpdate();
+
+                    IStyle bodyStyle = workbook.Styles.Add("bodyStyle");
+                    bodyStyle.BeginUpdate();
+                    bodyStyle.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                    bodyStyle.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                    bodyStyle.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                    bodyStyle.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                    bodyStyle.EndUpdate();
+
+                    worksheet.Range["A3"].Text = "COD.";
+                    worksheet.Range["B3"].Text = "PLANILHA";
+                    worksheet.Range["C3"].Text = "DESCIÇÃO";
+                    worksheet.Range["D3"].Text = "UNID.";
+                    worksheet.Range["E3"].Text = "EXPEDIDO";
+                    worksheet.Range["F3"].Text = "RETORNO";
+
+                    worksheet.Rows[2].CellStyle = headerStyle;
+
+                    int i = 3;
+                    foreach (var row in data)
+                    {
+                        i++;
+                        worksheet.Range[$"A{i}"].Number = Convert.ToDouble(row.codcompladicional);
+                        worksheet.Range[$"A{i}"].CellStyle = bodyStyle;
+
+                        worksheet.Range[$"B{i}"].Text = row.planilha;
+                        worksheet.Range[$"B{i}"].CellStyle = bodyStyle;
+
+                        worksheet.Range[$"C{i}"].Text = row.descricao;
+                        worksheet.Range[$"C{i}"].CellStyle = bodyStyle;
+
+                        worksheet.Range[$"D{i}"].Text = row.unidade;
+                        worksheet.Range[$"D{i}"].CellStyle = bodyStyle;
+
+                        worksheet.Range[$"E{i}"].Number = Convert.ToDouble(row.solucao_manutencao) + Convert.ToDouble(row.expedido);
+                        worksheet.Range[$"E{i}"].CellStyle = bodyStyle;
+                        worksheet.Range[$"E{i}"].NumberFormat = "0.00"; //"#,##0.00"; 
+
+                        worksheet.Range[$"F{i}"].Text = "";
+                        worksheet.Range[$"F{i}"].CellStyle = bodyStyle;
+
+                    }
+
+                    worksheet.PageSetup.Orientation = ExcelPageOrientation.Landscape;
+                    worksheet.PageSetup.FooterMargin = 0;
+                    worksheet.PageSetup.HeaderMargin = 0;
+                    worksheet.PageSetup.LeftMargin = 0;
+                    worksheet.PageSetup.RightMargin = 0;
+                    worksheet.PageSetup.TopMargin = 0;
+                    worksheet.PageSetup.BottomMargin = 0;
+                    worksheet.PageSetup.CenterHorizontally = true;
+                    worksheet.PageSetup.CenterVertically = false;
+
+                    worksheet.PageSetup.PrintTitleRows = "$1:$3";
+
+                    worksheet.UsedRange.AutofitColumns();
+
+                    workbook.SaveAs($"Impressos\\RELATORIO_CONTROLADO_{result}.xlsx");
+                    Process.Start(new ProcessStartInfo($"Impressos\\RELATORIO_CONTROLADO_{result}.xlsx")
+                    {
+                        UseShellExecute = true
+                    });
+
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+                catch (Exception ex)
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void OnRelatorioPlanilha(object sender, RoutedEventArgs e)
+        {
+            RadWindow.Prompt(
+                new DialogParameters
+                {
+                    Header = "RELATÓRIO POR PLANILHA",
+                    Content = "DIGITA A PLANILHA",
+                    Closed = this.OnPrintReportControladoPlanilha
+                });
+        }
+
+        private async void OnPrintReportControladoPlanilha(object? sender, WindowClosedEventArgs e)
+        {
+            var result = e.PromptResult?.ToUpper();
+            if (result != null)
+            {
+                try
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                    using DatabaseContext db = new();
+                    var data = await db.ProdutoControladoRecebimento.Where(c => c.planilha.Contains(result) && !c.sigla.Contains("SROOM")).ToListAsync();
+
+                    using ExcelEngine excelEngine = new ExcelEngine();
+                    IApplication application = excelEngine.Excel;
+
+                    application.DefaultVersion = ExcelVersion.Xlsx;
+
+                    //Create a workbook
+                    IWorkbook workbook = application.Workbooks.Create(1);
+                    IWorksheet worksheet = workbook.Worksheets[0];
+
+                    worksheet.Range["A1"].Text = $"CONTROLADOS RETORNO PLANILHA - {result}";
+                    worksheet.Range["A1:F1"].Merge();
+                    worksheet.Range["A1:F1"].CellStyle.Font.Bold = true;
+                    worksheet.Range["A1:F1"].CellStyle.Font.Size = 20;
+                    worksheet.Range["A1:F1"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+                    worksheet.Range["A1:F1"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignTop;
+
+                    IStyle headerStyle = workbook.Styles.Add("HeaderStyle");
+                    headerStyle.BeginUpdate();
+                    headerStyle.Font.Bold = true;
+                    headerStyle.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                    headerStyle.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                    headerStyle.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                    headerStyle.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                    headerStyle.EndUpdate();
+
+                    IStyle bodyStyle = workbook.Styles.Add("bodyStyle");
+                    bodyStyle.BeginUpdate();
+                    bodyStyle.Borders[ExcelBordersIndex.EdgeLeft].LineStyle = ExcelLineStyle.Thin;
+                    bodyStyle.Borders[ExcelBordersIndex.EdgeRight].LineStyle = ExcelLineStyle.Thin;
+                    bodyStyle.Borders[ExcelBordersIndex.EdgeTop].LineStyle = ExcelLineStyle.Thin;
+                    bodyStyle.Borders[ExcelBordersIndex.EdgeBottom].LineStyle = ExcelLineStyle.Thin;
+                    bodyStyle.EndUpdate();
+
+                    worksheet.Range["A3"].Text = "COD.";
+                    worksheet.Range["B3"].Text = "SIGLA";
+                    worksheet.Range["C3"].Text = "DESCIÇÃO";
+                    worksheet.Range["D3"].Text = "UNID.";
+                    worksheet.Range["E3"].Text = "EXPEDIDO";
+                    worksheet.Range["F3"].Text = "RETORNO";
+
+                    worksheet.Rows[2].CellStyle = headerStyle;
+
+                    int i = 3;
+                    foreach (var row in data)
+                    {
+                        i++;
+                        worksheet.Range[$"A{i}"].Number = Convert.ToDouble(row.codcompladicional);
+                        worksheet.Range[$"A{i}"].CellStyle = bodyStyle;
+
+                        worksheet.Range[$"B{i}"].Text = row.sigla;
+                        worksheet.Range[$"B{i}"].CellStyle = bodyStyle;
+
+                        worksheet.Range[$"C{i}"].Text = row.descricao;
+                        worksheet.Range[$"C{i}"].CellStyle = bodyStyle;
+
+                        worksheet.Range[$"D{i}"].Text = row.unidade;
+                        worksheet.Range[$"D{i}"].CellStyle = bodyStyle;
+
+                        worksheet.Range[$"E{i}"].Number = Convert.ToDouble(row.solucao_manutencao) + Convert.ToDouble(row.expedido);
+                        worksheet.Range[$"E{i}"].CellStyle = bodyStyle;
+                        worksheet.Range[$"E{i}"].NumberFormat = "0.00"; //"#,##0.00"; 
+
+                        worksheet.Range[$"F{i}"].Text = "";
+                        worksheet.Range[$"F{i}"].CellStyle = bodyStyle;
+
+                    }
+
+                    worksheet.PageSetup.Orientation = ExcelPageOrientation.Landscape;
+                    worksheet.PageSetup.FooterMargin = 0;
+                    worksheet.PageSetup.HeaderMargin = 0;
+                    worksheet.PageSetup.LeftMargin = 0;
+                    worksheet.PageSetup.RightMargin = 0;
+                    worksheet.PageSetup.TopMargin = 0;
+                    worksheet.PageSetup.BottomMargin = 0;
+                    worksheet.PageSetup.CenterHorizontally = true;
+                    worksheet.PageSetup.CenterVertically = false;
+
+                    worksheet.PageSetup.PrintTitleRows = "$1:$3";
+
+                    worksheet.UsedRange.AutofitColumns();
+
+                    workbook.SaveAs($"Impressos\\RELATORIO_CONTROLADO_{result}.xlsx");
+                    Process.Start(new ProcessStartInfo($"Impressos\\RELATORIO_CONTROLADO_{result}.xlsx")
+                    {
+                        UseShellExecute = true
+                    });
+
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                }
+                catch (Exception ex)
+                {
+                    Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                    MessageBox.Show(ex.Message);
+                }
+            }
         }
     }
 }

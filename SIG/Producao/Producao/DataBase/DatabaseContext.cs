@@ -102,6 +102,9 @@ namespace Producao
         public DbSet<KitSolicaoGeralModel> KitSolicaoGeral { get; set; }
         public DbSet<ControleSolicaoGeralModel> ControleSolicaoGeral { get; set; }
         public DbSet<ControleEnvioModel> ControleEnvio { get; set; }
+        public DbSet<ControladoRetornoGeralModel> ControladoRetornoGeral { get; set; }
+        public DbSet<ControladoRecebidoModel> ControladoRecebido { get; set; }
+        public DbSet<ProdutoControladoRecebimentoModel> ProdutoControladoRecebimento { get; set; }
 
         
         static DatabaseContext() => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -124,9 +127,9 @@ namespace Producao
                 $"user id={BaseSettings.Username};" +
                 $"password={BaseSettings.Password};" +
                 $"database={BaseSettings.Database};" ,
-                options => options.EnableRetryOnFailure()
+                options => { options.EnableRetryOnFailure(); }
                 );
-            //optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -136,6 +139,9 @@ namespace Producao
 
             modelBuilder.Entity<ConstrucaoPecaModel>()
                 .HasKey(a => new { a.id_detalhes, a.codcompladicional });
+
+            modelBuilder.Entity<ControladoRecebidoModel>()
+                .HasKey(a => new { a.id_aprovado, a.codcompladicional });
         }
     }
 }

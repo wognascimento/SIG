@@ -47,6 +47,7 @@ namespace Expedicao
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseNpgsql($"host={dB.Host};user id={dB.Username};password={dB.Password};database={dB.Database};Pooling=false;Timeout=300;CommandTimeout=300;");
+
             optionsBuilder.UseNpgsql(
                 $"host={dB.Host};" +
                 $"user id={dB.Username};" +

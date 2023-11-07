@@ -576,7 +576,7 @@ namespace Expedicao
             {
                 using AppDatabase db = new AppDatabase();
                 listAsync = await db.PacklistCarregCaminhaos
-                    .Where<PacklistCarregCaminhaoModel>(x => x.sigla == sigla && x.caminhao == caminhao && x.data == data)
+                    .Where<PacklistCarregCaminhaoModel>(x => x.sigla == sigla && x.caminhao == caminhao)
                     .Select(x => new
                     {
                         cod = x.coddetalhescompl,

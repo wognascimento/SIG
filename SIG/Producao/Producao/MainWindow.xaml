@@ -96,10 +96,10 @@
                 <syncfusion:MenuItemAdv Header="Imprimir" Click="OnImprimirEtiquetaControlado"/>
                 <syncfusion:MenuItemAdv Header="Vincular Etiqueta" Click="OnVinculoRequisicao"/>
                 <syncfusion:MenuItemAdv Header="Cobrança"/>
-                <syncfusion:MenuItemAdv Header="Retorno"/>
+                <syncfusion:MenuItemAdv Header="Retorno" Click="OnRetornoControlado"/>
                 <syncfusion:MenuItemAdv Header="Relatórios">
-                    <syncfusion:MenuItemAdv Header="Sigla"/>
-                    <syncfusion:MenuItemAdv Header="Planilha"/>
+                    <syncfusion:MenuItemAdv Header="Sigla" Click="OnRelatorioSigla"/>
+                    <syncfusion:MenuItemAdv Header="Planilha" Click="OnRelatorioPlanilha"/>
                 </syncfusion:MenuItemAdv>
             </syncfusion:MenuItemAdv>
 
