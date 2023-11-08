@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -44,6 +45,8 @@ namespace Producao.Views.Construcao
 
                 EtiquetaConstrucaoViewModel vm = (EtiquetaConstrucaoViewModel)DataContext;
                 vm.Planilhas = await Task.Run(vm.GetPlanilhasAsync);
+                vm.Tamanhos = new ObservableCollection<string>() { "P", "M", "G", "GG" };
+                vm.Dificuldades = new ObservableCollection<string>() { "FÁCIL", "MÉDIO", "DIFÍCIL", "MUITO DIFÍCIL" };
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
@@ -77,6 +80,7 @@ namespace Producao.Views.Construcao
 
                 vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(planilha?.planilha));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                clearMedidas();
                 txtDescricao.Focus();
             }
             catch (Exception ex)
@@ -106,6 +110,7 @@ namespace Producao.Views.Construcao
 
                 vm.DescAdicionais = await Task.Run(() => vm.GetDescAdicionaisAsync(produto?.codigo));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                clearMedidas();
                 txtDescricaoAdicional.Focus();
             }
             catch (Exception ex)
@@ -131,6 +136,7 @@ namespace Producao.Views.Construcao
 
                 vm.CompleAdicionais = await Task.Run(() => vm.GetCompleAdicionaisAsync(adicional?.coduniadicional));
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                clearMedidas();
                 txtComplementoAdicional.Focus();
             }
             catch (Exception ex)
@@ -148,6 +154,19 @@ namespace Producao.Views.Construcao
                 EtiquetaConstrucaoViewModel vm = (EtiquetaConstrucaoViewModel)DataContext;
                 TblComplementoAdicionalModel? complemento = e.NewValue as TblComplementoAdicionalModel;
                 vm.Compledicional = complemento;
+
+
+
+                txt_largura.Text = String.Format("{0:F}", complemento?.largura);//complemento.largura.ToString();
+                txt_area.Text = String.Format("{0:F}", complemento?.area);
+                txt_profundidade.Text = String.Format("{0:F}", complemento?.profundidade);
+                txt_volume.Text = String.Format("{0:F}", complemento?.volume);
+                txt_altura.Text = String.Format("{0:F}", complemento?.altura);
+                txt_peso.Text = String.Format("{0:F}", complemento?.peso);
+                txt_tamanho.SelectedItem = complemento?.tamanho_construcao;
+                txt_dificuldade.SelectedItem = complemento?.dificuldade;
+                
+
                 vm.Pecas = await Task.Run(() => vm.GetPecasAsync(complemento?.codcompladicional));
                 if (vm.Pecas.Count == 0)
                 {
@@ -433,19 +452,12 @@ namespace Producao.Views.Construcao
                 }
 
             }
-            /*
-            Process.Start(
-                            new ProcessStartInfo(@"Impressos\ORDEM_SERVICO_MODELO.xlsx")
-                            {
-                                Verb = "Print",
-                                UseShellExecute = true,
-                            });
-            */
+
 
             try
             {
                 int idx = 1;
-                for (int i = 0; i < _pagina; i++)
+                for (int i = 0; i < paginas; i++)
                 {
                     Process.Start(new ProcessStartInfo($"Impressos\\ETIQUETA_REQUISICAO_MODELO_{idx}.xlsx")
                     {
@@ -576,6 +588,18 @@ namespace Producao.Views.Construcao
             }
             MessageBox.Show("Impressão em impressora térmica, ainda não foi implementado.");
         }
+
+        private void clearMedidas()
+        {
+            txt_largura.Text = null;
+            txt_area.Text = null;
+            txt_profundidade.Text = null;
+            txt_volume.Text = null;
+            txt_altura.Text = null;
+            txt_peso.Text = null;
+            txt_tamanho.Text = null;
+            txt_dificuldade.Text = null;
+        }
     }
 
     public class EtiquetaConstrucaoViewModel : INotifyPropertyChanged
@@ -673,6 +697,20 @@ namespace Producao.Views.Construcao
         {
             get { return _peca; }
             set { _peca = value; RaisePropertyChanged("Peca"); }
+        }
+
+        private ObservableCollection<string> _tamanhos;
+        public ObservableCollection<string> Tamanhos
+        {
+            get { return _tamanhos; }
+            set { _tamanhos = value; RaisePropertyChanged("Tamanhos"); }
+        }
+
+        private ObservableCollection<string> _dificuldades;
+        public ObservableCollection<string> Dificuldades
+        {
+            get { return _dificuldades; }
+            set { _dificuldades = value; RaisePropertyChanged("Dificuldades"); }
         }
 
         public async Task<ObservableCollection<PlanilhaConstrucaoModel>> GetPlanilhasAsync()

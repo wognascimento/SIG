@@ -774,7 +774,7 @@ namespace Producao.Views.OrdemServico.Requisicao
             try
             {
                int idx = 1;
-                for (int i = 0; i < _pagina; i++)
+                for (int i = 0; i < paginas; i++)
                 {
                     Process.Start(new ProcessStartInfo($"Impressos\\ETIQUETA_REQUISICAO_MODELO_{idx}.xlsx")
                     {

@@ -27,9 +27,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="5" />
@@ -37,7 +34,7 @@
         </Grid.RowDefinitions>
 
         <syncfusion:SfTextInputLayout
-                Grid.Row="2"
+                Grid.Row="0"
                 Grid.Column="0"
                 InputViewPadding="4" 
                 HintFloatMode="Float" 
@@ -58,8 +55,8 @@
         </syncfusion:SfTextInputLayout>
 
         <syncfusion:SfTextInputLayout
-                Grid.Row="2"
-                Grid.Column="2"
+                Grid.Row="1"
+                Grid.Column="0"
                 InputViewPadding="4" 
                 HintFloatMode="Float" 
                 Hint="DESCRIÇÃO" 
@@ -79,9 +76,8 @@
         </syncfusion:SfTextInputLayout>
 
         <syncfusion:SfTextInputLayout
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="0"
-                Grid.ColumnSpan="3"
                 InputViewPadding="4" 
                 HintFloatMode="Float" 
                 Hint="DESCRIÇÃO ADICIONAL"
@@ -101,9 +97,8 @@
         </syncfusion:SfTextInputLayout>
 
         <syncfusion:SfTextInputLayout
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="0"
-                Grid.ColumnSpan="3"
                 InputViewPadding="4" 
                 HintFloatMode="Float" 
                 Hint="COMPLEMENTO ADICIONAL"
@@ -122,7 +117,162 @@
 
         </syncfusion:SfTextInputLayout>
 
-        <Grid Grid.Row="8" Grid.Column="0">
+        <Grid Grid.Row="0" Grid.RowSpan="4" Grid.Column="2" Width="160" HorizontalAlignment="Left" >
+
+            <GroupBox Header="Medidas">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <syncfusion:SfTextInputLayout
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        InputViewPadding="4" 
+                        HintFloatMode="Float" 
+                        Hint="Largura (m)"
+                        CharCountVisibility="Collapsed" 
+                        HelperTextVisibility="Collapsed">
+
+                        <syncfusion:SfTextBoxExt x:Name="txt_largura"
+                            ShowDropDownButton="False"
+                            ShowClearButton="True"/>     
+
+                    </syncfusion:SfTextInputLayout>
+
+
+                    <syncfusion:SfTextInputLayout
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        InputViewPadding="4" 
+                        HintFloatMode="Float" 
+                        Hint="Área (m²)"
+                        CharCountVisibility="Collapsed" 
+                        HelperTextVisibility="Collapsed">
+
+                        <syncfusion:SfTextBoxExt x:Name="txt_area"
+                            ShowDropDownButton="False"
+                            ShowClearButton="True"/>
+
+                    </syncfusion:SfTextInputLayout>
+
+
+
+                    <syncfusion:SfTextInputLayout
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        InputViewPadding="4" 
+                        HintFloatMode="Float" 
+                        Hint="Profundidade (m)"
+                        CharCountVisibility="Collapsed" 
+                        HelperTextVisibility="Collapsed">
+
+                        <syncfusion:SfTextBoxExt x:Name="txt_profundidade"
+                            ShowDropDownButton="False"
+                            ShowClearButton="True"/>
+
+                    </syncfusion:SfTextInputLayout>
+
+
+                    <syncfusion:SfTextInputLayout
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        InputViewPadding="4" 
+                        HintFloatMode="Float" 
+                        Hint="Volume (m³)"
+                        CharCountVisibility="Collapsed" 
+                        HelperTextVisibility="Collapsed">
+
+                        <syncfusion:SfTextBoxExt x:Name="txt_volume"
+                            ShowDropDownButton="False"
+                            ShowClearButton="True"/>
+
+                    </syncfusion:SfTextInputLayout>
+
+
+                    <syncfusion:SfTextInputLayout
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        InputViewPadding="4" 
+                        HintFloatMode="Float" 
+                        Hint="Altura (m)"
+                        CharCountVisibility="Collapsed" 
+                        HelperTextVisibility="Collapsed">
+
+                        <syncfusion:SfTextBoxExt x:Name="txt_altura"
+                            ShowDropDownButton="False"
+                            ShowClearButton="True"/>
+
+                    </syncfusion:SfTextInputLayout>
+
+
+                    <syncfusion:SfTextInputLayout
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        InputViewPadding="4" 
+                        HintFloatMode="Float" 
+                        Hint="Peso (kg)"
+                        CharCountVisibility="Collapsed" 
+                        HelperTextVisibility="Collapsed">
+
+                        <syncfusion:SfTextBoxExt x:Name="txt_peso"
+                            ShowDropDownButton="False"
+                            ShowClearButton="True"/>
+
+                    </syncfusion:SfTextInputLayout>
+
+
+                    <syncfusion:SfTextInputLayout
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        InputViewPadding="4" 
+                        HintFloatMode="Float" 
+                        Hint="Tamanho"
+                        CharCountVisibility="Collapsed" 
+                        HelperTextVisibility="Collapsed">
+
+                        <syncfusion:ComboBoxAdv
+                            x:Name="txt_tamanho" 
+                            ItemsSource="{Binding Tamanhos}" />
+
+                    </syncfusion:SfTextInputLayout>
+
+
+                    <syncfusion:SfTextInputLayout
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        InputViewPadding="4" 
+                        HintFloatMode="Float" 
+                        Hint="Dificuldade"
+                        CharCountVisibility="Collapsed" 
+                        HelperTextVisibility="Collapsed">
+
+                        <syncfusion:ComboBoxAdv
+                            x:Name="txt_dificuldade" 
+                            ItemsSource="{Binding Dificuldades}" />
+
+                    </syncfusion:SfTextInputLayout>
+
+                </Grid>
+
+            </GroupBox>
+
+        </Grid>
+
+        <Grid Grid.Row="5" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="1"/>
@@ -162,7 +312,7 @@
 
         <syncfusion:SfDataGrid
             x:Name="itens" 
-            Grid.Row="10"
+            Grid.Row="7"
             Grid.Column="0"
             Grid.ColumnSpan="3"
             AutoGenerateColumns="False" 
