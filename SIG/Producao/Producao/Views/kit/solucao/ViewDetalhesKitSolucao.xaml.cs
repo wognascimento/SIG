@@ -551,27 +551,41 @@ namespace Producao.Views.kit.solucao
 
         private void dgComplemento_AddNewRowInitiating(object sender, Syncfusion.UI.Xaml.Grid.AddNewRowInitiatingEventArgs e)
         {
-            DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
-
-            ((QryCheckListGeralComplementoModel)e.NewObject).codcompl = vm.CheckListGeral.codcompl;
+            try
+            {
+                DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+                ((QryCheckListGeralComplementoModel)e.NewObject).codcompl = vm.CheckListGeral.codcompl;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void OnCurrentCellDropDownSelectionChanged(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellDropDownSelectionChangedEventArgs e)
         {
-            var sfdatagrid = sender as SfDataGrid;
-            var viewModel = (DetalhesKitSolucaoViewModel)sfdatagrid.DataContext;
-            int rowIndex = sfdatagrid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
+            try
+            {
+                var sfdatagrid = sender as SfDataGrid;
+                var viewModel = (DetalhesKitSolucaoViewModel)sfdatagrid.DataContext;
+                int rowIndex = sfdatagrid.ResolveToRecordIndex(e.RowColumnIndex.RowIndex);
 
-            QryCheckListGeralComplementoModel record;
+                QryCheckListGeralComplementoModel record;
 
-            if (rowIndex == -1)
-                record = (QryCheckListGeralComplementoModel)sfdatagrid.View.CurrentAddItem;
-            //record = new();
-            else
-                record = (QryCheckListGeralComplementoModel)(sfdatagrid.View.Records[rowIndex] as RecordEntry).Data;
+                if (rowIndex == -1)
+                    record = (QryCheckListGeralComplementoModel)sfdatagrid.View.CurrentAddItem;
+                //record = new();
+                else
+                    record = (QryCheckListGeralComplementoModel)(sfdatagrid.View.Records[rowIndex] as RecordEntry).Data;
 
-            record.unidade = ((TblComplementoAdicionalModel)e.SelectedItem).unidade; //viewModel.UnitPriceDict[e.SelectedItem.ToString()];
-            record.saldoestoque = ((TblComplementoAdicionalModel)e.SelectedItem).saldo_estoque; //viewModel.QuantityDict[e.SelectedItem.ToString()];
+                record.unidade = ((TblComplementoAdicionalModel)e.SelectedItem).unidade; //viewModel.UnitPriceDict[e.SelectedItem.ToString()];
+                record.saldoestoque = ((TblComplementoAdicionalModel)e.SelectedItem).saldo_estoque; //viewModel.QuantityDict[e.SelectedItem.ToString()];
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
         }
 
         private void dgComplemento_CurrentCellValueChanged(object sender, Syncfusion.UI.Xaml.Grid.CurrentCellValueChangedEventArgs e)
@@ -674,29 +688,29 @@ namespace Producao.Views.kit.solucao
 
         private async void OnProdutos(object sender, RoutedEventArgs e)
         {
-            DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
-
-            var window = new Window
-            {
-                Title = "BUSCAR PRODUTO",
-                Height = 600,
-                Width = 900,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                WindowStyle = WindowStyle.ToolWindow,
-                ResizeMode = ResizeMode.NoResize,
-                Content = new LocalizaProduto(/*this.DataContext*/),
-                Owner = Window.GetWindow(dgCheckListGeral.Parent), //GetTopParent();
-                ShowInTaskbar = false
-            };
-            window.ShowDialog();
-
-            var descricao = ((LocalizaProdutoViewModel)((LocalizaProduto)window.Content).DataContext).Descricao; 
-
-            if (descricao == null)
-                return;
-
             try
             {
+                DetalhesKitSolucaoViewModel vm = (DetalhesKitSolucaoViewModel)DataContext;
+
+                var window = new Window
+                {
+                    Title = "BUSCAR PRODUTO",
+                    Height = 600,
+                    Width = 900,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                    WindowStyle = WindowStyle.ToolWindow,
+                    ResizeMode = ResizeMode.NoResize,
+                    Content = new LocalizaProduto(/*this.DataContext*/),
+                    Owner = Window.GetWindow(dgCheckListGeral.Parent), //GetTopParent();
+                    ShowInTaskbar = false
+                };
+                window.ShowDialog();
+
+                var descricao = ((LocalizaProdutoViewModel)((LocalizaProduto)window.Content).DataContext).Descricao;
+
+                if (descricao == null)
+                    return;
+
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
                 cbPlanilha.SelectedItem = (from p in vm.Planilhas where p.planilha == descricao.planilha select p).FirstOrDefault();
                 vm.Produtos = await Task.Run(() => vm.GetProdutosAsync(descricao.planilha));
