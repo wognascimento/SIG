@@ -123,6 +123,7 @@
 
         </Syncfusion:SfDataGrid>
 
+        
         <Syncfusion:ButtonAdv 
             x:Name="largeicon"
             Grid.Row="1" 
@@ -132,7 +133,7 @@
             SmallIcon="{x:Null}"
             Width="180"
             Height="30"
-            Margin="10,0,0,0"/> 
-
+            Margin="10,0,0,0" Click="OnBaixaRequisicaoClick"/> 
+        
     </StackPanel>
 </UserControl>

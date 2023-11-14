@@ -96,6 +96,27 @@ namespace Producao.Views.Controlado
                 }
             }
         }
+
+        private async void OnBaixaRequisicaoClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                VincularRequisicaoViewModel vm = (VincularRequisicaoViewModel)DataContext;
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = Cursors.Wait; });
+
+                foreach (var item in vm.Produtos)
+                {
+                    await Task.Run(() => vm.BaixaReceitaAsync(item));
+                }
+
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+            }
+            catch (Exception ex)
+            {
+                Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
+                MessageBox.Show(ex.Message);
+            }
+        }
     }
 
     public class VincularRequisicaoViewModel : INotifyPropertyChanged
@@ -207,6 +228,40 @@ namespace Producao.Views.Controlado
             {
                 using DatabaseContext db = new();
                 await db.ControladoShoppings.AddAsync(controlado);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task BaixaReceitaAsync(TransformaRequisicaoModel model)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+
+                var detReq = await db.RequisicaoDetalhes.Where(r => r.num_requisicao == model.num_requisicao && r.codcompladicional == model.codcompladicional).FirstOrDefaultAsync();
+                if (detReq != null)
+                {
+                    detReq.codcompladicional = model.codcompladicional;
+                    detReq.quantidade = model.quantidade;
+                    detReq.data = DateTime.Now;
+                    detReq.alterado_por = Environment.UserName;
+                    db.RequisicaoDetalhes.Update(detReq);
+                }
+                else
+                {
+                    var det = new DetalheRequisicaoModel
+                    {
+                        codcompladicional = model.codcompladicional,
+                        quantidade = model.quantidade,
+                        data = DateTime.Now,
+                        alterado_por = Environment.UserName,
+                    };
+                    await db.RequisicaoDetalhes.AddAsync(det);
+                }
+                await db.SaveChangesAsync();
             }
             catch (Exception)
             {

@@ -10,6 +10,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -302,7 +305,7 @@ namespace Producao.Views.Construcao
                                 worksheet.Range["A14"].Text = "";
                                 worksheet.Range["A15"].Text = "";
                                 worksheet.Range["A16"].Text = "";
-                                foreach (var item in GetProdutosEtiqueta(volume))
+                                foreach (var item in GetProdutosEtiqueta(volume, 5))
                                 {
                                     worksheet.Range[$"A{inx}"].Text = item.descricao_peca;
                                     inx++;
@@ -334,7 +337,7 @@ namespace Producao.Views.Construcao
                                 worksheet.Range["F14"].Text = "";
                                 worksheet.Range["F15"].Text = "";
                                 worksheet.Range["F16"].Text = "";
-                                foreach (var item in GetProdutosEtiqueta(volume))
+                                foreach (var item in GetProdutosEtiqueta(volume, 5))
                                 {
                                     worksheet.Range[$"F{inx}"].Text = item.descricao_peca;
                                     inx++;
@@ -366,7 +369,7 @@ namespace Producao.Views.Construcao
                                 worksheet.Range["A31"].Text = "";
                                 worksheet.Range["A32"].Text = "";
                                 worksheet.Range["A33"].Text = "";
-                                foreach (var item in GetProdutosEtiqueta(volume))
+                                foreach (var item in GetProdutosEtiqueta(volume, 5))
                                 {
                                     worksheet.Range[$"A{inx}"].Text = item.descricao_peca;
                                     inx++;
@@ -398,7 +401,7 @@ namespace Producao.Views.Construcao
                                 worksheet.Range["F31"].Text = "";
                                 worksheet.Range["F32"].Text = "";
                                 worksheet.Range["F33"].Text = "";
-                                foreach (var item in GetProdutosEtiqueta(volume))
+                                foreach (var item in GetProdutosEtiqueta(volume, 5))
                                 {
                                     worksheet.Range[$"F{inx}"].Text = item.descricao_peca;
                                     inx++;
@@ -476,10 +479,10 @@ namespace Producao.Views.Construcao
             Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
         }
 
-        private ObservableCollection<ConstrucaoPecaModel> GetProdutosEtiqueta(long volume)
+        private ObservableCollection<ConstrucaoPecaModel> GetProdutosEtiqueta(long volume, int itens)
         {
             EtiquetaConstrucaoViewModel vm = (EtiquetaConstrucaoViewModel)DataContext;
-            return new ObservableCollection<ConstrucaoPecaModel>(vm.Pecas.Where(p => p.volume_etiqueta == volume).Take(5));
+            return new ObservableCollection<ConstrucaoPecaModel>(vm.Pecas.Where(p => p.volume_etiqueta == volume).Take(itens));
         }
 
         private async void OnDescricaoClick(object sender, RoutedEventArgs e)
@@ -578,8 +581,145 @@ namespace Producao.Views.Construcao
             }
         }
 
-        private void OnEtiquetaTermicaClick(object sender, RoutedEventArgs e)
+        private async void OnEtiquetaTermicaClick(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                EtiquetaConstrucaoViewModel? vm = (EtiquetaConstrucaoViewModel)DataContext;
+                if (vm.Compledicional == null)
+                {
+                    MessageBox.Show("Produto não selecionado!");
+                    return;
+                }
+
+                var rDados = new Dictionary<string, object>();
+
+                string ip = "192.168.2.192";
+                int porta = 9100;
+                var temperatura = "";
+
+                var printQueue = new Queue<string>();
+                int stepSize = 20;
+
+                if (string.IsNullOrEmpty(ip))
+                    throw new InvalidOperationException("Impressora não informada.");
+                /*
+                if (string.IsNullOrEmpty(temperatura))
+                    throw new InvalidOperationException("Temperatura não informada.");
+                */
+                var volumes = vm.Pecas.OrderBy(o => o.volume_etiqueta).GroupBy(user => user.volume_etiqueta).ToList();
+                vm.Descricao = await Task.Run(() => vm.GetDescricaoAsync(vm.Compledicional.codcompladicional));
+                vm.ChecklistPrduto = await Task.Run(() => vm.GetChecklistPrdutoAsync(vm.Compledicional.codcompladicional));
+                var fieldCount = volumes.Count;
+                
+                for (int i = 0; i < fieldCount; i++)
+                {
+                    long volume = (long)volumes[i].Key;
+                    rDados.Add(volume.ToString(), Convert.IsDBNull(volumes[i]) ? null : volumes[i]);
+                    //ConstrucaoPecaModel objt = (ConstrucaoPecaModel)volumes[i];
+                    /*
+                    foreach (var item in GetProdutosEtiqueta(volume))
+                    {
+                        worksheet.Range[$"A{inx}"].Text = item.descricao_peca;
+                        inx++;
+                    }
+                    */
+                    var dataToSend = new StringBuilder();
+                    dataToSend.AppendLine("CT~~CD,~CC^~CT~");
+                    dataToSend.AppendLine("^XA^CI28");
+                    dataToSend.AppendLine("^PW799");
+                    dataToSend.AppendLine("^FO0,0^GFA,07680,07680,00048,:Z64:");
+                    dataToSend.AppendLine("eJzt2TEBAAAEAEHN9G+jARlMDPfzNfgI6XHZi4rneZ7neZ7neZ7neZ7neZ7nef76bkinDQEo3NE=:FD4C");
+                    dataToSend.AppendLine("^FO0,128^GFA,16000,16000,00100,:Z64:");
+                    dataToSend.AppendLine("eJztzTEJAAAIADCb2b+ToB0ED2ErsAgAWMg+Vg6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4vh0AwHsDPozsxw==:CD3A");
+
+                    int inx = 1;
+                    foreach (var item in GetProdutosEtiqueta(volume, 4))
+                    {
+                        if(inx == 1)
+                        {
+                            dataToSend.AppendLine("^FO0,256^GFA,06400,06400,00100,:Z64:");
+                            dataToSend.AppendLine("eJztz0ENwCAYxWAOU4OKJ2J4JFO5wxT8h45A+hlo2pokbWLQ7n8+QgcuOvAJHfCjJHTAj5LQAT9KQgf8KAkdOOijP7BJT0iSJElLvXZeZAg=:73CE");
+                            dataToSend.AppendLine($"^FT255,285^AAN,18,10^FH\\^FD{item.descricao_peca}^FS");
+                        }
+
+                        if (inx == 2)
+                        {
+                            dataToSend.AppendLine("^FO0,288^GFA,03200,03200,00100,:Z64:");
+                            dataToSend.AppendLine("eJztzzERACAMBMEUqEHFiwCPDCopUJDiKMKvgZuLsO9M2njzITrQ6MAlOuCPFNEBf6SIDvgjRXTAHymiA4U++oYteqKUA1xDZAg=:AB30");
+                            dataToSend.AppendLine($"^FT255,310^AAN,18,10^FH\\^FD{item.descricao_peca}^FS");
+                        }
+
+                        if (inx == 3)
+                        {
+                            dataToSend.AppendLine("^FO0,288^GFA,06400,06400,00100,:Z64:");
+                            dataToSend.AppendLine("eJztz0ENwCAYxWAOU4OKJ4J5JKjkgIL/0IUs/Qw0bU2SJEnS9V7a+OYjdOChA0fogB8loQN+lIQO+FESOuBHSejAjz76gk16QtIFNvvmZAg=:5269");
+                            dataToSend.AppendLine($"^FT255,335^AAN,18,10^FH\\^FD{item.descricao_peca}^FS");
+                        }
+
+                        if (inx == 4)
+                        {
+                            dataToSend.AppendLine("^FO0,320^GFA,06400,06400,00100,:Z64:");
+                            dataToSend.AppendLine("eJztz0ENwCAYxWAOU4OKJwI8kqncAQX/knLY+hlo2pokSdKPTNo48xE6cNGBLXTAj5LQAT9KQgf8KAkd8KMkdOBDH/2GLXpCkqTXHo8YZAg=:E99D");
+                            dataToSend.AppendLine($"^FT255,360^AAN,18,10^FH\\^FD{item.descricao_peca}^FS");
+                        }
+
+                        inx++;
+
+                    }
+
+                    dataToSend.AppendLine("^FO352,0^GFA,01920,01920,00020,:Z64:");
+                    dataToSend.AppendLine("eJxjYBgFJACmVShgAU51qFyFUXWj6kbVjaojqI7I8mUUDBMAAAn+F3M=:F17D");
+                    dataToSend.AppendLine("^FO640,0^GFA,01920,01920,00020,:Z64:");
+                    dataToSend.AppendLine("eJxjYBgF2IFoKCoIwaFOAI3PMqpuVN2oulF1BNQRW76MguEMAPHDDOU=:BA27");
+                    dataToSend.AppendLine("^FO352,64^GFA,05376,05376,00056,:Z64:");
+                    dataToSend.AppendLine("eJztzrERABAUREGBSCTRGT0aVWpAwp8R7eY371ICgJM27vVArz5ssp6enp6enp6ent7nXln3ZuAnELUBxog13Q==:EA59");
+                    dataToSend.AppendLine($"^FT302,395^A0N,18,16^FH\\^FDTOTAL DE {fieldCount} VOLUMES^FS");
+                    dataToSend.AppendLine("^FT426,37^A0N,18,16^FB29,1,0,C^FH\\^FDANO^FS");
+                    dataToSend.AppendLine($"^FT406,62^AAN,27,15^FB73,1,0,C^FH\\^FD{DateTime.Now.Year}^FS");
+                    dataToSend.AppendLine("^FT690,36^A0N,18,16^FB70,1,0,C^FH\\^FDCÓD. DET.^FS");
+                    dataToSend.AppendLine($"^FT690,61^AAN,27,15^FB73,1,0,C^FH\\^FD{vm.ChecklistPrduto.coddetalhescompl}^FS");
+                    dataToSend.AppendLine("^FT507,90^A0N,18,16^FB163,1,0,C^FH\\^FDLOCAL SHOPPING^FS");
+                    dataToSend.AppendLine($"^FT377,111^AAN,18,10^FB409,1,0,C^FH\\^FD{vm.ChecklistPrduto.local_shoppings[0..34]}^FS"); //34 caracteres
+                    dataToSend.AppendLine($"^FT377,136^AAN,18,10^FB409,1,0,C^FH\\^FD{vm.ChecklistPrduto.local_shoppings[35..]}^FS");
+                    dataToSend.AppendLine("^FO59,23^GB263,34,34^FS");
+                    dataToSend.AppendLine("^FT59,50^A0N,28,28^FB263,1,0,C^FR^FH\\^FDETIQUERA PRODUÇÃO^FS");
+                    dataToSend.AppendLine("^FO165,79^GB52,34,34^FS");
+                    dataToSend.AppendLine($"^FT165,106^A0N,28,28^FB52,1,0,C^FR^FH\\^FD{vm.ChecklistPrduto.sigla}^FS");
+                    dataToSend.AppendLine("^FO236,171^GB329,34,34^FS");
+                    dataToSend.AppendLine($"^FT236,198^A0N,28,28^FB329,1,0,C^FR^FH\\^FD{vm.Descricao.descricao}-{vm.Descricao.descricao_adicional}^FS");
+                    dataToSend.AppendLine("^FO123,216^GB555,34,34^FS");
+                    dataToSend.AppendLine($"^FT123,243^A0N,28,28^FB555,1,0,C^FR^FH\\^FD{vm.Descricao.complementoadicional}^FS");
+                    dataToSend.AppendLine("^PQ1,0,1,Y^XZ");
+                    dataToSend.AppendLine();
+
+                    printQueue.Enqueue(dataToSend.ToString());
+
+                    //rDados.Clear();
+                }
+
+                while (printQueue.Any())
+                {
+                    using var client = new TcpClient();
+                    var serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), porta);
+                    //IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(ip), porta);
+                    client.Connect(serverEndPoint);
+                    using var clientStream = client.GetStream();
+                    for (int i = 0; i < stepSize; i++)
+                    {
+                        var encoder = new ASCIIEncoding();
+                        byte[] buffer = encoder.GetBytes(printQueue.Dequeue());
+                        clientStream.Write(buffer, 0, buffer.Length);
+                        if (!printQueue.Any()) break;
+                    }
+                    clientStream.Flush();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            /*
             EtiquetaConstrucaoViewModel? vm = (EtiquetaConstrucaoViewModel)DataContext;
             if (vm.Compledicional == null)
             {
@@ -587,6 +727,7 @@ namespace Producao.Views.Construcao
                 return;
             }
             MessageBox.Show("Impressão em impressora térmica, ainda não foi implementado.");
+            */
         }
 
         private void clearMedidas()

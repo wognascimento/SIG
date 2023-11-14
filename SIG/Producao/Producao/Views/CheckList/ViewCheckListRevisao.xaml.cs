@@ -256,10 +256,10 @@ namespace Producao.Views
       
             var data = value as ControleMemorialModel;
 
-            /*
+            
             if (data == null)
                 return DependencyProperty.UnsetValue;
-            */
+            
 
             if (data.altera_ok.Trim().Contains('0') && data.memorial_alterado_por != null)
                 return new SolidColorBrush(Colors.Yellow);
