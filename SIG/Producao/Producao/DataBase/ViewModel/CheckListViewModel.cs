@@ -895,6 +895,21 @@ namespace Producao
                         comple.ordem = compChkList.ordem;
                         db.Entry(comple).Property(p => p.ordem).IsModified = true;
                     }
+                    if (compChkList.carga != "")
+                    {
+                        comple.carga = compChkList.carga;
+                        db.Entry(comple).Property(p => p.carga).IsModified = true;
+                    }
+                    if (compChkList.alterado_por != "")
+                    {
+                        comple.alterado_por = compChkList.alterado_por;
+                        db.Entry(comple).Property(p => p.alterado_por).IsModified = true;
+                    }
+                    if (compChkList.alterado_em != null)
+                    {
+                        comple.alterado_em = compChkList.alterado_em;
+                        db.Entry(comple).Property(p => p.alterado_em).IsModified = true;
+                    }
                     await db.SaveChangesAsync();
                 }
             }

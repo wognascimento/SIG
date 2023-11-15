@@ -492,6 +492,7 @@
                 <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE PRODUÇÃO" MappingName="obs" ColumnSizer="SizeToHeader" AllowEditing="True"/>
                 <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE MONTAGEM" MappingName="orient_montagem" ColumnSizer="SizeToHeader" AllowEditing="True"/>
                 <syncfusion:GridTextColumn HeaderText="ORIENTAÇÃO DE DESMONTAGEM" MappingName="orient_desmont" ColumnSizer="SizeToHeader" AllowEditing="True"/>
+                <syncfusion:GridTextColumn HeaderText="CAMINÃO" MappingName="carga" ColumnSizer="SizeToHeader" AllowEditing="True"/>
                 
                 <syncfusion:GridTextColumn MappingName="alteradopordescadic" ColumnSizer="SizeToHeader"/>
                 <syncfusion:GridDateTimeColumn MappingName="dataalteradescadic" ColumnSizer="SizeToHeader"/>

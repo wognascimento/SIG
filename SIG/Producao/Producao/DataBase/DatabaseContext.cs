@@ -126,7 +126,8 @@ namespace Producao
                 $"host={BaseSettings.Host};" +
                 $"user id={BaseSettings.Username};" +
                 $"password={BaseSettings.Password};" +
-                $"database={BaseSettings.Database};" ,
+                $"database={BaseSettings.Database};" +
+                $"Application Name=SIG Producao <{BaseSettings.Database}>;" ,
                 options => { options.EnableRetryOnFailure(); }
                 );
             optionsBuilder.EnableSensitiveDataLogging();
