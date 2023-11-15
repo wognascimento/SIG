@@ -28,6 +28,7 @@
                         <syncfusion:MenuItemAdv Header="Emitir" Click="OnEtiquetaChecklistClick"/>
                         <syncfusion:MenuItemAdv Header="Imprimir" Click="OnEtiquetaChecklistEmitidaClick"/>
                     </syncfusion:MenuItemAdv>
+                    <syncfusion:MenuItemAdv x:Name="historico" Header="Histórico" Click="OnHistoricoChecklistClick"/>
                 </syncfusion:MenuItemAdv>
                 <syncfusion:MenuItemAdv Header="Memorial" Click="OnOpenMemorial"/>
                 <syncfusion:MenuItemAdv Header="Funxma"/>

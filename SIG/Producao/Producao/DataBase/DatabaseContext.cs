@@ -16,6 +16,7 @@ namespace Producao
         public DbSet<SiglaChkListModel> Siglas { get; set; }
         public DbSet<ComplementoCheckListModel> ComplementoCheckLists { get; set; }
         public DbSet<QryCheckListGeralModel> CheckListGerals { get; set; }
+        public DbSet<HistoricoCheckListModel> HistoricoCheckList { get; set; }
         public DbSet<DetalhesComplemento> DetalhesComplementos { get; set; }
         public DbSet<QryCheckListGeralComplementoModel> CheckListGeralComplementos { get; set; }
         public DbSet<ChkGeralRelatorioModel> ChkGeralRelatorios { get; set; }

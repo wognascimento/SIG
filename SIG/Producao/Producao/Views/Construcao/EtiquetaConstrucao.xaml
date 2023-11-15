@@ -20,7 +20,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="303"/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition />
+            <ColumnDefinition Width="165"/>
+            <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -147,7 +148,7 @@
 
                         <syncfusion:SfTextBoxExt x:Name="txt_largura"
                             ShowDropDownButton="False"
-                            ShowClearButton="True"/>     
+                            ShowClearButton="True"/>
 
                     </syncfusion:SfTextInputLayout>
 
@@ -270,7 +271,30 @@
 
             </GroupBox>
 
+
         </Grid>
+
+        <syncfusion:SfDataGrid
+            x:Name="historicos" 
+            Grid.Row="0"
+            Grid.Column="3"
+            Grid.RowSpan="4"
+            AutoGenerateColumns="False" 
+            AllowResizingColumns="True"
+            AllowDraggingColumns="True"
+            ColumnSizer="AutoWithLastColumnFill"
+            ShowRowHeader="True" 
+            ItemsSource="{Binding Historicos}" 
+            AllowFiltering="True">
+            <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridTextColumn MappingName="sigla" ColumnSizer="SizeToCells"/>
+                <syncfusion:GridTextColumn MappingName="tema" ColumnSizer="SizeToHeader"/>
+                <syncfusion:GridNumericColumn
+                    MappingName="ano" 
+                    ColumnSizer="SizeToHeader"
+                    DisplayBinding="{Binding ano, Converter={StaticResource ConverterNumber}}"/>
+            </syncfusion:SfDataGrid.Columns>
+        </syncfusion:SfDataGrid>
 
         <Grid Grid.Row="5" Grid.Column="0">
             <Grid.ColumnDefinitions>
@@ -314,7 +338,7 @@
             x:Name="itens" 
             Grid.Row="7"
             Grid.Column="0"
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="4"
             AutoGenerateColumns="False" 
             AllowResizingColumns="True"
             AllowDraggingColumns="True"

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Syncfusion.UI.Xaml.Grid;
 using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -263,6 +264,8 @@ namespace Producao.Views.Construcao
             set { _detalhe = value; RaisePropertyChanged("Detalhe"); }
         }
 
+        
+
         public async Task<ObservableCollection<PlanilhaConstrucaoModel>> GetPlanilhasAsync()
         {
             try
@@ -364,6 +367,8 @@ namespace Producao.Views.Construcao
                 throw;
             }
         }
+
+        
 
     }
 }

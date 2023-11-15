@@ -4,6 +4,7 @@ using Producao.Views.CheckList;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.XlsIO;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -188,6 +189,10 @@ namespace Producao.Views.Construcao
                     }
                     vm.Pecas = await Task.Run(() => vm.GetPecasAsync(complemento?.codcompladicional));
                 }
+
+                vm.Historicos = await Task.Run(() => vm.GetHistoricoConstrucaoAsync(complemento?.codcompladicional));
+
+
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
@@ -879,6 +884,13 @@ namespace Producao.Views.Construcao
             set { _dificuldades = value; RaisePropertyChanged("Dificuldades"); }
         }
 
+        private IList _historicos;
+        public IList Historicos
+        {
+            get { return _historicos; }
+            set { _historicos = value; RaisePropertyChanged("Historicos"); }
+        }
+
         public async Task<ObservableCollection<PlanilhaConstrucaoModel>> GetPlanilhasAsync()
         {
             try
@@ -1018,6 +1030,26 @@ namespace Producao.Views.Construcao
             {
                 using DatabaseContext db = new();
                 return await db.ChecklistPrdutoConstrucaos.Where(c => c.codcompladicional == codcompladicional).FirstOrDefaultAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IList> GetHistoricoConstrucaoAsync(long? codcompladicional)
+        {
+            try
+            {
+                using DatabaseContext db = new();
+                var data = await db.HistoricoCheckList
+                    .Where(r => r.planilha == "CONSTRUÇÃO" && r.qtd_completada > 0 && r.codcompladicional == codcompladicional)
+                    .GroupBy(g => new { g.sigla, g.tema, g.ano })
+                    .Select(p => new { p.Key.sigla, p.Key.tema, p.Key.ano })
+                    .OrderBy(g => g.ano)
+                    .ToListAsync();
+                return data;
+
             }
             catch (Exception)
             {
