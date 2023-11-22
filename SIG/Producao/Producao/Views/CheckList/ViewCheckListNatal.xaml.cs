@@ -373,10 +373,12 @@ namespace Producao.Views.CheckList
 
                 RowColumnIndex rowColumnIndex = new RowColumnIndex();
                 this.dgCheckListGeral.SelectedItems.Clear();
-                this.dgCheckListGeral.SearchHelper.Search(compl.ordem);
-                this.dgCheckListGeral.SearchHelper.FindNext(compl.ordem);
+                this.dgCheckListGeral.SearchHelper.Search(compl.codcompl.ToString());
+                this.dgCheckListGeral.SearchHelper.FindNext(compl.codcompl.ToString());
                 rowColumnIndex.RowIndex = this.dgCheckListGeral.SearchHelper.CurrentRowColumnIndex.RowIndex;
                 dgCheckListGeral.ScrollInView(rowColumnIndex);
+                dgCheckListGeral.View.Refresh();
+                dgCheckListGeral.SelectedIndex = rowColumnIndex.RowIndex-1;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
             }
             catch (Exception ex)
@@ -405,11 +407,12 @@ namespace Producao.Views.CheckList
 
                 RowColumnIndex rowColumnIndex = new RowColumnIndex();
                 this.dgCheckListGeral.SelectedItems.Clear();
-                this.dgCheckListGeral.SearchHelper.Search(compl.ordem);
-                this.dgCheckListGeral.SearchHelper.FindNext(compl.ordem);
+                this.dgCheckListGeral.SearchHelper.Search(compl.codcompl.ToString());
+                this.dgCheckListGeral.SearchHelper.FindNext(compl.codcompl.ToString());
                 rowColumnIndex.RowIndex = this.dgCheckListGeral.SearchHelper.CurrentRowColumnIndex.RowIndex;
                 dgCheckListGeral.ScrollInView(rowColumnIndex);
                 dgCheckListGeral.View.Refresh();
+                dgCheckListGeral.SelectedIndex = rowColumnIndex.RowIndex-1;
                 Application.Current.Dispatcher.Invoke(() => { Mouse.OverrideCursor = null; });
 
             }

@@ -18,10 +18,13 @@ using Syncfusion.UI.Xaml.Spreadsheet;
 using Syncfusion.Windows.Tools.Controls;
 using Syncfusion.XlsIO;
 using System;
+using System.Collections.Specialized;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Telerik.Windows.Controls;
@@ -84,8 +87,12 @@ namespace Producao
         {
             InitializeComponent();
 			this.Loaded += OnLoaded;
-            //StyleManager.ApplicationTheme = new GreenTheme();
-            
+            StyleManager.ApplicationTheme = new MaterialTheme();
+
+
+            var appSettings = ConfigurationManager.GetSection("appSettings") as NameValueCollection;
+            if(appSettings[0].Length > 0)
+                BaseSettings.Username = appSettings[0];
 
             txtUsername.Text = BaseSettings.Username;
             txtDataBase.Text = BaseSettings.Database;
@@ -1442,6 +1449,37 @@ namespace Producao
             }
         }
 
+        private void OnAlterarUsuario(object sender, MouseButtonEventArgs e)
+        {
+            Login window = new();
+            window.ShowDialog();
 
+            try
+            {
+                var appSettings = ConfigurationManager.GetSection("appSettings") as NameValueCollection;
+                BaseSettings.Username = appSettings[0];
+                txtUsername.Text = BaseSettings.Username;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+
+            /*
+            RadWindow radWindow = new()
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                HideMaximizeButton = true,
+                HideMinimizeButton = true,
+                Header = "Alterar Usuário",
+                ResizeMode = ResizeMode.NoResize,
+                CanMove = false,
+                Content = new Login()
+            };
+            //radWindow.Content = grid;
+            radWindow.ShowDialog();
+            */
+        }
     }
 }

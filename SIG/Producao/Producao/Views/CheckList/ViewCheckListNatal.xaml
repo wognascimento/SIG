@@ -37,7 +37,7 @@
 
         <StackPanel Grid.Row="0" Orientation="Vertical">
 
-            <StackPanel Orientation="Horizontal" Height="39" >
+            <StackPanel Orientation="Horizontal" Height="34" >
 
                 <syncfusion:SfTextInputLayout 
                     InputViewPadding="4"
@@ -85,7 +85,7 @@
 
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Height="39">
+            <StackPanel Orientation="Horizontal" Height="34">
 
                 <syncfusion:SfTextInputLayout 
                     InputViewPadding="4" 
@@ -134,7 +134,7 @@
 
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Height="39">
+            <StackPanel Orientation="Horizontal" Height="34">
 
                 <syncfusion:SfTextInputLayout 
                     InputViewPadding="4"
@@ -225,7 +225,7 @@
 
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Height="39">
+            <StackPanel Orientation="Horizontal" Height="34">
 
                 <syncfusion:SfTextInputLayout 
                     InputViewPadding="4" 
@@ -293,7 +293,7 @@
 
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Height="39">
+            <StackPanel Orientation="Horizontal" Height="34">
                 
                 <syncfusion:SfTextInputLayout 
                     InputViewPadding="4" 
@@ -327,7 +327,7 @@
                 
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Height="39">
+            <StackPanel Orientation="Horizontal" Height="34">
                 
                 <syncfusion:SfTextInputLayout 
                     InputViewPadding="4" 
@@ -361,7 +361,7 @@
                 
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Height="39">
+            <StackPanel Orientation="Horizontal" Height="34">
                 
                 <syncfusion:SfTextInputLayout 
                     InputViewPadding="4" 
